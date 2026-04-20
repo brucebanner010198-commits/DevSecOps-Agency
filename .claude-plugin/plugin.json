@@ -1,0 +1,23 @@
+{
+  "name": "devsecops-agency",
+  "version": "0.2.0",
+  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO holds board meetings with 9 Chiefs, each of whom runs a council of specialists. Research → Product → Architecture → Security → Execution → Quality → DevOps → Docs → Legal. Security-first (STRIDE + OWASP Top 10) by default. Ships to GitHub. A live command-center artifact shows the org chart, every meeting, every handoff, and any blocker parked for you.",
+  "author": {
+    "name": "Sir"
+  },
+  "keywords": [
+    "devsecops",
+    "agents",
+    "orchestration",
+    "autonomous",
+    "security",
+    "owasp",
+    "stride",
+    "automation",
+    "code-generation",
+    "ci-cd",
+    "ceo",
+    "multi-agent"
+  ],
+  "license": "MIT"
+}

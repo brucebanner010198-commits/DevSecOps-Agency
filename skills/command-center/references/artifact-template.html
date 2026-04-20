@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>DevSecOps Agency — __PROJECT_TITLE__</title>
+<style>
+  :root {
+    --bg: #0b0f17;
+    --panel: #131a26;
+    --panel-2: #1b2433;
+    --line: #243043;
+    --text: #e6edf6;
+    --muted: #8a96a8;
+    --accent: #4f8cff;
+    --good: #3ddc97;
+    --warn: #ffb454;
+    --bad:  #ff5d6c;
+    --info: #59c2ff;
+    --ceo:  #b388ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  header { display: flex; align-items: center; gap: 16px; padding: 14px 20px;
+    background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5;
+    flex-wrap: wrap; }
+  header h1 { font-size: 16px; margin: 0; font-weight: 600; }
+  header h1 small { color: var(--muted); font-weight: 400; margin-left: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+    border-radius: 999px; background: var(--panel-2); border: 1px solid var(--line);
+    font-size: 12px; color: var(--muted); }
+  .chip.phase { background: rgba(79,140,255,.12); color: var(--accent); border-color: rgba(79,140,255,.3); }
+  .chip.phase.delivered { background: rgba(61,220,151,.12); color: var(--good); border-color: rgba(61,220,151,.3); }
+  .chip.phase.blocked { background: rgba(255,93,108,.12); color: var(--bad); border-color: rgba(255,93,108,.3); }
+  .chip.blockers.has { background: rgba(255,93,108,.12); color: var(--bad); border-color: rgba(255,93,108,.3); }
+
+  main { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 20px;
+    max-width: 1500px; margin: 0 auto; }
+  @media (min-width: 1100px) {
+    main { grid-template-columns: 2fr 1fr; }
+    .full { grid-column: 1 / -1; }
+  }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 16px; }
+  section h2 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--muted); font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+
+  /* CEO node */
+  .ceo-node { display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: linear-gradient(180deg, rgba(179,136,255,.18), rgba(179,136,255,.04));
+    border: 1px solid rgba(179,136,255,.5); border-radius: 10px; padding: 14px 18px;
+    margin-bottom: 16px; }
+  .ceo-node .ceo-title { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+  .ceo-node .ceo-name { font-size: 15px; font-weight: 700; color: var(--ceo); }
+  .ceo-node .ceo-sub { color: var(--muted); font-size: 12px; }
+
+  /* Org chart — 9 councils */
+  .org { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 1100px) { .org { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .org { grid-template-columns: 1fr; } }
+
+  .dept { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+  .dept .council-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+  .dept .lead { font-weight: 600; font-size: 13px; padding: 6px 8px; border-radius: 6px;
+    background: rgba(79,140,255,.1); color: var(--accent); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px; justify-content: space-between; }
+  .dept .lead .title { color: var(--muted); font-size: 11px; font-weight: 400; }
+  .dept ul { list-style: none; margin: 0; padding: 0; }
+  .dept li { font-size: 12px; padding: 4px 8px; border-radius: 5px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px; }
+  .dept li.active { background: rgba(61,220,151,.08); color: var(--good); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .dot.active { background: var(--good); animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .4; transform: scale(1.4); } }
+
+  /* Council-tint accents */
+  .dept.research  .lead { background: rgba(89,194,255,.10); color: var(--info); }
+  .dept.product   .lead { background: rgba(89,194,255,.10); color: var(--info); }
+  .dept.architecture .lead { background: rgba(79,140,255,.12); color: var(--accent); }
+  .dept.security  .lead { background: rgba(255,93,108,.12);  color: var(--bad); }
+  .dept.execution .lead { background: rgba(79,140,255,.12); color: var(--accent); }
+  .dept.quality   .lead { background: rgba(255,180,84,.14); color: var(--warn); }
+  .dept.devops    .lead { background: rgba(61,220,151,.12);  color: var(--good); }
+  .dept.docs      .lead { background: rgba(179,136,255,.12); color: var(--ceo); }
+  .dept.legal     .lead { background: rgba(255,180,84,.10); color: var(--warn); }
+
+  /* Pipeline */
+  .pipeline { display: grid; grid-template-columns: repeat(7, minmax(130px, 1fr));
+    gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .stage { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px; min-height: 90px; }
+  .stage h3 { margin: 0 0 6px; font-size: 12px; font-weight: 600; }
+  .stage .meta { font-size: 11px; color: var(--muted); }
+  .stage .phase-num { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .stage.done { border-color: rgba(61,220,151,.4); }
+  .stage.done h3 { color: var(--good); }
+  .stage.in-progress { border-color: rgba(79,140,255,.5);
+    box-shadow: 0 0 0 1px rgba(79,140,255,.2) inset; }
+  .stage.in-progress h3 { color: var(--accent); }
+  .stage.blocked { border-color: rgba(255,93,108,.5); }
+  .stage.blocked h3 { color: var(--bad); }
+
+  /* Chat */
+  .chat-filter { display: inline-flex; gap: 4px; }
+  .chat-filter button { background: var(--panel-2); border: 1px solid var(--line); color: var(--muted);
+    padding: 3px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: .05em; }
+  .chat-filter button.active { background: rgba(79,140,255,.18); color: var(--accent); border-color: rgba(79,140,255,.4); }
+  .chat { max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+    padding-right: 4px; }
+  .msg { display: grid; grid-template-columns: 70px auto 1fr; gap: 8px; align-items: baseline;
+    font-size: 12px; padding: 6px 8px; border-radius: 6px; background: var(--panel-2); }
+  .msg.scope-council { background: rgba(27,36,51,.5); border-left: 2px solid var(--line); padding-left: 10px; }
+  .msg.scope-board { background: var(--panel-2); border-left: 2px solid var(--accent); }
+  .msg time { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 11px; }
+  .msg .who { color: var(--text); }
+  .msg .who b { color: var(--accent); }
+  .msg .note { color: var(--muted); }
+  .badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px;
+    text-transform: uppercase; letter-spacing: .05em; margin-right: 6px; }
+  .b-handoff       { background: rgba(79,140,255,.18);  color: var(--accent); }
+  .b-dispatch      { background: rgba(89,194,255,.18);  color: var(--info); }
+  .b-report        { background: rgba(61,220,151,.18);  color: var(--good); }
+  .b-boarddecision { background: rgba(179,136,255,.18); color: var(--ceo); }
+  .b-decision      { background: rgba(255,180,84,.18);  color: var(--warn); }
+  .b-escalate      { background: rgba(255,93,108,.2);   color: var(--bad); }
+  .b-resume        { background: rgba(61,220,151,.18);  color: var(--good); }
+  .b-fixloop       { background: rgba(255,180,84,.2);   color: var(--warn); }
+  .gate-chip { font-size: 10px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; }
+  .gate-green  { background: rgba(61,220,151,.2); color: var(--good); }
+  .gate-yellow { background: rgba(255,180,84,.2); color: var(--warn); }
+  .gate-red    { background: rgba(255,93,108,.2); color: var(--bad); }
+
+  /* Inbox */
+  .inbox-item { border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 8px;
+    background: var(--panel-2); }
+  .inbox-item.open { border-color: rgba(255,93,108,.5); background: rgba(255,93,108,.05); }
+  .inbox-item .q-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px;
+    color: var(--muted); margin-bottom: 6px; }
+  .inbox-item .q-text { font-size: 13px; color: var(--text); }
+  .inbox-item .q-options { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .inbox-item .q-option { font-size: 11px; padding: 3px 8px; border-radius: 4px;
+    background: var(--panel); border: 1px solid var(--line); color: var(--muted); }
+
+  /* Artifacts */
+  .artifacts { display: grid; gap: 6px; }
+  .artifacts a { display: flex; justify-content: space-between; padding: 8px 10px;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
+    color: var(--text); text-decoration: none; font-size: 12px; }
+  .artifacts a:hover { border-color: var(--accent); }
+  .artifacts a span.path { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  .empty { color: var(--muted); font-style: italic; padding: 20px; text-align: center; font-size: 13px; }
+  footer { padding: 14px 20px; color: var(--muted); font-size: 11px; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>DevSecOps Agency <small>· <span id="proj-title">__PROJECT_TITLE__</span></small></h1>
+  <span class="chip phase" id="phase-chip">phase: —</span>
+  <span class="chip blockers" id="blocker-chip">0 blockers</span>
+  <span class="chip" id="updated-chip">—</span>
+</header>
+
+<main>
+  <section class="full">
+    <h2>Organisation</h2>
+    <div class="ceo-node">
+      <div>
+        <div class="ceo-title">CEO · single point of contact</div>
+        <div class="ceo-name" id="ceo-name">ceo</div>
+      </div>
+      <div class="ceo-sub">chairs the board · filters to 1 voice for the user</div>
+    </div>
+    <div class="org" id="org"></div>
+  </section>
+
+  <section class="full">
+    <h2>Phases</h2>
+    <div class="pipeline" id="pipeline"></div>
+  </section>
+
+  <section>
+    <h2>
+      <span>Meeting log</span>
+      <span class="chat-filter">
+        <button data-filter="all" class="active">All</button>
+        <button data-filter="board">Board</button>
+        <button data-filter="council">Council</button>
+      </span>
+    </h2>
+    <div class="chat" id="chat"></div>
+  </section>
+
+  <section>
+    <h2>Inbox · human input queue</h2>
+    <div id="inbox"></div>
+    <h2 style="margin-top:18px;">Artifacts</h2>
+    <div class="artifacts" id="artifacts"></div>
+  </section>
+</main>
+
+<footer>Generated <span id="generated-at">__GENERATED_AT__</span> · re-open this artifact any time to see the latest state.</footer>
+
+<script>
+__STATE__
+</script>
+<script>
+(function () {
+  const S = (window.__STATE__ || {});
+  const status = S.status || {};
+  const chat   = S.chat   || [];
+  const inbox  = S.inbox  || { open: [], answered: [] };
+  const projectFolder = S.projectFolder || "";
+
+  // Council → Chief title mapping (v0.2 org)
+  const COUNCILS = [
+    { key: 'research',     chief: 'cro',              title: 'CRO · Research' },
+    { key: 'product',      chief: 'pm-lead',          title: 'CPO · Product' },
+    { key: 'architecture', chief: 'engineering-lead', title: 'CTO · Architecture' },
+    { key: 'security',     chief: 'security-lead',    title: 'CISO · Security' },
+    { key: 'execution',    chief: 'engineering-lead', title: 'VP-Eng · Execution' },
+    { key: 'quality',      chief: 'qa-lead',          title: 'CQO · Quality' },
+    { key: 'devops',       chief: 'devops-lead',      title: 'VP-Ops · DevOps' },
+    { key: 'docs',         chief: 'docs-lead',        title: 'CKO · Docs' },
+    { key: 'legal',        chief: 'gc',               title: 'GC · Legal' },
+  ];
+
+  // Legacy v0.1 fallback map (for older status.json files)
+  const LEGACY_MAP = {
+    pm: 'product', security: 'security', engineering: 'execution',
+    qa: 'quality', devops: 'devops', docs: 'docs'
+  };
+
+  // Header
+  document.getElementById('proj-title').textContent = status.projectSlug || '—';
+  const phaseChip = document.getElementById('phase-chip');
+  phaseChip.textContent = 'phase: ' + (status.phase || '—');
+  if (status.phase === 'delivered') phaseChip.classList.add('delivered');
+  if (status.phase === 'blocked') phaseChip.classList.add('blocked');
+  const blockerChip = document.getElementById('blocker-chip');
+  const blockers = (status.blockers || []).length;
+  blockerChip.textContent = blockers + ' blocker' + (blockers === 1 ? '' : 's');
+  if (blockers > 0) blockerChip.classList.add('has');
+  document.getElementById('updated-chip').textContent = 'updated ' + (status.lastUpdated || '—');
+
+  // Org chart
+  const orgEl = document.getElementById('org');
+  const team = status.team || {};
+  const active = new Set(status.activeAgents || []);
+  for (const c of COUNCILS) {
+    let dept = team[c.key];
+    if (!dept) {
+      const legacyKey = Object.entries(LEGACY_MAP).find(([, v]) => v === c.key)?.[0];
+      if (legacyKey && team[legacyKey]) dept = team[legacyKey];
+    }
+    if (!dept) dept = { lead: c.chief, specialists: [] };
+    const div = document.createElement('div');
+    div.className = 'dept ' + c.key;
+    const leadActive = active.has(dept.lead) ? 'active' : '';
+    div.innerHTML =
+      '<div class="council-label">' + c.title + '</div>' +
+      '<div class="lead"><span><span class="dot ' + leadActive + '"></span>' + dept.lead + '</span><span class="title">chief</span></div>' +
+      '<ul>' +
+      (dept.specialists || []).map(s => {
+        const isActive = active.has(s);
+        return '<li class="' + (isActive ? 'active' : '') + '">' +
+          '<span class="dot ' + (isActive ? 'active' : '') + '"></span>' + s + '</li>';
+      }).join('') + '</ul>';
+    orgEl.appendChild(div);
+  }
+
+  // Phases (v0.2 — 7 phases)
+  const PHASES = [
+    { key: 'discovery',      label: 'Discovery',     num: 'Phase 1' },
+    { key: 'design',         label: 'Design',        num: 'Phase 2' },
+    { key: 'build',          label: 'Build',         num: 'Phase 3' },
+    { key: 'verify',         label: 'Verify',        num: 'Phase 4' },
+    { key: 'ship',           label: 'Ship',          num: 'Phase 5' },
+    { key: 'document-legal', label: 'Document+Legal',num: 'Phase 6' },
+    { key: 'close',          label: 'Close',         num: 'Phase 7' },
+  ];
+  const completed = new Set(status.completed || []);
+  const current = status.phase;
+  const pipeEl = document.getElementById('pipeline');
+  for (const p of PHASES) {
+    const card = document.createElement('div');
+    card.className = 'stage';
+    let cls = '', meta = '';
+    if (completed.has(p.key) || status.phase === 'delivered') { cls = 'done'; meta = 'done'; }
+    else if (p.key === current) {
+      cls = blockers > 0 ? 'blocked' : 'in-progress';
+      meta = blockers > 0 ? 'blocked' : 'in progress';
+    } else {
+      meta = 'pending';
+    }
+    card.classList.add(cls);
+    card.innerHTML = '<div class="phase-num">' + p.num + '</div><h3>' + p.label + '</h3><div class="meta">' + meta + '</div>';
+    pipeEl.appendChild(card);
+  }
+
+  // Chat / meeting log
+  const chatEl = document.getElementById('chat');
+  let filter = 'all';
+  function renderChat() {
+    chatEl.innerHTML = '';
+    const items = chat.slice().reverse().filter(m => filter === 'all' ? true : (m.scope || 'board') === filter);
+    if (!items.length) {
+      chatEl.innerHTML = '<div class="empty">No activity' + (filter !== 'all' ? ' for this filter' : '') + '.</div>';
+      return;
+    }
+    items.forEach(m => {
+      const row = document.createElement('div');
+      const scope = m.scope || 'board';
+      row.className = 'msg scope-' + scope;
+      const tShort = (m.ts || '').replace(/.*T(\d\d:\d\d:\d\d).*/, '$1');
+      const typeKey = (m.type || '').replace(/-/g, '');
+      const badge = '<span class="badge b-' + typeKey + '">' + (m.type || '') + '</span>';
+      const gate = m.gate && m.gate !== 'n/a' ? '<span class="gate-chip gate-' + m.gate + '">' + m.gate + '</span>' : '';
+      const from = m.from || '';
+      const to = m.to || '';
+      const arts = Array.isArray(m.artifacts) ? m.artifacts.join(', ') : (m.artifact || '');
+      row.innerHTML = '<time>' + tShort + '</time>' +
+        '<span class="who">' + badge + '<b>' + from + '</b> → <b>' + to + '</b>' + gate + '</span>' +
+        '<span class="note">' + (m.note || '') + (arts ? ' · ' + arts : '') + '</span>';
+      chatEl.appendChild(row);
+    });
+  }
+  document.querySelectorAll('.chat-filter button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.chat-filter button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filter = btn.dataset.filter;
+      renderChat();
+    });
+  });
+  renderChat();
+
+  // Inbox
+  const inboxEl = document.getElementById('inbox');
+  const open = inbox.open || [];
+  const answered = inbox.answered || [];
+  if (!open.length && !answered.length) {
+    inboxEl.innerHTML = '<div class="empty">No questions parked. Agents are running autonomously.</div>';
+  } else {
+    open.forEach(q => {
+      const item = document.createElement('div');
+      item.className = 'inbox-item open';
+      item.innerHTML = '<div class="q-head"><span>raised by <b>' + q.raisedBy + '</b> · ' + q.stage + '</span><span>' + (q.raisedAt || '') + '</span></div>' +
+        '<div class="q-text">' + q.question + '</div>' +
+        ((q.options && q.options.length) ? '<div class="q-options">' + q.options.map(o => '<span class="q-option">' + o + '</span>').join('') + '</div>' : '');
+      inboxEl.appendChild(item);
+    });
+    if (answered.length) {
+      const h = document.createElement('div');
+      h.style.cssText = 'color:var(--muted); font-size:11px; margin:10px 0 6px; text-transform:uppercase; letter-spacing:.06em;';
+      h.textContent = 'Resolved (' + answered.length + ')';
+      inboxEl.appendChild(h);
+      answered.forEach(q => {
+        const item = document.createElement('div');
+        item.className = 'inbox-item';
+        item.innerHTML = '<div class="q-head"><span>' + q.raisedBy + ' · ' + q.stage + '</span><span>answered</span></div>' +
+          '<div class="q-text" style="opacity:.7;">' + q.question + '</div>' +
+          (q.answer ? '<div style="margin-top:6px; color:var(--good); font-size:12px;">→ ' + q.answer + '</div>' : '');
+        inboxEl.appendChild(item);
+      });
+    }
+  }
+
+  // Artifacts
+  const aEl = document.getElementById('artifacts');
+  const arts = status.artifacts || {};
+  const entries = Object.entries(arts);
+  if (!entries.length) {
+    aEl.innerHTML = '<div class="empty">No artifacts produced yet.</div>';
+  } else {
+    entries.forEach(([k, v]) => {
+      const a = document.createElement('a');
+      a.href = projectFolder ? ('computer://' + projectFolder + '/' + v) : '#';
+      a.target = '_blank';
+      a.innerHTML = '<span>' + k + '</span><span class="path">' + v + '</span>';
+      aEl.appendChild(a);
+    });
+  }
+})();
+</script>
+</body>
+</html>
