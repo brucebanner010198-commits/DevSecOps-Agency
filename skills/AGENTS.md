@@ -27,7 +27,7 @@ Telegraph. Read before authoring or editing a skill.
 - `metadata.version` follows semver. Bump on contract changes (schema, artifact paths, trigger phrases).
 - Plugin root `plugin.json.version` bumps when ≥ 1 skill bumps.
 
-## Skill index (v0.3.0-alpha.5)
+## Skill index (v0.3.0-alpha.6)
 
 | Skill              | Trigger                                                 |
 | ------------------ | ------------------------------------------------------- |
@@ -62,3 +62,5 @@ Telegraph. Read before authoring or editing a skill.
 | **`ladder`** (v0.3.0 Wave 4) | 8-rung never-give-up resilience ladder. Fix-loop = Rung 1; every rung transition files an ADR; Rung 7 parking lot preserves artifacts for later revival. |
 | **`eval`** (v0.3.0 Wave 5) | Close-eval + portfolio regression + benchmark-sweep + compaction. Derives eval items from PKRs (never from shipped artifacts). 5 pp regression threshold. Regression baseline freezes per quarter. |
 | **`budget`** (v0.3.0 Wave 5) | Per-project token + $ budget with per-phase allocation, burn tracking on every Chief report, and Rung 6 escalation on cumulative > 110 %. 4 size classes (small / medium / large / custom). |
+| **`red-team`** (v0.3.0 Wave 6) | Adversarial testing on every close + prompt-upgrade + integration + quarterly portfolio sweep. OWASP ASI Top 10 mapping; severity → gate → ladder Rung 3. CRT never on delivery path. |
+| **`playbook`** (v0.3.0 Wave 6) | DGM-style stepping-stone archive. Immutable stones derived from remediated `high`+ red-team findings. Prompt-diff review runs against archive before `agents/*.md` edits land. |

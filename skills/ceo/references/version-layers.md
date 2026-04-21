@@ -2,6 +2,23 @@
 
 Each release layer is still in effect. The CEO playbook in `SKILL.md` is the condensed view; this is the long form.
 
+## v0.3.0-alpha.6 — red-team + self-modifying playbooks (Wave 6)
+
+One new council + two new skills + a blocking prompt-diff review gate give the agency adversarial defense that scales with the system itself:
+
+- **Red-Team Council** — Chief: `red-team-lead` (Sonnet, CRT). Specialists: `adversarial-prompter`, `tool-abuse-tester`, `data-exfil-tester`, `model-poisoning-scout`, `supply-chain-attacker`, `social-engineering-tester`, `playbook-author`. Informing + **independent** — same structural invariant as Audit + Eval. Never on any project's delivery path. Outputs live in `<slug>/red-team/` (per-project) and `_vision/playbooks/` (portfolio stones).
+- **`red-team`** — OWASP ASI Top 10 (2025) mapping across all five kinds: pre-release (every ship, parallel with close-audit + close-eval), prompt-upgrade (every `agents/*.md` or `councils/*/AGENTS.md` edit — blocking via prompt-diff review), integration (every new tool / skill / MCP / model-family swap), portfolio-sweep (quarterly), incident (on demand after a live breach or near-miss). Severity rubric = reproducibility × impact × boundary × mitigation → critical/high/medium/low/info. Severity → gate → ladder routing in `skills/red-team/references/severity-gate-map.md` (default Rung 3; only Rung 6 accepts-without-fix). Attack catalogs per specialist in `skills/red-team/references/attack-catalogs.md`. Canonical credential regexes + memory-contamination scans in `skills/red-team/references/owasp-asi-top-10.md`. CRT never on delivery path.
+- **`playbook`** — DGM-style stepping-stone archive under `_vision/playbooks/`. One stone per remediated `high`+ red-team finding. Stone file = `stones/stone-NNNN-<slug>.md`; registry = `ARCHIVE.md`. Stone YAML: `id · slug · asi · severity · hardened_skill · adr · created · superseded_by`. Stones are **immutable** — the only allowed mutation is the single `superseded_by:` pointer field. Supersession / augment / deprecate rules in `skills/playbook/references/supersession-rules.md`. Stone abstraction rules (no instance-specific patterns) in `skills/playbook/references/stone-authoring.md`. ARCHIVE.md table format + 500-row/quarter cap in `skills/playbook/references/archive-format.md`.
+- **Prompt-diff review** — blocking gate run by `playbook-author` on every proposed `agents/*.md` or `councils/*/AGENTS.md` diff before it lands. Matches diff against `ARCHIVE.md` via `hardened_skill` field + ASI category. Weakening phrasing patterns auto-reject: `Never → Should not`, `Must → Should`, `Required → Recommended`, `forbidden → discouraged`, `critical → important`, `always → usually`, quantified thresholds relaxed, invariants downgraded to guidelines. Rejections auto-rollback the diff — never land, never enter the ladder.
+
+Invariants added in Wave 6 (cumulative 1-14 in SKILL.md; 28-32 below):
+
+28. Every project close runs CRT pre-release red-team in parallel with CAO close-audit + CEVO close-eval. All three mandatory before archival. CRT reds block ship per severity-gate-map; only Rung 6 user-waiver waives them.
+29. Every `agents/*.md` or `councils/*/AGENTS.md` edit runs prompt-diff review before it lands. Weakening-phrasing diffs auto-reject and auto-rollback; rejected diffs do not enter the ladder. New stones must be authored before a rejected diff can be re-applied.
+30. Every remediated `high`+ red-team finding authors an immutable stepping-stone. Stone body never edits after acceptance. Supersession is the only allowed evolution; `supersedes:` on the new stone + single-field `superseded_by:` on the old stone, both covered by an ADR.
+31. CRT + every red-team specialist cannot dual-hat with any delivery role (CTO/VP-Eng/CISO/CQO/CEVO/CAO). A red-team specialist red-teaming a project they delivered requires a blind-peer-review gate. Independence breaches are automatic critical findings + CAO reds.
+32. Real PII / credential exfil during red-team tests is an automatic critical finding. Use synthetic fixtures from `skills/red-team/references/owasp-asi-top-10.md > credential regexes`. Tests that exfil real data are treated as the breach they simulate.
+
 ## v0.3.0-alpha.5 — evaluation + budget (Wave 5)
 
 One new council + two new skills + one reusable compaction capability give the agency a mandatory quality check and a first-class cost signal:

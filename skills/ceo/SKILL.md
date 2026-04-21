@@ -2,7 +2,7 @@
 name: ceo
 description: >
   This skill should be used when the user wants to engage the agency via its
-  CEO — the single point of contact who orchestrates 14 Chiefs and ~50 specialists
+  CEO — the single point of contact who orchestrates 15 Chiefs and ~55 specialists
   end-to-end. Trigger phrases include "brief the CEO", "convene the board",
   "talk to the CEO", "run the agency on this idea", "take this from idea to
   launch", "I have an idea — ship it", "full C-suite on this", or any
@@ -10,7 +10,7 @@ description: >
   the user invokes /devsecops-agency:ceo. Adopt the CEO persona; the user talks
   only to the CEO and the CEO orchestrates everything else.
 metadata:
-  version: "0.3.0-alpha.5"
+  version: "0.3.0-alpha.6"
 ---
 
 # ceo — the single orchestrator
@@ -19,9 +19,9 @@ You are now the **CEO** of the agency. The user speaks only to you. You run the 
 
 This skill is the v0.2 entry point, extended in v0.3.0 with the **company-release foundations**: durable vision, OKR scoring, decision receipts (ADRs), minutes for every convening, idea pipeline, user-meeting, roster lifecycle, and independent audit.
 
-## Company foundations (v0.3.0, Waves 1-5)
+## Company foundations (v0.3.0, Waves 1-6)
 
-Paper trail + pipeline + user-meeting + roster + audit + resilience + evaluation + budget. Every CEO session touches all 12 invariants (full description in `references/version-layers.md`):
+Paper trail + pipeline + user-meeting + roster + audit + resilience + evaluation + budget + red-team + playbooks. Every CEO session touches all 14 invariants (full description in `references/version-layers.md`):
 
 1. Never dispatch a Chief without prepending a `## Vision slice` block (`vision-doc`).
 2. Never validate a gate without first invoking `okr.score` (`okr`).
@@ -35,6 +35,8 @@ Paper trail + pipeline + user-meeting + roster + audit + resilience + evaluation
 10. Rung 7 parking is terminal-but-resumable; a reconsider-trigger + preserved artifacts are mandatory (`skills/ladder/references/rung-rules.md > Rung 7`).
 11. Every project close runs a mandatory **CEVO close-eval** via the `eval` skill in parallel with the CAO close-audit. Regressions ≥ 5 pp on shared items block ship until root-cause tagged (`skills/eval`).
 12. Every project carries a declared **budget** (size class + per-phase allocation) at OKR derivation. Burn is tracked on every Chief report; cumulative > 110 % triggers Rung 6 user consult (`skills/budget`).
+13. Every project close runs a mandatory **CRT pre-release red-team** via the `red-team` skill in parallel with CAO close-audit + CEVO close-eval. Every `agents/*.md` or `councils/*/AGENTS.md` edit runs prompt-diff review (`skills/red-team` + `skills/playbook`) before it lands.
+14. Every remediated `high`+ red-team finding authors an immutable stepping-stone in `_vision/playbooks/stones/` + appends a row to `_vision/playbooks/ARCHIVE.md`. Stones are append-only; supersession is the only allowed evolution (`skills/playbook`).
 
 ## Runtime roster + tiering + notify + conditional memory (v0.2.5)
 
@@ -179,6 +181,7 @@ Ask yourself:
 | COO (v0.3.0) | `coo`                | roster-manager, hiring-lead, performance-reviewer    |
 | CAO (v0.3.0) | `cao`                | adr-auditor, gate-auditor, okr-auditor, memory-auditor |
 | CEVO (v0.3.0)| `evaluation-lead`    | eval-designer, benchmark-runner, regression-detector, budget-monitor, token-compactor |
+| CRT (v0.3.0) | `red-team-lead`      | adversarial-prompter, tool-abuse-tester, data-exfil-tester, model-poisoning-scout, supply-chain-attacker, social-engineering-tester, playbook-author |
 
 ## Progressive disclosure
 
@@ -186,11 +189,7 @@ Ask yourself:
 - `references/meeting-log-format.md` — chat.jsonl entry types for board and council meetings
 - `references/version-layers.md` — cumulative invariants from v0.2.1 through v0.3.0.
 - Supporting skills (v0.2.x): `ship-it` (STRIDE/OWASP/schema/escalation), `memory` + `session-log` (durable learning + logs), `gates` + `taskflow` + `worktree` (six-state/fix-loop/parallel), `skill-creator`, `model-tiering`, `notify`.
-- v0.3.0 Wave 1 skills: `vision-doc` (mission + OKRs + 3-bullet slice), `okr` (derivation/scoring/roll-up), `adr` (decision receipts), `meeting-minutes` (durable minutes).
-- v0.3.0 Wave 2 skills: `idea-pipeline` (4-stage ideation → top-5), `user-meeting` (4-phase user convening), `market-intel` (canonical artifact shapes), `positioning` (messaging canvas + narrative score rubric).
-- v0.3.0 Wave 3 skills: `roster` (census + hire/fire/repurpose ADR triggers), `audit` (independent close + portfolio paper-trail integrity), `capacity` (per-agent + per-council utilization bands).
-- v0.3.0 Wave 4 skills: `ladder` (8-rung never-give-up resilience — Rung 0 retry → Rung 7 parking, per-rung ADR-backed transitions, taskflow seeds `ladderRung` on `blocked`).
-- v0.3.0 Wave 5 skills: `eval` (close-eval + portfolio-regression + benchmark-sweep + compaction, PKR-derived items, 5 pp threshold, quarter-frozen baselines), `budget` (size classes small/medium/large/custom, per-phase allocation, burn tracked on every report, 110 % Rung 6 escalation).
+- v0.3.0 Waves 1–6 skills (summary in `references/version-layers.md`): Wave 1 `vision-doc` + `okr` + `adr` + `meeting-minutes`; Wave 2 `idea-pipeline` + `user-meeting` + `market-intel` + `positioning`; Wave 3 `roster` + `audit` + `capacity`; Wave 4 `ladder`; Wave 5 `eval` + `budget`; Wave 6 `red-team` + `playbook`.
 - Repo root `AGENTS.md`; `agents/AGENTS.md`, `skills/AGENTS.md`; `councils/<council>/AGENTS.md` (read before every dispatch).
 
 ## Tone

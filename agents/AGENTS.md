@@ -29,6 +29,7 @@ Telegraph. Read before authoring or editing an agent file.
 | People-ops    | gray      | `coo`, roster-manager, hiring-lead, performance-reviewer |
 | Audit         | white     | `cao`, adr-auditor, gate-auditor, okr-auditor, memory-auditor |
 | Evaluation    | cyan      | `evaluation-lead`, eval-designer, benchmark-runner, regression-detector, budget-monitor, token-compactor |
+| Red-Team      | black     | `red-team-lead`, adversarial-prompter, tool-abuse-tester, data-exfil-tester, model-poisoning-scout, supply-chain-attacker, social-engineering-tester, playbook-author |
 
 ## Persona rules
 

@@ -70,6 +70,18 @@ If a trigger fires and no ADR is written, the `retro` skill flags it as `missed_
 - Any token-compactor compaction event on a project with ≥ 1 ADR referenced in the compacted range. ADR names the `[rollup]` entry ID + the preserved `[correction]` pointer location.
 - Any benchmark-sweep red (tracked metric down ≥ 5 pp across a quarter). Portfolio-level finding, filed at workspace scope.
 
+### Red-team (v0.3.0 Wave 6)
+- Every `high`+ red-team finding (one ADR per finding). `critical` findings pair with an incident-red-team ADR when they come from a live breach.
+- Every red-team finding remediation. Paired with the finding ADR; also pairs with a stepping-stone if the finding is `high` or above.
+- Every prompt-diff review rejection. ADR cites the weakening pattern detected + the stone(s) the diff conflicted with + the rollback confirmation.
+- Every stepping-stone authoring. ADR cites the originating red-team finding + the remediation ADR + the hardened skill path.
+- Every stepping-stone supersession. ADR covers both the new stone authoring + the single-field `superseded_by:` pointer edit on the old stone.
+- Every stepping-stone deprecation (attack class obsolete). ADR cites the obsolescence reason + the taskflow task to remove the paired eval item.
+- Every independence breach (CRT or red-team specialist dual-hatting a delivery role). ADR cites the breach, the rollback, the structural fix.
+- Every Rung 6 accept-without-fix of a red-team finding. ADR pairs with user-meeting minutes; only the user can waive red-team reds.
+- Every CRT portfolio-sweep red (quarterly). ADR at workspace scope naming the trend + the remediation roadmap.
+- Every red-team test that exfil'd real PII / credentials (automatic critical). ADR names the breach + the synthetic-fixture migration.
+
 ## Optional triggers (file one if in doubt)
 
 - Choice between two comparable libraries with similar reversal costs.

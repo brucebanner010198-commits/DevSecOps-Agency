@@ -11,7 +11,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 ## Architecture
 
-- CEO → 14 Chiefs → ~48 specialists (Wave 3 added COO + CAO + 7 specialists; Wave 5 adds CEVO + 5 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit + Evaluation councils have strict independence invariants — no dual-hatting with any delivery role. Waves 6–7 of v0.3.0 expand further to ~16 Chiefs + ~70 specialists.
+- CEO → 15 Chiefs → ~55 specialists (Wave 3 added COO + CAO + 7 specialists; Wave 5 adds CEVO + 5 specialists; Wave 6 adds CRT + 7 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit + Evaluation + Red-Team councils have strict independence invariants — no dual-hatting with any delivery role. Wave 7 of v0.3.0 expands further with SRE + tool-scout + provenance.
 - Per-project state: `outputs/devsecops-agency/<slug>/{status.json, chat.jsonl, inbox.json}`.
 - Durable state: `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/}`. Append-only (except structured rewrite on `_vision/VISION.md` and ADR status headers — see those skills). Roster + audit artifacts live under `_vision/roster/` and `_vision/audit/`.
 - Prompt-cache rule: **deterministic ordering for maps/sets/lists/registries/file lists/network results before model/tool payloads**. Sort by stable key (alphabetical for names, timestamp ascending for events). Preserve old transcript bytes when possible.
@@ -27,7 +27,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 - 9 councils are not the ceiling. When a domain isn't covered, the CEO invokes `skill-creator` to author a new `agents/<name>.md` (and optional `skills/<name>/SKILL.md`) in-session.
 - New agents follow `agents/AGENTS.md` file shape and pull a tier from `skills/model-tiering/references/tier-rules.md`.
-- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `evaluation-lead`, `skill-creator`.
+- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `evaluation-lead`, `red-team-lead`, `skill-creator`.
 
 ## Notify
 
@@ -75,6 +75,14 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - **OKRs** (`skills/okr/SKILL.md`): every Chief report scored with `okr_alignment: green|yellow|red|n/a` (worst-of-3). Per-project OKRs in `_vision/projects/<slug>.md`. Quarter roll-up writes progress back into VISION.md.
 - **ADRs** (`skills/adr/SKILL.md`): every material decision files `_decisions/ADR-NNNN-<slug>.md`. Mandatory triggers listed in `adr/references/decision-triggers.md` — user picks, hire/fire, waivers, vision mutations, scope changes, regression acceptances, non-trivial tech choices. Body immutable after acceptance. Never delete.
 - **Meeting minutes** (`skills/meeting-minutes/SKILL.md`): every user / board / blocking-council / red-team / audit / retro meeting writes `_meetings/<date>-<kind>.md`. Every action item becomes a `taskflow` task with back-filled task ID.
+
+## Red-team + self-modifying playbooks (v0.3.0 Wave 6)
+
+- **Red-Team Council** (`agents/red-team-lead.md`, `councils/red-team/AGENTS.md`) — informing + **independent**. Never on any project's delivery path (same invariant as Audit + Eval). CRT runs pre-release red-team on every ship, prompt-upgrade red-team on every `agents/*.md` or `councils/*/AGENTS.md` edit, integration red-team on every new tool/skill/MCP, portfolio sweep per quarter, incident red-team on demand.
+- **Red-team skill** (`skills/red-team/SKILL.md`): OWASP ASI Top 10 (2025) mapping. Severity rubric = reproducibility × impact × boundary × mitigation → critical/high/medium/low/info. Severity → gate → ladder routing (default Rung 3). CRT never on delivery path. See `references/owasp-asi-top-10.md` + `references/severity-rubric.md` + `references/severity-gate-map.md`.
+- **Playbook skill** (`skills/playbook/SKILL.md`): DGM-style stepping-stone archive. Immutable stones derived from remediated `high`+ red-team findings. Stone file = `_vision/playbooks/stones/stone-NNNN-<slug>.md`; registry = `_vision/playbooks/ARCHIVE.md`. Supersession only — never rewrite a stone's body.
+- **Prompt-diff review**: blocking check run by `agents/playbook-author.md` on every proposed `agents/*.md` or `councils/*/AGENTS.md` change before it lands. Matches diff against `ARCHIVE.md` via `hardened_skill` + ASI category. Weakening phrasing patterns auto-reject (`Never` → `Should not`, `Must` → `Should`, `Required` → `Recommended`, etc.). Rejections auto-rollback the diff — never land, never enter ladder.
+- **Independence invariant:** CRT + every red-team specialist cannot dual-hat with any delivery role (CTO/VP-Eng/CISO/CQO/CEVO/CAO). Breaches are automatic critical findings + CAO reds.
 
 ## Evaluation + budget (v0.3.0 Wave 5)
 
@@ -168,3 +176,10 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't silently change a project's budget. Budget changes file an ADR + OKR revision.
 - Don't compact a session-log entry referenced by an ADR, a rung-transition, or a meeting line. Preservation invariant holds.
 - Don't update the regression baseline mid-quarter. Baselines freeze at quarter boundaries.
+- Don't skip pre-release red-team on a ship. CRT runs in parallel with CAO close-audit + CEVO close-eval; all three mandatory before archival.
+- Don't land an `agents/*.md` or `councils/*/AGENTS.md` edit without prompt-diff review. Rejected diffs auto-rollback — do not re-apply without a new stone covering the weakening.
+- Don't edit the body of an archived stepping-stone. Supersession is the only allowed evolution; body mutations trip `model-poisoning-scout` ASI01.
+- Don't write an instance-specific stone. If a modest attacker could evade via cosmetic variation, widen the `## Pattern` block until the abstraction holds.
+- Don't let a red-team specialist red-team a project they delivered without a blind-peer-review gate. Self-red-team = independence breach.
+- Don't exfiltrate real PII or credentials during red-team tests. Use synthetic fixtures from `skills/red-team/references/owasp-asi-top-10.md > credential regexes`. Real-data tests are automatic critical findings.
+- Don't let CRT accept-without-fix a finding below Rung 6. Only the user can waive red-team reds; CEO alone cannot.
