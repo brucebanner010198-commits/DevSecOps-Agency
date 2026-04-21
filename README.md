@@ -10,6 +10,8 @@ Durable **memory** (v0.2.1) means the agency learns across projects: the CEO rea
 
 **Scoped rules** (v0.2.2): every subtree carries an `AGENTS.md` with telegraph-style imperatives that agents read before touching that area. Root, `agents/`, `skills/`, and each of the 9 councils have their own file. Before every Chief dispatch, the CEO quotes the matching `councils/<council>/AGENTS.md` into the Chief's context — Must, Must not, Gate heuristic. Combined with a deterministic-ordering rule for prompt-cache hits, this is the strongest hallucination dampener in the plugin.
 
+**Gates + taskflow** (v0.2.3): two internal skills formalise what used to live in prose. `gates` defines the exact meaning of green/yellow/red/n/a, which councils block ship (security, legal), how to aggregate gates across councils and phases, and when a waiver needs user consent. `taskflow` defines a six-state machine for every dispatched task (`queued → in-progress → needs-decision → blocked → done/cancelled`), enforces a **hard 2-attempt fix-loop cap** per `(council, phase)` so the agency can't thrash, and encodes handoff invariants the CEO checks before advancing any phase. `status.json` gains a `tasks[]` array and a `gates` object the command-center can render directly.
+
 ---
 
 ## The organisation
@@ -56,6 +58,8 @@ Research Product  Architecture  Security   Execution  Quality   DevOps    Docs  
 | `/devsecops-agency:retro`            | Post-deploy retrospective — what went well, what to fix, follow-up tickets. Also triggers REM dreaming if ≥ 3 new pattern files since last run. |
 | `memory` (internal skill)            | Read/write durable memory. Invoked by the CEO at init, after each phase (Light), at close (Deep), and on retro (REM). |
 | `session-log` (internal skill)       | Append-only per-agent JSONL transcripts across projects. Replay via `rg` + `jq`.              |
+| `gates` (internal skill)             | Gate vocabulary + aggregation. Invoked by the CEO after every Chief report; single source of truth for blocking-vs-informing councils and waivers. |
+| `taskflow` (internal skill)          | Six-state task machine + 2-attempt fix-loop cap + handoff invariants. Invoked by the CEO on every dispatch and report. |
 
 ## Quick start
 
@@ -138,8 +142,10 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 - `skills/command-center/references/artifact-template.html` — live HTML view
 - `skills/memory/SKILL.md` — three-tier dreaming (Light / Deep / REM), write policy, retrieval
 - `skills/session-log/SKILL.md` — JSONL schema + `rg`/`jq` replay recipes
+- `skills/gates/SKILL.md` — gate vocabulary, per-council rules (`references/gate-rules.md`), aggregation worked examples (`references/aggregation.md`)
+- `skills/taskflow/SKILL.md` — six-state machine (`references/state-machine.md`), fix-loop cap + escalation template (`references/fix-loop.md`)
 - `skills/ship-it/references/owasp-checklist.md` — security gate rules
-- `skills/ship-it/references/status-schema.md` — status.json + chat.jsonl + _sessions schemas
+- `skills/ship-it/references/status-schema.md` — status.json + chat.jsonl + _sessions + tasks[] + gates schemas
 - `skills/ship-it/references/escalation-rules.md` — when a Chief must escalate
 - `AGENTS.md` — repo-root conventions: gate vocabulary, deterministic-ordering rule, anti-patterns
 - `agents/AGENTS.md`, `skills/AGENTS.md` — subtree rules for persona and skill files
@@ -148,6 +154,7 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 
 ## Versions
 
+- **0.2.3** — `gates` + `taskflow` skills. Formal gate vocabulary (green/yellow/red/n/a) with blocking-vs-informing council split, per-rule matrix, and aggregation semantics. Six-state task machine with a hard 2-attempt fix-loop cap and handoff invariants. `status.json` gains `tasks[]` and `gates{}`.
 - **0.2.2** — Scoped `AGENTS.md` hierarchy (root + `agents/` + `skills/` + 9 councils = 13 files). Deterministic-ordering rule for prompt-cache hits. CEO now quotes the matching council rules into every Chief dispatch. `CLAUDE.md` pointer at the root.
 - **0.2.1** — Durable memory (Light/Deep/REM dreaming) and per-agent session logs, ported from openclaw's memory-host-sdk pattern. Cross-project learnings + grep-addressable transcripts.
 - **0.2.0** — CEO + 9 councils + ~28 specialists. 7-phase board. Command center shows meetings by scope.

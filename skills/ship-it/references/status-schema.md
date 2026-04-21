@@ -51,6 +51,42 @@ Two shapes are supported. v0.2 is the default (9 councils, 7 phases, CEO orchest
   },
   "blockers": [],
   "commandCenterArtifactId": null,
+  "tasks": [
+    {
+      "id": "t-0001",
+      "council": "research",
+      "chief": "cro",
+      "phase": "discovery",
+      "kind": "chief-dispatch",
+      "state": "done",
+      "createdAt": "<iso>",
+      "updatedAt": "<iso>",
+      "dispatchedAt": "<iso>",
+      "finishedAt": "<iso>",
+      "sessionRef": "_sessions/cro/b8d2e44a1107.jsonl",
+      "fixAttempts": 0,
+      "gate": "green",
+      "artifacts": ["research-brief.md"],
+      "inboxItem": null,
+      "note": "discovery scan, wedge: dorms"
+    }
+  ],
+  "gates": {
+    "overall": "yellow",
+    "byCouncil": {
+      "research": "green", "product": "green", "architecture": "green",
+      "security": "yellow", "execution": "green", "quality": "yellow",
+      "devops": "green", "docs": "green", "legal": "green"
+    },
+    "byPhase": {
+      "discovery": "green", "design": "green", "build": "green",
+      "verify": "yellow", "ship": "green", "document-legal": "green"
+    },
+    "followups": [
+      {"id": "fu-001", "from": "devops", "severity": "medium", "summary": "redact email field in structured logs", "owner": "devops-lead", "state": "open"}
+    ],
+    "waivers": []
+  },
   "memory": {
     "priorLearnings": ["patterns/invoice-splitter.md"],
     "lightDreams": [
@@ -71,10 +107,34 @@ Two shapes are supported. v0.2 is the default (9 councils, 7 phases, CEO orchest
     "councilMeetings": 18,
     "fixLoops": 1,
     "escalations": 0,
-    "memoryWrites": 6
+    "memoryWrites": 6,
+    "tasksByState": {"queued": 0, "in-progress": 1, "needs-decision": 0, "blocked": 0, "done": 7, "cancelled": 0},
+    "waivers": 0
   }
 }
 ```
+
+### tasks[] entry
+
+One row per Chief dispatch. Append-then-update, never delete. See `skills/taskflow/SKILL.md` for the state machine and legal transitions. Fields:
+
+- `id` — monotonic `t-NNNN`.
+- `council` · `chief` · `phase` — which slot in the org chart.
+- `kind` — `chief-dispatch | fix-loop | escalation-response | waiver-check`.
+- `state` — `queued | in-progress | needs-decision | blocked | done | cancelled`.
+- `fixAttempts` — 0, 1, or 2. Exceeding 2 forces the task to `blocked`.
+- `sessionRef` — path to the `_sessions/<agentId>/<sessionId>.jsonl` with detail.
+- `gate` — the report gate (`green | yellow | red | null`); null while running.
+- `inboxItem` — set when state is `blocked`.
+
+### gates object
+
+Aggregate view. The `gates` skill is the single writer; the command-center is the reader.
+
+- `overall` — project gate, computed by `skills/gates/references/aggregation.md` rules.
+- `byCouncil` · `byPhase` — per-slice aggregates.
+- `followups[]` — documented yellow tickets and waived-red follow-ups.
+- `waivers[]` — explicit user-consented overrides of red gates.
 
 ## v0.1 (legacy — still supported)
 
@@ -112,10 +172,11 @@ One JSON object per line. New fields: `scope`, `council`, `gate`, `artifacts` (a
 {"ts":"<iso>","scope":"memory","from":"ceo","to":"_memory","type":"write","tier":"light","artifact":"_memory/memory/2026-04-20.md","note":"5 bullets"}
 ```
 
-`type` vocabulary: `dispatch · report · handoff · board-decision · fix-loop · escalate · resume · write`.
-`gate` vocabulary: `green · yellow · red · n/a`.
+`type` vocabulary: `dispatch · report · handoff · board-decision · fix-loop · escalate · resume · write · waiver`.
+`gate` vocabulary: `green · yellow · red · n/a` (see `skills/gates/SKILL.md` for meaning and blocking-council rules).
 `scope` vocabulary: `board · council · memory`.
 `tier` vocabulary (memory scope only): `light · deep · rem`.
+`state` vocabulary (tasks[]): `queued · in-progress · needs-decision · blocked · done · cancelled` (see `skills/taskflow/SKILL.md`).
 
 ## _sessions/<agentId>/<sessionId>.jsonl schema (v0.2.1)
 

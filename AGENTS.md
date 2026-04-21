@@ -18,11 +18,21 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 ## Gates
 
-- CISO blocks on any Critical/High unmitigated risk. No override.
-- GC blocks on license `red` or privacy `red` before public release.
-- Gate vocabulary: `green` · `yellow` · `red` · `n/a`.
-- Phase exit criteria in `skills/ceo/references/board-phases.md`. Don't skip.
-- Chief reports without a gate signal are invalid.
+- Single source of truth: `skills/gates/SKILL.md` + `skills/gates/references/gate-rules.md`.
+- Gate vocabulary: `green` · `yellow` · `red` · `n/a`. Nothing else.
+- Blocking councils: **security (CISO)** and **legal (GC)**. Their reds block ship unless waived by the user via `inbox.json`.
+- Informing councils: the other seven. Their reds aggregate into the project gate and can be waived by the CEO after user consent.
+- `yellow` requires a non-empty `followups[]` in the report. No silent yellows.
+- Aggregation: any blocking red unwaived → project red; else any red → red; else any yellow → yellow; else green. `n/a` skipped.
+- Phase exit criteria in `skills/ceo/references/board-phases.md`. Handoff invariants in `skills/taskflow/SKILL.md`.
+
+## Taskflow
+
+- Every Chief dispatch is a task row in `status.json > tasks[]`.
+- States: `queued · in-progress · needs-decision · blocked · done · cancelled`. See `skills/taskflow/references/state-machine.md`.
+- Fix-loop cap: **2 attempts per `(council, phase)`**. Attempt 3 transitions to `blocked`, not another loop.
+- Every fix-loop dispatch must cite specific Must/Must-not rows in `corrections[]`. No "try harder."
+- Phase cannot advance while any task is in `needs-decision` or unblocked `blocked`.
 
 ## Writing
 
