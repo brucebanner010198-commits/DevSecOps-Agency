@@ -11,9 +11,9 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 ## Architecture
 
-- CEO → 11 Chiefs → ~36 specialists (Wave 2 adds CMO + CSO + 8 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Waves 3–7 of v0.3.0 expand further to 14 Chiefs + ~70 specialists.
+- CEO → 13 Chiefs → ~43 specialists (Wave 3 adds COO + CAO + 7 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit Council has a strict independence invariant — no dual-hatting. Waves 4–7 of v0.3.0 expand further to ~16 Chiefs + ~70 specialists.
 - Per-project state: `outputs/devsecops-agency/<slug>/{status.json, chat.jsonl, inbox.json}`.
-- Durable state: `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/}`. Append-only (except structured rewrite on `_vision/VISION.md` and ADR status headers — see those skills).
+- Durable state: `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/}`. Append-only (except structured rewrite on `_vision/VISION.md` and ADR status headers — see those skills). Roster + audit artifacts live under `_vision/roster/` and `_vision/audit/`.
 - Prompt-cache rule: **deterministic ordering for maps/sets/lists/registries/file lists/network results before model/tool payloads**. Sort by stable key (alphabetical for names, timestamp ascending for events). Preserve old transcript bytes when possible.
 
 ## Model tiering
@@ -27,7 +27,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 - 9 councils are not the ceiling. When a domain isn't covered, the CEO invokes `skill-creator` to author a new `agents/<name>.md` (and optional `skills/<name>/SKILL.md`) in-session.
 - New agents follow `agents/AGENTS.md` file shape and pull a tier from `skills/model-tiering/references/tier-rules.md`.
-- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `skill-creator`.
+- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `skill-creator`.
 
 ## Notify
 
@@ -75,6 +75,14 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - **OKRs** (`skills/okr/SKILL.md`): every Chief report scored with `okr_alignment: green|yellow|red|n/a` (worst-of-3). Per-project OKRs in `_vision/projects/<slug>.md`. Quarter roll-up writes progress back into VISION.md.
 - **ADRs** (`skills/adr/SKILL.md`): every material decision files `_decisions/ADR-NNNN-<slug>.md`. Mandatory triggers listed in `adr/references/decision-triggers.md` — user picks, hire/fire, waivers, vision mutations, scope changes, regression acceptances, non-trivial tech choices. Body immutable after acceptance. Never delete.
 - **Meeting minutes** (`skills/meeting-minutes/SKILL.md`): every user / board / blocking-council / red-team / audit / retro meeting writes `_meetings/<date>-<kind>.md`. Every action item becomes a `taskflow` task with back-filled task ID.
+
+## People-ops + audit (v0.3.0 Wave 3)
+
+- **People-ops Council** (`agents/coo.md`, `councils/people-ops/AGENTS.md`) — informing. Owns the living roster: census, performance, proposals. Every mutation files an ADR.
+- **Audit Council** (`agents/cao.md`, `councils/audit/AGENTS.md`) — informing but **independent**. Never participates in any project's delivery path. Close-audit mandatory on every ship; portfolio-audit mandatory per quarter.
+- **Roster skill** (`skills/roster/SKILL.md`): census + performance + proposals + archive. See `references/action-rules.md` for per-action checklists and `references/archive-policy.md` for retiring-an-agent file shape.
+- **Audit skill** (`skills/audit/SKILL.md`): 4 kinds (close, portfolio, pre-release, incident). Every red files an ADR; every yellow pairs with a taskflow task. Machine-checkable rows walk every entry.
+- **Capacity skill** (`skills/capacity/SKILL.md`): per-agent + per-Chief bands + per-council parallel utilization + KR coverage gaps. Feeds roster-manager and idea-pipeline pre-flight.
 
 ## Idea pipeline + user-meeting (v0.3.0 Wave 2)
 
@@ -127,3 +135,9 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't let opportunity-ranker score without all 4 upstream artifacts (trend-radar, competitive-map, market-sizes, CMO narrative-readout). Return `blocked` instead of a half-scored shortlist.
 - Don't write launch copy before positioning.md lands. Cart before horse.
 - Don't publish an elevator pitch over 30 words. The 30-word cap is a hard gate, not a guideline.
+- Don't archive a project without running a CAO close-audit. Shipped-but-not-audited = paper trail rots.
+- Don't let an Audit specialist also sit on any project's delivery path. Independence is the whole point of the council.
+- Don't mutate an accepted ADR's body, a `_memory/*` file line, or a `_sessions/**.jsonl` entry. Append-only is a hard invariant; violations are automatic CAO reds.
+- Don't retire an agent via `git rm`. Archive to `_vision/roster/_archive/<name>.md` with a redirect line.
+- Don't propose a tier downgrade. Propose a prompt upgrade instead; if that fails twice, propose a fire + hire.
+- Don't execute a hire or fire outside of the `roster` skill. Driveby roster changes rot the paper trail.

@@ -2,6 +2,26 @@
 
 Each release layer is still in effect. The CEO playbook in `SKILL.md` is the condensed view; this is the long form.
 
+## v0.3.0-alpha.3 — people-ops + audit (Wave 3)
+
+Two new councils + three new skills give the agency a self-modifying roster and an independent integrity check:
+
+- **People-ops Council** — Chief: `coo` (Sonnet). Specialists: `roster-manager`, `hiring-lead`, `performance-reviewer`. Informing council. Outputs live in `_vision/roster/`. Convened by CEO at project kick-off/close, quarter roll-up, REM retro, and on 2-attempt fix-loop-cap hit within 30 days.
+- **Audit Council** — Chief: `cao` (Sonnet). Specialists: `adr-auditor`, `gate-auditor`, `okr-auditor`, `memory-auditor`. Independent — never in any project's delivery path. Outputs live in `_vision/audit/`. Close-audit mandatory on every ship; portfolio-audit mandatory per quarter.
+- **`roster`** — census.md (alphabetical agent table), performance.md (30/90d ratings), proposals.md (hire/fire/tier-change/repurpose/prompt-upgrade), coo-brief.md (synthesis). Archives in `_vision/roster/_archive/`.
+- **`audit`** — 4 audit kinds (close, portfolio, pre-release, incident). Every red files an ADR in the same CEO turn. Every yellow pairs with a taskflow task. Machine-checkable rows walk every entry — no sampling.
+- **`capacity`** — per-agent bands (idle/low/healthy/hot/overloaded) + per-council parallel utilization + KR coverage gaps.
+
+Invariants added in Wave 3 (cumulative 1-8 from Waves 1-3 in `SKILL.md`):
+
+11. Never skip a close-audit. `audit` is mandatory on every project close; CEO cannot archive without green/yellow audit.
+12. Never mutate an agent's `agents/<name>.md` prompt without an ADR proposing the change and `skill-creator` executing it.
+13. Never fire a blocking-council agent (`security-lead`, `gc`, or their specialists) without a user-signed waiver in `inbox.json`.
+14. Never propose a tier downgrade. `skills/model-tiering/SKILL.md` forbids it; propose prompt upgrade instead.
+15. Never delete a retired agent file. Preserve in `_vision/roster/_archive/<name>.md` with redirect line and frozen "Original prompt" block.
+16. Audit Council is read-only on the records being audited. Corrections flow through new ADRs or `[correction]` session-log lines — never revert, never rewrite.
+17. No Audit specialist may also be in any project's delivery path. Independence violation → pause audit + file breach ADR + reassign via COO.
+
 ## v0.3.0-alpha.2 — idea pipeline + user-meeting (Wave 2)
 
 Two new councils + four new skills add portfolio-level ideation and the formal CEO ↔ user convening:

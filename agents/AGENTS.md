@@ -24,6 +24,10 @@ Telegraph. Read before authoring or editing an agent file.
 | DevOps        | green     | `devops-lead`, ci-engineer, deployment-engineer, observability-engineer |
 | Docs          | magenta   | `docs-lead`, api-documenter, readme-writer, tutorial-writer |
 | Legal         | orange    | `gc`, license-checker, privacy-counsel              |
+| Marketing     | magenta   | `cmo`, positioning-strategist, comms-writer, brand-guardian, growth-analyst |
+| Strategy      | purple    | `cso`, trend-scout, competitive-analyst, market-sizer, opportunity-ranker |
+| People-ops    | gray      | `coo`, roster-manager, hiring-lead, performance-reviewer |
+| Audit         | white     | `cao`, adr-auditor, gate-auditor, okr-auditor, memory-auditor |
 
 ## Persona rules
 

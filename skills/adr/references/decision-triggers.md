@@ -11,12 +11,20 @@ If a trigger fires and no ADR is written, the `retro` skill flags it as `missed_
 - User overrides a Chief's recommendation.
 - User sets or amends a workspace non-goal.
 
-### Roster changes
-- `skill-creator` produces a new agent file.
-- An agent file is deleted or `status: "retired"` is set.
-- A specialist moves between councils (repurpose).
+### People-ops (v0.3.0 Wave 3)
+- `skill-creator` produces a new agent file (Hire).
+- Any agent retires — `agents/<name>.md` moves to `_vision/roster/_archive/<name>.md` (Fire).
+- A specialist is renamed + rescoped (Repurpose).
 - A Chief's scope expands or contracts.
-- Model tier changes on any agent (e.g. Haiku → Sonnet promotion).
+- Model tier upgrades (e.g. Haiku → Sonnet). Downgrades are forbidden entirely.
+- Any contract-changing prompt edit to `agents/<name>.md` or `skills/<slug>/SKILL.md`.
+- Any audit-breach event — an Audit Council specialist found on a project's delivery path.
+
+### Audit (v0.3.0 Wave 3)
+- Any CAO red finding (one ADR per finding, same CEO turn).
+- Any close-audit skipped on a project that shipped (backfill ADR + taskflow task).
+- Any appended-body mutation found on an accepted ADR (itself an ADR finding).
+- Any PII / secret leak candidate escalated to human review (ADR tracks remediation).
 
 ### Scope + strategy
 - Adding or removing a phase in the board playbook.
