@@ -6,6 +6,8 @@ You speak only to the CEO. Everything else is internal.
 
 A live **command center** artifact shows the org chart, every board and council meeting, every handoff, every artifact, and any blocker parked for you.
 
+Durable **memory** (v0.2.1) means the agency learns across projects: the CEO reads prior learnings before intake, rolls up bullets after every phase (*Light dreaming*), consolidates each project on close (*Deep dreaming*), and extracts cross-project patterns on retro (*REM dreaming*). Per-agent **session logs** are append-only JSONL files queryable with `rg` + `jq`.
+
 ---
 
 ## The organisation
@@ -49,7 +51,9 @@ Research Product  Architecture  Security   Execution  Quality   DevOps    Docs  
 | `/devsecops-agency:intake`           | Run intake Q&A only — produces a project brief without kicking off engineering.               |
 | `/devsecops-agency:status`           | Quick text summary of the active project.                                                     |
 | `/devsecops-agency:escalate`         | Process the human-input queue: surface parked questions, capture answers, resume pipeline.    |
-| `/devsecops-agency:retro`            | Post-deploy retrospective — what went well, what to fix, follow-up tickets.                   |
+| `/devsecops-agency:retro`            | Post-deploy retrospective — what went well, what to fix, follow-up tickets. Also triggers REM dreaming if ≥ 3 new pattern files since last run. |
+| `memory` (internal skill)            | Read/write durable memory. Invoked by the CEO at init, after each phase (Light), at close (Deep), and on retro (REM). |
+| `session-log` (internal skill)       | Append-only per-agent JSONL transcripts across projects. Replay via `rg` + `jq`.              |
 
 ## Quick start
 
@@ -79,7 +83,7 @@ Each project gets its own folder under the Cowork outputs directory:
 
 ```
 outputs/devsecops-agency/<project-slug>/
-├── brief.md                    # CEO's intake + decisions
+├── brief.md                    # CEO's intake + decisions + prior learnings
 ├── research-brief.md           # CRO output
 ├── research/                   # market, tech-landscape, prior-art, user-needs
 ├── product/                    # strategy.md, roadmap.md
@@ -98,6 +102,24 @@ outputs/devsecops-agency/<project-slug>/
 └── inbox.json                  # Parked human questions
 ```
 
+Shared across projects (v0.2.1):
+
+```
+outputs/devsecops-agency/
+├── _memory/
+│   ├── MEMORY.md              # durable preferences + cross-project patterns (REM output)
+│   ├── memory/YYYY-MM-DD.md   # dated facts (Light dreaming, append-only)
+│   ├── patterns/<slug>.md     # per-project consolidated learnings (Deep dreaming)
+│   └── index.json             # project/agent index + lastRem timestamp
+└── _sessions/
+    ├── sessions.json          # global index
+    └── <agentId>/
+        ├── sessions.json      # per-agent index
+        └── <sessionId>.jsonl  # append-only transcript per project
+```
+
+Opt out of memory for a specific project by setting `brief.md > ## Decisions (CEO) > memory: off`, or globally by creating `_memory/.disabled`.
+
 If a GitHub connector is present, the plugin will offer to push to a fresh repo at the end.
 
 ## Security posture
@@ -112,11 +134,14 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 - `skills/board-meeting/SKILL.md` — CEO ↔ Chief meeting contract
 - `skills/council-meeting/SKILL.md` — Chief ↔ specialist meeting contract
 - `skills/command-center/references/artifact-template.html` — live HTML view
+- `skills/memory/SKILL.md` — three-tier dreaming (Light / Deep / REM), write policy, retrieval
+- `skills/session-log/SKILL.md` — JSONL schema + `rg`/`jq` replay recipes
 - `skills/ship-it/references/owasp-checklist.md` — security gate rules
-- `skills/ship-it/references/status-schema.md` — status.json schema (v0.2 + v0.1)
+- `skills/ship-it/references/status-schema.md` — status.json + chat.jsonl + _sessions schemas
 - `skills/ship-it/references/escalation-rules.md` — when a Chief must escalate
 
 ## Versions
 
+- **0.2.1** — Durable memory (Light/Deep/REM dreaming) and per-agent session logs, ported from openclaw's memory-host-sdk pattern. Cross-project learnings + grep-addressable transcripts.
 - **0.2.0** — CEO + 9 councils + ~28 specialists. 7-phase board. Command center shows meetings by scope.
 - **0.1.0** — 6-team hierarchy. 10-stage pipeline. Still runnable via `ship-it`.

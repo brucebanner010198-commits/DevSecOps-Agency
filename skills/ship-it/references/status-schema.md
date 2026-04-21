@@ -51,11 +51,27 @@ Two shapes are supported. v0.2 is the default (9 councils, 7 phases, CEO orchest
   },
   "blockers": [],
   "commandCenterArtifactId": null,
+  "memory": {
+    "priorLearnings": ["patterns/invoice-splitter.md"],
+    "lightDreams": [
+      {"phase": "discovery", "ts": "<iso>", "file": "_memory/memory/2026-04-20.md", "bullets": 5}
+    ],
+    "deepDreamFile": null,
+    "optOut": false
+  },
+  "sessionLog": {
+    "ceoSessionId": "a4f1c09b22e8",
+    "byAgent": {
+      "cro": "b8d2e44a1107",
+      "engineering-lead": "77c19abf5d03"
+    }
+  },
   "metrics": {
     "boardMeetings": 4,
     "councilMeetings": 18,
     "fixLoops": 1,
-    "escalations": 0
+    "escalations": 0,
+    "memoryWrites": 6
   }
 }
 ```
@@ -93,11 +109,23 @@ One JSON object per line. New fields: `scope`, `council`, `gate`, `artifacts` (a
 {"ts":"<iso>","scope":"board","from":"ceo","to":"cro","type":"dispatch","phase":"discovery","note":"run the research council"}
 {"ts":"<iso>","scope":"board","from":"cro","to":"ceo","type":"report","phase":"discovery","gate":"green","artifacts":["research-brief.md"],"note":"wedge: dorms"}
 {"ts":"<iso>","scope":"council","council":"research","from":"cro","to":"market-researcher","type":"dispatch","artifact":"research/market.md"}
+{"ts":"<iso>","scope":"memory","from":"ceo","to":"_memory","type":"write","tier":"light","artifact":"_memory/memory/2026-04-20.md","note":"5 bullets"}
 ```
 
-`type` vocabulary: `dispatch · report · handoff · board-decision · fix-loop · escalate · resume`.
+`type` vocabulary: `dispatch · report · handoff · board-decision · fix-loop · escalate · resume · write`.
 `gate` vocabulary: `green · yellow · red · n/a`.
-`scope` vocabulary: `board · council`.
+`scope` vocabulary: `board · council · memory`.
+`tier` vocabulary (memory scope only): `light · deep · rem`.
+
+## _sessions/<agentId>/<sessionId>.jsonl schema (v0.2.1)
+
+Per-agent append-only transcripts. See `skills/session-log/SKILL.md` for the full contract.
+
+```json
+{"ts":"<iso>","agentId":"market-researcher","sessionId":"a4f1c09b22e8","projectSlug":"invoice-splitter","phase":"discovery","type":"report","from":"cro","to":"market-researcher","artifact":"research/market.md","gate":"green","tokens":{"in":1234,"out":512},"note":"incumbents skip students"}
+```
+
+`type` vocabulary (session-log): `dispatch · report · handoff · note · error`.
 
 ## inbox.json schema
 
