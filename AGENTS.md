@@ -11,9 +11,9 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 ## Architecture
 
-- CEO → 9 Chiefs → ~28 specialists. Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng).
+- CEO → 9 Chiefs → ~28 specialists. Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Waves 2–7 of v0.3.0 expand to 14 Chiefs + ~70 specialists.
 - Per-project state: `outputs/devsecops-agency/<slug>/{status.json, chat.jsonl, inbox.json}`.
-- Durable state: `outputs/devsecops-agency/{_memory/, _sessions/}`. Append-only.
+- Durable state: `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/}`. Append-only (except structured rewrite on `_vision/VISION.md` and ADR status headers — see those skills).
 - Prompt-cache rule: **deterministic ordering for maps/sets/lists/registries/file lists/network results before model/tool payloads**. Sort by stable key (alphabetical for names, timestamp ascending for events). Preserve old transcript bytes when possible.
 
 ## Model tiering
@@ -43,6 +43,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - Informing councils: the other seven. Their reds aggregate into the project gate and can be waived by the CEO after user consent.
 - `yellow` requires a non-empty `followups[]` in the report. No silent yellows.
 - Aggregation: any blocking red unwaived → project red; else any red → red; else any yellow → yellow; else green. `n/a` skipped.
+- **OKR alignment (v0.3.0):** `okr_alignment: green|yellow|red|n/a` is computed by `okr.score` before gate validation. Matrix in `skills/okr/references/scoring-rules.md`. `red` alignment with any council-green triggers user escalation + ADR.
 - Phase exit criteria in `skills/ceo/references/board-phases.md`. Handoff invariants in `skills/taskflow/SKILL.md`.
 
 ## Taskflow
@@ -67,6 +68,13 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - Memory writes: append-only, redact secrets and PII, cite source file. See `skills/memory/references/write-policy.md`. Run the novelty gate (`skills/memory/references/novelty.md`) before any Light/Deep/REM write; skip below threshold.
 - Session-log writes: one JSONL entry per dispatch, report, handoff, note, or error. See `skills/session-log/SKILL.md`.
 - Never overwrite an existing line in `chat.jsonl`, `memory/<date>.md`, `patterns/<slug>.md`, `MEMORY.md`, or any `_sessions/**/*.jsonl`.
+
+## Vision, OKRs, ADRs, meetings (v0.3.0)
+
+- **Vision** (`skills/vision-doc/SKILL.md`): `_vision/VISION.md` owns mission + ≤ 5 active OKRs + ≤ 5 non-goals. The CEO prepends a 3-bullet KR slice (selected by `vision-doc/references/cascade-rules.md`) to every Chief dispatch context — no dispatch without it.
+- **OKRs** (`skills/okr/SKILL.md`): every Chief report scored with `okr_alignment: green|yellow|red|n/a` (worst-of-3). Per-project OKRs in `_vision/projects/<slug>.md`. Quarter roll-up writes progress back into VISION.md.
+- **ADRs** (`skills/adr/SKILL.md`): every material decision files `_decisions/ADR-NNNN-<slug>.md`. Mandatory triggers listed in `adr/references/decision-triggers.md` — user picks, hire/fire, waivers, vision mutations, scope changes, regression acceptances, non-trivial tech choices. Body immutable after acceptance. Never delete.
+- **Meeting minutes** (`skills/meeting-minutes/SKILL.md`): every user / board / blocking-council / red-team / audit / retro meeting writes `_meetings/<date>-<kind>.md`. Every action item becomes a `taskflow` task with back-filled task ID.
 
 ## Commands
 
@@ -99,3 +107,9 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't dispatch an agent with a missing or `inherit` `model:` field. Fix via `skill-creator` first.
 - Don't write a memory bullet without running the novelty gate.
 - Don't fire more than 5 notifies per project run — buffer into a digest.
+- Don't dispatch a Chief without prepending the `## Vision slice` block. (Strips mission from execution.)
+- Don't validate a gate before invoking `okr.score`. OKR alignment is an input to gate aggregation.
+- Don't land a material decision without filing an ADR in the same CEO turn. "We'll document it later" = never.
+- Don't edit an accepted ADR's body. Supersede with a new ADR.
+- Don't skip minutes on a meeting "because it was informal." If ≥ 2 attendees decided anything, write minutes.
+- Don't create a meeting action item without a paired `taskflow` task ID. Orphaned actions rot.

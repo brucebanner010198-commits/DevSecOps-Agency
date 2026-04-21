@@ -1,7 +1,7 @@
 {
   "name": "devsecops-agency",
-  "version": "0.2.5",
-  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO holds board meetings with 9 Chiefs, each of whom runs a council of specialists. Research → Product → Architecture → Security → Execution → Quality → DevOps → Docs → Legal. Security-first (STRIDE + OWASP Top 10) by default. Ships to GitHub. v0.2.1 adds durable cross-project memory (three-tier Light/Deep/REM dreaming, ported from openclaw) and per-agent append-only JSONL session logs replayable with rg + jq. v0.2.2 adds a scoped AGENTS.md hierarchy (root + agents/ + skills/ + 9 councils) and a deterministic-ordering rule so every Chief reads its own Must / Must not / Gate heuristic before dispatch. v0.2.3 adds a formal gates skill (green/yellow/red/n/a with blocking-vs-informing councils and waiver semantics) and a taskflow skill with a six-state machine and a hard 2-attempt fix-loop cap — so the agency converges or escalates instead of thrashing. v0.2.4 adds a worktree skill: parallel dispatches and every fix-loop run in isolated <slug>/_worktrees/<chief>-<attempt>/ scratch directories with declared writes[]/reads[], atomic scope-checked alphabetical merge, stale-rebase detection, and structural-vs-non-structural conflict handling. v0.2.5 adds a skill-creator (runtime roster extension for uncovered domains), per-agent model tiering (Opus CEO / Sonnet Chiefs / Haiku specialists, enforced at dispatch), a notify skill with hook-wired push on close/block/REM and a 5-per-run rate limit, and a novelty gate on every Light/Deep/REM memory write so repeat projects stop bloating MEMORY.md with near-duplicates. A live command-center artifact shows the org chart, every meeting, every handoff, and any blocker parked for you.",
+  "version": "0.3.0-alpha.1",
+  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO holds board meetings with Chiefs, each of whom runs a council of specialists. Research → Product → Architecture → Security → Execution → Quality → DevOps → Docs → Legal. Security-first (STRIDE + OWASP Top 10) by default. Ships to GitHub. v0.2.1 adds durable cross-project memory (three-tier Light/Deep/REM dreaming) + append-only JSONL session logs. v0.2.2 adds scoped AGENTS.md hierarchy + deterministic ordering. v0.2.3 adds gates (green/yellow/red/n/a with blocking-vs-informing councils) + taskflow (six-state machine + 2-attempt fix-loop cap). v0.2.4 adds worktree parallelism with atomic scope-checked merge + structural-conflict escalation. v0.2.5 adds skill-creator runtime roster extension + per-agent model tiering (Opus CEO / Sonnet Chiefs / Haiku specialists) + notify (rate-limited push) + novelty-gated memory writes. v0.3.0 starts the 'company release': Wave 1 (this alpha) adds durable corporate paper trail — `vision-doc` (workspace VISION.md owning mission + OKRs + non-goals, with a 3-bullet KR slice prepended to every Chief dispatch), `okr` (per-project OKR derivation, per-report alignment scoring, quarter roll-up), `adr` (decision receipts in _decisions/ADR-NNNN-<slug>.md on every material decision, immutable after acceptance), and `meeting-minutes` (durable minutes for user/board/blocking-council/red-team/audit/retro meetings with action items backed by taskflow tasks). Waves 2–7 add marketing + strategy councils + top-5 user meeting, people-ops + audit, never-give-up resilience ladder, eval + benchmarks + budget, red-team + self-modifying playbooks, and SRE + tool-scout + provenance.",
   "author": {
     "name": "Sir"
   },
@@ -30,7 +30,12 @@
     "parallelism",
     "skill-creator",
     "model-tiering",
-    "notify"
+    "notify",
+    "vision",
+    "okr",
+    "adr",
+    "meeting-minutes",
+    "company-release"
   ],
   "license": "MIT"
 }

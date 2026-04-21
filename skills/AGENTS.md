@@ -27,7 +27,7 @@ Telegraph. Read before authoring or editing a skill.
 - `metadata.version` follows semver. Bump on contract changes (schema, artifact paths, trigger phrases).
 - Plugin root `plugin.json.version` bumps when ≥ 1 skill bumps.
 
-## Skill index (v0.2.5)
+## Skill index (v0.3.0-alpha.1)
 
 | Skill              | Trigger                                                 |
 | ------------------ | ------------------------------------------------------- |
@@ -40,7 +40,7 @@ Telegraph. Read before authoring or editing a skill.
 | `status`           | Text summary.                                           |
 | `escalate`         | Process parked questions.                               |
 | `retro`            | Post-deploy retro + REM dreaming trigger.               |
-| `memory`           | Read/write durable memory (Light/Deep/REM) with novelty gate. |
+| `memory`           | Read/write durable memory (Light/Deep/REM) with novelty gate. v0.3.0 extends read path to ADRs + meetings. |
 | `session-log`      | Per-agent append-only JSONL.                            |
 | `gates` (internal) | Gate vocabulary + aggregation. CEO invokes on report.   |
 | `taskflow` (internal) | Task state machine + fix-loop cap. CEO invokes on dispatch/report. |
@@ -48,3 +48,7 @@ Telegraph. Read before authoring or editing a skill.
 | `skill-creator`    | Runtime roster extension — author new agents + skills. CEO invokes on domain gap. |
 | `model-tiering`    | Per-agent tier assignment (Haiku/Sonnet/Opus). CEO reads on every dispatch. |
 | `notify`           | Push-notify surface on close/block/REM. Rate-limited.   |
+| **`vision-doc`** (v0.3.0) | Workspace VISION.md — mission + ≤ 5 OKRs + ≤ 5 non-goals. 3-bullet slice prepended to every dispatch. |
+| **`okr`** (v0.3.0) | Per-project OKR derivation, per-report scoring, quarter roll-up. CEO invokes on every report. |
+| **`adr`** (v0.3.0) | Decision receipts (`_decisions/ADR-NNNN-*.md`). CEO invokes on every material decision trigger. |
+| **`meeting-minutes`** (v0.3.0) | Durable minutes for user / board / blocking-council / red-team / audit / retro convenings. |

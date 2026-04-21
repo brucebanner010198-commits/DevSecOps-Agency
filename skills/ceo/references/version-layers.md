@@ -2,6 +2,25 @@
 
 Each release layer is still in effect. The CEO playbook in `SKILL.md` is the condensed view; this is the long form.
 
+## v0.3.0-alpha.1 — company foundations (Wave 1)
+
+Four new skills add durable corporate paper trail:
+
+- **`vision-doc`** — `_vision/VISION.md` owns mission + ≤ 5 active OKRs + ≤ 5 non-goals. Bootstrapped on first run per workspace. A 3-bullet KR slice (selected by `vision-doc/references/cascade-rules.md`) prepends to every Chief dispatch context.
+- **`okr`** — per-project OKRs derived from workspace VISION into `_vision/projects/<slug>.md`. Every Chief report scored with `okr_alignment: green|yellow|red|n/a` (worst-of-3 aggregation). Quarter roll-up writes progress back into VISION.md.
+- **`adr`** — `_decisions/ADR-NNNN-<slug>.md` per material decision. Mandatory triggers: user picks, roster changes, scope changes, waivers, vision mutations, non-trivial tech choices, regression acceptances, non-goal violations. Body immutable after acceptance; supersede via new ADR.
+- **`meeting-minutes`** — `_meetings/<date>-<kind>.md` for user / board / blocking-council / red-team / audit / retro convenings. Every action item becomes a `taskflow` task with back-filled task ID.
+
+Invariants:
+
+1. Never dispatch a Chief without the `## Vision slice` block prepended.
+2. Never validate a gate without first invoking `okr.score`.
+3. Never land a material decision without filing an ADR in the same CEO turn.
+4. Never hold a meeting of the above kinds without writing minutes.
+5. Minutes action items and `taskflow` tasks are 1:1 — never one without the other.
+
+Waves 2–7 extend: marketing + strategy councils + user-meeting (Wave 2), people-ops + audit (Wave 3), never-give-up ladder (Wave 4), eval + benchmark + budget (Wave 5), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
+
 ## v0.2.4 — worktree parallelism
 
 - Parallel dispatches and fix-loops (attempt ≥ 1) write to `<slug>/_worktrees/<chief>-<attempt>/`, not the main tree.

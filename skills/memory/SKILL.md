@@ -12,28 +12,41 @@ description: >
   "consolidate this project", "extract patterns", or internal invocation
   by the `ceo` skill.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # memory — durable agency learning
 
-Three-tier consolidation (Light / Deep / REM), append-only writes, grep-first retrieval, **conditional-write** to skip trivial duplicates. Ported pattern from openclaw's `memory-host-sdk/dreaming.ts`.
+Three-tier consolidation (Light / Deep / REM), append-only writes, grep-first retrieval, **conditional-write** to skip trivial duplicates. Ported pattern from openclaw's `memory-host-sdk/dreaming.ts`. v0.3.0 adds `_vision/`, `_decisions/`, `_meetings/` as sibling paper-trail tiers — written by the `vision-doc`, `adr`, and `meeting-minutes` skills respectively; read at retrieval via grep.
 
 ## Storage layout
 
-All memory lives under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/_memory/`:
+All agency state lives under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/`:
 
 ```
-_memory/
-├── MEMORY.md                  # durable preferences + cross-project patterns (REM output)
-├── memory/
-│   └── YYYY-MM-DD.md          # dated facts (Light dreaming output)
-├── patterns/
-│   └── <project-slug>.md      # per-project consolidated learnings (Deep dreaming output)
-└── index.json                 # lightweight index: {projects, agents, lastDream, byAgent}
+_memory/                        # learning (this skill)
+├── MEMORY.md                   # durable preferences + cross-project patterns (REM output)
+├── memory/YYYY-MM-DD.md        # dated facts (Light dreaming output)
+├── patterns/<slug>.md          # per-project consolidated learnings (Deep dreaming output)
+└── index.json                  # lightweight index
+
+_vision/                        # north star (vision-doc skill)
+├── VISION.md                   # mission + active OKRs + non-goals
+├── projects/<slug>.md          # per-project OKRs (okr skill)
+└── history/YYYY-MM-DD.md       # append-only vision-change log
+
+_decisions/                     # receipts (adr skill)
+├── ADR-NNNN-<slug>.md          # one ADR per material decision
+└── INDEX.md                    # generated index
+
+_meetings/                      # proceedings (meeting-minutes skill)
+├── YYYY-MM-DD-<kind>.md        # one file per meeting
+└── INDEX.md                    # generated index
 ```
 
-Append-only. Never overwrite an existing line — add new entries with a timestamp.
+`_memory/` writes are this skill's responsibility. `_vision/`, `_decisions/`, `_meetings/` are owned by their respective v0.3.0 skills; this skill's read path greps across all four when pulling prior learnings.
+
+Append-only (for `_memory/memory/` + `_memory/MEMORY.md` bullets + `_vision/history/` + `_meetings/`). Never overwrite an existing line — add new entries with a timestamp. Structured rewrite allowed on `_vision/VISION.md` and ADR status headers; see those skills' rules.
 
 ## Three tiers
 
@@ -71,7 +84,8 @@ At project init, the CEO runs this before intake:
 1. Read `_memory/MEMORY.md` top-to-bottom (always small enough).
 2. `rg -l "<keywords from idea>" _memory/patterns/` to find relevant prior projects.
 3. For the top 1–3 matches, read the section headers only.
-4. Inject a "## Prior learnings" section into `brief.md` with the 3–6 most relevant bullets and file-path citations.
+4. **v0.3.0:** Also `rg -l "<keywords>" _decisions/` for prior ADRs on the same topic (prevents re-litigating decisions) and `rg -l "<keywords>" _meetings/` for relevant prior user-meeting outcomes.
+5. Inject a "## Prior learnings" section into `brief.md` with 3–6 most relevant bullets, citing `_memory/patterns/<file>` + ADR numbers + meeting dates.
 
 See `references/retrieval.md` for the exact grep recipes.
 
