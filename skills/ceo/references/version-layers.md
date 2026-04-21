@@ -2,6 +2,25 @@
 
 Each release layer is still in effect. The CEO playbook in `SKILL.md` is the condensed view; this is the long form.
 
+## v0.3.0-alpha.2 — idea pipeline + user-meeting (Wave 2)
+
+Two new councils + four new skills add portfolio-level ideation and the formal CEO ↔ user convening:
+
+- **Marketing Council** — Chief: `cmo` (Sonnet). Specialists: `positioning-strategist`, `comms-writer`, `brand-guardian`, `growth-analyst`. Per-project outputs to `<slug>/marketing/`; pipeline-mode outputs to `_vision/projects/_pipeline/pipeline-readout.md`. Informing council.
+- **Strategy Council** — Chief: `cso` (Sonnet). Specialists: `trend-scout`, `competitive-analyst`, `market-sizer`, `opportunity-ranker`. Portfolio-only; outputs to `_vision/strategy/`. Informing council.
+- **`idea-pipeline`** — 4-stage gated pipeline: Ideation (≥15 candidates) → Screening (≤10 survivors per `references/screening-filters.md`) → Deep ranking (per `references/ranking-matrix.md` — RICE · narrative 0.6/0.4 weighting) → Top-5 shortlist.
+- **`user-meeting`** — 4-phase flow: Brief (solo pre-read) → Present (Cowork artifact, ≤60s per option, one at a time) → Capture (reflect-back, verbatim constraints) → Commit (ADRs + OKR derivation + taskflow tasks). The only structured agency ↔ user convening.
+- **`market-intel`** — canonical shapes for three market artifacts (per-project wedge scan · portfolio sizes · portfolio competitive map). Downstream agents parse by section header.
+- **`positioning`** — messaging canvas (audience · promise · proof · wedge · category · elevator ≤ 30 words · messaging hierarchy) + pipeline-mode narrative score rubric (narrative clarity · wedge strength · category fit, 1–5).
+
+Invariants added in Wave 2:
+
+6. Never start a new project with an empty backlog without invoking `idea-pipeline` first (unless the user has explicitly named the idea).
+7. Never present ≥ 2 options to the user outside the `user-meeting` 4-phase flow.
+8. Never short-circuit the top-5: pipeline runs to 5 one-pagers before user is convened.
+9. Never skip the ranker disqualifier (OKR red-alignment or missing upstream artifact) — composite score alone does not qualify.
+10. Never draft launch copy before `marketing/positioning.md` lands. Comms-writer always downstream of positioning-strategist.
+
 ## v0.3.0-alpha.1 — company foundations (Wave 1)
 
 Four new skills add durable corporate paper trail:
@@ -11,7 +30,7 @@ Four new skills add durable corporate paper trail:
 - **`adr`** — `_decisions/ADR-NNNN-<slug>.md` per material decision. Mandatory triggers: user picks, roster changes, scope changes, waivers, vision mutations, non-trivial tech choices, regression acceptances, non-goal violations. Body immutable after acceptance; supersede via new ADR.
 - **`meeting-minutes`** — `_meetings/<date>-<kind>.md` for user / board / blocking-council / red-team / audit / retro convenings. Every action item becomes a `taskflow` task with back-filled task ID.
 
-Invariants:
+Invariants (Waves 1-2 cumulative):
 
 1. Never dispatch a Chief without the `## Vision slice` block prepended.
 2. Never validate a gate without first invoking `okr.score`.
@@ -19,7 +38,7 @@ Invariants:
 4. Never hold a meeting of the above kinds without writing minutes.
 5. Minutes action items and `taskflow` tasks are 1:1 — never one without the other.
 
-Waves 2–7 extend: marketing + strategy councils + user-meeting (Wave 2), people-ops + audit (Wave 3), never-give-up ladder (Wave 4), eval + benchmark + budget (Wave 5), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
+Waves 3–7 extend: people-ops + audit (Wave 3), never-give-up ladder (Wave 4), eval + benchmark + budget (Wave 5), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
 
 ## v0.2.4 — worktree parallelism
 

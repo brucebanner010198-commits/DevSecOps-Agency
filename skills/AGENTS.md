@@ -27,7 +27,7 @@ Telegraph. Read before authoring or editing a skill.
 - `metadata.version` follows semver. Bump on contract changes (schema, artifact paths, trigger phrases).
 - Plugin root `plugin.json.version` bumps when ≥ 1 skill bumps.
 
-## Skill index (v0.3.0-alpha.1)
+## Skill index (v0.3.0-alpha.2)
 
 | Skill              | Trigger                                                 |
 | ------------------ | ------------------------------------------------------- |
@@ -52,3 +52,7 @@ Telegraph. Read before authoring or editing a skill.
 | **`okr`** (v0.3.0) | Per-project OKR derivation, per-report scoring, quarter roll-up. CEO invokes on every report. |
 | **`adr`** (v0.3.0) | Decision receipts (`_decisions/ADR-NNNN-*.md`). CEO invokes on every material decision trigger. |
 | **`meeting-minutes`** (v0.3.0) | Durable minutes for user / board / blocking-council / red-team / audit / retro convenings. |
+| **`idea-pipeline`** (v0.3.0 Wave 2) | 4-stage portfolio ideation: raw → screened → ranked → top-5. CEO invokes on "what next" / quarter / REM / empty-backlog. |
+| **`user-meeting`** (v0.3.0 Wave 2) | 4-phase CEO ↔ user selection flow (brief → present → capture → commit). Only structured convening with user. |
+| **`market-intel`** (v0.3.0 Wave 2) | Canonical shapes for market artifacts. Parsed by section header; readers fail-fast on schema drift. |
+| **`positioning`** (v0.3.0 Wave 2) | Messaging canvas + narrative-score rubric. Consumed by opportunity-ranker, top-5 one-pager, comms-writer. |

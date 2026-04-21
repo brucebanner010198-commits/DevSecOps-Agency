@@ -11,7 +11,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 ## Architecture
 
-- CEO → 9 Chiefs → ~28 specialists. Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Waves 2–7 of v0.3.0 expand to 14 Chiefs + ~70 specialists.
+- CEO → 11 Chiefs → ~36 specialists (Wave 2 adds CMO + CSO + 8 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Waves 3–7 of v0.3.0 expand further to 14 Chiefs + ~70 specialists.
 - Per-project state: `outputs/devsecops-agency/<slug>/{status.json, chat.jsonl, inbox.json}`.
 - Durable state: `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/}`. Append-only (except structured rewrite on `_vision/VISION.md` and ADR status headers — see those skills).
 - Prompt-cache rule: **deterministic ordering for maps/sets/lists/registries/file lists/network results before model/tool payloads**. Sort by stable key (alphabetical for names, timestamp ascending for events). Preserve old transcript bytes when possible.
@@ -69,12 +69,20 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - Session-log writes: one JSONL entry per dispatch, report, handoff, note, or error. See `skills/session-log/SKILL.md`.
 - Never overwrite an existing line in `chat.jsonl`, `memory/<date>.md`, `patterns/<slug>.md`, `MEMORY.md`, or any `_sessions/**/*.jsonl`.
 
-## Vision, OKRs, ADRs, meetings (v0.3.0)
+## Vision, OKRs, ADRs, meetings (v0.3.0 Wave 1)
 
 - **Vision** (`skills/vision-doc/SKILL.md`): `_vision/VISION.md` owns mission + ≤ 5 active OKRs + ≤ 5 non-goals. The CEO prepends a 3-bullet KR slice (selected by `vision-doc/references/cascade-rules.md`) to every Chief dispatch context — no dispatch without it.
 - **OKRs** (`skills/okr/SKILL.md`): every Chief report scored with `okr_alignment: green|yellow|red|n/a` (worst-of-3). Per-project OKRs in `_vision/projects/<slug>.md`. Quarter roll-up writes progress back into VISION.md.
 - **ADRs** (`skills/adr/SKILL.md`): every material decision files `_decisions/ADR-NNNN-<slug>.md`. Mandatory triggers listed in `adr/references/decision-triggers.md` — user picks, hire/fire, waivers, vision mutations, scope changes, regression acceptances, non-trivial tech choices. Body immutable after acceptance. Never delete.
 - **Meeting minutes** (`skills/meeting-minutes/SKILL.md`): every user / board / blocking-council / red-team / audit / retro meeting writes `_meetings/<date>-<kind>.md`. Every action item becomes a `taskflow` task with back-filled task ID.
+
+## Idea pipeline + user-meeting (v0.3.0 Wave 2)
+
+- **Marketing Council** (`agents/cmo.md`, `councils/marketing/AGENTS.md`) — informing. Per-project voice + pipeline-mode narrative scoring.
+- **Strategy Council** (`agents/cso.md`, `councils/strategy/AGENTS.md`) — informing, portfolio-only. Owns `_vision/strategy/`. Does not duplicate CRO per-project work.
+- **Idea pipeline** (`skills/idea-pipeline/SKILL.md`): 4-stage gated funnel → `_vision/strategy/_pipeline/top-5.md`. Scoring rubric in `references/ranking-matrix.md` (RICE · narrative, 0.6/0.4). CEO may override but must file ADR.
+- **User-meeting** (`skills/user-meeting/SKILL.md`): the only structured CEO ↔ user convening. 4 phases (brief → present → capture → commit). Renders live Cowork artifact. Every pick → project-OKR derivation + ADR + 1:1 taskflow-tasks mapping.
+- **Market-intel** (`skills/market-intel/SKILL.md`) + **positioning** (`skills/positioning/SKILL.md`): canonical artifact shapes. Schema-drift fails loudly at read time.
 
 ## Commands
 
@@ -113,3 +121,9 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't edit an accepted ADR's body. Supersede with a new ADR.
 - Don't skip minutes on a meeting "because it was informal." If ≥ 2 attendees decided anything, write minutes.
 - Don't create a meeting action item without a paired `taskflow` task ID. Orphaned actions rot.
+- Don't start a new project with empty backlog without invoking `idea-pipeline`. (Skipping the pipeline = building whatever came to mind first.)
+- Don't present ≥ 2 options to the user outside the `user-meeting` 4-phase flow. Ad-hoc selection conversations don't commit, and uncommitted picks rot.
+- Don't let CSO duplicate CRO's per-project work. Strategy is portfolio-only. Cross-project market-researcher output is a code smell.
+- Don't let opportunity-ranker score without all 4 upstream artifacts (trend-radar, competitive-map, market-sizes, CMO narrative-readout). Return `blocked` instead of a half-scored shortlist.
+- Don't write launch copy before positioning.md lands. Cart before horse.
+- Don't publish an elevator pitch over 30 words. The 30-word cap is a hard gate, not a guideline.

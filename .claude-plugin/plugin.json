@@ -1,7 +1,7 @@
 {
   "name": "devsecops-agency",
-  "version": "0.3.0-alpha.1",
-  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO holds board meetings with Chiefs, each of whom runs a council of specialists. Research → Product → Architecture → Security → Execution → Quality → DevOps → Docs → Legal. Security-first (STRIDE + OWASP Top 10) by default. Ships to GitHub. v0.2.1 adds durable cross-project memory (three-tier Light/Deep/REM dreaming) + append-only JSONL session logs. v0.2.2 adds scoped AGENTS.md hierarchy + deterministic ordering. v0.2.3 adds gates (green/yellow/red/n/a with blocking-vs-informing councils) + taskflow (six-state machine + 2-attempt fix-loop cap). v0.2.4 adds worktree parallelism with atomic scope-checked merge + structural-conflict escalation. v0.2.5 adds skill-creator runtime roster extension + per-agent model tiering (Opus CEO / Sonnet Chiefs / Haiku specialists) + notify (rate-limited push) + novelty-gated memory writes. v0.3.0 starts the 'company release': Wave 1 (this alpha) adds durable corporate paper trail — `vision-doc` (workspace VISION.md owning mission + OKRs + non-goals, with a 3-bullet KR slice prepended to every Chief dispatch), `okr` (per-project OKR derivation, per-report alignment scoring, quarter roll-up), `adr` (decision receipts in _decisions/ADR-NNNN-<slug>.md on every material decision, immutable after acceptance), and `meeting-minutes` (durable minutes for user/board/blocking-council/red-team/audit/retro meetings with action items backed by taskflow tasks). Waves 2–7 add marketing + strategy councils + top-5 user meeting, people-ops + audit, never-give-up resilience ladder, eval + benchmarks + budget, red-team + self-modifying playbooks, and SRE + tool-scout + provenance.",
+  "version": "0.3.0-alpha.2",
+  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO holds board meetings with Chiefs, each of whom runs a council of specialists. Research → Product → Architecture → Security → Execution → Quality → DevOps → Docs → Legal. Security-first (STRIDE + OWASP Top 10) by default. Ships to GitHub. v0.2 adds: durable cross-project memory (three-tier Light/Deep/REM dreaming) + append-only JSONL session logs, scoped AGENTS.md hierarchy + deterministic ordering, gates (green/yellow/red/n/a with blocking-vs-informing councils), taskflow (six-state machine + 2-attempt fix-loop cap), worktree parallelism with atomic scope-checked merge, skill-creator runtime roster extension, per-agent model tiering (Opus CEO / Sonnet Chiefs / Haiku specialists), rate-limited notify, and novelty-gated memory writes. v0.3.0 'company release': Wave 1 adds durable corporate paper trail — `vision-doc` (workspace VISION.md + 3-bullet KR slice per dispatch), `okr` (per-project OKR derivation + per-report alignment + quarter roll-up), `adr` (immutable decision receipts), `meeting-minutes` (minutes for every user/board/blocking-council/red-team/audit/retro convening). Wave 2 adds Marketing + Strategy councils (CMO + CSO + 8 specialists: positioning-strategist, comms-writer, brand-guardian, growth-analyst, trend-scout, competitive-analyst, market-sizer, opportunity-ranker), plus four new skills: `idea-pipeline` (4-stage gated ideation → top-5), `user-meeting` (4-phase CEO↔user selection flow with live Cowork artifact), `market-intel` (canonical artifact shapes), `positioning` (messaging canvas + narrative rubric). Waves 3–7 add people-ops + audit, never-give-up resilience ladder, eval + benchmarks + budget, red-team + self-modifying playbooks, and SRE + tool-scout + provenance.",
   "author": {
     "name": "Sir"
   },
@@ -35,7 +35,15 @@
     "okr",
     "adr",
     "meeting-minutes",
-    "company-release"
+    "company-release",
+    "marketing",
+    "strategy",
+    "idea-pipeline",
+    "user-meeting",
+    "positioning",
+    "market-intel",
+    "cmo",
+    "cso"
   ],
   "license": "MIT"
 }
