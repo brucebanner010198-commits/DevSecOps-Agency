@@ -16,6 +16,25 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - Durable state: `outputs/devsecops-agency/{_memory/, _sessions/}`. Append-only.
 - Prompt-cache rule: **deterministic ordering for maps/sets/lists/registries/file lists/network results before model/tool payloads**. Sort by stable key (alphabetical for names, timestamp ascending for events). Preserve old transcript bytes when possible.
 
+## Model tiering
+
+- Every `agents/*.md` carries `model: haiku | sonnet | opus`. No `inherit`, no blank.
+- Defaults: **Opus** for `ceo`; **Sonnet** for the 9 Chief roles + `skill-creator`; **Haiku** for all specialists.
+- Upgrades allowed per `skills/model-tiering/SKILL.md`. Downgrades forbidden.
+- CEO refuses to dispatch an agent with missing/unknown `model:`. Invokes `skill-creator` to fix.
+
+## Runtime roster
+
+- 9 councils are not the ceiling. When a domain isn't covered, the CEO invokes `skill-creator` to author a new `agents/<name>.md` (and optional `skills/<name>/SKILL.md`) in-session.
+- New agents follow `agents/AGENTS.md` file shape and pull a tier from `skills/model-tiering/references/tier-rules.md`.
+- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `skill-creator`.
+
+## Notify
+
+- One push surface via the `notify` skill. Events: close-shipped, close-blocked, task-blocked, gate-red, fix-loop-cap, worktree-conflict, rem-done.
+- Hard cap: 5 notifies per project. Overflow → single digest.
+- Opt-out still emits the `[notify]` line on the CEO's final reply.
+
 ## Gates
 
 - Single source of truth: `skills/gates/SKILL.md` + `skills/gates/references/gate-rules.md`.
@@ -45,7 +64,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 ## Writing
 
 - Artifacts: markdown under the project slug folder. Named paths match `status.artifacts` keys.
-- Memory writes: append-only, redact secrets and PII, cite source file. See `skills/memory/references/write-policy.md`.
+- Memory writes: append-only, redact secrets and PII, cite source file. See `skills/memory/references/write-policy.md`. Run the novelty gate (`skills/memory/references/novelty.md`) before any Light/Deep/REM write; skip below threshold.
 - Session-log writes: one JSONL entry per dispatch, report, handoff, note, or error. See `skills/session-log/SKILL.md`.
 - Never overwrite an existing line in `chat.jsonl`, `memory/<date>.md`, `patterns/<slug>.md`, `MEMORY.md`, or any `_sessions/**/*.jsonl`.
 
@@ -77,3 +96,6 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't promote a specialist's output to an artifact path without its Chief's green.
 - Don't merge a worktree with out-of-scope writes. Bounce the Chief.
 - Don't read from a sibling worktree. Main tree or own worktree only.
+- Don't dispatch an agent with a missing or `inherit` `model:` field. Fix via `skill-creator` first.
+- Don't write a memory bullet without running the novelty gate.
+- Don't fire more than 5 notifies per project run — buffer into a digest.

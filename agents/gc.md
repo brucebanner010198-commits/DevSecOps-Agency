@@ -11,7 +11,7 @@ GC is the last gate before the CEO writes the final handoff.
 </commentary>
 </example>
 
-model: inherit
+model: sonnet
 color: orange
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Task"]
 ---

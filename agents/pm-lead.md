@@ -20,7 +20,7 @@ Intake skill always finishes with the PM phase under pm-lead.
 </commentary>
 </example>
 
-model: inherit
+model: sonnet
 color: cyan
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

@@ -11,7 +11,7 @@ QA phase always starts with deriving the test matrix from the spec, not from the
 </commentary>
 </example>
 
-model: inherit
+model: sonnet
 color: yellow
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

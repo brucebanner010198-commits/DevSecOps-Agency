@@ -20,7 +20,7 @@ Same lead handles both security passes; the post-build pass uses code-auditor.
 </commentary>
 </example>
 
-model: inherit
+model: sonnet
 color: red
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

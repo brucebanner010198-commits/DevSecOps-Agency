@@ -11,7 +11,7 @@ Always called by docs-lead.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: magenta
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

@@ -11,7 +11,7 @@ Always called by security-lead. Runs after code-auditor's static review.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: red
 tools: ["Read", "Bash", "Write", "Edit", "Grep", "Glob"]
 ---

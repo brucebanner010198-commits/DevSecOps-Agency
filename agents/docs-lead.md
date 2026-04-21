@@ -11,7 +11,7 @@ Docs phase always runs last so it can describe the actual built system, not an a
 </commentary>
 </example>
 
-model: inherit
+model: sonnet
 color: magenta
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

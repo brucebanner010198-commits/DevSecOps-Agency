@@ -11,7 +11,7 @@ Always called by qa-lead. Keeps it minimal for v1 — not a full perf engineerin
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: yellow
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

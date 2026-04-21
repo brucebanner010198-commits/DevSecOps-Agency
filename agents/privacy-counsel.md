@@ -11,7 +11,7 @@ Always called by gc. Not formal legal advice — operational posture only.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: orange
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

@@ -11,7 +11,7 @@ Always called by qa-lead.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: yellow
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

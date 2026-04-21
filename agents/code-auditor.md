@@ -11,7 +11,7 @@ Always called by security-lead in the post-build pass.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: red
 tools: ["Read", "Grep", "Glob", "Bash", "Edit"]
 ---

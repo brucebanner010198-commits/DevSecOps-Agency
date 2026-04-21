@@ -11,7 +11,7 @@ Always called by cro.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: teal
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

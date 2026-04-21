@@ -11,7 +11,7 @@ CRO never talks to the user directly — only to the CEO.
 </commentary>
 </example>
 
-model: inherit
+model: sonnet
 color: teal
 tools: ["Read", "Write", "Edit", "Grep", "Glob", "Task"]
 ---

@@ -11,7 +11,7 @@ Always called by engineering-lead. Feeds deployment-engineer downstream.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: blue
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

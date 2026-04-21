@@ -11,7 +11,7 @@ Always called by pm-lead.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: cyan
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

@@ -29,7 +29,7 @@ Fix loops are bounded — max 2 rounds before escalation.
 </commentary>
 </example>
 
-model: inherit
+model: sonnet
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

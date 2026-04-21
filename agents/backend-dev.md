@@ -11,7 +11,7 @@ Always called by engineering-lead. May be re-dispatched in a fix loop with focus
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

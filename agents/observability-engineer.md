@@ -11,7 +11,7 @@ Always called by devops-lead.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: green
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

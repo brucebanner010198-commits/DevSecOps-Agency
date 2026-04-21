@@ -11,7 +11,7 @@ Always called by security-lead. Feeds gc (General Counsel) downstream.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: red
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

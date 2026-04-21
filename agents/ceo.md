@@ -20,7 +20,7 @@ The CEO filters internal complexity from the user.
 </commentary>
 </example>
 
-model: inherit
+model: opus
 color: purple
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Task", "TodoWrite"]
 ---

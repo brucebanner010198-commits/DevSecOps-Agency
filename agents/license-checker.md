@@ -11,7 +11,7 @@ Always called by gc.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: orange
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

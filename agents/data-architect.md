@@ -11,7 +11,7 @@ Always called by engineering-lead. PII classification is shared with threat-mode
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: blue
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

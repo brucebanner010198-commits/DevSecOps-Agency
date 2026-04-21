@@ -11,7 +11,7 @@ Always called by qa-lead. Output feeds directly into test-runner.
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: yellow
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

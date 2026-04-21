@@ -14,6 +14,8 @@ Durable **memory** (v0.2.1) means the agency learns across projects: the CEO rea
 
 **Worktree parallelism** (v0.2.4): parallel dispatches (CRO+CPO, CQO+CISO², CKO+GC) and every fix-loop (attempt ≥ 1) now run in isolated `<slug>/_worktrees/<chief>-<attempt>/` scratch directories. Each Chief declares `writes[]` and `reads[]` up front; merges into the main tree are atomic (all-or-nothing), scope-checked (out-of-scope writes bounce), and deterministic (alphabetical order for prompt-cache stability). Fix-loops can diff against the previous attempt's worktree, so `corrections[]` maps to visible changes. Structural conflicts escalate to `inbox.json`; non-structural ones merge with a note.
 
+**Runtime extension, model tiering, push-notify, conditional memory** (v0.2.5): four cross-cutting skills that stop the agency from being brittle on edge cases. `skill-creator` authors new AGENTS.md-compliant agent and skill files in-session when the 9 councils don't cover a domain (crypto, game-dev, mobile, embedded, ML). `model-tiering` pins every agent to **Opus CEO / Sonnet Chiefs (+ skill-creator) / Haiku specialists** with declared upgrade rules; the CEO refuses to dispatch agents with a missing tier. `notify` gives the user one rate-limited push surface (5 per run, then digest) for close-shipped, close-blocked, task-blocked, gate-red, fix-loop-cap, worktree-conflict, and REM-done — hook-wired via Cowork `Stop` / `SubagentStop` where available, with a `[notify]` terminal fallback. `memory` now runs a **Jaccard novelty gate** before every Light/Deep/REM write so repeat projects in the same wedge stop bloating `MEMORY.md` with near-duplicates.
+
 ---
 
 ## The organisation
@@ -63,6 +65,9 @@ Research Product  Architecture  Security   Execution  Quality   DevOps    Docs  
 | `gates` (internal skill)             | Gate vocabulary + aggregation. Invoked by the CEO after every Chief report; single source of truth for blocking-vs-informing councils and waivers. |
 | `taskflow` (internal skill)          | Six-state task machine + 2-attempt fix-loop cap + handoff invariants. Invoked by the CEO on every dispatch and report. |
 | `worktree` (internal skill)          | Per-dispatch isolated scratch dirs for parallel and fix-loop work. Atomic scope-checked merge into the main tree. |
+| `skill-creator` (internal skill)     | Author new `agents/*.md` + `skills/*/SKILL.md` in-session when the 9 councils don't cover a domain. Invoked by the CEO on roster gap. |
+| `model-tiering` (internal skill)     | Per-agent tier assignment — Opus CEO / Sonnet Chiefs / Haiku specialists. Read on every dispatch. |
+| `notify` (internal skill)            | Single push-notify surface (close / block / REM / fix-loop cap / worktree conflict). 5-per-run cap + digest fallback. |
 
 ## Quick start
 
@@ -152,6 +157,10 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 - `skills/gates/SKILL.md` — gate vocabulary, per-council rules (`references/gate-rules.md`), aggregation worked examples (`references/aggregation.md`)
 - `skills/taskflow/SKILL.md` — six-state machine (`references/state-machine.md`), fix-loop cap + escalation template (`references/fix-loop.md`)
 - `skills/worktree/SKILL.md` — isolation lifecycle, per-phase parallel matrix (`references/parallel-matrix.md`), merge algorithm + conflict classes (`references/merge-policy.md`)
+- `skills/skill-creator/SKILL.md` — runtime roster extension with agent (`references/agent-template.md`) and skill (`references/skill-template.md`) templates, collision policy (`references/collision-policy.md`)
+- `skills/model-tiering/SKILL.md` — per-agent tier defaults (`references/tier-rules.md`), cost/latency rationale (`references/cost-model.md`), override log (`references/override-log.md`)
+- `skills/notify/SKILL.md` — event catalog, transport priority + hook wiring (`references/hook-wiring.md`), payload shapes (`references/payload-shapes.md`), rate-limit + opt-out (`references/rate-limit.md`)
+- `skills/memory/references/novelty.md` — Jaccard novelty gate, thresholds, worked examples
 - `skills/ship-it/references/owasp-checklist.md` — security gate rules
 - `skills/ship-it/references/status-schema.md` — status.json + chat.jsonl + _sessions + tasks[] + gates schemas
 - `skills/ship-it/references/escalation-rules.md` — when a Chief must escalate
@@ -162,6 +171,7 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 
 ## Versions
 
+- **0.2.5** — `skill-creator`, `model-tiering`, `notify` skills + novelty gate on `memory`. Runtime roster extension via AGENTS.md-compliant agent/skill authoring. Per-agent model tiering with Opus CEO / Sonnet Chiefs (+ skill-creator) / Haiku specialists, enforced at dispatch — CEO refuses agents without a tier. Single push-notify surface with 5-per-run rate limit, digest fallback, and Cowork `Stop` / `SubagentStop` hook wiring. Jaccard novelty gate on every Light/Deep/REM write skips trivial duplicates instead of bloating `MEMORY.md`.
 - **0.2.4** — `worktree` skill. Parallel dispatches and every fix-loop (attempt ≥ 1) run in isolated `<slug>/_worktrees/<chief>-<attempt>/` directories with declared `writes[]`/`reads[]`, atomic scope-checked alphabetical merge, stale-rebase detection, and structural-vs-non-structural conflict handling.
 - **0.2.3** — `gates` + `taskflow` skills. Formal gate vocabulary (green/yellow/red/n/a) with blocking-vs-informing council split, per-rule matrix, and aggregation semantics. Six-state task machine with a hard 2-attempt fix-loop cap and handoff invariants. `status.json` gains `tasks[]` and `gates{}`.
 - **0.2.2** — Scoped `AGENTS.md` hierarchy (root + `agents/` + `skills/` + 9 councils = 13 files). Deterministic-ordering rule for prompt-cache hits. CEO now quotes the matching council rules into every Chief dispatch. `CLAUDE.md` pointer at the root.

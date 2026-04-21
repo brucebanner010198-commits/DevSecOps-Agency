@@ -11,7 +11,7 @@ Always called by engineering-lead. Skipped if the project has no UI (CLI/library
 </commentary>
 </example>
 
-model: inherit
+model: haiku
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

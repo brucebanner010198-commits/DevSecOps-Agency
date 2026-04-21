@@ -12,12 +12,12 @@ description: >
   "consolidate this project", "extract patterns", or internal invocation
   by the `ceo` skill.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # memory — durable agency learning
 
-Three-tier consolidation (Light / Deep / REM), append-only writes, grep-first retrieval. Ported pattern from openclaw's `memory-host-sdk/dreaming.ts`.
+Three-tier consolidation (Light / Deep / REM), append-only writes, grep-first retrieval, **conditional-write** to skip trivial duplicates. Ported pattern from openclaw's `memory-host-sdk/dreaming.ts`.
 
 ## Storage layout
 
@@ -85,6 +85,25 @@ See `references/retrieval.md` for the exact grep recipes.
 
 See `references/write-policy.md` for the full rules.
 
+## Conditional-write (v0.2.0)
+
+Not every phase deserves a memory entry. Before writing any bullet to `_memory/memory/<today>.md`, any line to `_memory/patterns/<slug>.md`, or any bullet to `_memory/MEMORY.md`, run the novelty gate:
+
+1. **Build the candidate.** 3–7 bullets for Light, 5 sections for Deep, 3–12 bullets for REM.
+2. **Pull the comparison corpus.** For Light: last 7 days of `memory/*.md`. For Deep: all `patterns/*.md`. For REM: current `MEMORY.md`.
+3. **Score each candidate bullet** per `references/novelty.md`:
+   - Tokenise bullet + existing corpus entries.
+   - Compute Jaccard similarity; treat ≥ `dedupe_similarity` (default 0.85) as duplicate.
+   - A duplicate candidate is dropped from the write set.
+4. **Abort the write entirely if < `min_new_bullets`** (default 1 for Light, 2 for Deep, 3 for REM) survive. Log a `scope:"memory"` entry with `type:"write"` and `note:"skipped — below novelty threshold"`.
+5. **Persist only the surviving bullets** in append-only form, with their source-file citations.
+
+The novelty gate runs in every tier. It replaces the older "just append everything" behaviour so repeat projects in the same wedge don't bloat `MEMORY.md` with near-duplicates.
+
+**Never** overwrite or edit an existing line to reconcile with a duplicate — drop the candidate instead. The old line stays; the new one is silently absorbed.
+
+See `references/novelty.md` for thresholds, tokenisation rules, and worked examples.
+
 ## Integration with the CEO skill
 
 The CEO playbook (`skills/ceo/SKILL.md`) calls this skill at four moments:
@@ -103,3 +122,4 @@ Log every memory write as a `scope:"memory"` entry in the active project's `chat
 - `references/dreaming-config.md` — the exact knob defaults and when to tune them
 - `references/write-policy.md` — append-only rules, redaction, opt-out
 - `references/retrieval.md` — grep recipes for the read path
+- `references/novelty.md` — novelty gate, Jaccard threshold, min-new-bullet floors
