@@ -7,7 +7,7 @@ description: >
   Invoked by the CEO on every dispatch, report, fix-loop, and escalation. Not a
   user-facing skill.
 metadata:
-  version: "0.2.3"
+  version: "0.2.4"
 ---
 
 # taskflow — how work moves through the agency
@@ -81,6 +81,7 @@ Lives in `status.json > tasks[]`, append-then-update (never delete):
   "fixAttempts": 0,
   "gate": null,
   "artifacts": [],
+  "worktree": "security-lead-1",
   "inboxItem": null,
   "note": "STRIDE threat model on architecture v1"
 }
@@ -92,6 +93,7 @@ Field notes:
 - `state` ∈ the six states above.
 - `fixAttempts` caps at 2. On attempt 3 the task transitions to `blocked` (not another fix-loop).
 - `sessionRef` is the `_sessions/...` file where detail lives; don't duplicate it here.
+- `worktree` is the worktree id (`<chief>-<attempt>`) if this task was dispatched into a worktree; null for direct-to-main-tree dispatches. See `skills/worktree/SKILL.md`.
 - `inboxItem` is set when state transitions to `blocked`, clears on resume.
 
 ## Legal transitions

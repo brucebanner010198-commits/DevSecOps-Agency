@@ -12,6 +12,8 @@ Durable **memory** (v0.2.1) means the agency learns across projects: the CEO rea
 
 **Gates + taskflow** (v0.2.3): two internal skills formalise what used to live in prose. `gates` defines the exact meaning of green/yellow/red/n/a, which councils block ship (security, legal), how to aggregate gates across councils and phases, and when a waiver needs user consent. `taskflow` defines a six-state machine for every dispatched task (`queued → in-progress → needs-decision → blocked → done/cancelled`), enforces a **hard 2-attempt fix-loop cap** per `(council, phase)` so the agency can't thrash, and encodes handoff invariants the CEO checks before advancing any phase. `status.json` gains a `tasks[]` array and a `gates` object the command-center can render directly.
 
+**Worktree parallelism** (v0.2.4): parallel dispatches (CRO+CPO, CQO+CISO², CKO+GC) and every fix-loop (attempt ≥ 1) now run in isolated `<slug>/_worktrees/<chief>-<attempt>/` scratch directories. Each Chief declares `writes[]` and `reads[]` up front; merges into the main tree are atomic (all-or-nothing), scope-checked (out-of-scope writes bounce), and deterministic (alphabetical order for prompt-cache stability). Fix-loops can diff against the previous attempt's worktree, so `corrections[]` maps to visible changes. Structural conflicts escalate to `inbox.json`; non-structural ones merge with a note.
+
 ---
 
 ## The organisation
@@ -60,6 +62,7 @@ Research Product  Architecture  Security   Execution  Quality   DevOps    Docs  
 | `session-log` (internal skill)       | Append-only per-agent JSONL transcripts across projects. Replay via `rg` + `jq`.              |
 | `gates` (internal skill)             | Gate vocabulary + aggregation. Invoked by the CEO after every Chief report; single source of truth for blocking-vs-informing councils and waivers. |
 | `taskflow` (internal skill)          | Six-state task machine + 2-attempt fix-loop cap + handoff invariants. Invoked by the CEO on every dispatch and report. |
+| `worktree` (internal skill)          | Per-dispatch isolated scratch dirs for parallel and fix-loop work. Atomic scope-checked merge into the main tree. |
 
 ## Quick start
 
@@ -105,7 +108,11 @@ outputs/devsecops-agency/<project-slug>/
 ├── legal/                      # GC output — licenses.md, privacy.md
 ├── status.json                 # Pipeline state (read by the command-center)
 ├── chat.jsonl                  # Board + council meeting log
-└── inbox.json                  # Parked human questions
+├── inbox.json                  # Parked human questions
+└── _worktrees/                 # Isolated scratch dirs for parallel + fix-loop dispatches (v0.2.4)
+    ├── <chief>-<attempt>/      # worktree.json + the Chief's writes[]
+    ├── _merged/                # audit archive of cleanly-merged worktrees
+    └── _discarded/             # short-lived archive of superseded attempts
 ```
 
 Shared across projects (v0.2.1):
@@ -144,6 +151,7 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 - `skills/session-log/SKILL.md` — JSONL schema + `rg`/`jq` replay recipes
 - `skills/gates/SKILL.md` — gate vocabulary, per-council rules (`references/gate-rules.md`), aggregation worked examples (`references/aggregation.md`)
 - `skills/taskflow/SKILL.md` — six-state machine (`references/state-machine.md`), fix-loop cap + escalation template (`references/fix-loop.md`)
+- `skills/worktree/SKILL.md` — isolation lifecycle, per-phase parallel matrix (`references/parallel-matrix.md`), merge algorithm + conflict classes (`references/merge-policy.md`)
 - `skills/ship-it/references/owasp-checklist.md` — security gate rules
 - `skills/ship-it/references/status-schema.md` — status.json + chat.jsonl + _sessions + tasks[] + gates schemas
 - `skills/ship-it/references/escalation-rules.md` — when a Chief must escalate
@@ -154,6 +162,7 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 
 ## Versions
 
+- **0.2.4** — `worktree` skill. Parallel dispatches and every fix-loop (attempt ≥ 1) run in isolated `<slug>/_worktrees/<chief>-<attempt>/` directories with declared `writes[]`/`reads[]`, atomic scope-checked alphabetical merge, stale-rebase detection, and structural-vs-non-structural conflict handling.
 - **0.2.3** — `gates` + `taskflow` skills. Formal gate vocabulary (green/yellow/red/n/a) with blocking-vs-informing council split, per-rule matrix, and aggregation semantics. Six-state task machine with a hard 2-attempt fix-loop cap and handoff invariants. `status.json` gains `tasks[]` and `gates{}`.
 - **0.2.2** — Scoped `AGENTS.md` hierarchy (root + `agents/` + `skills/` + 9 councils = 13 files). Deterministic-ordering rule for prompt-cache hits. CEO now quotes the matching council rules into every Chief dispatch. `CLAUDE.md` pointer at the root.
 - **0.2.1** — Durable memory (Light/Deep/REM dreaming) and per-agent session logs, ported from openclaw's memory-host-sdk pattern. Cross-project learnings + grep-addressable transcripts.

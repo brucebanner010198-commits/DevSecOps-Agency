@@ -34,6 +34,14 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - Every fix-loop dispatch must cite specific Must/Must-not rows in `corrections[]`. No "try harder."
 - Phase cannot advance while any task is in `needs-decision` or unblocked `blocked`.
 
+## Worktrees (parallelism)
+
+- Parallel dispatches (discovery, verify, optionally doc+legal) and any fix-loop (attempt ≥ 1) go into `<slug>/_worktrees/<chief>-<attempt>/`. Direct writes to main tree only when sequential + attempt 0.
+- Declared writes/reads per Chief per phase in `skills/worktree/references/parallel-matrix.md`. Out-of-scope writes fail the merge.
+- Merge is atomic, alphabetical (prompt-cache stable), and scope-checked. Non-structural conflicts merge with a note; structural conflicts escalate.
+- A Chief reads only from the main tree or its own worktree. Never from a sibling's.
+- Phase cannot advance while any `_worktrees/*/worktree.json` has `status: "open"` for that phase.
+
 ## Writing
 
 - Artifacts: markdown under the project slug folder. Named paths match `status.artifacts` keys.
@@ -67,3 +75,5 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't let `chat.jsonl` entries drop their `scope` or `gate` fields.
 - Don't hand-edit a `.jsonl` file. Append a correction entry instead.
 - Don't promote a specialist's output to an artifact path without its Chief's green.
+- Don't merge a worktree with out-of-scope writes. Bounce the Chief.
+- Don't read from a sibling worktree. Main tree or own worktree only.

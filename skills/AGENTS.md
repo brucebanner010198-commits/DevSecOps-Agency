@@ -27,7 +27,7 @@ Telegraph. Read before authoring or editing a skill.
 - `metadata.version` follows semver. Bump on contract changes (schema, artifact paths, trigger phrases).
 - Plugin root `plugin.json.version` bumps when ≥ 1 skill bumps.
 
-## Skill index (v0.2.3)
+## Skill index (v0.2.4)
 
 | Skill              | Trigger                                                 |
 | ------------------ | ------------------------------------------------------- |
@@ -44,3 +44,4 @@ Telegraph. Read before authoring or editing a skill.
 | `session-log`      | Per-agent append-only JSONL.                            |
 | `gates` (internal) | Gate vocabulary + aggregation. CEO invokes on report.   |
 | `taskflow` (internal) | Task state machine + fix-loop cap. CEO invokes on dispatch/report. |
+| `worktree` (internal) | Isolated scratch dirs for parallel + fix-loop dispatches. CEO invokes on dispatch/report. |

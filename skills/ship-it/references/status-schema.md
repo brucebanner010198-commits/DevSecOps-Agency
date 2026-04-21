@@ -67,6 +67,7 @@ Two shapes are supported. v0.2 is the default (9 councils, 7 phases, CEO orchest
       "fixAttempts": 0,
       "gate": "green",
       "artifacts": ["research-brief.md"],
+      "worktree": "cro-0",
       "inboxItem": null,
       "note": "discovery scan, wedge: dorms"
     }
@@ -109,7 +110,8 @@ Two shapes are supported. v0.2 is the default (9 councils, 7 phases, CEO orchest
     "escalations": 0,
     "memoryWrites": 6,
     "tasksByState": {"queued": 0, "in-progress": 1, "needs-decision": 0, "blocked": 0, "done": 7, "cancelled": 0},
-    "waivers": 0
+    "waivers": 0,
+    "worktrees": {"open": 0, "merged": 6, "discarded": 1, "stale": 0}
   }
 }
 ```
@@ -125,6 +127,7 @@ One row per Chief dispatch. Append-then-update, never delete. See `skills/taskfl
 - `fixAttempts` — 0, 1, or 2. Exceeding 2 forces the task to `blocked`.
 - `sessionRef` — path to the `_sessions/<agentId>/<sessionId>.jsonl` with detail.
 - `gate` — the report gate (`green | yellow | red | null`); null while running.
+- `worktree` — `<chief>-<attempt>` id if this task was dispatched into an isolated worktree. See `skills/worktree/SKILL.md`. Null for direct-to-main-tree dispatches.
 - `inboxItem` — set when state is `blocked`.
 
 ### gates object
@@ -172,7 +175,7 @@ One JSON object per line. New fields: `scope`, `council`, `gate`, `artifacts` (a
 {"ts":"<iso>","scope":"memory","from":"ceo","to":"_memory","type":"write","tier":"light","artifact":"_memory/memory/2026-04-20.md","note":"5 bullets"}
 ```
 
-`type` vocabulary: `dispatch · report · handoff · board-decision · fix-loop · escalate · resume · write · waiver`.
+`type` vocabulary: `dispatch · report · handoff · board-decision · fix-loop · escalate · resume · write · waiver · merge · stale · conflict`.
 `gate` vocabulary: `green · yellow · red · n/a` (see `skills/gates/SKILL.md` for meaning and blocking-council rules).
 `scope` vocabulary: `board · council · memory`.
 `tier` vocabulary (memory scope only): `light · deep · rem`.
