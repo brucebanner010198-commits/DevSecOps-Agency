@@ -50,7 +50,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 - Every Chief dispatch is a task row in `status.json > tasks[]`.
 - States: `queued · in-progress · needs-decision · blocked · done · cancelled`. See `skills/taskflow/references/state-machine.md`.
-- Fix-loop cap: **2 attempts per `(council, phase)`**. Attempt 3 transitions to `blocked`, not another loop.
+- Fix-loop cap: **2 attempts per `(council, phase)`**. Attempt 3 transitions to `blocked` + Rung 2 of the resilience ladder — not a dead end. See `skills/ladder/SKILL.md`.
 - Every fix-loop dispatch must cite specific Must/Must-not rows in `corrections[]`. No "try harder."
 - Phase cannot advance while any task is in `needs-decision` or unblocked `blocked`.
 
@@ -75,6 +75,15 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - **OKRs** (`skills/okr/SKILL.md`): every Chief report scored with `okr_alignment: green|yellow|red|n/a` (worst-of-3). Per-project OKRs in `_vision/projects/<slug>.md`. Quarter roll-up writes progress back into VISION.md.
 - **ADRs** (`skills/adr/SKILL.md`): every material decision files `_decisions/ADR-NNNN-<slug>.md`. Mandatory triggers listed in `adr/references/decision-triggers.md` — user picks, hire/fire, waivers, vision mutations, scope changes, regression acceptances, non-trivial tech choices. Body immutable after acceptance. Never delete.
 - **Meeting minutes** (`skills/meeting-minutes/SKILL.md`): every user / board / blocking-council / red-team / audit / retro meeting writes `_meetings/<date>-<kind>.md`. Every action item becomes a `taskflow` task with back-filled task ID.
+
+## Resilience ladder (v0.3.0 Wave 4)
+
+- **Standing user rule:** "Always find a way to get the result as long as the solution is achievable with technology present."
+- **Ladder skill** (`skills/ladder/SKILL.md`): 8 rungs from `Retry with refreshed context` (0) through `Parking lot` (7). Fix-loop is Rung 1; the ladder operationalises what happens after. Per-rung owners + budgets + entry/exit signals in `skills/ladder/references/rung-rules.md`. Routing table in `skills/ladder/references/ladder-matrix.md` (task state × blocker kind → starting rung).
+- **Every rung transition files an ADR.** No informal rung climbs. Upward rung skips need an ADR citing an explicit exception.
+- **Rung 7 is resumable.** Parking preserves every artifact, session log, and partial commit. Each parked task carries a reconsider-trigger; portfolio audits surface parked tasks whose triggers have fired.
+- **Blocking-council reds don't durably block** — they start the ladder. Durable ship-block only after Rung 6 user-waiver refusal + Rung 7 park.
+- **Metrics logged in `status.json > metrics`:** `ladderClimbs`, `rungAttempts`, `ladderMeanTime`. CAO portfolio-audit reviews them for always-parks / always-hires / ladder-abuse patterns.
 
 ## People-ops + audit (v0.3.0 Wave 3)
 
@@ -141,3 +150,7 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't retire an agent via `git rm`. Archive to `_vision/roster/_archive/<name>.md` with a redirect line.
 - Don't propose a tier downgrade. Propose a prompt upgrade instead; if that fails twice, propose a fire + hire.
 - Don't execute a hire or fire outside of the `roster` skill. Driveby roster changes rot the paper trail.
+- Don't give up below Rung 7. Every rung transition files an ADR; only Rung 7 is terminal.
+- Don't skip upward on the ladder without an ADR citing a matrix exception (user-credentials, user-asked-for-pivot, user-asked-for-specialist).
+- Don't park a task by deleting its artifacts. Rung 7 preserves everything; reconsider-triggers resurrect it when conditions change.
+- Don't count Rung 2+ attempts in `metrics.fixLoops`. They go in `metrics.rungAttempts[rung_N]`. Misclassification rots the always-hits-rung-4 audit signal.

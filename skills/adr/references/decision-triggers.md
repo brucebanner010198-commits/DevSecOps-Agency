@@ -47,9 +47,18 @@ If a trigger fires and no ADR is written, the `retro` skill flags it as `missed_
 
 ### Process
 - Extending the 2-attempt fix-loop cap on a specific task.
-- Using the never-give-up ladder (future Wave 4 skill) — every rung escalation is an ADR.
 - Merging a worktree with structural conflicts accepted.
 - Publishing a project publicly (GitHub push to public repo, npm publish, etc.).
+
+### Ladder / resilience (v0.3.0 Wave 4)
+- Every rung transition on the 8-rung `skills/ladder` (0 → 1 → ... → 7). ADR names both rungs and the routing matrix row.
+- Any upward rung skip (entering a rung higher than current+1). ADR cites the exception row in `skills/ladder/references/ladder-matrix.md > Routing rules`.
+- Any downward descent (re-running an earlier rung after a later rung failed). ADR cites the new information that reopens the earlier rung.
+- Rung 4 hire / repurpose / prompt-upgrade (also files the standard roster-mutation ADR — same turn, separate record).
+- Rung 5 scope pivot (paired with a scope-amendment ADR).
+- Rung 6 user consult decision (paired with user-meeting minutes).
+- Rung 7 parking (terminal ADR; must include the reconsider-trigger).
+- A blocked task exceeding 8 attempts across all rungs without a terminal outcome (CAO-escalated).
 
 ## Optional triggers (file one if in doubt)
 

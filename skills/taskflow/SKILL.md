@@ -7,7 +7,7 @@ description: >
   Invoked by the CEO on every dispatch, report, fix-loop, and escalation. Not a
   user-facing skill.
 metadata:
-  version: "0.2.4"
+  version: "0.3.0"
 ---
 
 # taskflow — how work moves through the agency
@@ -95,6 +95,7 @@ Field notes:
 - `sessionRef` is the `_sessions/...` file where detail lives; don't duplicate it here.
 - `worktree` is the worktree id (`<chief>-<attempt>`) if this task was dispatched into a worktree; null for direct-to-main-tree dispatches. See `skills/worktree/SKILL.md`.
 - `inboxItem` is set when state transitions to `blocked`, clears on resume.
+- `ladderRung` ∈ `0..7` — present iff state is `blocked`. Seeded from `skills/ladder/references/ladder-matrix.md`, incremented per rung transition. See `skills/ladder/SKILL.md`.
 
 ## Legal transitions
 
@@ -121,20 +122,17 @@ Any other transition is a bug. The CEO bounces it.
 | Chief reports `gate: red` (blocking)      | `in-progress`   | `blocked`       | open inbox item, park                            |
 | CEO issues fix-loop (attempt ≤ 2)         | `needs-decision`| `in-progress`   | `fixAttempts += 1`, new dispatch entry           |
 | CEO accepts waiver                        | `needs-decision`| `done`          | write `waiver` entry to chat.jsonl               |
-| Fix attempts reach 3                      | `needs-decision`| `blocked`       | open inbox, park                                 |
+| Fix attempts reach 3                      | `needs-decision`| `blocked`       | seed `ladderRung=2`, dispatch Rung 2 owner       |
 | User responds to inbox                    | `blocked`       | `in-progress` OR `done` OR `cancelled` | consume inbox item           |
 | CEO kills the task                        | any non-terminal| `cancelled`     | write `board-decision` entry                     |
 
 ## Fix-loop cap
 
-Per `(council, phase)` pair, the CEO dispatches a Chief at most **three times total**: the initial dispatch + 2 fix-loops. On attempt 3, the task is `blocked` and goes to the user with:
+Per `(council, phase)` pair, the CEO dispatches a Chief at most **three times total**: the initial dispatch + 2 fix-loops. On attempt 3, the task is `blocked` and the ladder skill takes over — the fix-loop cap is **Rung 1 budget exhausted**, not a dead end. The CEO immediately reads `skills/ladder/references/ladder-matrix.md` to seed `ladderRung` and dispatches the Rung 2 owner.
 
-- What the Chief got right (1 bullet).
-- What's still red (1 bullet).
-- Three options: `fix-path-A`, `fix-path-B`, `ship-with-waiver`.
-- CEO's recommendation.
+`metrics.fixLoops` counts only the `in-progress → needs-decision → in-progress` round-trips. An initial dispatch is attempt 0. Rung 2+ attempts are counted in `metrics.rungAttempts` (see `skills/ladder`), not in `fixLoops`.
 
-`metrics.fixLoops` counts only the `in-progress → needs-decision → in-progress` round-trips. An initial dispatch is attempt 0.
+The user-facing escalation (three options + recommendation) now happens at **Rung 6**, not immediately at fix-attempt 3. Rungs 2-5 are attempted first per the matrix.
 
 ## Handoff invariants
 
@@ -187,3 +185,4 @@ See `skills/command-center/references/panel-spec.md` for the rendering contract.
 
 - `references/state-machine.md` — the six states with entry/exit conditions in detail.
 - `references/fix-loop.md` — the 2-attempt cap, the escalation template, and the anti-pattern list.
+- `skills/ladder/SKILL.md` — the 8-rung resilience ladder that takes over after Rung 1 (= fix-loop) is exhausted.

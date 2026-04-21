@@ -2,6 +2,24 @@
 
 Each release layer is still in effect. The CEO playbook in `SKILL.md` is the condensed view; this is the long form.
 
+## v0.3.0-alpha.4 — resilience ladder (Wave 4)
+
+One new skill wires the agency's never-give-up rule into the existing state machine without letting token spend go unbounded:
+
+- **`ladder`** — 8 rungs from `Retry with refreshed context` (0) → `Fix-loop` (1, existing 2-attempt cap) → `Alternate approach within scope` (2) → `Cross-council escalation` (3) → `Hire / repurpose a specialist (COO)` (4) → `Scope pivot (CPO + user)` (5) → `User consult` (6) → `Parking lot` (7). Per-rung owners, budgets, entry/exit signals in `skills/ladder/references/rung-rules.md`. Task state × blocker kind → starting rung in `skills/ladder/references/ladder-matrix.md`.
+
+Taskflow contract change: `status.json > tasks[].ladderRung` field seeded from the matrix when state becomes `blocked`. Fix-loop cap now feeds Rung 2, not a dead-end. `metrics.rungAttempts[rung_N]` + `metrics.ladderClimbs` + `metrics.ladderMeanTime` logged to `status.json > metrics`.
+
+Gates contract change: blocking-council reds do not durably ship-block. They start the ladder. Durable block only after Rung 6 user-waiver refusal + Rung 7 park.
+
+Invariants added in Wave 4 (cumulative 1-10 in SKILL.md; 18-22 below):
+
+18. Never give up below Rung 7. Every blocked task climbs until shipped, superseded, pivoted, or parked with reconsider-trigger.
+19. Every rung transition files an ADR. Upward rung skips require an ADR citing an exception in `ladder-matrix.md > Routing rules`.
+20. Rung 7 preserves everything. Artifacts, session logs, worktree branches, partial commits stay; parking is resumable.
+21. Rung 6 is bounded — 7-day user-response timeout auto-advances to Rung 7.
+22. `metrics.fixLoops` counts only Rung 1 attempts. Rung 2+ goes in `metrics.rungAttempts[rung_N]`. Misclassification rots audit signals.
+
 ## v0.3.0-alpha.3 — people-ops + audit (Wave 3)
 
 Two new councils + three new skills give the agency a self-modifying roster and an independent integrity check:
@@ -58,7 +76,7 @@ Invariants (Waves 1-2 cumulative):
 4. Never hold a meeting of the above kinds without writing minutes.
 5. Minutes action items and `taskflow` tasks are 1:1 — never one without the other.
 
-Waves 3–7 extend: people-ops + audit (Wave 3), never-give-up ladder (Wave 4), eval + benchmark + budget (Wave 5), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
+Waves 3–7 extend: people-ops + audit (Wave 3, shipped), never-give-up ladder (Wave 4, shipped), eval + benchmark + budget (Wave 5), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
 
 ## v0.2.4 — worktree parallelism
 
