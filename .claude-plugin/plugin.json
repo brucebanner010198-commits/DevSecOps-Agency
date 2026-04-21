@@ -1,7 +1,7 @@
 {
   "name": "devsecops-agency",
-  "version": "0.2.1",
-  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO holds board meetings with 9 Chiefs, each of whom runs a council of specialists. Research → Product → Architecture → Security → Execution → Quality → DevOps → Docs → Legal. Security-first (STRIDE + OWASP Top 10) by default. Ships to GitHub. v0.2.1 adds durable cross-project memory (three-tier Light/Deep/REM dreaming, ported from openclaw) and per-agent append-only JSONL session logs replayable with rg + jq. A live command-center artifact shows the org chart, every meeting, every handoff, and any blocker parked for you.",
+  "version": "0.2.2",
+  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO holds board meetings with 9 Chiefs, each of whom runs a council of specialists. Research → Product → Architecture → Security → Execution → Quality → DevOps → Docs → Legal. Security-first (STRIDE + OWASP Top 10) by default. Ships to GitHub. v0.2.1 adds durable cross-project memory (three-tier Light/Deep/REM dreaming, ported from openclaw) and per-agent append-only JSONL session logs replayable with rg + jq. v0.2.2 adds a scoped AGENTS.md hierarchy (root + agents/ + skills/ + 9 councils) and a deterministic-ordering rule so every Chief reads its own Must / Must not / Gate heuristic before dispatch — the strongest hallucination dampener in the plugin. A live command-center artifact shows the org chart, every meeting, every handoff, and any blocker parked for you.",
   "author": {
     "name": "Sir"
   },
@@ -20,7 +20,9 @@
     "multi-agent",
     "memory",
     "dreaming",
-    "session-logs"
+    "session-logs",
+    "agents-md",
+    "scoped-rules"
   ],
   "license": "MIT"
 }

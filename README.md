@@ -8,6 +8,8 @@ A live **command center** artifact shows the org chart, every board and council 
 
 Durable **memory** (v0.2.1) means the agency learns across projects: the CEO reads prior learnings before intake, rolls up bullets after every phase (*Light dreaming*), consolidates each project on close (*Deep dreaming*), and extracts cross-project patterns on retro (*REM dreaming*). Per-agent **session logs** are append-only JSONL files queryable with `rg` + `jq`.
 
+**Scoped rules** (v0.2.2): every subtree carries an `AGENTS.md` with telegraph-style imperatives that agents read before touching that area. Root, `agents/`, `skills/`, and each of the 9 councils have their own file. Before every Chief dispatch, the CEO quotes the matching `councils/<council>/AGENTS.md` into the Chief's context — Must, Must not, Gate heuristic. Combined with a deterministic-ordering rule for prompt-cache hits, this is the strongest hallucination dampener in the plugin.
+
 ---
 
 ## The organisation
@@ -139,9 +141,14 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 - `skills/ship-it/references/owasp-checklist.md` — security gate rules
 - `skills/ship-it/references/status-schema.md` — status.json + chat.jsonl + _sessions schemas
 - `skills/ship-it/references/escalation-rules.md` — when a Chief must escalate
+- `AGENTS.md` — repo-root conventions: gate vocabulary, deterministic-ordering rule, anti-patterns
+- `agents/AGENTS.md`, `skills/AGENTS.md` — subtree rules for persona and skill files
+- `councils/<council>/AGENTS.md` — per-council Must / Must not / Gate heuristic (9 files)
+- `CLAUDE.md` — thin pointer to root `AGENTS.md` for tools that look there
 
 ## Versions
 
+- **0.2.2** — Scoped `AGENTS.md` hierarchy (root + `agents/` + `skills/` + 9 councils = 13 files). Deterministic-ordering rule for prompt-cache hits. CEO now quotes the matching council rules into every Chief dispatch. `CLAUDE.md` pointer at the root.
 - **0.2.1** — Durable memory (Light/Deep/REM dreaming) and per-agent session logs, ported from openclaw's memory-host-sdk pattern. Cross-project learnings + grep-addressable transcripts.
 - **0.2.0** — CEO + 9 councils + ~28 specialists. 7-phase board. Command center shows meetings by scope.
 - **0.1.0** — 6-team hierarchy. 10-stage pipeline. Still runnable via `ship-it`.

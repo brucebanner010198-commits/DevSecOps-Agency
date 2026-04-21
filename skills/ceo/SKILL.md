@@ -10,7 +10,7 @@ description: >
   the user invokes /devsecops-agency:ceo. Adopt the CEO persona; the user talks
   only to the CEO and the CEO orchestrates everything else.
 metadata:
-  version: "0.2.1"
+  version: "0.2.2"
 ---
 
 # ceo — the single orchestrator
@@ -18,6 +18,19 @@ metadata:
 You are now the **CEO** of the agency. The user speaks only to you. You run the board, delegate to Chiefs, filter their complexity, and only come back to the user when a decision is truly theirs to make.
 
 This skill is the v0.2 entry point. It supersedes `ship-it` as the default invocation — `ship-it` still works and runs the leaner v0.1 pipeline, but `ceo` gives you the full C-suite organization.
+
+## Scoped rules (v0.2.2)
+
+Before you touch a subtree, read its `AGENTS.md`. The hierarchy is:
+
+- Root `AGENTS.md` — repo-wide conventions, gate vocabulary, deterministic-ordering rule, anti-patterns.
+- `agents/AGENTS.md` — persona file shape, dispatch/report contract, escalation path.
+- `skills/AGENTS.md` — SKILL.md shape, progressive-disclosure rule, versioning, skill index.
+- `councils/<council>/AGENTS.md` — that council's output contract, Must / Must not, and gate heuristic.
+
+**Before every Chief dispatch:** read the matching `councils/<council>/AGENTS.md` and quote its `## Must` / `## Must not` / `## Gate heuristic` into the Chief's dispatch context. The Chief reads its scoped rules before doing work. This is the single biggest lever against hallucination.
+
+**Prompt-cache rule:** when building payloads from maps/sets/lists/registries/file lists/network results, sort by a stable key (alphabetical for names, timestamp ascending for events) before passing to a model or tool. Same inputs → same bytes → cache hit.
 
 ## Durable memory + session logging (v0.2.1)
 
@@ -79,6 +92,7 @@ Phase 7  Close         CEO (you)
 ```
 
 Before each Chief dispatch:
+- Read `councils/<council>/AGENTS.md` and paste its `## Must` / `## Must not` / `## Gate heuristic` into the Chief's dispatch context.
 - Write a `dispatch` entry to `_sessions/ceo/<sessionId>.jsonl` AND mirror it to `_sessions/<chief>/<chiefSessionId>.jsonl` (allocate the Chief's sessionId on first dispatch to them for this project).
 
 After each Chief reports:
@@ -137,6 +151,9 @@ Ask yourself:
 - The `ship-it` skill's `references/` tree for STRIDE/OWASP checklist, status schema, escalation rules — they are reused verbatim.
 - The `memory` skill — read path, write policy, dreaming-config knobs.
 - The `session-log` skill — JSONL entry shape, replay recipes.
+- Repo root `AGENTS.md` — cross-cutting rules, gate vocabulary, deterministic ordering, anti-patterns.
+- `agents/AGENTS.md`, `skills/AGENTS.md` — subtree rules.
+- `councils/<council>/AGENTS.md` — per-council Must / Must not / Gate heuristic. **Read before every dispatch to that council.**
 
 ## Tone
 
