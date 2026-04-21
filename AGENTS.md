@@ -11,7 +11,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 ## Architecture
 
-- CEO → 13 Chiefs → ~43 specialists (Wave 3 adds COO + CAO + 7 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit Council has a strict independence invariant — no dual-hatting. Waves 4–7 of v0.3.0 expand further to ~16 Chiefs + ~70 specialists.
+- CEO → 14 Chiefs → ~48 specialists (Wave 3 added COO + CAO + 7 specialists; Wave 5 adds CEVO + 5 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit + Evaluation councils have strict independence invariants — no dual-hatting with any delivery role. Waves 6–7 of v0.3.0 expand further to ~16 Chiefs + ~70 specialists.
 - Per-project state: `outputs/devsecops-agency/<slug>/{status.json, chat.jsonl, inbox.json}`.
 - Durable state: `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/}`. Append-only (except structured rewrite on `_vision/VISION.md` and ADR status headers — see those skills). Roster + audit artifacts live under `_vision/roster/` and `_vision/audit/`.
 - Prompt-cache rule: **deterministic ordering for maps/sets/lists/registries/file lists/network results before model/tool payloads**. Sort by stable key (alphabetical for names, timestamp ascending for events). Preserve old transcript bytes when possible.
@@ -27,7 +27,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 - 9 councils are not the ceiling. When a domain isn't covered, the CEO invokes `skill-creator` to author a new `agents/<name>.md` (and optional `skills/<name>/SKILL.md`) in-session.
 - New agents follow `agents/AGENTS.md` file shape and pull a tier from `skills/model-tiering/references/tier-rules.md`.
-- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `skill-creator`.
+- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `evaluation-lead`, `skill-creator`.
 
 ## Notify
 
@@ -75,6 +75,14 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - **OKRs** (`skills/okr/SKILL.md`): every Chief report scored with `okr_alignment: green|yellow|red|n/a` (worst-of-3). Per-project OKRs in `_vision/projects/<slug>.md`. Quarter roll-up writes progress back into VISION.md.
 - **ADRs** (`skills/adr/SKILL.md`): every material decision files `_decisions/ADR-NNNN-<slug>.md`. Mandatory triggers listed in `adr/references/decision-triggers.md` — user picks, hire/fire, waivers, vision mutations, scope changes, regression acceptances, non-trivial tech choices. Body immutable after acceptance. Never delete.
 - **Meeting minutes** (`skills/meeting-minutes/SKILL.md`): every user / board / blocking-council / red-team / audit / retro meeting writes `_meetings/<date>-<kind>.md`. Every action item becomes a `taskflow` task with back-filled task ID.
+
+## Evaluation + budget (v0.3.0 Wave 5)
+
+- **Evaluation Council** (`agents/evaluation-lead.md`, `councils/evaluation/AGENTS.md`) — informing + independent. Never on any project's delivery path (same invariant as Audit). Runs close-eval on every ship, portfolio-regression per quarter, benchmark-sweep before every plugin v-bump, compaction-check under context pressure.
+- **Eval skill** (`skills/eval/SKILL.md`): eval items derive from PKRs, not from shipped artifacts. 5 pp regression threshold (minor → yellow, ≥ 10 pp → red, ≥ 20 pp → red + Rung 3). Regression baseline frozen per quarter.
+- **Budget skill** (`skills/budget/SKILL.md`): per-project token + $ budget with per-phase allocation. 4 size classes (small / medium / large / custom). Burn tracked on every Chief report. Cumulative burn > 110 % → red → Rung 6 (user consult is the only rung that can expand a budget).
+- **Token compactor** (`agents/token-compactor.md`): structured rewrite of session logs when context pressure trips threshold. Decisions, errors, reports, ADR-referenced lines, rung transitions, meeting lines — never compactable. Preservation invariant holds.
+- **Regression root-cause taxonomy:** prompt-rot, tier-drift, skill-edit, budget-squeeze, input-drift, baseline-defect, unknown. Every red regression ADR cites the tag.
 
 ## Resilience ladder (v0.3.0 Wave 4)
 
@@ -154,3 +162,9 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't skip upward on the ladder without an ADR citing a matrix exception (user-credentials, user-asked-for-pivot, user-asked-for-specialist).
 - Don't park a task by deleting its artifacts. Rung 7 preserves everything; reconsider-triggers resurrect it when conditions change.
 - Don't count Rung 2+ attempts in `metrics.fixLoops`. They go in `metrics.rungAttempts[rung_N]`. Misclassification rots the always-hits-rung-4 audit signal.
+- Don't ship a project without close-eval. CEVO close-eval + CAO close-audit run in parallel; both mandatory before archival.
+- Don't retrofit eval items to make a failing project pass. Eval-set derivation is post-OKR, pre-result; write from the promise.
+- Don't let an Evaluation specialist sit on any delivery path. Independence is structural, same invariant as Audit.
+- Don't silently change a project's budget. Budget changes file an ADR + OKR revision.
+- Don't compact a session-log entry referenced by an ADR, a rung-transition, or a meeting line. Preservation invariant holds.
+- Don't update the regression baseline mid-quarter. Baselines freeze at quarter boundaries.

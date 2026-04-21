@@ -2,6 +2,24 @@
 
 Each release layer is still in effect. The CEO playbook in `SKILL.md` is the condensed view; this is the long form.
 
+## v0.3.0-alpha.5 — evaluation + budget (Wave 5)
+
+One new council + two new skills + one reusable compaction capability give the agency a mandatory quality check and a first-class cost signal:
+
+- **Evaluation Council** — Chief: `evaluation-lead` (Sonnet, CEVO). Specialists: `eval-designer`, `benchmark-runner`, `regression-detector`, `budget-monitor`, `token-compactor`. Informing + independent. Never on any project's delivery path. Outputs live in `<slug>/eval/` (per-project) and `_vision/eval/` (portfolio).
+- **`eval`** — close-eval (mandatory on every ship, in parallel with close-audit), portfolio-regression (per quarter, 5 pp threshold), benchmark-sweep (SWE-bench-lite + MLE-bench-lite + per-project harnesses), compaction-check (token-compactor structural rewrite review). Eval items derive from PKRs at close time — never from shipped artifacts. ≤ 25 items per set across three tiers (functional / ux / promise). Per-tier shapes + rejection patterns + subjectivity budget (max 30 % promise-tier) in `skills/eval/references/eval-set-rubric.md`. Baselines freeze per quarter; unfrozen baselines are a regression-detector hard error.
+- **`budget`** — four size classes (`small` 75 k/$1.50, `medium` 250 k/$5, `large` 1 M/$20, `custom`). Per-phase allocation defaults in `skills/budget/SKILL.md`. Burn tracked on every Chief report into `<slug>/eval/budget-ledger.md`. Thresholds: phase WARN at 20 % overrun, cumulative STOP + Rung 6 at 110 %. Per-model costs in `skills/budget/references/cost-table.md`. Size-class decision tree + re-class ADR rules in `skills/budget/references/size-class-calibration.md`.
+
+Token-compactor contract: **structured rewrite, never delete.** Emits a `[rollup]` entry spanning the compacted range + a `[correction]` pointer at the original location. Never-compact list: decisions, errors, reports, ADR-refs, worktree lines, survived-novelty-gate writes, meeting lines, rung transitions, any entry under 48 h old.
+
+Invariants added in Wave 5 (cumulative 1-12 in SKILL.md; 23-27 below):
+
+23. Every project close runs a mandatory close-eval in parallel with the close-audit. Reds (regression ≥ 5 pp unresolved) block ship until root-cause tagged (one of `prompt-rot · tier-drift · skill-edit · budget-squeeze · input-drift · baseline-defect · unknown`).
+24. Eval items are derived from PKRs before ship, never retrofitted from what was actually built. Retrofit detection → eval-designer files an error + escalates to CEVO.
+25. Regression baselines freeze per quarter. Never update a baseline mid-quarter; mid-quarter changes require a baseline-update ADR at quarter boundary.
+26. Every project declares a budget (size class + per-phase allocation) at OKR derivation. Later class changes require an ADR citing the trigger in `skills/budget/references/size-class-calibration.md > ## Triggers to re-class mid-flight`.
+27. Rung 6 is the only ladder rung that can expand a project budget. All other rungs operate within the declared envelope; exhaustion at any rung ≠ Rung 6 climbs the ladder, it does not silently borrow tokens.
+
 ## v0.3.0-alpha.4 — resilience ladder (Wave 4)
 
 One new skill wires the agency's never-give-up rule into the existing state machine without letting token spend go unbounded:
@@ -76,7 +94,7 @@ Invariants (Waves 1-2 cumulative):
 4. Never hold a meeting of the above kinds without writing minutes.
 5. Minutes action items and `taskflow` tasks are 1:1 — never one without the other.
 
-Waves 3–7 extend: people-ops + audit (Wave 3, shipped), never-give-up ladder (Wave 4, shipped), eval + benchmark + budget (Wave 5), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
+Waves 3–7 extend: people-ops + audit (Wave 3, shipped), never-give-up ladder (Wave 4, shipped), eval + benchmark + budget (Wave 5, shipped), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
 
 ## v0.2.4 — worktree parallelism
 

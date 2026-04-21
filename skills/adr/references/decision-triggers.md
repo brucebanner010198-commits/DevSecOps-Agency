@@ -60,6 +60,16 @@ If a trigger fires and no ADR is written, the `retro` skill flags it as `missed_
 - Rung 7 parking (terminal ADR; must include the reconsider-trigger).
 - A blocked task exceeding 8 attempts across all rungs without a terminal outcome (CAO-escalated).
 
+### Evaluation / budget (v0.3.0 Wave 5)
+- Any regression baseline update. Baselines freeze per quarter; an update ADR lands at the quarter boundary only (`skills/eval/references/regression-thresholds.md > Quarter boundary`).
+- Adding a new benchmark harness to `skills/eval/references/benchmark-harnesses.md` or deprecating an existing one.
+- Any close-eval red acceptance (regression ≥ 5 pp shipped despite the signal). ADR names the root-cause tag from the Wave 5 taxonomy.
+- Any budget size-class override — default class re-classed mid-flight per `skills/budget/references/size-class-calibration.md > Triggers to re-class mid-flight`.
+- Any cumulative budget overrun > 110 % absorbed (user waiver via Rung 6). Paired with user-meeting minutes.
+- Any `custom` budget class declaration at OKR derivation. ADR cites the why (why the standard classes don't fit).
+- Any token-compactor compaction event on a project with ≥ 1 ADR referenced in the compacted range. ADR names the `[rollup]` entry ID + the preserved `[correction]` pointer location.
+- Any benchmark-sweep red (tracked metric down ≥ 5 pp across a quarter). Portfolio-level finding, filed at workspace scope.
+
 ## Optional triggers (file one if in doubt)
 
 - Choice between two comparable libraries with similar reversal costs.

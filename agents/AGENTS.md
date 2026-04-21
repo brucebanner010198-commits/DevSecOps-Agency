@@ -28,6 +28,7 @@ Telegraph. Read before authoring or editing an agent file.
 | Strategy      | purple    | `cso`, trend-scout, competitive-analyst, market-sizer, opportunity-ranker |
 | People-ops    | gray      | `coo`, roster-manager, hiring-lead, performance-reviewer |
 | Audit         | white     | `cao`, adr-auditor, gate-auditor, okr-auditor, memory-auditor |
+| Evaluation    | cyan      | `evaluation-lead`, eval-designer, benchmark-runner, regression-detector, budget-monitor, token-compactor |
 
 ## Persona rules
 
