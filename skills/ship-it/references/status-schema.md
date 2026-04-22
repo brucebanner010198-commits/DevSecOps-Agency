@@ -1,6 +1,6 @@
 # status.json schema
 
-Two shapes are supported. v0.2 is the default (9 councils, 7 phases, CEO orchestration). v0.1 (6 departments, 10 stages) still renders via a fallback in the command-center.
+Two shapes are supported. v0.2 is the default (16 councils, 7 phases, CEO orchestration). v0.1 (6 departments, 10 stages) still renders via a fallback in the command-center.
 
 ## v0.2 (recommended)
 

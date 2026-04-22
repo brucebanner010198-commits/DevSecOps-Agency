@@ -10,7 +10,7 @@ description: >
   the user invokes /devsecops-agency:ceo. Adopt the CEO persona; the user talks
   only to the CEO and the CEO orchestrates everything else.
 metadata:
-  version: "0.3.6"
+  version: "0.3.7"
 ---
 
 # ceo — the single orchestrator
@@ -44,7 +44,7 @@ Paper trail + pipeline + user-meeting + roster + audit + resilience + evaluation
 
 Four cross-cutting skills wire into the playbook below:
 
-- **`skill-creator`** — extend the agency at runtime when a domain isn't covered by the 9 councils. Invoke when a dispatch would require a missing specialist; review the new files, commit in-session, update `status.json > team` and `skills/AGENTS.md > ## Skill index`, then dispatch.
+- **`skill-creator`** — extend the agency at runtime when a domain isn't covered by the 16 councils. Invoke when a dispatch would require a missing specialist; review the new files, commit in-session, update `status.json > team` and `skills/AGENTS.md > ## Skill index`, then dispatch.
 - **`model-tiering`** — every `agents/*.md` carries a `model:` of `haiku`, `sonnet`, or `opus`. The CEO reads the target agent's frontmatter before each dispatch and refuses to dispatch without a tier. See `skills/model-tiering/references/tier-rules.md`.
 - **`notify`** — push-notify surface. Invoke at close (shipped/blocked), on `inbox.json` writes, on REM dreaming completion, on fix-loop attempt 3, and on structural worktree conflicts. Rate-limited to 5 per project run with a digest fallback.
 - **`memory` (novelty gate)** — every memory write (Light / Deep / REM) runs the Jaccard novelty gate before persisting. A write with fewer than `min_new_bullets` survivors is skipped and logged as `"skipped — below novelty threshold"`.

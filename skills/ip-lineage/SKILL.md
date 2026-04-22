@@ -49,7 +49,7 @@ Every shipped artifact has a traceable origin. Lineage is the trace.
 - License incompatibilities = reds, not yellows.
 - Similarity thresholds are fixed — raising them is an ADR.
 - User contributions always credited.
-- Imported skill packs and agents record source provenance in their own `README.md` (or agent-file frontmatter comment) and are surfaced in every lineage statement that cites a pattern from them. Current imports: `skills/sdlc-patterns/` ← `NousResearch/hermes-agent` MIT; `runtime-hooks/` ← `github/awesome-copilot` MIT; `skills/oss-forensics/` ← hermes-agent MIT (inspired by RAPTOR's OSS Forensics system); `skills/arxiv/` ← hermes-agent MIT; `agents/agent-governance-reviewer.md` ← awesome-copilot MIT (frontmatter reformatted to agency convention).
+- Imported skill packs and agents record source provenance in their own `README.md` (or agent-file frontmatter comment) and are surfaced in every lineage statement that cites a pattern from them. Current imports: `skills/sdlc-patterns/` ← `NousResearch/hermes-agent` MIT; `runtime-hooks/` ← `github/awesome-copilot` MIT; `skills/oss-forensics/` ← hermes-agent MIT (inspired by RAPTOR's OSS Forensics system); `skills/arxiv/` ← hermes-agent MIT; `agents/audit/agent-governance-reviewer.md` ← awesome-copilot MIT (frontmatter reformatted to agency convention).
 
 ## What never happens
 

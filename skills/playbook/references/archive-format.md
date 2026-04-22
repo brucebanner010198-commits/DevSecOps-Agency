@@ -12,7 +12,7 @@ Adversarial-defense stepping stones. Append-only; supersession pointers track ev
 | id | slug                                      | asi       | severity | hardened_skill                       | adr            | created    |
 |----|-------------------------------------------|-----------|----------|--------------------------------------|----------------|------------|
 | 7  | asi06-indirect-authority-injection        | ASI06     | high     | councils/security/AGENTS.md          | ADR-0042-...   | 2026-03-14 |
-| 12 | asi02-tool-chaining-privilege-composition | ASI02/03  | high     | agents/security-lead.md              | ADR-0061-...   | 2026-04-02 |
+| 12 | asi02-tool-chaining-privilege-composition | ASI02/03  | high     | agents/security/security-lead.md     | ADR-0061-...   | 2026-04-02 |
 | 23 | asi09-forged-user-role-turn               | ASI09     | critical | councils/audit/AGENTS.md             | ADR-0089-...   | 2026-04-15 |
 
 ## Superseded stones

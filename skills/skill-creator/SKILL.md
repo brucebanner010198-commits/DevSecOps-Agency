@@ -1,7 +1,7 @@
 ---
 name: skill-creator
 description: >
-  This skill should be used when the CEO hits a domain the current 9 councils
+  This skill should be used when the CEO hits a domain the current 16 councils
   don't cover (cryptography, game-dev, mobile, embedded, ML, niche compliance
   regime) and needs to extend the agency's roster at runtime. It authors new
   agent files and new skill files that comply with `agents/AGENTS.md` and
@@ -15,7 +15,7 @@ metadata:
 
 # skill-creator — runtime roster extension
 
-Author new `agents/<name>.md` and `skills/<name>/SKILL.md` files so the agency can cover a domain its 9 councils don't. Returns new file paths to the CEO. Does not dispatch the new agents itself.
+Author new `agents/<council>/<name>.md` and `skills/<name>/SKILL.md` files so the agency can cover a domain its 16 councils don't. Returns new file paths to the CEO. Does not dispatch the new agents itself.
 
 ## When to trigger
 
@@ -27,7 +27,7 @@ Author new `agents/<name>.md` and `skills/<name>/SKILL.md` files so the agency c
 
 | Kind       | When                                                          | Path                                |
 | ---------- | ------------------------------------------------------------- | ----------------------------------- |
-| agent      | Distinct role the agency will repeatedly dispatch             | `agents/<name>.md`                  |
+| agent      | Distinct role the agency will repeatedly dispatch             | `agents/<council>/<name>.md`        |
 | skill      | New capability owned by an existing agent                     | `skills/<name>/SKILL.md` (+ refs)   |
 | both       | Domain needs both a persona and a repeatable procedure        | both of the above                   |
 
@@ -42,7 +42,7 @@ Author new `agents/<name>.md` and `skills/<name>/SKILL.md` files so the agency c
 4. **Decide model tier** per `skills/model-tiering/SKILL.md`: Opus for CEO-class only; Sonnet for Chiefs and cross-cutting authors (including `skill-creator` itself); Haiku for specialist output.
 5. **Author the agent file** following `references/agent-template.md`. Frontmatter fields only: `name`, `description`, `model`, `color`, `tools`. Body: `## Process`, `## Output format`, `## What you never do`.
 6. **Author the skill file** (if required) following `references/skill-template.md`. Frontmatter: `name`, `description` (≥ 2 sentences starting with "This skill should be used when..."), `metadata.version: "0.1.0"`. Body ≤ 200 lines; detail in `references/`.
-7. **Refuse on collision.** If `agents/<name>.md` or `skills/<name>/SKILL.md` already exists, abort and return `note: "collision"` with the existing path.
+7. **Refuse on collision.** If `agents/<council>/<name>.md` or `skills/<name>/SKILL.md` already exists, abort and return `note: "collision"` with the existing path.
 8. **Return to CEO.** One block per new file: `file:`, `kind:`, `summary:`. The CEO reviews and runs the first dispatch.
 
 ## Content rules
@@ -55,7 +55,7 @@ Author new `agents/<name>.md` and `skills/<name>/SKILL.md` files so the agency c
 
 ## Reserved names
 
-Do not create agents with these reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `skill-creator`.
+Do not create agents with these reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `evaluation-lead`, `red-team-lead`, `sre-lead`, `skill-creator`.
 
 ## Integration with CEO
 

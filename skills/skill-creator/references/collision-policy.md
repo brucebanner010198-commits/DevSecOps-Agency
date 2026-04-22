@@ -13,7 +13,7 @@ Refuse by default. Return to the CEO with the existing path + last-modified time
 | Same file, `metadata.version` bump requested by user  | Edit in place, bump minor or patch.       |
 | User says "replace the old agent"                     | Require CEO to stage a `_archive/<name>-<ts>.md` copy first, then overwrite. |
 | File exists but is empty or malformed frontmatter     | Treat as collision; refuse. CEO repairs.  |
-| Different kind (`skills/foo/` vs `agents/foo.md`)     | Allowed — no collision.                   |
+| Different kind (`skills/foo/` vs `agents/<council>/foo.md`) | Allowed — no collision.             |
 
 ## Return format on collision
 
