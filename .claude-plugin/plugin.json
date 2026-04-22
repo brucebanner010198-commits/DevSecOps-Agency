@@ -1,7 +1,7 @@
 {
   "name": "devsecops-agency",
-  "version": "0.3.8",
-  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when work shards cleanly, spawn workers to run in parallel. Research-first, security-second, receipts-always. STRIDE + OWASP Top 10 baseline for code; OWASP ASI Top 10 2025 via the Red-Team Council; every shipped artifact gets SBOM + SLSA provenance; DLP on every outbound tool call; secrets only via vault refs; runtime-hook enforcement of commit-gate, secrets-scanner, tool-guardian, governance-audit, dependency-license-checker, session-logger. 1 CEO + 16 Chiefs + 75 specialists = 92 agents; Audit / Evaluation / Red-Team / SRE are informing + independent — never on any project's delivery path. v0.3.8 'Identity+Learning' — adds MISSION.md + VALUES.md + KEEPER-TEST.md + LESSONS.md at repo root (mission = 'ship software that is secure, receipted, and reversible'; 11 operating principles; Netflix-inspired quarterly fire-readily review with user as final vote; append-only cross-project learning ledger). Three new skills: retrospective/ (4-kind post-close/portfolio/incident/wave format with Jaccard carry-over check), lessons-ledger/ (append-only ledger row append after every close with 11-field row schema + ADR pairing), keeper-test/ (wraps performance-reviewer + roster + hiring-lead with 4 scoring axes, bootstrap rules for quarter 0, USER-ONLY fire approval flow). CEO SKILL.md now reads MISSION+VALUES+LESSONS at session start and invokes retrospective + lessons-ledger at close; AGENTS.md + skills/AGENTS.md updated with 10 new anti-patterns + 12 new skill-index rows. Skill-layer and root-doc-layer only — no new agents, no new councils, no new tool grants. Foundation for v0.3.9 Rhythm+Career. Full wave-by-wave history (v0.2.0 → v0.3.7) is in CHANGELOG.md.",
+  "version": "0.3.9",
+  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when work shards cleanly, spawn workers to run in parallel. Research-first, security-second, receipts-always. STRIDE + OWASP Top 10 baseline for code; OWASP ASI Top 10 2025 via the Red-Team Council; every shipped artifact gets SBOM + SLSA provenance; DLP on every outbound tool call; secrets only via vault refs; runtime-hook enforcement of commit-gate, secrets-scanner, tool-guardian, governance-audit, dependency-license-checker, session-logger. 1 CEO + 16 Chiefs + 75 specialists = 92 agents; Audit / Evaluation / Red-Team / SRE are informing + independent — never on any project's delivery path. v0.3.9 'Rhythm+Career' — adds RHYTHM.md + CAREER.md at repo root and two new skills. RHYTHM.md declares 4 heartbeat cadences: daily (CEO, `heartbeat-<date>.md`), weekly (CEO+COO, `weekly-<YYYY-WW>.md`), monthly (CAO+CPO, `monthly-<YYYY-MM>.md`), quarterly (COO+CEVO+user, `quarterly-<YYYY-Q>.md`). State lives in `_vision/rhythm/state.json` with lastDaily/lastWeekly/lastMonthly/lastQuarterly + degradedCount; missed heartbeats escalate 1st miss → yellow compliance-drift, 2nd → ADR + Rung 2, 3rd → Rung 3 (blocks new projects). CAREER.md declares within-tier L1 (trial) → L2 (steady) → L3 (principal) ladder: L1→L2 needs 2 consecutive greens + ≥10 reports + zero roster-upgrade ADRs, L2→L3 needs 4 consecutive greens + ≥3 stepping-stones + ≥1 mentor upgrade + zero high+ red-team, L3→L2 on any red or high+ finding, L3→L1 forbidden. Inter-tier mobility stays USER-ONLY (VALUES §10). Reserved names (CEO + 16 Chiefs + skill-creator) always L3. Two new skills: rhythm/ (heartbeat orchestrator invoked at session start + on schedule, 8-step process, composes with keeper-test on quarterly), career-ladder/ (per-agent level engine, quarterly sub-step of rhythm + ad-hoc on stepping-stone / mentor events, bootstrap writes every non-reserved agent at L1). CEO SKILL.md now runs the rhythm heartbeat at session start right after MISSION+VALUES+LESSONS; AGENTS.md + skills/AGENTS.md updated with 11 new anti-patterns + 2 new skill-index rows. Skill-layer and root-doc-layer only — no new agents, no new councils, no new tool grants. Foundation for v0.4.0 Governance+Resilience. Full wave-by-wave history (v0.2.0 → v0.3.8) is in CHANGELOG.md.",
   "author": {
     "name": "Sir"
   },
@@ -282,7 +282,33 @@
     "north-stars",
     "non-goals",
     "operating-principles",
-    "session-start-invariant"
+    "session-start-invariant",
+    "rhythm",
+    "heartbeat",
+    "daily-heartbeat",
+    "weekly-heartbeat",
+    "monthly-heartbeat",
+    "quarterly-heartbeat",
+    "cadence",
+    "rhythm-state",
+    "missed-heartbeat",
+    "catch-up-mode",
+    "skip-forward-mode",
+    "degraded-heartbeat",
+    "career-ladder",
+    "l1-l2-l3",
+    "trial-steady-principal",
+    "within-tier-level",
+    "promotion-gates",
+    "demotion-gates",
+    "stepping-stone-authorship",
+    "mentor-assignment",
+    "first-vote-privilege",
+    "reserved-names",
+    "inter-tier-user-only",
+    "primary-author-roster-upgrade",
+    "career-bootstrap",
+    "l3-revalidation"
   ],
   "license": "MIT"
 }

@@ -27,7 +27,7 @@ Telegraph. Read before authoring or editing a skill.
 - `metadata.version` follows semver. Bump on contract changes (schema, artifact paths, trigger phrases).
 - Plugin root `plugin.json.version` bumps when ≥ 1 skill bumps.
 
-## Skill index (v0.3.8)
+## Skill index (v0.3.9)
 
 | Skill              | Trigger                                                 |
 | ------------------ | ------------------------------------------------------- |
@@ -76,3 +76,5 @@ Telegraph. Read before authoring or editing a skill.
 | **`retrospective`** (v0.3.8) | Post-close / wave / incident / portfolio retro. Feeds `LESSONS.md` via `lessons-ledger`. |
 | **`lessons-ledger`** (v0.3.8) | Append-only cross-project learning log `LESSONS.md`. CEO invokes on every close after retrospective. |
 | **`keeper-test`** (v0.3.8) | Quarterly + on-demand fire-readily review. Cites `KEEPER-TEST.md`. User has final vote on fires. |
+| **`rhythm`** (v0.3.9) | Daily / weekly / monthly / quarterly heartbeat orchestrator. Reads `_vision/rhythm/state.json`; writes `heartbeat-<date>.md` / `weekly-<YYYY-WW>.md` / `monthly-<YYYY-MM>.md` / `quarterly-<YYYY-Q>.md`. Missed heartbeats escalate via `compliance-drift` → Rung 2 → Rung 3. |
+| **`career-ladder`** (v0.3.9) | Per-agent L1 (trial) → L2 (steady) → L3 (principal) within-tier level engine. Quarterly sub-step of `rhythm` + ad-hoc on stepping-stone / mentor events. Inter-tier mobility is USER-ONLY. Reserved names (CEO + 16 Chiefs + `skill-creator`) always L3. |

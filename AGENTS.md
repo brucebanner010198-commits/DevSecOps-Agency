@@ -10,6 +10,13 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-
 - **[`LESSONS.md`](LESSONS.md)** — one append-only row per project close. Written via `skills/lessons-ledger/SKILL.md` after `skills/retrospective/SKILL.md` lands the retro minutes.
 - **Session-start invariant:** CEO reads `MISSION.md` + `VALUES.md` + latest 5 rows of `LESSONS.md` before deriving a project slug. Missing any = abort + file ADR `kind: identity-missing`.
 
+## Rhythm + Career (v0.3.9)
+
+- **[`RHYTHM.md`](RHYTHM.md)** — daily / weekly / monthly / quarterly heartbeats with owners, artifact paths, pass criteria, failure modes. Session-level rhythm (open = identity reads, close = retrospective + lessons-ledger) is already wired in v0.3.8.
+- **[`CAREER.md`](CAREER.md)** — L1 (trial) → L2 (steady) → L3 (principal) within-tier progression. Inter-tier changes are USER-ONLY (`VALUES.md §10`).
+- **Session-start rhythm invariant:** CEO invokes `skills/rhythm/SKILL.md` immediately after the MISSION+VALUES+LESSONS reads. Any due heartbeat runs in order (daily → weekly → monthly → quarterly) before project init.
+- **Career invariant:** the quarterly heartbeat is the only turn that moves level. Mid-quarter moves occur only on (a) bootstrap at v0.3.9 install and (b) immediate L3 → L2 demotion on a mid-quarter Keeper Test red. Reserved names (CEO, 16 Chiefs, skill-creator) are always L3.
+
 ## Start
 
 - Single user voice: CEO. All other agents are internal.
@@ -185,3 +192,14 @@ Before a phase transition, a Chief must have read: its council's scoped `AGENTS.
 - Don't run `skills/keeper-test` on the 16 chiefs or `skill-creator`. Reserved names — their firing is a restructure, not a review.
 - Don't write the retro before CAO close-audit + CEVO close-eval + CRT pre-release red-team all land. Late findings flip outcomes.
 - Don't skip the retrospective carry-over check. Repeat-lessons are VALUES §11 reds; catching them late turns drift into breach.
+- Don't skip a heartbeat because "nothing changed." The heartbeat proves the paper trail is alive; silence = `compliance-drift` yellow on the first miss, ADR + Rung 2 on the second, Rung 3 on the third.
+- Don't backdate a heartbeat file. Each `heartbeat-<date>.md` / `weekly-<YYYY-WW>.md` / `monthly-<YYYY-MM>.md` / `quarterly-<YYYY-Q>.md` carries the real runtime date; corrections are new files citing prior, never mutations.
+- Don't merge cadences. Daily ≠ weekly ≠ monthly ≠ quarterly; each writes its own file with its own owner. Collapsing cadences into a single super-heartbeat breaks `RHYTHM.md` pass-criteria and hides degradation.
+- Don't run the quarterly heartbeat without invoking `keeper-test` first, then `career-ladder` as a sub-step. Career-ladder depends on `performance-<date>.md` existing; inverting the order yields stale level decisions.
+- Don't promote across tiers via `career-ladder`. Inter-tier mobility is USER-ONLY (`VALUES.md §10`). Career-ladder only ever moves L1 ↔ L2 ↔ L3 within a tier.
+- Don't skip demotion on a red L3 because they're "on an important project." File the `career-demotion` ADR; their task continues under L2 privileges without interruption.
+- Don't let a single stepping-stone count toward multiple agents' L3 gates. `primaryAuthor` field is authoritative; co-authors are named but don't accrue gate credit.
+- Don't carry L3 privileges across a demotion. Demotion → L2 strips first-vote on prompt-diff, mentor assignments, and single-sign-off close-out gate immediately.
+- Don't edit a landed `levels-<date>.md`. Corrections are new files citing prior, `Review kind: correction` (mirrors the keeper-test invariant).
+- Don't backdate a promotion to recognize "historical" work. The window starts at v0.3.9 install; pre-v0.3.9 activity is not gate evidence.
+- Don't run `career-ladder` on reserved names (CEO, 16 Chiefs, `skill-creator`). Reserved names are always L3; their removal is a restructure via USER-ONLY path, not a ladder move.
