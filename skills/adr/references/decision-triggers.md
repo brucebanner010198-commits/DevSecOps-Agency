@@ -37,7 +37,7 @@ If a trigger fires and no ADR is written, the `retro` skill flags it as `missed_
 - Any waiver of a council gate (security, legal, a11y, qa).
 - Any `okr_alignment: red` accepted (CEO proceeds despite).
 - Any Critical-severity risk accepted without mitigation.
-- Any compliance exception (future Wave 7 compliance-drift skill).
+- Any compliance-drift red (breach) or yellow (drift). See Wave 7 section below.
 
 ### Technology
 - Framework / runtime / vendor choice with reversal cost > 1 engineering day.
@@ -81,6 +81,32 @@ If a trigger fires and no ADR is written, the `retro` skill flags it as `missed_
 - Every Rung 6 accept-without-fix of a red-team finding. ADR pairs with user-meeting minutes; only the user can waive red-team reds.
 - Every CRT portfolio-sweep red (quarterly). ADR at workspace scope naming the trend + the remediation roadmap.
 - Every red-team test that exfil'd real PII / credentials (automatic critical). ADR names the breach + the synthetic-fixture migration.
+
+### SRE + tool-scout + provenance (v0.3.0 Wave 7)
+- Every `tool-scout` verdict on a new MCP / skill / third-party tool (green / yellow / red). ADR names the 7-dimension scorecard + the verdict + the auto-red trinity result.
+- Every MCP / tool / integration adoption, re-scoring, or retirement. Adoption ADR pairs with the green verdict; retirement ADR cites cause (CVE, abandonment, scope overreach).
+- Every A2A adapter landed or retired. ADR names the counterparty, allowed-tools list, denied-tools assertion (`*`), rate limit, and smoke-suite pass.
+- Every wildcard-allowlist finding (automatic critical). ADR pairs with the rollback + the corrected adapter config.
+- Every model-routing override — both opening (lateral reroute begins) and closing (primary restored). ADR lists the tier, primary, fallback chosen, trigger signal, and the `[routing-override:<adr-id>]` session-log tag range.
+- Every emergency Haiku→Sonnet upgrade during an outage (same opening + closing ADR pair; flagged as `emergency_upgrade`).
+- Every attempted downward tier crossing (automatic critical — downgrades are forbidden entirely). ADR names the attempt + the rollback.
+- Every dep with unknown license surfaced by `sbom-slsa`. ADR pairs with the ip-lineage reconciliation or the dep removal.
+- Every hash-mismatch between manifest and lockfile. ADR names the supply-chain finding + the fix.
+- Every SLSA-level downgrade on a project that previously hit a higher level. ADR names the lost capability + the plan to recover.
+- Every unsigned-SBOM ship (incident-mode only — opening + closing ADR pair). Unsigned output ≠ attestation; shipping without a signature is a hard carve-out.
+- Every credential provision at high-privilege scope. ADR names the scopes granted + the rotation schedule (7-day for high-privilege).
+- Every rotation that fails verify. ADR pairs with the rollback + root-cause.
+- Every real-leak finding from a gitleaks / trufflehog scan. ADR names the rotation + the scope of the leak + the CAO notify.
+- Every infinite-life credential carve-out (requires user approval). ADR names the business reason + the compensating controls.
+- Every license incompatibility between a dep and the project license. Reds, never yellows.
+- Every ≥ 85 % similarity hit on a creative output. ADR pairs with the remediation (rewrite / redesign / remove).
+- Every unknown-license dep adopted. Blocks ship until resolved via `ip-lineage`.
+- Every user-contribution dispute. ADR names the artifact, the contribution, the attribution decision.
+- Every compliance-drift breach (red). ADR names the framework, the violated control, the remediation taskflow task, and the CAO notification.
+- Every compliance-drift rubric-version upgrade. ADR names the framework + the `v<n> → v<n+1>` delta.
+- Every compliance-drift scope amendment (adding / removing a framework from the monthly sweep). ADR names the why.
+- Every compliance-drift waiver accepted. ADR pairs with user-meeting minutes; waivers require explicit user consent.
+- Every CSRE independence breach (an SRE specialist scouting a tool they authored, or dual-hatting a delivery role). Automatic critical + CAO red.
 
 ## Optional triggers (file one if in doubt)
 

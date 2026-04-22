@@ -1,6 +1,6 @@
 # DevSecOps Agency
 
-A plugin that turns Claude into a fully autonomous AI software-development company. You hand the **CEO** a one-sentence idea; the CEO convenes a board of 9 Chiefs; each Chief runs a council of specialists. Research, Product, Architecture, Security, Execution, Quality, DevOps, Docs, Legal. Security-first (STRIDE + OWASP Top 10). Ships to GitHub.
+A plugin that turns Claude into a fully autonomous AI software-development company. You hand the **CEO** a one-sentence idea; the CEO convenes a board of 16 Chiefs; each Chief runs a council of specialists. Research, Product, Architecture, Security, Execution, Quality, DevOps, Docs, Legal, Marketing, Strategy, People-ops, Audit, Evaluation, Red-Team, SRE. Security-first (STRIDE + OWASP Top 10 for app code; OWASP ASI Top 10 2025 for agent runtime). Ships to GitHub with SBOM + SLSA provenance.
 
 You speak only to the CEO. Everything else is internal.
 
@@ -21,31 +21,38 @@ Durable **memory** (v0.2.1) means the agency learns across projects: the CEO rea
 ## The organisation
 
 ```
-                                    USER
-                                     │
-                                     ▼
-                         ┌──────────────────────┐
-                         │         CEO          │  ← only one you talk to
-                         └──────────┬───────────┘
-    ┌────────┬──────────┬───────────┼───────────┬────────┬─────────┬────────┬────────┐
-    ▼        ▼          ▼           ▼           ▼        ▼         ▼        ▼        ▼
-  CRO      CPO       CTO         CISO        VP-Eng     CQO     VP-Ops    CKO       GC
-Research Product  Architecture  Security   Execution  Quality   DevOps    Docs    Legal
+                                              USER
+                                                │
+                                                ▼
+                                    ┌──────────────────────┐
+                                    │         CEO          │  ← only one you talk to
+                                    └──────────┬───────────┘
+    ┌──────┬──────┬──────┬──────┬──────┬──────┼──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
+    ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼
+   CRO    CPO    CTO   CISO   VP-Eng  CQO   VP-Ops  CKO    GC    CMO    CSO    COO    CAO   CEVO   CRT   CSRE
+   Res.  Prod.  Arch.  Sec.   Exec.  Qual.  DevOps Docs  Legal  Mktg  Strat  P-ops Audit   Eval Red-T  SRE
 ```
 
-| Council       | Chief (agent)        | Specialists                                                                 |
-| ------------- | -------------------- | --------------------------------------------------------------------------- |
-| Research      | `cro`                | market-researcher, tech-scout, literature-reviewer, user-researcher         |
-| Product       | `pm-lead` (CPO)      | spec-writer, product-strategist, roadmap-planner                            |
-| Architecture  | `engineering-lead` (CTO) | system-architect, api-designer, data-architect, infra-architect          |
-| Security      | `security-lead` (CISO)   | threat-modeler, code-auditor, pen-tester, compliance-officer             |
-| Execution     | `engineering-lead` (VP-Eng) | backend-dev, frontend-dev, db-engineer, integrations-engineer         |
-| Quality       | `qa-lead` (CQO)      | test-designer, test-runner, performance-tester, a11y-auditor                |
-| DevOps        | `devops-lead` (VP-Ops)   | ci-engineer, deployment-engineer, observability-engineer                 |
-| Docs          | `docs-lead` (CKO)    | api-documenter, readme-writer, tutorial-writer                              |
-| Legal         | `gc`                 | license-checker, privacy-counsel                                            |
+| Council       | Chief (agent)              | Specialists                                                                 |
+| ------------- | -------------------------- | --------------------------------------------------------------------------- |
+| Research      | `cro`                      | market-researcher, tech-scout, literature-reviewer, user-researcher         |
+| Product       | `pm-lead` (CPO)            | spec-writer, product-strategist, roadmap-planner                            |
+| Architecture  | `engineering-lead` (CTO)   | system-architect, api-designer, data-architect, infra-architect             |
+| Security      | `security-lead` (CISO)     | threat-modeler, code-auditor, pen-tester, compliance-officer, **sbom-slsa**, **secrets-vault** |
+| Execution     | `engineering-lead` (VP-Eng)| backend-dev, frontend-dev, db-engineer, integrations-engineer               |
+| Quality       | `qa-lead` (CQO)            | test-designer, test-runner, performance-tester, a11y-auditor                |
+| DevOps        | `devops-lead` (VP-Ops)     | ci-engineer, deployment-engineer, observability-engineer                    |
+| Docs          | `docs-lead` (CKO)          | api-documenter, readme-writer, tutorial-writer                              |
+| Legal         | `gc`                       | license-checker, privacy-counsel, **ip-lineage**, **compliance-drift**      |
+| Marketing     | `cmo`                      | positioning-strategist, comms-writer, brand-guardian, growth-analyst        |
+| Strategy      | `cso`                      | trend-scout, competitive-analyst, market-sizer, opportunity-ranker          |
+| People-ops    | `coo`                      | roster-manager, hiring-lead, performance-reviewer                           |
+| Audit         | `cao` *(independent)*      | adr-auditor, gate-auditor, okr-auditor, memory-auditor                      |
+| Evaluation    | `evaluation-lead` (CEVO) *(independent)* | eval-designer, benchmark-runner, regression-detector, budget-monitor, token-compactor |
+| Red-Team      | `red-team-lead` (CRT) *(independent)* | adversarial-prompter, tool-abuse-tester, data-exfil-tester, model-poisoning-scout, supply-chain-attacker, social-engineering-tester, playbook-author |
+| SRE           | `sre-lead` (CSRE) *(independent)* | mcp-registry-scout, a2a-adapter, sandbox-runner, model-routing-override |
 
-**1 CEO + 9 Chiefs + ~28 specialists.** Each specialist does one thing well and hands their artifact up to the Chief, who consolidates and reports to the CEO.
+**1 CEO + 16 Chiefs + ~64 specialists.** Each specialist does one thing well and hands their artifact up to the Chief, who consolidates and reports to the CEO. Audit + Evaluation + Red-Team + SRE are **informing + independent** — never on any project's delivery path.
 
 ## Skills (slash commands)
 
@@ -171,6 +178,14 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 
 ## Versions
 
+- **0.3.0** — *Company release — final cut.* Seven cumulative waves:
+  - **Wave 1** (foundations): `vision-doc` + `okr` + `adr` + `meeting-minutes`. Durable mission / OKRs / ADRs / minutes. Every Chief dispatch gets a 3-bullet KR slice; every gate validates after `okr.score`; every material decision files an ADR same-turn; every user / board / blocking-council / red-team / audit / retro convening writes minutes.
+  - **Wave 2** (pipeline + user-meeting): Marketing (CMO) + Strategy (CSO) councils. `idea-pipeline` 4-stage funnel → top-5; `user-meeting` 4-phase flow (brief → present → capture → commit); `market-intel` + `positioning` canonical shapes.
+  - **Wave 3** (people-ops + audit): People-ops (COO) + Audit (CAO) councils. `roster` (living agent registry + hire / fire / tier-change / repurpose with mandatory ADRs and `_vision/roster/_archive/`); `audit` (4 kinds, independent, every red → ADR); `capacity` (utilization bands + KR coverage gaps). CAO never on any delivery path.
+  - **Wave 4** (resilience ladder): `ladder` skill. 8 rungs from `Retry` (0) to `Parking lot` (7). Every rung transition files an ADR. Rung 7 is resumable-terminal; blocking-council reds start the ladder instead of durably blocking.
+  - **Wave 5** (evaluation + budget): Evaluation (CEVO) council. `eval` (mandatory close-eval paired with close-audit, 5 pp regression threshold, quarter-frozen baselines); `budget` (4 size classes + per-phase allocation + 110 % triggers Rung 6). Token-compactor performs structured rewrites with a never-compact list.
+  - **Wave 6** (red-team + self-modifying playbooks): Red-Team (CRT) council. `red-team` (OWASP ASI Top 10 2025 mapping, 5 kinds, severity × impact × boundary × mitigation rubric); `playbook` (DGM-style immutable stepping-stones, supersession-only, prompt-diff review blocking gate on every `agents/*.md` or `councils/*/AGENTS.md` edit with weakening-phrasing auto-reject).
+  - **Wave 7** (SRE + tool-scout + provenance): SRE (CSRE) council. `tool-scout` (7-dimension rubric); `a2a` (cross-agency adapters, default-deny, rate limits, 30 s timeouts, mTLS/JWT); `sandbox` (ephemeral `/tmp/sandbox-<nonce>/`, 2 CPU / 2 GB / 60 s, net default-deny, diff-not-state); `model-routing` (same-tier lateral fallback matrix). Security additions: `sbom-slsa` (CycloneDX + SLSA provenance, keyless sigstore); `secrets-vault` (vault refs only, 30 d rotation, weekly scans). Legal additions: `ip-lineage` (lineage tree + license reconciliation + similarity check); `compliance-drift` (monthly + on-demand, SOC 2 / GDPR / HIPAA, drift ≠ breach).
 - **0.2.5** — `skill-creator`, `model-tiering`, `notify` skills + novelty gate on `memory`. Runtime roster extension via AGENTS.md-compliant agent/skill authoring. Per-agent model tiering with Opus CEO / Sonnet Chiefs (+ skill-creator) / Haiku specialists, enforced at dispatch — CEO refuses agents without a tier. Single push-notify surface with 5-per-run rate limit, digest fallback, and Cowork `Stop` / `SubagentStop` hook wiring. Jaccard novelty gate on every Light/Deep/REM write skips trivial duplicates instead of bloating `MEMORY.md`.
 - **0.2.4** — `worktree` skill. Parallel dispatches and every fix-loop (attempt ≥ 1) run in isolated `<slug>/_worktrees/<chief>-<attempt>/` directories with declared `writes[]`/`reads[]`, atomic scope-checked alphabetical merge, stale-rebase detection, and structural-vs-non-structural conflict handling.
 - **0.2.3** — `gates` + `taskflow` skills. Formal gate vocabulary (green/yellow/red/n/a) with blocking-vs-informing council split, per-rule matrix, and aggregation semantics. Six-state task machine with a hard 2-attempt fix-loop cap and handoff invariants. `status.json` gains `tasks[]` and `gates{}`.

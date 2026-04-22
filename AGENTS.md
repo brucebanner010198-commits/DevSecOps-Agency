@@ -11,7 +11,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 ## Architecture
 
-- CEO → 15 Chiefs → ~55 specialists (Wave 3 added COO + CAO + 7 specialists; Wave 5 adds CEVO + 5 specialists; Wave 6 adds CRT + 7 specialists). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit + Evaluation + Red-Team councils have strict independence invariants — no dual-hatting with any delivery role. Wave 7 of v0.3.0 expands further with SRE + tool-scout + provenance.
+- CEO → 16 Chiefs → ~64 specialists (Wave 3 added COO + CAO + 7 specialists; Wave 5 added CEVO + 5 specialists; Wave 6 added CRT + 7 specialists; Wave 7 adds CSRE + 4 SRE specialists + 4 provenance specialists distributed to Security + Legal). Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit + Evaluation + Red-Team + SRE councils have strict independence invariants — no dual-hatting with any delivery role.
 - Per-project state: `outputs/devsecops-agency/<slug>/{status.json, chat.jsonl, inbox.json}`.
 - Durable state: `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/}`. Append-only (except structured rewrite on `_vision/VISION.md` and ADR status headers — see those skills). Roster + audit artifacts live under `_vision/roster/` and `_vision/audit/`.
 - Prompt-cache rule: **deterministic ordering for maps/sets/lists/registries/file lists/network results before model/tool payloads**. Sort by stable key (alphabetical for names, timestamp ascending for events). Preserve old transcript bytes when possible.
@@ -27,7 +27,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 
 - 9 councils are not the ceiling. When a domain isn't covered, the CEO invokes `skill-creator` to author a new `agents/<name>.md` (and optional `skills/<name>/SKILL.md`) in-session.
 - New agents follow `agents/AGENTS.md` file shape and pull a tier from `skills/model-tiering/references/tier-rules.md`.
-- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `evaluation-lead`, `red-team-lead`, `skill-creator`.
+- Reserved names: `ceo`, `cro`, `pm-lead`, `engineering-lead`, `security-lead`, `qa-lead`, `devops-lead`, `docs-lead`, `gc`, `cmo`, `cso`, `coo`, `cao`, `evaluation-lead`, `red-team-lead`, `sre-lead`, `skill-creator`.
 
 ## Notify
 
@@ -83,6 +83,19 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - **Playbook skill** (`skills/playbook/SKILL.md`): DGM-style stepping-stone archive. Immutable stones derived from remediated `high`+ red-team findings. Stone file = `_vision/playbooks/stones/stone-NNNN-<slug>.md`; registry = `_vision/playbooks/ARCHIVE.md`. Supersession only — never rewrite a stone's body.
 - **Prompt-diff review**: blocking check run by `agents/playbook-author.md` on every proposed `agents/*.md` or `councils/*/AGENTS.md` change before it lands. Matches diff against `ARCHIVE.md` via `hardened_skill` + ASI category. Weakening phrasing patterns auto-reject (`Never` → `Should not`, `Must` → `Should`, `Required` → `Recommended`, etc.). Rejections auto-rollback the diff — never land, never enter ladder.
 - **Independence invariant:** CRT + every red-team specialist cannot dual-hat with any delivery role (CTO/VP-Eng/CISO/CQO/CEVO/CAO). Breaches are automatic critical findings + CAO reds.
+
+## SRE + tool-scout + provenance (v0.3.0 Wave 7)
+
+- **SRE Council** (`agents/sre-lead.md`, `councils/sre/AGENTS.md`) — informing + **independent**. Never on any project's delivery path (same invariant as Audit + Eval + Red-Team). CSRE runs tool-scout on every new MCP / skill / integration, sandbox-check on every untrusted tool call, routing-override during model outages, A2A-integration when a cross-agency adapter lands, portfolio-sweep per quarter, incident-mode on demand.
+- **Tool-scout skill** (`skills/tool-scout/SKILL.md`): 7-dimension rubric (provenance, scope, abuse-surface, reversibility, secret-handling, maintenance, integration-cost) → green/yellow/red verdict. Auto-red trinity: reversibility-red + abuse-surface-red + secret-handling-red. See `references/rubric.md`. Every vetted MCP / tool files an ADR.
+- **A2A skill** (`skills/a2a/SKILL.md`): cross-agency agent-to-agent adapters. Default-deny allowlists (`allowed_tools: [...]`, `denied_tools: *`). Rate limits + 30s timeouts + mTLS/JWT identity. Smoke suite on every adapter: allowed / denied / over-limit paths.
+- **Sandbox skill** (`skills/sandbox/SKILL.md`): ephemeral `/tmp/sandbox-<nonce>/` with 2 CPU / 2 GB / 60 s / net default-deny caps. Runner returns a diff, never raw state. Stage → isolate → execute → diff → destroy. Untrusted input never runs outside a sandbox.
+- **Model-routing skill** (`skills/model-routing/SKILL.md`): same-tier lateral fallbacks only. Matrix in `references/fallback-matrix.md`. Downward tier crossings forbidden. Every override files an opening ADR + closing ADR; session logs tagged `[routing-override:<adr-id>]`. Emergency Haiku→Sonnet upgrade permitted when no Haiku fallback works.
+- **SBOM + SLSA skill** (`skills/sbom-slsa/SKILL.md`): CycloneDX JSON + SLSA provenance attestation on every shipped artifact. Keyless sigstore signing preferred. SLSA level reported, never claimed. Transitive deps always counted. Unsigned output = informational only, not attestation.
+- **Secrets-vault skill** (`skills/secrets-vault/SKILL.md`): agents receive vault refs (`_vault:<project>-<tool>`), never raw creds. 30-day rotation default, 7-day for high-privilege. Rotation = overlap + verify. Weekly + every-close gitleaks/trufflehog scans. Real leak = same-turn rotation + ADR.
+- **IP-lineage skill** (`skills/ip-lineage/SKILL.md`): lineage tree (prompt / model / inputs / derived-from) on every close-phase artifact. Dep license reconciliation against project license. Similarity check on creative outputs: ≥85% → red, 70–85% → yellow + attribution. User contributions always credited.
+- **Compliance-drift skill** (`skills/compliance-drift/SKILL.md`): monthly + on-demand drift detection across SOC 2 / GDPR / HIPAA / state-privacy. Version-pinned rubrics. Drift = yellow + remediation task; breach = red + ADR + CAO notify. Drift and breach stay distinct.
+- **Independence invariant:** CSRE + every SRE specialist cannot dual-hat with any delivery role (CTO/VP-Eng/CISO/CQO/CEVO/CAO/CRT). Scouting your own tool = independence breach = automatic critical finding.
 
 ## Evaluation + budget (v0.3.0 Wave 5)
 
@@ -183,3 +196,12 @@ Before a phase transition, a Chief must have read: its council's scoped AGENTS.m
 - Don't let a red-team specialist red-team a project they delivered without a blind-peer-review gate. Self-red-team = independence breach.
 - Don't exfiltrate real PII or credentials during red-team tests. Use synthetic fixtures from `skills/red-team/references/owasp-asi-top-10.md > credential regexes`. Real-data tests are automatic critical findings.
 - Don't let CRT accept-without-fix a finding below Rung 6. Only the user can waive red-team reds; CEO alone cannot.
+- Don't adopt a new MCP / skill / third-party tool without a `tool-scout` verdict. Unscouted adoption = Rung 6 + automatic CSRE red.
+- Don't run untrusted input outside the sandbox. "Just this once" = ASI-class finding. The sandbox runner is mandatory, not optional.
+- Don't silently downgrade a model tier when a primary vendor is down. Same-tier lateral only; every override files opening + closing ADRs.
+- Don't wildcard an A2A allowlist. `allowed_tools: *` is an automatic critical finding. Default-deny is the invariant.
+- Don't ship without SBOM + SLSA. Every published artifact carries both or it doesn't ship. Unsigned provenance ≠ provenance.
+- Don't print raw secrets in reports, ADRs, logs, or session lines. Vault refs only. A single raw-secret line is a CISO red + same-turn rotation.
+- Don't skip IP-lineage on creative outputs. Perceptual-hash similarity check is mandatory; ≥ 85 % hits block ship until ip-lineage reconciles.
+- Don't hide compliance drift because it looks small. Drift is an early-warning signal — suppressing it converts drift into breach on the auditor's schedule, not ours.
+- Don't let a CSRE specialist scout a tool they authored or integrated. Self-scouting = independence breach = automatic critical finding + CAO red.

@@ -2,6 +2,34 @@
 
 Each release layer is still in effect. The CEO playbook in `SKILL.md` is the condensed view; this is the long form.
 
+## v0.3.0 — SRE + tool-scout + provenance (Wave 7, final cut)
+
+One new council + four SRE specialists + four provenance specialists distributed to existing Security and Legal councils, plus eight new skills, close the v0.3.0 "company release" by giving the agency a durable answer to external dependencies, runtime safety, supply-chain integrity, and IP / compliance paper trail:
+
+- **SRE Council** — Chief: `sre-lead` (Sonnet, CSRE). Specialists: `mcp-registry-scout`, `a2a-adapter`, `sandbox-runner`, `model-routing-override`. Informing + **independent** — same structural invariant as Audit + Eval + Red-Team. Never on any project's delivery path. Council roster + invariants in `councils/sre/AGENTS.md`.
+- **Security Council additions** — `sbom-slsa`, `secrets-vault`. Security Council remains blocking; these two sit alongside the existing CISO specialists.
+- **Legal Council additions** — `ip-lineage`, `compliance-drift`. Legal Council remains blocking; these two sit alongside the existing GC specialists.
+- **`tool-scout`** — 7-dimension rubric (provenance · scope · abuse-surface · reversibility · secret-handling · maintenance · integration-cost) → green/yellow/red verdict per MCP / skill / third-party tool. Auto-red trinity: reversibility-red + abuse-surface-red + secret-handling-red together force red regardless of the other axes. Full rubric in `skills/tool-scout/references/rubric.md`. Every vetted tool files an ADR.
+- **`a2a`** — YAML manifest shape for cross-agency agent-to-agent adapters. Default-deny allowlists (`allowed_tools: [...]`, `denied_tools: *`), rate limits, 30-second timeouts, mTLS or JWT identity. Smoke suite mandatory per adapter: allowed / denied / over-limit paths. Wildcard allowlists are an automatic critical finding.
+- **`sandbox`** — ephemeral `/tmp/sandbox-<nonce>/` execution envelope. Lifecycle = stage → isolate → execute → diff → destroy. Caps: 2 CPU / 2 GB / 60 s / network default-deny. Runner returns a diff, never raw state. Untrusted input never runs outside a sandbox.
+- **`model-routing`** — same-tier lateral fallbacks only. Matrix in `skills/model-routing/references/fallback-matrix.md`: Opus tier (CEO), Sonnet tier (Chiefs), Haiku tier (specialists). Downward tier crossings forbidden. Emergency Haiku→Sonnet upgrade permitted during an outage. Every override files an opening ADR + closing ADR; session logs tagged `[routing-override:<adr-id>]`.
+- **`sbom-slsa`** — CycloneDX JSON SBOM + SLSA provenance attestation on every shipped artifact. Keyless sigstore signing preferred over long-lived keys. SLSA level reported based on what the build actually achieves, never claimed. Transitive deps always counted. Unsigned output is informational, not attestation.
+- **`secrets-vault`** — agents receive vault refs (`_vault:<project>-<tool>`), never raw secrets. 30-day rotation default, 7-day rotation for high-privilege scopes. Rotation = issue replacement → verify downstream → 24 h overlap → revoke old. Weekly gitleaks/trufflehog scans + every-close scan. Real leak = same-turn rotation + ADR + CAO notify.
+- **`ip-lineage`** — lineage tree (prompt source · model vendor+family+version · external inputs · derived-from) on every close-phase artifact. Dep license reconciliation against project license. Creative outputs pass a perceptual-hash / n-gram / melodic-fingerprint similarity check: ≥ 85 % → red, 70–85 % → yellow + attribution. User contributions always credited.
+- **`compliance-drift`** — monthly + on-demand drift detection across SOC 2 / GDPR / HIPAA / state privacy / custom frameworks. Rubric version-pinned per report. Results classified **compliant** (green) / **drift** (yellow + remediation task) / **breach** (red + ADR + CAO notify). Drift and breach stay distinct — they describe different severities, not different reports.
+
+Invariants added in Wave 7 (cumulative 1-16 in SKILL.md; 33-40 below):
+
+33. Every new MCP / skill / third-party tool passes `tool-scout` before adoption. Unscouted adoption triggers Rung 6 + an automatic CSRE red.
+34. Every untrusted tool call routes through the `sandbox` skill. Network default-deny; caps enforced at 2 CPU / 2 GB / 60 s. Raw state never leaves the sandbox — the runner returns a diff.
+35. Every model-vendor outage routes through `model-routing` with a same-tier lateral fallback only. Downward tier crossings are forbidden. Every override files opening + closing ADRs; session logs tag every override turn with `[routing-override:<adr-id>]`.
+36. Every cross-agency adapter ships with a default-deny allowlist + rate limit + 30 s timeout + mTLS/JWT identity + a smoke suite (allowed / denied / over-limit). Wildcard allowlists are an automatic critical finding.
+37. Every published artifact carries CycloneDX SBOM + SLSA provenance. Unsigned output ≠ attestation. SLSA level reported, never claimed above what the build achieves.
+38. Agents receive vault refs, never raw secrets. Every credential has an expiry; infinite-life creds are an automatic critical finding. Real leaks rotate same-turn.
+39. Every close-phase artifact emits an IP-lineage statement. License incompatibilities are reds, never yellows. Creative outputs pass the similarity check or do not ship.
+40. Drift and breach are distinct. Drift = yellow + remediation task. Breach = red + ADR + CAO notify + user consult if material. Hiding drift because it looks small converts drift into breach on the auditor's schedule.
+41. CSRE + every SRE specialist cannot dual-hat with any delivery role (CTO/VP-Eng/CISO/CQO/CEVO/CAO/CRT). Scouting a tool you authored = independence breach = automatic critical finding + CAO red.
+
 ## v0.3.0-alpha.6 — red-team + self-modifying playbooks (Wave 6)
 
 One new council + two new skills + a blocking prompt-diff review gate give the agency adversarial defense that scales with the system itself:
@@ -111,7 +139,7 @@ Invariants (Waves 1-2 cumulative):
 4. Never hold a meeting of the above kinds without writing minutes.
 5. Minutes action items and `taskflow` tasks are 1:1 — never one without the other.
 
-Waves 3–7 extend: people-ops + audit (Wave 3, shipped), never-give-up ladder (Wave 4, shipped), eval + benchmark + budget (Wave 5, shipped), red-team + self-modifying playbooks (Wave 6), SRE + tool-scout + provenance (Wave 7).
+Waves 3–7 extend: people-ops + audit (Wave 3, shipped), never-give-up ladder (Wave 4, shipped), eval + benchmark + budget (Wave 5, shipped), red-team + self-modifying playbooks (Wave 6, shipped), SRE + tool-scout + provenance (Wave 7, shipped — v0.3.0 final).
 
 ## v0.2.4 — worktree parallelism
 

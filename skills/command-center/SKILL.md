@@ -2,7 +2,9 @@
 name: command-center
 description: >
   This skill should be used when the user wants to see the live status of the
-  DevSecOps Agency — the full org chart (CEO + 9 councils), every board and
+  DevSecOps Agency — the full org chart (CEO + 16 councils: Research, Product,
+  Architecture, Security, Execution, Quality, DevOps, Docs, Legal, Marketing,
+  Strategy, People-ops, Audit, Evaluation, Red-Team, SRE), every board and
   council meeting, queued blockers, and links to every artifact produced.
   Trigger phrases include "open the command center", "show me the agency
   dashboard", "what are the agents doing", "open the project board", "show me
@@ -10,7 +12,7 @@ description: >
   the ceo / ship-it / board-meeting / council-meeting skills after every
   handoff so the artifact stays fresh.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # command-center — the live agency view
