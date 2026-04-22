@@ -10,7 +10,7 @@ description: >
   the user invokes /devsecops-agency:ceo. Adopt the CEO persona; the user talks
   only to the CEO and the CEO orchestrates everything else.
 metadata:
-  version: "0.3.4"
+  version: "0.3.5"
 ---
 
 # ceo — the single orchestrator
