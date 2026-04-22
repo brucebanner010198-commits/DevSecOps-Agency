@@ -49,6 +49,7 @@ Every shipped artifact has a traceable origin. Lineage is the trace.
 - License incompatibilities = reds, not yellows.
 - Similarity thresholds are fixed — raising them is an ADR.
 - User contributions always credited.
+- Imported skill packs (`skills/sdlc-patterns/` ← hermes-agent MIT, `runtime-hooks/` ← awesome-copilot MIT) record source provenance in their own `README.md` and are surfaced in every lineage statement that cites a pattern from them.
 
 ## What never happens
 

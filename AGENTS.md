@@ -109,6 +109,14 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - **commit-gate.sh** — agency-authored replacement for the upstream auto-commit hook. The upstream version was **deliberately excluded** because it runs `git add -A` + `git commit --no-verify` + `git push`, bypassing every other hook in the set. Our replacement stages only files in `$COMMIT_FILES`, never passes `--no-verify`, and never auto-pushes (push is a CEO-gated action).
 - **CAO reads hook logs on close-audit.** Any unacknowledged threat / blocked / critical line is a mandatory ADR finding.
 
+## SDLC patterns pack (v0.3.2)
+
+- **Location:** `skills/sdlc-patterns/`. Six skills ported from `NousResearch/hermes-agent` (MIT) after a prompt-injection audit: `plan`, `writing-plans`, `systematic-debugging`, `test-driven-development`, `requesting-code-review`, `subagent-driven-development`.
+- **Not user-facing.** The pack is specialist-invoked only. The user still speaks only to the CEO. Execution / QA / Architecture specialists reach into the pack when they hit a concrete situation (debug a failing test, run TDD, plan a multi-step task, review code pre-commit, dispatch parallel delegates).
+- **Scope containment:** these skills never replace agency scaffolding. `taskflow` still owns the six-state machine + 2-attempt fix-loop cap. `ladder` still owns escalation. `meeting-minutes` still writes the convening record. The pack adds operational *how*, not organizational *what*.
+- **Exclusions (deliberate):** the hermes-agent `skills/red-teaming/godmode` skill was left out — it is an explicit prompt-injection + jailbreak toolkit (Parseltongue encoding, GODMODE templates, `exec(open(...))` dynamic loading, `auto_jailbreak()` config writer). It violates both the user's "no prompt-injection skills" directive and the agency's adversarial-defense-first posture (our Red-Team Council CRT is defensive — OWASP ASI Top 10 — not offensive jailbreaking).
+- **IP-lineage:** every shipped artifact that cites one of these patterns gets the hermes-agent attribution in its lineage statement. The pack's `README.md` is the authoritative source of provenance.
+
 ## Evaluation + budget (v0.3.0 Wave 5)
 
 - **Evaluation Council** (`agents/evaluation-lead.md`, `councils/evaluation/AGENTS.md`) — informing + independent. Never on any project's delivery path (same invariant as Audit). Runs close-eval on every ship, portfolio-regression per quarter, benchmark-sweep before every plugin v-bump, compaction-check under context pressure.
