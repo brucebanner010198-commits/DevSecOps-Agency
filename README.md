@@ -2,7 +2,7 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.4.1` · MIT + imports (see `LICENSES/`).
+Status: `v0.4.2` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md).
 
 ## Identity
 
@@ -15,12 +15,13 @@ Status: `v0.4.1` · MIT + imports (see `LICENSES/`).
 - [`CAREER.md`](CAREER.md) — L1 (trial) → L2 (steady) → L3 (principal) within-tier level ladder. Inter-tier mobility is USER-ONLY.
 - [`GOVERNANCE.md`](GOVERNANCE.md) — decision matrix (Proposer / Reviewer / Approver / Final-vote). Enumerates the 10 USER-ONLY actions and separates blocking chiefs (CISO/CEVO/CRT/CAO) from informing-only chiefs.
 - [`RESILIENCE.md`](RESILIENCE.md) — failure-mode map. First response + escalation path + skill + ADR kind for every failure. Four degraded modes (model / heartbeat / chief / budget); five recovery guarantees.
+- [`SECURITY.md`](SECURITY.md) — public security policy (v1.0, ratified 2026-04-22 with plugin v0.4.2). Scope + supported versions + reporting channels (GitHub Private Vulnerability Reporting primary, email fallback) + 48h ack / 7d triage / 7d-30d-next-wave fix SLAs / 90d coordinated disclosure / CVSS v3.1 severity rubric / plugin-specific threat model / responsible-testing rules / safe harbor. Non-waivable classes (raw-secret + ASI) inherit from Constitution §8.5.
 
 ## Install
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.4.1.plugin
+/plugin install devsecops-agency-0.4.2.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git
@@ -144,6 +145,8 @@ Each project lands at `outputs/devsecops-agency/<slug>/` with `brief.md`, `resea
 ## Security posture
 
 Full STRIDE + OWASP Top 10 before code is written. Second-pass code audit + pen-test after build. CISO blocks on any Critical/High without mitigation. MCP defense via pinned-hash registration. DLP on every outbound tool call. Secrets only via vault refs. Every shipped artifact gets SBOM + SLSA provenance. OWASP ASI Top 10 2025 covered by the Red-Team council. Session logs are append-only. Memory writes pass a Jaccard novelty gate. Runtime hooks enforce `commit-gate`, `secrets-scanner`, `tool-guardian`, `governance-audit`, `dependency-license-checker`, `session-logger`.
+
+**Reporting a vulnerability in the plugin itself:** see [`SECURITY.md`](SECURITY.md) — GitHub Private Vulnerability Reporting is the preferred channel; 48h ack / 7d triage / 90d coordinated disclosure; CVSS v3.1 severity rubric; raw-secret and ASI-class findings are non-waivable per Constitution §8.5.
 
 ## Learn more
 

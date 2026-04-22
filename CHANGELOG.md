@@ -2,6 +2,26 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.4.2 — Security Policy (2026-04-22)
+
+Doc-layer patch. Replaces the default GitHub `SECURITY.md` template with a complete, agency-specific public security policy. No new agents, no new councils, no new skills, no new tool grants, no code changes. Safe upgrade from v0.4.1.
+
+- **`SECURITY.md`** (full rewrite, v1.0). 12 numbered sections, agency-specific throughout:
+  - **§1 Scope** — explicitly covers the plugin repo (`agents/`, `skills/`, `councils/`, `runtime-hooks/`, `.claude-plugin/plugin.json`, all Schedule-A root docs). Explicitly out-of-scope: downstream shipped projects (each has its own `threat-model.md`), user-authored skills not in the archive, Claude Code, the Claude API, third-party MCP servers.
+  - **§2 Supported versions** — table: `0.4.x` current (patches within 7/30/next-wave days by severity); `0.3.x` security-only, end-of-support 2026-07-22; `0.2.x` and below frozen; all `-alpha.*` / `-rc.*` unsupported.
+  - **§3 Reporting** — GitHub Private Vulnerability Reporting as the preferred channel with full required-fields list; `brucebanner010198@gmail.com` fallback with subject convention; public issue tracker explicitly closed and recreated as private; SLA table (48h ack / 7d triage / 7d Critical / 30d High / 90d Medium / next-wave Low / 90d public disclosure whichever earlier).
+  - **§4 Coordinated disclosure** — 90-day window modeled on Google Project Zero and CERT/CC norms; one-time 14-day extension allowed; researcher credit opt-in; CVE + CVSS v3.1 vector in the advisory at publication; supply-chain pre-notification available but never used to delay disclosure.
+  - **§5 Severity rubric** — four-tier table (Critical 9.0–10.0 / High 7.0–8.9 / Medium 4.0–6.9 / Low 0.1–3.9) aligned with CVSS v3.1 and cross-referenced to council-level gates; non-waivable classes called out (raw-secret + ASI per Constitution §8.5).
+  - **§6 Threat model specific to this plugin** — six in-scope attacker classes (external prompt-injection actor, supply-chain attacker, memory-poisoning actor, persona-tampering actor, waiver-abuse actor, governance-bypass actor); twelve in-scope vulnerability classes mapped to OWASP ASI Top 10 and Constitution clauses; out-of-scope list (Anthropic services, Claude Code, Claude API, Agent SDK, reference MCP servers, self-XSS, rate-limit bypass-as-FinOps); responsible-testing rules (synthesize data, no destructive commands on infra you don't own, concrete reproductions required, use a fork/worktree).
+  - **§7 Defense-in-depth already shipped** — complete enumeration of runtime hooks (`secrets-scanner`, `tool-guardian`, `governance-audit`, `dependency-license-checker`, `session-logger`, `commit-gate.sh`), blocking councils (CISO, CRT, CEVO, CAO) with trigger criteria, security-critical skills (`mcp-defense`, `mcp-authoring`, `dlp`, `injection-defense`, `secrets-vault`, `red-team`, `waivers`, `chaos`, `audit`), and constitutional guarantees cited by section (§1.1 Supremacy, §2.2 USER-ONLY, §5.1 Receipts, §5.2 Append-only, §5.5 Vault refs, §5.7 SBOM+SLSA, §8.5 Waiver bounds, §11.1 Enforcement, §11.5 no enforcement against User, §11.6 no silent enforcement).
+  - **§8 Handling of accepted findings** — six-step pipeline (ADR under `_decisions/` with explicit `kind:` values + stepping stone for High/Critical + `threat-model.md` row + fix commit through `commit-gate.sh` + `CHANGELOG.md` entry + public advisory at window close); waiver flow procedure restated with ≤ 90-day calendar expiry and non-waivable classes.
+  - **§9 Safe harbor** — explicit good-faith research clause: no civil/criminal pursuit, no law-enforcement referral, no GitHub retaliation; clause binds project maintainers only (not Anthropic / GitHub / upstream).
+  - **§10 Acknowledgments** — every accepted researcher credited in the advisory + `CHANGELOG.md` unless anonymity requested (honored without question); no bounty currently; hall-of-fame page planned for v0.5.0.
+  - **§11 References** — normative (RFC 2119, RFC 8174, RFC 9116, Constitution); framework citations (OWASP Top 10, OWASP ASI Top 10, CVSS v3.1, NIST CSF, ISO/IEC 27001, SOC 2, SLSA, SPDX, Anthropic RSP, Anthropic Usage Policies, CERT/CC, Google Project Zero, ACM/IEEE Codes); original-synthesis disclaimer.
+  - **§12 Document control** — version / ratified date / supremacy / amendment procedure / contact. Changes to §3 / §4 / §5 / §6 / §9 need a `security-policy-amend` ADR with CAO + CRT + CISO review; changes to §8 non-waivable classes route through Constitution Art X as USER-ONLY.
+- **`README.md` Identity section** extended with `SECURITY.md` bullet; "Security posture" section adds explicit pointer to the reporting flow. Status + install command updated v0.4.1 → v0.4.2.
+- **`.claude-plugin/plugin.json`** — version bumped v0.4.1 → v0.4.2; description appended with the v0.4.2 summary.
+
 ## v0.4.1 — Constitution (2026-04-22)
 
 Doc-layer patch. Ratifies a supreme document — **`CONSTITUTION.md`** — above MISSION / VALUES / GOVERNANCE / RESILIENCE / KEEPER-TEST / CAREER / RHYTHM / LESSONS. No new agents, no new councils, no new skills, no new tool grants. Safe upgrade from v0.4.0.
