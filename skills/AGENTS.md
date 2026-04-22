@@ -27,7 +27,7 @@ Telegraph. Read before authoring or editing a skill.
 - `metadata.version` follows semver. Bump on contract changes (schema, artifact paths, trigger phrases).
 - Plugin root `plugin.json.version` bumps when ≥ 1 skill bumps.
 
-## Skill index (v0.3.9)
+## Skill index (v0.4.0)
 
 | Skill              | Trigger                                                 |
 | ------------------ | ------------------------------------------------------- |
@@ -78,3 +78,5 @@ Telegraph. Read before authoring or editing a skill.
 | **`keeper-test`** (v0.3.8) | Quarterly + on-demand fire-readily review. Cites `KEEPER-TEST.md`. User has final vote on fires. |
 | **`rhythm`** (v0.3.9) | Daily / weekly / monthly / quarterly heartbeat orchestrator. Reads `_vision/rhythm/state.json`; writes `heartbeat-<date>.md` / `weekly-<YYYY-WW>.md` / `monthly-<YYYY-MM>.md` / `quarterly-<YYYY-Q>.md`. Missed heartbeats escalate via `compliance-drift` → Rung 2 → Rung 3. |
 | **`career-ladder`** (v0.3.9) | Per-agent L1 (trial) → L2 (steady) → L3 (principal) within-tier level engine. Quarterly sub-step of `rhythm` + ad-hoc on stepping-stone / mentor events. Inter-tier mobility is USER-ONLY. Reserved names (CEO + 16 Chiefs + `skill-creator`) always L3. |
+| **`waivers`** (v0.4.0) | Formal time-boxed waiver flow for clearing a blocking-council red without fixing the underlying finding. Proposer = council lead; reviewer = blocking chief + CEO; approver = user-only. Every waiver has a calendar expiration ≤ 90 days; paired `waiver-expiry` ADR files on expiry day. One-finding-one-artifact-one-project scope. ASI-class + raw-secret findings are not waivable. |
+| **`drill`** (v0.4.0) | Scheduled + on-demand resilience drills across 5 drill kinds (chief-unavailable, heartbeat-miss, model-outage, waiver-expiry, compaction-loss) on 4 cadences (monthly, quarterly, annual, on-demand). Every drill files a `drill-report` ADR with outcome (pass / pass-with-gaps / fail) + gaps + remediation. Missed drills are CAO reds. Drills never run during a live incident affecting the same subsystem. |

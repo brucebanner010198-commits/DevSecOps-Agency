@@ -17,6 +17,15 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-
 - **Session-start rhythm invariant:** CEO invokes `skills/rhythm/SKILL.md` immediately after the MISSION+VALUES+LESSONS reads. Any due heartbeat runs in order (daily → weekly → monthly → quarterly) before project init.
 - **Career invariant:** the quarterly heartbeat is the only turn that moves level. Mid-quarter moves occur only on (a) bootstrap at v0.3.9 install and (b) immediate L3 → L2 demotion on a mid-quarter Keeper Test red. Reserved names (CEO, 16 Chiefs, skill-creator) are always L3.
 
+## Governance + Resilience (v0.4.0)
+
+- **[`GOVERNANCE.md`](GOVERNANCE.md)** — decision matrix: Proposer / Reviewer / Approver / Final-vote per decision kind. Enumerates the 10 USER-ONLY actions (kickoff, tier change, fire, waive blocking red, Rung 7 park, amend root docs, publish externally, spend money, accept non-goal, cross-tier repurpose). Distinguishes **blocking chiefs** (CISO, CEVO, CRT, CAO — strict veto) from **informing-only chiefs** (CSRE + the 11 delivery/strategy Chiefs). CEO reads at session start before routing any non-trivial decision.
+- **[`RESILIENCE.md`](RESILIENCE.md)** — failure-mode map: every failure cites its first response, escalation path, skill(s), ADR kind. Defines four **degraded modes** (model, heartbeat, chief, budget — any subset can be simultaneously active) and five **recovery guarantees** (no silent failure, no lost work, no double-decision, recovery window, paper trail survives agent).
+- **Governance invariant:** CEO reads `GOVERNANCE.md` at session start alongside MISSION+VALUES+LESSONS. Any decision whose Approver column resolves to "user" routes through `user-meeting` — no CEO stand-in on USER-ONLY decisions, even with user-stated preference from a prior session.
+- **Resilience invariant:** daily rhythm heartbeat publishes the degraded-mode set in `heartbeat-<date>.md §Degraded`. Degraded stays degraded until an explicit close-ADR lands. Never retire a degraded-mode tag silently.
+- **Waivers:** `skills/waivers/SKILL.md` is the only non-fix path to clear a blocking-council red. Every waiver has a calendar expiration; expiry-day heartbeat files the paired `waiver-expiry` ADR. User-approved only — not CEO, not the blocking Chief.
+- **Drills:** `skills/drill/SKILL.md` runs five drill kinds on four cadences (monthly chief-unavailable; quarterly heartbeat-miss + model-outage; annual waiver-expiry + compaction-loss; on-demand). Every drill files a `drill-report` ADR. Missed drills are CAO reds. Drills never run during a live incident affecting the same subsystem.
+
 ## Start
 
 - Single user voice: CEO. All other agents are internal.
@@ -203,3 +212,16 @@ Before a phase transition, a Chief must have read: its council's scoped `AGENTS.
 - Don't edit a landed `levels-<date>.md`. Corrections are new files citing prior, `Review kind: correction` (mirrors the keeper-test invariant).
 - Don't backdate a promotion to recognize "historical" work. The window starts at v0.3.9 install; pre-v0.3.9 activity is not gate evidence.
 - Don't run `career-ladder` on reserved names (CEO, 16 Chiefs, `skill-creator`). Reserved names are always L3; their removal is a restructure via USER-ONLY path, not a ladder move.
+- Don't approve your own proposal. Proposer ≠ reviewer ≠ approver (`VALUES.md §3` + `GOVERNANCE.md §Decision matrix`). Self-approval is an automatic CAO red regardless of urgency.
+- Don't collapse an informing chief into an approving one. Informing chiefs raise ADRs and concerns; only blocking chiefs (CISO, CEVO, CRT, CAO) hold veto on the ship path. Treating CPO or CTO as a "silent approver" bypasses the matrix.
+- Don't take a USER-ONLY action on last-quarter consent. The 10 USER-ONLY actions require fresh user approval every time — prior approval does not carry. ("The user said yes last quarter" is not a valid cite.)
+- Don't grant a permanent waiver. Every waiver has a calendar expiration within 90 days. Open-ended waivers violate `VALUES.md §4` (append-only) — a waiver must have a closing row.
+- Don't let the blocking chief approve the waiver on their own red. Blocking chief reviews for procedural grounds; only the user approves. Same-chief approve-and-raise is a self-approval anti-pattern.
+- Don't waive through a side channel. `user-meeting` + `inbox.json` only. Slack DMs, private calls, or email approvals don't land a grant ADR and don't create a paper trail.
+- Don't waive an ASI-class red-team finding. Those require fix-or-park; the waiver path is closed for them. Same for raw-secret findings.
+- Don't drill during a live incident affecting the same subsystem. Real outage = real path; synthetic on top = signal pollution. Pause the drill schedule; resume post-incident.
+- Don't skip a scheduled drill. Missed drill = CAO red. Reschedule within the cadence window (e.g., a missed monthly reruns before month-end).
+- Don't mark a drill `pass` when paper-trail gaps exist. Use `pass-with-gaps` so each gap files a follow-up ADR with owner + due date.
+- Don't let multiple degraded modes compound silently. If ≥ 2 degraded modes are active, the daily heartbeat escalates to weekly-equivalent depth; ≥ 4 on one project = automatic Rung 4 replan.
+- Don't drill a blocking Chief (CISO, CEVO, CRT, CAO). Chief-unavailable drill rotates through the 12 non-blocking chiefs only. Blocking chiefs hold veto and cannot be safely offline even for 30 minutes.
+- Don't run drills and real incidents in parallel across overlapping subsystems. `skills/drill §Pre-flight` checks `_vision/rhythm/state.json` for active degraded modes before starting.
