@@ -2,7 +2,7 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.5.0` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md).
+Status: `v0.5.1` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md). Live ops console: [`command-center/`](command-center/) (deploys to GitHub Pages on every push).
 
 ## Identity
 
@@ -25,12 +25,13 @@ Status: `v0.5.0` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — contribution workflow. Amendment-class gates on founding documents.
 - [`CODEOWNERS`](CODEOWNERS) — path-to-council ownership map.
 - [`.well-known/security.txt`](.well-known/security.txt) — RFC 9116 disclosure contact.
+- **[`command-center/`](command-center/)** — **public operations console (v0.1, v0.5.1).** Single `index.html` — no build step — showing CEO + 16 councils org chart (blocking vs informing chiefs flagged), live vital signs fetched from the GitHub API (councils / skills / agents / hooks), today's rhythm of four heartbeats, twelve Trust commitments panel (shows "pending" until 2026-07-22 scorecard), recent commits feed, Schedule-A founding-documents grid, and five one-click meeting launchers (Call a CEO meeting · Convene a council · Issue a new directive · Schedule a drill · Publish Trust Scorecard). Each launcher copies a pre-written slash-command prompt for Claude. Auto-deploys to GitHub Pages via `.github/workflows/pages.yml`; portable to Cloudflare Pages, Vercel, Netlify, or a Cowork artifact. Maintenance procedure in [`skills/command-center-web`](skills/command-center-web/SKILL.md).
 
 ## Install
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.5.0.plugin
+/plugin install devsecops-agency-0.5.1.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DevSecOps-Agency — Command Center</title>
+<meta name="description" content="Live operations console for the DevSecOps-Agency — org chart, councils, rhythm, trust commitments, and CEO meeting launcher." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛡%3C/text%3E%3C/svg%3E" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root { color-scheme: dark; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, sans-serif; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .grid-bg {
+    background-image:
+      radial-gradient(ellipse at top, rgba(56,189,248,0.10), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(168,85,247,0.08), transparent 60%),
+      linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+  }
+  .pulse { animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+  .rise { animation: rise .5s ease-out both; }
+  @keyframes rise { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:translateY(0) } }
+  .card {
+    background: linear-gradient(180deg, rgba(30,41,59,0.55) 0%, rgba(15,23,42,0.55) 100%);
+    border: 1px solid rgba(148,163,184,0.14);
+    backdrop-filter: blur(8px);
+  }
+  .card:hover { border-color: rgba(56,189,248,0.35); }
+  .chip {
+    display:inline-flex; align-items:center; gap:.25rem;
+    padding: 2px 8px; border-radius: 9999px;
+    font-size: 11px; font-weight: 600;
+    border: 1px solid rgba(148,163,184,0.25);
+  }
+  .ok    { color: #4ade80; border-color: rgba(74,222,128,0.35); background: rgba(74,222,128,0.08) }
+  .warn  { color: #fbbf24; border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.08) }
+  .crit  { color: #f87171; border-color: rgba(248,113,113,0.35); background: rgba(248,113,113,0.08) }
+  .info  { color: #38bdf8; border-color: rgba(56,189,248,0.35); background: rgba(56,189,248,0.08) }
+  .muted { color: #94a3b8; border-color: rgba(148,163,184,0.25); background: rgba(148,163,184,0.08) }
+  .btn {
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding: 8px 14px; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
+    border: 1px solid rgba(148,163,184,0.30);
+    background: rgba(30,41,59,0.6);
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .btn:hover { border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.10); color: #f8fafc }
+  .btn-primary { background: linear-gradient(135deg, #0ea5e9, #6366f1); border-color: transparent; color: white }
+  .btn-primary:hover { filter: brightness(1.1) }
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary svg { transform: rotate(90deg); }
+  svg.chev { transition: transform .15s ease; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .scroll-fade { mask-image: linear-gradient(180deg, black 80%, transparent); }
+  dialog { background: transparent; color: inherit; border: 0; padding: 0; }
+  dialog::backdrop { background: rgba(2,6,23,0.72); backdrop-filter: blur(4px); }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen grid-bg">
+
+<!-- ========== HEADER ========== -->
+<header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur">
+  <div class="max-w-7xl mx-auto px-5 py-3 flex items-center gap-4">
+    <div class="flex items-center gap-2">
+      <div class="text-2xl">🛡</div>
+      <div>
+        <div class="text-[11px] uppercase tracking-[0.2em] text-slate-400">DevSecOps-Agency</div>
+        <div class="text-base font-semibold">Command Center</div>
+      </div>
+    </div>
+    <div class="flex-1"></div>
+    <div class="hidden md:flex items-center gap-2 mono text-[11px] text-slate-400">
+      <span class="dot bg-emerald-400 pulse"></span>
+      <span id="hdr-version">loading…</span>
+      <span class="text-slate-600">·</span>
+      <span id="hdr-clock">--:--:--</span>
+    </div>
+    <button id="btn-refresh" class="btn" title="Refresh data">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      <span>Refresh</span>
+    </button>
+    <a id="btn-repo" class="btn" target="_blank" rel="noopener" href="https://github.com/brucebanner010198-commits/DevSecOps-Agency">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.08 1.84 2.82 1.31 3.51 1 .11-.78.42-1.31.77-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23A11.5 11.5 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+      Repo
+    </a>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-5 py-6 space-y-6">
+
+  <!-- ========== HERO ========== -->
+  <section class="rise card rounded-2xl p-6">
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <span class="chip ok"><span class="dot bg-emerald-400 pulse"></span> Online</span>
+      <span id="hero-version" class="chip info">v—</span>
+      <span id="hero-commit" class="chip muted mono">—</span>
+      <span id="hero-signoff" class="chip muted hidden">CEVO+CAO ratified</span>
+      <span class="flex-1"></span>
+      <span id="hero-last-updated" class="text-[11px] text-slate-400 mono">fetching…</span>
+    </div>
+    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Run the Agency like a tech company.</h1>
+    <p class="text-slate-400 mt-2 max-w-3xl">
+      Direct the CEO. Convene councils. Track trust. See commits land in real time. Every action ends at the repo — the Agency's source of truth.
+    </p>
+    <div class="mt-5 flex flex-wrap gap-2">
+      <button class="btn btn-primary" data-action="ceo-meeting">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Call a CEO meeting
+      </button>
+      <button class="btn" data-action="council-meeting">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 0 0 0-8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M1 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg>
+        Convene a council
+      </button>
+      <button class="btn" data-action="directive">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        Issue a new directive
+      </button>
+      <button class="btn" data-action="schedule-drill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Schedule a drill
+      </button>
+      <button class="btn" data-action="scorecard">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
+        Publish Trust Scorecard
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== VITAL SIGNS ========== -->
+  <section class="grid grid-cols-2 md:grid-cols-6 gap-3">
+    <div class="card rounded-xl p-4"><div class="text-[11px] uppercase tracking-wider text-slate-400">Councils</div><div class="text-2xl font-semibold mt-1" id="vital-councils">—</div></div>
+    <div class="card rounded-xl p-4"><div class="text-[11px] uppercase tracking-wider text-slate-400">Skills</div><div class="text-2xl font-semibold mt-1" id="vital-skills">—</div></div>
+    <div class="card rounded-xl p-4"><div class="text-[11px] uppercase tracking-wider text-slate-400">Agents</div><div class="text-2xl font-semibold mt-1" id="vital-agents">—</div></div>
+    <div class="card rounded-xl p-4"><div class="text-[11px] uppercase tracking-wider text-slate-400">Runtime hooks</div><div class="text-2xl font-semibold mt-1" id="vital-hooks">—</div></div>
+    <div class="card rounded-xl p-4"><div class="text-[11px] uppercase tracking-wider text-slate-400">Trust pledges</div><div class="text-2xl font-semibold mt-1">12</div></div>
+    <div class="card rounded-xl p-4"><div class="text-[11px] uppercase tracking-wider text-slate-400">USER-ONLY acts</div><div class="text-2xl font-semibold mt-1">10</div></div>
+  </section>
+
+  <!-- ========== TWO-COLUMN: ORG + ACTIVITY ========== -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Org chart -->
+    <div class="lg:col-span-2 card rounded-2xl p-5">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-semibold">Organization</h2>
+          <p class="text-slate-400 text-sm">CEO and 16 councils. Four chiefs hold blocking vetoes. Tap a council for its chief, specialists, and workers.</p>
+        </div>
+        <span class="chip info">Chief → Specialist → Worker</span>
+      </div>
+
+      <!-- CEO node -->
+      <div class="flex justify-center mb-4">
+        <div class="card rounded-xl px-5 py-3 text-center border-sky-500/40">
+          <div class="text-[10px] uppercase tracking-widest text-sky-300">Sovereign</div>
+          <div class="font-semibold">You — the User</div>
+          <div class="text-[11px] text-slate-400">Directs the CEO · 10 USER-ONLY actions</div>
+        </div>
+      </div>
+      <div class="flex justify-center mb-4">
+        <div class="w-px h-5 bg-slate-700"></div>
+      </div>
+      <div class="flex justify-center mb-5">
+        <div class="card rounded-xl px-5 py-3 text-center border-violet-500/40">
+          <div class="text-[10px] uppercase tracking-widest text-violet-300">Chief Executive</div>
+          <div class="font-semibold">CEO</div>
+          <div class="text-[11px] text-slate-400">Reads Constitution first · Single voice to User</div>
+        </div>
+      </div>
+
+      <div id="councils-grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Activity feed -->
+    <div class="card rounded-2xl p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold">Recent activity</h2>
+        <span id="commits-label" class="text-[11px] text-slate-400 mono">—</span>
+      </div>
+      <ol id="commits-list" class="space-y-2.5 max-h-[600px] overflow-y-auto scroll-fade pr-1">
+        <li class="text-slate-400 text-sm">Loading from GitHub…</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========== RHYTHM + TRUST ========== -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card rounded-2xl p-5">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-semibold">Today's rhythm</h2>
+        <span id="rhythm-date" class="text-[11px] text-slate-400 mono"></span>
+      </div>
+      <p class="text-slate-400 text-sm mb-4">Four heartbeats keep the Agency honest. Miss one without a documented slip → Trust commitment #9 fails.</p>
+      <ul id="rhythm-list" class="space-y-2.5"></ul>
+    </div>
+
+    <div class="card rounded-2xl p-5">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-semibold">Trust commitments</h2>
+        <span class="chip warn">Next scorecard 2026-07-22</span>
+      </div>
+      <p class="text-slate-400 text-sm mb-4">Twelve public commitments. Until the first quarterly scorecard publishes, status is "measurement pending."</p>
+      <ul id="trust-list" class="space-y-1.5 mono text-[12.5px]"></ul>
+    </div>
+  </section>
+
+  <!-- ========== FOUNDING DOCS ========== -->
+  <section class="card rounded-2xl p-5">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-lg font-semibold">Founding documents</h2>
+      <span class="chip info">Schedule A amended 2026-04-22</span>
+    </div>
+    <div id="docs-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5"></div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="pt-6 pb-10 text-center text-[11px] text-slate-500 mono">
+    Command Center v0.1 · Data from GitHub API (unauth, 60/hr) · Receipts over rhetoric · <a class="underline hover:text-slate-300" href="https://github.com/brucebanner010198-commits/DevSecOps-Agency/blob/main/TRUST.md">TRUST.md</a>
+  </footer>
+</main>
+
+<!-- ========== MODAL ========== -->
+<dialog id="action-modal" class="p-0">
+  <div class="card rounded-2xl p-5 max-w-xl w-full m-4 md:m-auto">
+    <div class="flex items-center justify-between mb-3">
+      <h3 id="modal-title" class="text-lg font-semibold">Action</h3>
+      <button class="btn" onclick="document.getElementById('action-modal').close()">Close</button>
+    </div>
+    <p id="modal-lede" class="text-slate-400 text-sm mb-3"></p>
+    <textarea id="modal-prompt" class="w-full h-44 rounded-lg bg-slate-900/80 border border-slate-700 p-3 mono text-[12.5px] text-slate-200 resize-y" readonly></textarea>
+    <div class="mt-3 flex flex-wrap gap-2">
+      <button class="btn btn-primary" id="modal-copy">Copy prompt</button>
+      <a id="modal-open" class="btn" target="_blank" rel="noopener" href="https://claude.ai/new">Open Claude</a>
+      <span class="flex-1"></span>
+      <span id="modal-feedback" class="text-[11px] text-emerald-400 mono self-center"></span>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* ================= CONFIG ================= */
+const REPO_OWNER = "brucebanner010198-commits";
+const REPO_NAME  = "DevSecOps-Agency";
+const API = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
+const RAW = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main`;
+
+const COUNCILS = [
+  { slug:"strategy",     name:"Strategy",        chief:"CSO",  role:"inform", tier:"Wave 2" },
+  { slug:"product",      name:"Product",         chief:"CPO",  role:"inform", tier:"Wave 1" },
+  { slug:"architecture", name:"Architecture",    chief:"CTO",  role:"inform", tier:"Wave 1" },
+  { slug:"research",     name:"Research",        chief:"CKO",  role:"inform", tier:"Wave 1" },
+  { slug:"security",     name:"Security",        chief:"CISO", role:"block",  tier:"Wave 1" },
+  { slug:"red-team",     name:"Red-Team",        chief:"CRT",  role:"block",  tier:"Wave 6" },
+  { slug:"evaluation",   name:"Evaluation",      chief:"CEVO", role:"block",  tier:"Wave 5" },
+  { slug:"audit",        name:"Audit",           chief:"CAO",  role:"block",  tier:"Wave 3" },
+  { slug:"quality",      name:"Quality",         chief:"CQO",  role:"inform", tier:"Wave 1" },
+  { slug:"execution",    name:"Execution",       chief:"VPE",  role:"inform", tier:"Wave 1" },
+  { slug:"devops",       name:"DevOps",          chief:"VPO",  role:"inform", tier:"Wave 1" },
+  { slug:"sre",          name:"SRE",             chief:"CSRE", role:"inform", tier:"Wave 7" },
+  { slug:"docs",         name:"Docs",            chief:"CKO2", role:"inform", tier:"Wave 1" },
+  { slug:"legal",        name:"Legal",           chief:"GC",   role:"inform", tier:"Wave 1" },
+  { slug:"marketing",    name:"Marketing",       chief:"CMO",  role:"inform", tier:"Wave 2" },
+  { slug:"people-ops",   name:"People-Ops",      chief:"COO",  role:"inform", tier:"Wave 3" },
+];
+
+const RHYTHM = [
+  { label:"Daily heartbeat",        time:"End of day", skill:"heartbeat",        note:"session-log + 1-line status" },
+  { label:"Weekly board meeting",   time:"Fridays",    skill:"board-meeting",    note:"CEO + chiefs of blocking councils" },
+  { label:"Monthly council meeting",time:"Month-end",  skill:"council-meeting",  note:"each of the 16 councils, rotating" },
+  { label:"Quarterly retrospective",time:"Jan/Apr/Jul/Oct 31", skill:"retrospective", note:"scorecard + lessons" },
+];
+
+const TRUST = [
+  "01  Receipts ratio — every decision logged",
+  "02  Append-only ledger — never rewrite history",
+  "03  Four blocking vetoes are real (CISO/CRT/CEVO/CAO)",
+  "04  Ten USER-ONLY actions honored",
+  "05  Per-project security baseline (threat-model + SBOM + license)",
+  "06  Prompt-diff review on persona/skill edits",
+  "07  Six runtime hooks present every session",
+  "08  Memory novelty gate (Jaccard 0.65)",
+  "09  Rhythm cadence — no skipped quarter",
+  "10  Never-give-up ladder — Rung 7/8 → User notified",
+  "11  Reproducibility — commit → release → SBOM chain",
+  "12  Independence of CAO / CEVO / CRT / CSRE",
+];
+
+const DOCS = [
+  { name:"CONSTITUTION",     file:"CONSTITUTION.md",      tag:"supreme" },
+  { name:"MISSION",          file:"MISSION.md",           tag:"identity" },
+  { name:"VALUES",           file:"VALUES.md",            tag:"identity" },
+  { name:"GOVERNANCE",       file:"GOVERNANCE.md",        tag:"rules" },
+  { name:"RESILIENCE",       file:"RESILIENCE.md",        tag:"rules" },
+  { name:"RHYTHM",           file:"RHYTHM.md",            tag:"rules" },
+  { name:"CAREER",           file:"CAREER.md",            tag:"rules" },
+  { name:"KEEPER-TEST",      file:"KEEPER-TEST.md",       tag:"rules" },
+  { name:"LESSONS",          file:"LESSONS.md",           tag:"learning" },
+  { name:"SECURITY",         file:"SECURITY.md",          tag:"security" },
+  { name:"THREAT-MODEL",     file:"THREAT-MODEL.md",      tag:"security" },
+  { name:"DISASTER-RECOVERY",file:"DISASTER-RECOVERY.md", tag:"security" },
+  { name:"TRUST",            file:"TRUST.md",             tag:"trust" },
+  { name:"SWOT",             file:"SWOT.md",              tag:"trust" },
+  { name:"SYSTEM-CARD",      file:"SYSTEM-CARD.md",       tag:"trust" },
+  { name:"CODE_OF_CONDUCT",  file:"CODE_OF_CONDUCT.md",   tag:"community" },
+  { name:"CONTRIBUTING",     file:"CONTRIBUTING.md",      tag:"community" },
+  { name:"CODEOWNERS",       file:"CODEOWNERS",           tag:"community" },
+  { name:"security.txt",     file:".well-known/security.txt", tag:"security" },
+];
+
+const ACTIONS = {
+  "ceo-meeting": {
+    title: "Call a CEO meeting",
+    lede: "Copy the prompt, open Claude, paste. The CEO will read CONSTITUTION.md and AGENTS.md before responding.",
+    prompt:
+`/devsecops-agency:ceo
+
+CEO — convene a short executive review. I want:
+1. A one-paragraph state-of-the-agency (version, open commitments, any drift signals).
+2. The top-three priorities for this week with owner + checkpoint.
+3. Any blocker that needs a USER-ONLY decision from me today.
+
+Follow your session-start reading path (CONSTITUTION → MISSION/VALUES → GOVERNANCE/RESILIENCE/RHYTHM top sections), then respond. No theater — receipts or say "unknown."`
+  },
+  "council-meeting": {
+    title: "Convene a council",
+    lede: "Replace <council-name> with one of: strategy, product, architecture, research, security, red-team, evaluation, audit, quality, execution, devops, sre, docs, legal, marketing, people-ops.",
+    prompt:
+`/devsecops-agency:council-meeting <council-name>
+
+CEO — convene the <council-name> council.
+
+Agenda:
+- Share current vision + this quarter's OKR.
+- Chief's status on open workstreams (RAG format: receipt → status → next checkpoint).
+- Cross-council dependencies this council needs cleared.
+- Any waiver request or escalation routed to blocking chiefs.
+
+Log outputs to _meetings/council-<council-name>-<date>.md. File a LESSONS row if a new failure mode surfaces.`
+  },
+  "directive": {
+    title: "Issue a new directive",
+    lede: "The sovereign speaks. Edit the prompt with your ask, then paste into Claude.",
+    prompt:
+`/devsecops-agency:ceo
+
+DIRECTIVE FROM THE USER:
+
+<describe the outcome you want — a feature, a research task, a doc, a decision>
+
+Constraints:
+- Due: <date or "next checkpoint">
+- Must-have: <list>
+- Nice-to-have: <list>
+- Out-of-scope: <list>
+
+CEO — accept this as a USER-approved goal. Open a <kind: directive-intake> ADR, assign chiefs, and report the first checkpoint date. If any USER-ONLY action is required along the way, come back to me first.`
+  },
+  "schedule-drill": {
+    title: "Schedule a drill",
+    lede: "Pick one: corrupted-main, lost-repo, compromised-release, pat-compromise, user-unavailable, model-outage, hostile-fork.",
+    prompt:
+`/devsecops-agency:drill
+
+CSRE + CRes — schedule a tabletop for playbook <name> per DISASTER-RECOVERY.md §<N>.
+
+- Run tabletop in a forked worktree; do not touch main.
+- Exercise RPO 24h / RTO 72h claims.
+- File drill-<playbook>-<date>.md in _meetings/.
+- File a LESSONS row if any guarantee was not met.
+- Open a corrective-action issue within 7 days if anything failed.`
+  },
+  "scorecard": {
+    title: "Publish Trust Scorecard",
+    lede: "First scheduled publish is 2026-07-22 (end of Q2). Use this to trigger early or after a Severity ≥ High incident.",
+    prompt:
+`/devsecops-agency:trust-scorecard
+
+CAO — run the trust-scorecard skill for the current quarter.
+
+- Compute each of the 12 commitments against its TRUST.md §2 target.
+- Assemble evidence (session logs, commits, ADRs) per commitment.
+- Publish to _meetings/trust-scorecard-YYYY-QN.md.
+- For any missed target: add a written cause-analysis (no excuses) and open a corrective-action issue within 7 days.
+- Link from TRUST.md §3.`
+  }
+};
+
+/* ================= STATE ================= */
+let state = {
+  version: null, commit: null, committedAt: null,
+  skillCount: null, agentCount: null, hookCount: null,
+  commits: [], councilRosters: {}, rateLimitRemaining: null
+};
+
+/* ================= BOOT ================= */
+document.addEventListener("DOMContentLoaded", () => {
+  renderCouncils(); renderRhythm(); renderTrust(); renderDocs();
+  renderClock(); setInterval(renderClock, 1000);
+  hydrateFromApi();
+  wireActions();
+  document.getElementById("btn-refresh").addEventListener("click", () => { hydrateFromApi(true); });
+});
+
+/* ================= RENDER: STATIC ================= */
+function renderClock() {
+  const now = new Date();
+  const hh = String(now.getUTCHours()).padStart(2,"0");
+  const mm = String(now.getUTCMinutes()).padStart(2,"0");
+  const ss = String(now.getUTCSeconds()).padStart(2,"0");
+  document.getElementById("hdr-clock").textContent = `${hh}:${mm}:${ss} UTC`;
+  document.getElementById("rhythm-date").textContent = now.toISOString().slice(0,10);
+}
+
+function renderCouncils() {
+  const grid = document.getElementById("councils-grid");
+  grid.innerHTML = "";
+  COUNCILS.forEach((c, i) => {
+    const block = c.role === "block";
+    const el = document.createElement("details");
+    el.className = "card rounded-xl p-3 rise";
+    el.style.animationDelay = `${i*30}ms`;
+    el.innerHTML = `
+      <summary class="flex items-center gap-2">
+        <svg class="chev text-slate-500" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="dot ${block ? 'bg-red-400' : 'bg-sky-400'}"></span>
+        <span class="font-semibold text-[13.5px]">${c.name}</span>
+        <span class="flex-1"></span>
+        <span class="chip ${block ? 'crit' : 'muted'}">${c.chief}</span>
+      </summary>
+      <div class="mt-2.5 text-[12px] text-slate-400 space-y-1">
+        <div class="flex items-center gap-2">
+          <span class="chip ${block ? 'crit' : 'info'}">${block ? 'blocking' : 'informing'}</span>
+          <span class="chip muted">${c.tier}</span>
+        </div>
+        <div id="roster-${c.slug}" class="mono text-[11.5px] text-slate-300 mt-2 leading-relaxed">Loading roster…</div>
+      </div>
+    `;
+    grid.appendChild(el);
+  });
+}
+
+function renderRhythm() {
+  const ul = document.getElementById("rhythm-list");
+  ul.innerHTML = RHYTHM.map(r => `
+    <li class="flex items-center gap-3">
+      <span class="chip muted w-28 justify-center shrink-0">${r.time}</span>
+      <div class="min-w-0 flex-1">
+        <div class="font-medium text-[13.5px]">${r.label}</div>
+        <div class="text-[11.5px] text-slate-400 mono">skill: ${r.skill} · ${r.note}</div>
+      </div>
+    </li>
+  `).join("");
+}
+
+function renderTrust() {
+  document.getElementById("trust-list").innerHTML = TRUST.map(t => `
+    <li class="flex items-center gap-3">
+      <span class="chip muted">pending</span>
+      <span class="truncate">${t}</span>
+    </li>`).join("");
+}
+
+function renderDocs() {
+  const palette = { supreme:"info", identity:"info", rules:"muted", learning:"muted", security:"crit", trust:"ok", community:"warn" };
+  document.getElementById("docs-grid").innerHTML = DOCS.map(d => `
+    <a class="card rounded-xl p-3 hover:border-sky-500/40 transition" target="_blank" rel="noopener"
+       href="https://github.com/${REPO_OWNER}/${REPO_NAME}/blob/main/${d.file}">
+      <div class="flex items-center justify-between">
+        <span class="font-semibold text-[13px]">${d.name}</span>
+        <span class="chip ${palette[d.tag]||'muted'}">${d.tag}</span>
+      </div>
+      <div class="mono text-[11px] text-slate-500 mt-1.5 truncate">${d.file}</div>
+    </a>`).join("");
+}
+
+/* ================= RENDER: ACTIVITY ================= */
+function renderCommits() {
+  const list = document.getElementById("commits-list");
+  document.getElementById("commits-label").textContent = state.commits.length
+    ? `${state.commits.length} commits · rate-limit ${state.rateLimitRemaining ?? '?'}/hr`
+    : "no data";
+  if (!state.commits.length) {
+    list.innerHTML = `<li class="text-slate-500 text-sm">No commits returned. GitHub rate-limit may be exhausted — refresh later.</li>`;
+    return;
+  }
+  list.innerHTML = state.commits.map(c => {
+    const when = new Date(c.commit.committer.date);
+    const ago = relTime(when);
+    const msg = (c.commit.message.split("\n")[0]).replace(/</g,"&lt;");
+    const sha = c.sha.slice(0,7);
+    return `
+      <li class="flex gap-3 rise">
+        <span class="dot bg-sky-400 mt-2 shrink-0"></span>
+        <div class="min-w-0 flex-1">
+          <a class="font-medium text-[13px] hover:underline" target="_blank" rel="noopener" href="${c.html_url}">${msg}</a>
+          <div class="mono text-[11.5px] text-slate-500">${sha} · ${ago}</div>
+        </div>
+      </li>`;
+  }).join("");
+}
+
+function relTime(d) {
+  const s = (Date.now() - d.getTime()) / 1000;
+  if (s < 60) return `${Math.floor(s)}s ago`;
+  if (s < 3600) return `${Math.floor(s/60)}m ago`;
+  if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+  if (s < 86400*30) return `${Math.floor(s/86400)}d ago`;
+  return d.toISOString().slice(0,10);
+}
+
+/* ================= FETCH ================= */
+async function hydrateFromApi(isRefresh=false) {
+  if (isRefresh) {
+    document.getElementById("hero-last-updated").textContent = "refreshing…";
+  }
+  try {
+    const [repoRes, tagsRes, commitsRes, skillsRes, agentsRes, hooksRes] = await Promise.all([
+      fetch(`${API}`),
+      fetch(`${API}/tags?per_page=1`),
+      fetch(`${API}/commits?per_page=20`),
+      fetch(`${API}/contents/skills`),
+      fetch(`${API}/contents/agents`),
+      fetch(`${API}/contents/runtime-hooks`),
+    ]);
+
+    const remaining = commitsRes.headers.get("x-ratelimit-remaining");
+    if (remaining !== null) state.rateLimitRemaining = remaining;
+
+    if (tagsRes.ok) {
+      const tags = await tagsRes.json();
+      state.version = tags[0]?.name || "unversioned";
+    }
+    if (commitsRes.ok) {
+      state.commits = await commitsRes.json();
+      state.commit = state.commits[0]?.sha?.slice(0,7) || "—";
+      state.committedAt = state.commits[0]?.commit?.committer?.date || null;
+    }
+    if (skillsRes.ok) {
+      const s = await skillsRes.json();
+      state.skillCount = s.filter(x => x.type === "dir").length;
+    }
+    if (agentsRes.ok) {
+      const a = await agentsRes.json();
+      state.agentCount = countAgents(a);
+    }
+    if (hooksRes.ok) {
+      const h = await hooksRes.json();
+      state.hookCount = h.filter(x => x.type === "file").length;
+    }
+
+    // council rosters — fire-and-forget, lazy populate
+    COUNCILS.forEach(c => { fetchRoster(c.slug); });
+
+    applyState();
+  } catch (err) {
+    document.getElementById("hero-last-updated").textContent = "offline · static mode";
+    console.warn("Command center hydrate failed:", err);
+  }
+}
+
+async function countAgents(root) {
+  let total = 0;
+  for (const entry of root) {
+    if (entry.type === "file" && entry.name.endsWith(".md")) total += 1;
+    if (entry.type === "dir") {
+      try {
+        const r = await fetch(entry.url);
+        if (r.ok) {
+          const sub = await r.json();
+          total += sub.filter(x => x.type === "file" && x.name.endsWith(".md")).length;
+        }
+      } catch { /* ignore */ }
+    }
+  }
+  return total;
+}
+
+async function fetchRoster(slug) {
+  try {
+    const r = await fetch(`${API}/contents/councils/${slug}`);
+    if (!r.ok) {
+      document.getElementById(`roster-${slug}`).textContent = "no roster yet";
+      return;
+    }
+    const items = await r.json();
+    const files = items
+      .filter(x => x.type === "file" && x.name.endsWith(".md") && !/^(AGENTS|TEAM|README)\.md$/i.test(x.name))
+      .map(x => x.name.replace(/\.md$/,""));
+    const dirs = items.filter(x => x.type === "dir").map(x => `${x.name}/*`);
+    const all = [...files, ...dirs];
+    const el = document.getElementById(`roster-${slug}`);
+    if (!all.length) { el.textContent = "(chief only for now)"; return; }
+    el.innerHTML = all.slice(0,20).map(n => `<div>· ${n}</div>`).join("")
+      + (all.length > 20 ? `<div class="text-slate-500">…+${all.length-20} more</div>` : "");
+  } catch {
+    document.getElementById(`roster-${slug}`).textContent = "fetch failed";
+  }
+}
+
+function applyState() {
+  document.getElementById("hdr-version").textContent = state.version || "—";
+  document.getElementById("hero-version").textContent = state.version || "v—";
+  document.getElementById("hero-commit").textContent  = state.commit  || "—";
+  document.getElementById("hero-last-updated").textContent =
+    state.committedAt ? `updated ${relTime(new Date(state.committedAt))}` : "no-data";
+  document.getElementById("vital-councils").textContent = COUNCILS.length;
+  document.getElementById("vital-skills").textContent   = state.skillCount ?? "—";
+  document.getElementById("vital-agents").textContent   = state.agentCount ?? "—";
+  document.getElementById("vital-hooks").textContent    = state.hookCount  ?? "—";
+  renderCommits();
+}
+
+/* ================= ACTIONS (modal) ================= */
+function wireActions() {
+  document.querySelectorAll("[data-action]").forEach(btn => {
+    btn.addEventListener("click", () => openAction(btn.dataset.action));
+  });
+  document.getElementById("modal-copy").addEventListener("click", async () => {
+    const txt = document.getElementById("modal-prompt").value;
+    try {
+      await navigator.clipboard.writeText(txt);
+      document.getElementById("modal-feedback").textContent = "Copied to clipboard";
+      setTimeout(() => document.getElementById("modal-feedback").textContent = "", 2000);
+    } catch {
+      document.getElementById("modal-feedback").textContent = "Copy failed — select manually";
+    }
+  });
+}
+
+function openAction(key) {
+  const a = ACTIONS[key]; if (!a) return;
+  document.getElementById("modal-title").textContent = a.title;
+  document.getElementById("modal-lede").textContent = a.lede;
+  document.getElementById("modal-prompt").value = a.prompt;
+  document.getElementById("modal-feedback").textContent = "";
+  document.getElementById("action-modal").showModal();
+}
+</script>
+</body>
+</html>
