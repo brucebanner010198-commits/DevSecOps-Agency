@@ -37,6 +37,7 @@ No agent adopts a new MCP / external tool without a scout report. Scout is owned
 - Scoped credentials — minimum-viable OAuth scopes, rotating creds.
 - Rate limit — defaults per `references/rate-limits.md`.
 - Audit — every call logged in `_vision/sre/tool-audit-<tool>.log`.
+- Runtime gate — every invocation first traverses `runtime-hooks/tool-guardian/guard-tool.sh`, which block-exits on destructive patterns (`rm -rf /`, force-push, `DROP`, chmod 777, etc.). Allowlist via `TOOL_GUARD_ALLOWLIST`.
 - Kill switch — CSRE can disable the tool without a new ADR.
 
 ## ADR triggers

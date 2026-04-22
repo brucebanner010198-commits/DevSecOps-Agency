@@ -97,6 +97,18 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Ported p
 - **Compliance-drift skill** (`skills/compliance-drift/SKILL.md`): monthly + on-demand drift detection across SOC 2 / GDPR / HIPAA / state-privacy. Version-pinned rubrics. Drift = yellow + remediation task; breach = red + ADR + CAO notify. Drift and breach stay distinct.
 - **Independence invariant:** CSRE + every SRE specialist cannot dual-hat with any delivery role (CTO/VP-Eng/CISO/CQO/CEVO/CAO/CRT). Scouting your own tool = independence breach = automatic critical finding.
 
+## Runtime hooks (v0.3.1)
+
+- **Location:** `runtime-hooks/`. Five drop-in bash hooks ported from github/awesome-copilot after a prompt-injection audit, plus a locked-down `commit-gate.sh`.
+- **Read-only defenders — no eval, no `bash -c`, no network fetch, no remote pattern loading.** All hooks parse stdin JSON via `jq -r` literal extraction, match against hardcoded regex arrays, and emit exit codes + append-only JSONL. No path where untrusted content becomes executable.
+- **secrets-scanner** — pairs with `secrets-vault`. Diff-scope by default. 30+ patterns (AWS, GitHub PATs, Stripe, JWT, Slack, private keys).
+- **tool-guardian** — pairs with `tool-scout` + `a2a`. Blocks destructive tool invocations (`rm -rf /`, force-push, `DROP TABLE`, chmod 777). Allowlist via `TOOL_GUARD_ALLOWLIST`.
+- **governance-audit** — pairs with `audit`. Three scripts: session-start / per-prompt / session-end. 5 threat categories (data-exfiltration, privilege-escalation, system-destruction, prompt-injection, credential-exposure). Findings are an ADR trigger at close-audit.
+- **dependency-license-checker** — pairs with `ip-lineage`. Scans npm / pip / go / gem / cargo dep diffs.
+- **session-logger** — runtime-boundary JSONL trail, separate from the per-agent `_sessions/` logs.
+- **commit-gate.sh** — agency-authored replacement for the upstream auto-commit hook. The upstream version was **deliberately excluded** because it runs `git add -A` + `git commit --no-verify` + `git push`, bypassing every other hook in the set. Our replacement stages only files in `$COMMIT_FILES`, never passes `--no-verify`, and never auto-pushes (push is a CEO-gated action).
+- **CAO reads hook logs on close-audit.** Any unacknowledged threat / blocked / critical line is a mandatory ADR finding.
+
 ## Evaluation + budget (v0.3.0 Wave 5)
 
 - **Evaluation Council** (`agents/evaluation-lead.md`, `councils/evaluation/AGENTS.md`) — informing + independent. Never on any project's delivery path (same invariant as Audit). Runs close-eval on every ship, portfolio-regression per quarter, benchmark-sweep before every plugin v-bump, compaction-check under context pressure.

@@ -27,6 +27,7 @@ Every shipped artifact has a traceable origin. Lineage is the trace.
    - Pull each dep's license.
    - Cross-check against project's declared license.
    - Flag incompatibilities as red.
+   - Runtime support — `runtime-hooks/dependency-license-checker/check-licenses.sh` scans dep diffs (npm, pip, go mod, gem, cargo) and emits JSONL findings. Lineage consumes these findings as pre-filtered input.
 3. **Run similarity check** (creative outputs):
    - Perceptual hash (images) / n-gram overlap (text) / melodic-fingerprint (music).
    - ≥ 85% similarity to known corpus → red.

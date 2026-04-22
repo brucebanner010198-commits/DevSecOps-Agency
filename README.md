@@ -178,6 +178,7 @@ Default gate: **full STRIDE threat model + OWASP Top 10 coverage** before any co
 
 ## Versions
 
+- **0.3.1** — *Runtime-hooks patch.* Adds `runtime-hooks/` — five read-only defender hooks ported from `github/awesome-copilot` after a prompt-injection audit (`secrets-scanner`, `tool-guardian`, `governance-audit`, `dependency-license-checker`, `session-logger`) plus a locked-down `commit-gate.sh` replacement. The upstream `session-auto-commit` hook was **deliberately excluded** because it uses `git add -A` + `--no-verify` + `git push`, which bypasses every other hook. No new councils, no agent changes, no prompt mutations — only runtime enforcement bolted onto existing skills (`secrets-vault`, `tool-scout`, `audit`, `ip-lineage`, `session-log`). All hooks are read-only regex defenders: no `eval`, no `bash -c`, no network fetch, no remote pattern loading.
 - **0.3.0** — *Company release — final cut.* Seven cumulative waves:
   - **Wave 1** (foundations): `vision-doc` + `okr` + `adr` + `meeting-minutes`. Durable mission / OKRs / ADRs / minutes. Every Chief dispatch gets a 3-bullet KR slice; every gate validates after `okr.score`; every material decision files an ADR same-turn; every user / board / blocking-council / red-team / audit / retro convening writes minutes.
   - **Wave 2** (pipeline + user-meeting): Marketing (CMO) + Strategy (CSO) councils. `idea-pipeline` 4-stage funnel → top-5; `user-meeting` 4-phase flow (brief → present → capture → commit); `market-intel` + `positioning` canonical shapes.

@@ -37,10 +37,11 @@ Secrets never touch agent context. Refs do.
 ## Process (scan)
 
 1. Run `gitleaks` / `trufflehog` across the repo tree.
-2. Classify each finding: false-positive / real-leak / fixture.
-3. Real leak → immediate rotation + ADR + CAO notify.
-4. Fixture → verify it's clearly fake; if not, treat as real.
-5. Write `_vision/security/<date>-scan.md`.
+2. Additionally pipe the session's file diffs through `runtime-hooks/secrets-scanner/scan-secrets.sh` (30+ hardcoded patterns: AWS, GitHub PATs, Stripe, JWT, Slack, private keys). The hook emits JSONL findings; no eval, no network, no remote config.
+3. Classify each finding: false-positive / real-leak / fixture.
+4. Real leak → immediate rotation + ADR + CAO notify.
+5. Fixture → verify it's clearly fake; if not, treat as real.
+6. Write `_vision/security/<date>-scan.md`.
 
 ## Invariants
 

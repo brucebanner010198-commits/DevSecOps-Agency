@@ -63,6 +63,7 @@ _vision/audit/
 - `meeting-minutes` writes for every audit convening (kind: `audit`).
 - `adr` files mandatory ADRs on every red finding.
 - `roster` skill is downstream: Audit reds on an agent's output become performance-reviewer evidence at the next roster checkpoint.
+- `runtime-hooks/governance-audit/` runs at session-start + per-prompt + session-end. Scans prompts for 5 threat categories (data-exfiltration, privilege-escalation, system-destruction, prompt-injection, credential-exposure) and appends findings to `.github/logs/copilot/governance-audit/audit.log`. Close-audit (CAO) reads this log — any unacknowledged threat line is a mandatory ADR finding.
 
 ## What this skill is not
 

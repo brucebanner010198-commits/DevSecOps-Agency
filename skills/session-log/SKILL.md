@@ -142,6 +142,15 @@ Chief playbooks mirror the same pattern for specialist dispatches.
 
 Both can be written from a single helper in practice. Overlap is fine — they're authoritative for different questions.
 
+## Relationship to `runtime-hooks/session-logger/`
+
+The runtime hook writes a separate, **minimal** JSONL file (`.github/logs/copilot/session-logger/log.jsonl`) at three events: session-start, each prompt, session-end. It is intentionally small and does not mirror the per-agent schema above.
+
+- `_sessions/*.jsonl` — agency-internal orchestration trail. Written by dispatching + reporting agents inside the CEO / Chief / specialist loop.
+- `.github/logs/copilot/session-logger/log.jsonl` — runtime-boundary trail. Written by the shell hook outside the agent.
+
+The two are never merged. Cross-reference is by timestamp if a CAO audit needs to correlate them.
+
 ## Progressive disclosure
 
 - `references/replay-recipes.md` — canonical `rg`/`jq` queries
