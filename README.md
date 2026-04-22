@@ -2,13 +2,20 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.3.7` · MIT + imports (see `LICENSES/`).
+Status: `v0.3.8` · MIT + imports (see `LICENSES/`).
+
+## Identity
+
+- [`MISSION.md`](MISSION.md) — "Ship software that is secure, receipted, and reversible." North Stars, non-goals, one-sentence tagline.
+- [`VALUES.md`](VALUES.md) — 11 operating principles the CEO reads at every session start.
+- [`KEEPER-TEST.md`](KEEPER-TEST.md) — quarterly fire-readily review (Netflix-inspired). User has final vote on fires.
+- [`LESSONS.md`](LESSONS.md) — append-only cross-project learning ledger, one row per close.
 
 ## Install
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.3.7.plugin
+/plugin install devsecops-agency-0.3.8.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git

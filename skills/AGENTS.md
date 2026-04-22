@@ -27,7 +27,7 @@ Telegraph. Read before authoring or editing a skill.
 - `metadata.version` follows semver. Bump on contract changes (schema, artifact paths, trigger phrases).
 - Plugin root `plugin.json.version` bumps when ≥ 1 skill bumps.
 
-## Skill index (v0.3.0-alpha.6)
+## Skill index (v0.3.8)
 
 | Skill              | Trigger                                                 |
 | ------------------ | ------------------------------------------------------- |
@@ -64,3 +64,15 @@ Telegraph. Read before authoring or editing a skill.
 | **`budget`** (v0.3.0 Wave 5) | Per-project token + $ budget with per-phase allocation, burn tracking on every Chief report, and Rung 6 escalation on cumulative > 110 %. 4 size classes (small / medium / large / custom). |
 | **`red-team`** (v0.3.0 Wave 6) | Adversarial testing on every close + prompt-upgrade + integration + quarterly portfolio sweep. OWASP ASI Top 10 mapping; severity → gate → ladder Rung 3. CRT never on delivery path. |
 | **`playbook`** (v0.3.0 Wave 6) | DGM-style stepping-stone archive. Immutable stones derived from remediated `high`+ red-team findings. Prompt-diff review runs against archive before `agents/*.md` edits land. |
+| **`tool-scout`** (v0.3.0 Wave 7) | Scouts new MCPs, skills, or third-party tools before adoption. CEO invokes on any add-a-tool request. |
+| **`a2a`** (v0.3.0 Wave 7) | Agent-to-agent adapter builder. Default-deny allowlists; wildcard allowlists are an automatic critical finding. |
+| **`sandbox`** (v0.3.0 Wave 7) | Run untrusted input in an isolated environment. "Just this once" is an ASI-class finding — use the sandbox. |
+| **`model-routing`** (v0.3.0 Wave 7) | Model-vendor outage routing. Same-tier lateral moves only; opening + closing ADRs on every override. |
+| **`sbom-slsa`** (v0.3.0 Wave 7) | CycloneDX SBOM + SLSA provenance on every published artifact. No exceptions. |
+| **`secrets-vault`** (v0.3.0 Wave 7) | Vault refs only — never raw secrets. Weekly + every-close scans. 30-day rotation default. |
+| **`ip-lineage`** (v0.3.0 Wave 7) | IP-lineage statement on every close; creative outputs pass perceptual-hash similarity ≥ 85 %. |
+| **`compliance-drift`** (v0.3.0 Wave 7) | Monthly + on-demand sweeps. Drift (yellow) vs breach (red) — suppressed drift converts to breach on auditor schedule. |
+| **`fanout`** (v0.3.7) | Chief → Specialist → Worker worker-tier convention. 3-level depth cap; parallelism caps 8/specialist, 24/council, 64/agency. |
+| **`retrospective`** (v0.3.8) | Post-close / wave / incident / portfolio retro. Feeds `LESSONS.md` via `lessons-ledger`. |
+| **`lessons-ledger`** (v0.3.8) | Append-only cross-project learning log `LESSONS.md`. CEO invokes on every close after retrospective. |
+| **`keeper-test`** (v0.3.8) | Quarterly + on-demand fire-readily review. Cites `KEEPER-TEST.md`. User has final vote on fires. |

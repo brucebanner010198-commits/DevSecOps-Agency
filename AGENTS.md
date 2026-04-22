@@ -2,6 +2,14 @@
 
 Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-wave history lives in [`CHANGELOG.md`](CHANGELOG.md); this file is the active contract.
 
+## Identity + Learning (v0.3.8)
+
+- **[`MISSION.md`](MISSION.md)** — why the agency exists, who we serve, non-goals, north stars. CEO reads at session start. Non-goal violations in dispatch contexts bounce back.
+- **[`VALUES.md`](VALUES.md)** — 11 operating principles. Cited by COO in performance review, by CAO in close-audit, by CRT in prompt-diff review.
+- **[`KEEPER-TEST.md`](KEEPER-TEST.md)** — the quarterly fire-readily criterion applied to every non-reserved agent. Invoked via `skills/keeper-test/SKILL.md`.
+- **[`LESSONS.md`](LESSONS.md)** — one append-only row per project close. Written via `skills/lessons-ledger/SKILL.md` after `skills/retrospective/SKILL.md` lands the retro minutes.
+- **Session-start invariant:** CEO reads `MISSION.md` + `VALUES.md` + latest 5 rows of `LESSONS.md` before deriving a project slug. Missing any = abort + file ADR `kind: identity-missing`.
+
 ## Start
 
 - Single user voice: CEO. All other agents are internal.
@@ -168,3 +176,12 @@ Before a phase transition, a Chief must have read: its council's scoped `AGENTS.
 - Don't spawn workers from a council lead. Leads dispatch specialists; specialists dispatch workers.
 - Don't exceed three-level depth without an ADR. The cap exists so the paper trail stays readable.
 - Don't merge worker shards without aggregation semantics declared in the worker block. Union / majority / worst-of / tally — pick one.
+- Don't start a CEO session without reading `MISSION.md` + `VALUES.md`. Missing either = abort + identity-missing ADR.
+- Don't accept an idea that lands in a `MISSION.md` non-goal without a user-meeting + ADR. Scope drift without consent is a VALUES §1 red.
+- Don't skip the `lessons-ledger` append at close. `MISSION.md` north-star § 5: a closed project without a ledger row did not learn.
+- Don't edit a prior `LESSONS.md` row. Corrections are new rows with strictly increasing `closedAt`. Append-only (`VALUES.md §4`).
+- Don't fire an agent without user approval via `user-meeting`. COO-alone or CEO-alone fires violate `KEEPER-TEST.md > ## Who runs it`.
+- Don't `git rm` a fired agent. Archive to `_vision/roster/_archive/<name>.md` with a redirect header.
+- Don't run `skills/keeper-test` on the 16 chiefs or `skill-creator`. Reserved names — their firing is a restructure, not a review.
+- Don't write the retro before CAO close-audit + CEVO close-eval + CRT pre-release red-team all land. Late findings flip outcomes.
+- Don't skip the retrospective carry-over check. Repeat-lessons are VALUES §11 reds; catching them late turns drift into breach.

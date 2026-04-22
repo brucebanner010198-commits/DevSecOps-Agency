@@ -1,7 +1,7 @@
 {
   "name": "devsecops-agency",
-  "version": "0.3.7",
-  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when work shards cleanly, spawn workers to run in parallel. Research-first, security-second, receipts-always. STRIDE + OWASP Top 10 baseline for code; OWASP ASI Top 10 2025 via the Red-Team Council; every shipped artifact gets SBOM + SLSA provenance; DLP on every outbound tool call; secrets only via vault refs; runtime-hook enforcement of commit-gate, secrets-scanner, tool-guardian, governance-audit, dependency-license-checker, session-logger. 1 CEO + 16 Chiefs + 75 specialists = 92 agents; Audit / Evaluation / Red-Team / SRE are informing + independent — never on any project's delivery path. v0.3.7 'Clarity' — pure restructure wave: 91 agent persona files moved from the flat agents/ tree into 16 per-council subfolders under agents/<council>/<agent>.md (ceo.md remains at root); Role Card v1 prepended to all 92 agents with uniform 8-field metadata (Council / Role / Reports to / Team / Model tier / Purpose / Convened by / Must not); 16 per-council TEAM.md roster cards added as the companion to each AGENTS.md contract; skills/fanout/ worker-tier scaffold declares the Chief → Specialist → Worker convention with 3-level depth cap (deeper requires council-lead ADR), parallelism caps (8/specialist, 24/council, 64/agency-wide), aggregation contracts, isolation under _workers/<specialist>/<shard>.md, and pairing with skills/taskflow/ via parent_task_id; README.md and AGENTS.md rewritten for clarity with wave history extracted to CHANGELOG.md. No new capabilities, no new runtime behaviour, no new tool grants — foundation wave for upcoming v0.3.8 Identity+Learning, v0.3.9 Rhythm+Career, v0.4.0 Governance+Resilience. Full wave-by-wave history (v0.2.0 → v0.3.6) is in CHANGELOG.md.",
+  "version": "0.3.8",
+  "description": "A fully autonomous AI software-development company in a plugin. You speak only to the CEO; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when work shards cleanly, spawn workers to run in parallel. Research-first, security-second, receipts-always. STRIDE + OWASP Top 10 baseline for code; OWASP ASI Top 10 2025 via the Red-Team Council; every shipped artifact gets SBOM + SLSA provenance; DLP on every outbound tool call; secrets only via vault refs; runtime-hook enforcement of commit-gate, secrets-scanner, tool-guardian, governance-audit, dependency-license-checker, session-logger. 1 CEO + 16 Chiefs + 75 specialists = 92 agents; Audit / Evaluation / Red-Team / SRE are informing + independent — never on any project's delivery path. v0.3.8 'Identity+Learning' — adds MISSION.md + VALUES.md + KEEPER-TEST.md + LESSONS.md at repo root (mission = 'ship software that is secure, receipted, and reversible'; 11 operating principles; Netflix-inspired quarterly fire-readily review with user as final vote; append-only cross-project learning ledger). Three new skills: retrospective/ (4-kind post-close/portfolio/incident/wave format with Jaccard carry-over check), lessons-ledger/ (append-only ledger row append after every close with 11-field row schema + ADR pairing), keeper-test/ (wraps performance-reviewer + roster + hiring-lead with 4 scoring axes, bootstrap rules for quarter 0, USER-ONLY fire approval flow). CEO SKILL.md now reads MISSION+VALUES+LESSONS at session start and invokes retrospective + lessons-ledger at close; AGENTS.md + skills/AGENTS.md updated with 10 new anti-patterns + 12 new skill-index rows. Skill-layer and root-doc-layer only — no new agents, no new councils, no new tool grants. Foundation for v0.3.9 Rhythm+Career. Full wave-by-wave history (v0.2.0 → v0.3.7) is in CHANGELOG.md.",
   "author": {
     "name": "Sir"
   },
@@ -262,7 +262,27 @@
     "design-guidance-skill",
     "no-code-ported",
     "cross-surface-formatting",
-    "multi-dialect-messaging"
+    "multi-dialect-messaging",
+    "mission",
+    "values",
+    "keeper-test",
+    "lessons-ledger",
+    "retrospective",
+    "carry-over-check",
+    "jaccard-similarity",
+    "identity-learning",
+    "append-only-ledger",
+    "cross-project-learning",
+    "netflix-keeper-test",
+    "fire-readily",
+    "performance-review",
+    "quarterly-review",
+    "bootstrap-rules",
+    "user-final-vote",
+    "north-stars",
+    "non-goals",
+    "operating-principles",
+    "session-start-invariant"
   ],
   "license": "MIT"
 }
