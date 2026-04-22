@@ -2,7 +2,7 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.5.2` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md). Live ops console: [`command-center/`](command-center/) (deploys to GitHub Pages on every push). Build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** (see [`VALUES.md`](VALUES.md) §12).
+Status: `v0.5.3` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md). Live ops console: [`command-center/`](command-center/) — **now live at [`https://brucebanner010198-commits.github.io/DevSecOps-Agency/`](https://brucebanner010198-commits.github.io/DevSecOps-Agency/)** (deploys to GitHub Pages on every push that touches `command-center/**`). Build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** (see [`VALUES.md`](VALUES.md) §12).
 
 ## Identity
 
@@ -32,7 +32,7 @@ Status: `v0.5.2` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.5.2.plugin
+/plugin install devsecops-agency-0.5.3.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git

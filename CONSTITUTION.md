@@ -576,6 +576,10 @@ Amending any of these is a USER-ONLY action (§2.2 clause 1). Amending the list 
 
 **Schedule A amendment 2026-04-22** by the User on the v0.5.0 release cut — added TRUST, SWOT, SYSTEM-CARD, THREAT-MODEL, DISASTER-RECOVERY, CODE_OF_CONDUCT, CONTRIBUTING, CODEOWNERS, and `.well-known/security.txt` to the founding-document list. No other articles amended. ADR logged under `adrs/`.
 
+**VALUES.md amendment 2026-04-22** by the User on the v0.5.2 release cut — added §12 "Build in this order: Security & Privacy → Design → Operations → Timely Delivery" to `VALUES.md` (11 → 12 operating principles). Schedule A pointer updated to reflect the new count. No other articles amended. Rationale: give the Agency a fixed priority stack for resolving build-order trade-offs; delivery is a goal, not the goal. Ownership at Phase 2 scope-cut sits with the CPO; CISO / GC vetoes from Value #2 remain independent; CEO cites §12 at Phase 7 Close when reviewing scope-cut records. Effective from merge commit `2ee6199` (v0.5.2).
+
+**Schedule B note — ADR backfill (outstanding).** The v0.5.0 and v0.5.2 amendment ADRs referenced above live under `_decisions/<slug>/adrs/` once a project slug exists; a central `adrs/` directory at the repo root is not yet created. When the first ADR is filed, this note is deleted and the path is hard-linked in the amendment rows above.
+
 Signed into force by the CEO persona, which MUST read this Constitution at every session start going forward and MUST cite it in every amendment proposal, waiver grant, drill report, and close-audit.
 
 ---
