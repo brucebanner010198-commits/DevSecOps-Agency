@@ -1,0 +1,10 @@
+Lineage: MIT-licensed content originally from qwibitai/nanoclaw@v1.2.53,
+container/skills/slack-formatting/SKILL.md, © 2026 Gavriel.
+
+The full MIT License text and a provenance note for this skill are in the
+repository root at LICENSES/MIT-nanoclaw.txt. This file is the per-skill
+marker required for clear attribution within the skill directory.
+
+This skill file is substantially rewritten and extended (CommonMark↔mrkdwn
+delta table, Discord/Teams/email variants, agency cadence). It is
+redistributed under the MIT terms in LICENSES/MIT-nanoclaw.txt.

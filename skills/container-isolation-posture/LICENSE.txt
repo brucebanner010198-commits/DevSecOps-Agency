@@ -1,0 +1,10 @@
+Lineage: design patterns distilled from MIT-licensed source in
+qwibitai/nanoclaw@v1.2.53 — docs/SECURITY.md and src/mount-security.ts,
+© 2026 Gavriel.
+
+The full MIT License text and a provenance note for this skill are in the
+repository root at LICENSES/MIT-nanoclaw.txt.
+
+No TypeScript source was ported. The nine-rule checklist and privilege
+matrix are generalized design guidance, rewritten in this repo's voice,
+and redistributed under the MIT terms in LICENSES/MIT-nanoclaw.txt.
