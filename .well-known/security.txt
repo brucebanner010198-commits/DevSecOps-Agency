@@ -1,0 +1,24 @@
+# security.txt — RFC 9116
+# DevSecOps-Agency vulnerability-disclosure contact point
+#
+# Canonical URL (once hosted):
+#   https://github.com/brucebanner010198-commits/DevSecOps-Agency/blob/main/.well-known/security.txt
+#
+# Authority: SECURITY.md in the same repository
+# Last updated: 2026-04-22
+
+Contact: mailto:brucebanner010198@gmail.com
+Contact: https://github.com/brucebanner010198-commits/DevSecOps-Agency/security/advisories/new
+Expires: 2027-04-22T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://raw.githubusercontent.com/brucebanner010198-commits/DevSecOps-Agency/main/.well-known/security.txt
+Policy: https://github.com/brucebanner010198-commits/DevSecOps-Agency/blob/main/SECURITY.md
+Acknowledgments: https://github.com/brucebanner010198-commits/DevSecOps-Agency/blob/main/SECURITY.md#10-acknowledgments
+
+# Scope, severity rubric, SLAs, safe harbor, and coordinated-disclosure
+# window (90 calendar days by default) are defined in SECURITY.md.
+#
+# Non-waivable classes (Constitution §8.5):
+#   * Raw secrets in repo, logs, or artifacts
+#   * ASI-class escalation requests
+# These are refused on sight; reporting them is always in scope.

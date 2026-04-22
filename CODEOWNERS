@@ -1,0 +1,75 @@
+# CODEOWNERS — DevSecOps-Agency
+#
+# Maps paths to the councils that own them.  When a PR touches a path,
+# the listed council's review is REQUIRED.  Councils are identified by
+# their council directory; the actual human reviewer is the User/CEO
+# invoking the council persona.
+#
+# Authority: CONSTITUTION.md + GOVERNANCE.md + CONTRIBUTING.md
+# Last updated: 2026-04-22 (v0.5.0)
+
+# ───────────────────────────── Default ─────────────────────────────
+
+*                                @brucebanner010198-commits
+
+# ───────────────────────── Founding documents ───────────────────────
+# Supreme document — CGov + CAO review REQUIRED, USER approval ratifies
+/CONSTITUTION.md                 @brucebanner010198-commits
+/MISSION.md                      @brucebanner010198-commits
+/VALUES.md                       @brucebanner010198-commits
+/AGENTS.md                       @brucebanner010198-commits
+/GOVERNANCE.md                   @brucebanner010198-commits
+/SECURITY.md                     @brucebanner010198-commits
+/TRUST.md                        @brucebanner010198-commits
+/SWOT.md                         @brucebanner010198-commits
+/SYSTEM-CARD.md                  @brucebanner010198-commits
+/THREAT-MODEL.md                 @brucebanner010198-commits
+/DISASTER-RECOVERY.md            @brucebanner010198-commits
+/RHYTHM.md                       @brucebanner010198-commits
+/CAREER.md                       @brucebanner010198-commits
+/RESILIENCE.md                   @brucebanner010198-commits
+/KEEPER-TEST.md                  @brucebanner010198-commits
+/LESSONS.md                      @brucebanner010198-commits
+/CLAUDE.md                       @brucebanner010198-commits
+
+# ───────────────────────── Community documents ──────────────────────
+/CODE_OF_CONDUCT.md              @brucebanner010198-commits
+/CONTRIBUTING.md                 @brucebanner010198-commits
+/CODEOWNERS                      @brucebanner010198-commits
+/README.md                       @brucebanner010198-commits
+/CHANGELOG.md                    @brucebanner010198-commits
+/LICENSES/                       @brucebanner010198-commits
+/.well-known/                    @brucebanner010198-commits
+
+# ──────────────────────────── Manifest ─────────────────────────────
+/.claude-plugin/plugin.json      @brucebanner010198-commits
+
+# ───────────────────────── Councils (per-council) ────────────────────
+/councils/security/              @brucebanner010198-commits
+/councils/red-team/              @brucebanner010198-commits
+/councils/evaluation/            @brucebanner010198-commits
+/councils/audit/                 @brucebanner010198-commits
+/councils/reliability/           @brucebanner010198-commits
+/councils/incident-response/     @brucebanner010198-commits
+/councils/governance/            @brucebanner010198-commits
+/councils/ethics/                @brucebanner010198-commits
+/councils/technology/            @brucebanner010198-commits
+/councils/knowledge-transfer/    @brucebanner010198-commits
+/councils/rhythm/                @brucebanner010198-commits
+/councils/career/                @brucebanner010198-commits
+/councils/planning/              @brucebanner010198-commits
+/councils/memory/                @brucebanner010198-commits
+/councils/resilience/            @brucebanner010198-commits
+/councils/prompt-reviewer/       @brucebanner010198-commits
+
+# ─────────────────────────────── Skills ─────────────────────────────
+/skills/                         @brucebanner010198-commits
+
+# ────────────────────────── Runtime hooks ───────────────────────────
+/runtime-hooks/                  @brucebanner010198-commits
+
+# ─────────────────────────────── ADRs ───────────────────────────────
+/adrs/                           @brucebanner010198-commits
+
+# ───────────────────────── Session logs (append-only) ────────────────
+/sessions/                       @brucebanner010198-commits

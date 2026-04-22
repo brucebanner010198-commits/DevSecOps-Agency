@@ -556,6 +556,15 @@ This Constitution binds, and is bound by, the following root documents, incorpor
 - `AGENTS.md` — repo-root rules (gates, ordering, anti-patterns).
 - `skills/AGENTS.md` — per-skill rules.
 - `SECURITY.md` — external security policy.
+- `TRUST.md` — twelve public trust commitments (v0.5.0).
+- `SWOT.md` — rolling self-audit with mitigation roadmap (v0.5.0).
+- `SYSTEM-CARD.md` — capabilities, limits, tested bounds (v0.5.0).
+- `THREAT-MODEL.md` — plugin-level STRIDE + OWASP ASI + AI RMF (v0.5.0).
+- `DISASTER-RECOVERY.md` — RPO/RTO, playbooks, read-only mode (v0.5.0).
+- `CODE_OF_CONDUCT.md` — community behavior standard (v0.5.0).
+- `CONTRIBUTING.md` — contribution workflow (v0.5.0).
+- `CODEOWNERS` — path-to-council ownership map (v0.5.0).
+- `.well-known/security.txt` — RFC 9116 disclosure contact (v0.5.0).
 
 Amending any of these is a USER-ONLY action (§2.2 clause 1). Amending the list itself is a Constitution amendment under Article X.
 
@@ -564,6 +573,8 @@ Amending any of these is a USER-ONLY action (§2.2 clause 1). Amending the list 
 ## Schedule B — Ratification
 
 **Ratified 2026-04-22** by the User via `user-meeting` on the v0.4.1 release cut.
+
+**Schedule A amendment 2026-04-22** by the User on the v0.5.0 release cut — added TRUST, SWOT, SYSTEM-CARD, THREAT-MODEL, DISASTER-RECOVERY, CODE_OF_CONDUCT, CONTRIBUTING, CODEOWNERS, and `.well-known/security.txt` to the founding-document list. No other articles amended. ADR logged under `adrs/`.
 
 Signed into force by the CEO persona, which MUST read this Constitution at every session start going forward and MUST cite it in every amendment proposal, waiver grant, drill report, and close-audit.
 

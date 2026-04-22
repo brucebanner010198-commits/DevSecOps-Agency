@@ -2,11 +2,11 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.4.2` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md).
+Status: `v0.5.0` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md).
 
 ## Identity
 
-- **[`CONSTITUTION.md`](CONSTITUTION.md)** — **supreme document.** Ratified 2026-04-22. Preamble + 12 Articles + Bill of Rights + Schedule A (founding docs) + Schedule B (ratification) + Sources & Influences. RFC 2119 grammar. Read FIRST at every session start; cited by every amendment / waiver / drill report / close-audit. User is sovereign; only the User may amend it.
+- **[`CONSTITUTION.md`](CONSTITUTION.md)** — **supreme document.** Ratified 2026-04-22 (Schedule A amended 2026-04-22 for v0.5.0). Preamble + 12 Articles + Bill of Rights + Schedule A (founding docs) + Schedule B (ratification) + Sources & Influences. RFC 2119 grammar. Read FIRST at every session start; cited by every amendment / waiver / drill report / close-audit. User is sovereign; only the User may amend it.
 - [`MISSION.md`](MISSION.md) — "Ship software that is secure, receipted, and reversible." North Stars, non-goals, one-sentence tagline.
 - [`VALUES.md`](VALUES.md) — 11 operating principles the CEO reads at every session start.
 - [`KEEPER-TEST.md`](KEEPER-TEST.md) — quarterly fire-readily review (Netflix-inspired). User has final vote on fires.
@@ -16,12 +16,21 @@ Status: `v0.4.2` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY
 - [`GOVERNANCE.md`](GOVERNANCE.md) — decision matrix (Proposer / Reviewer / Approver / Final-vote). Enumerates the 10 USER-ONLY actions and separates blocking chiefs (CISO/CEVO/CRT/CAO) from informing-only chiefs.
 - [`RESILIENCE.md`](RESILIENCE.md) — failure-mode map. First response + escalation path + skill + ADR kind for every failure. Four degraded modes (model / heartbeat / chief / budget); five recovery guarantees.
 - [`SECURITY.md`](SECURITY.md) — public security policy (v1.0, ratified 2026-04-22 with plugin v0.4.2). Scope + supported versions + reporting channels (GitHub Private Vulnerability Reporting primary, email fallback) + 48h ack / 7d triage / 7d-30d-next-wave fix SLAs / 90d coordinated disclosure / CVSS v3.1 severity rubric / plugin-specific threat model / responsible-testing rules / safe harbor. Non-waivable classes (raw-secret + ASI) inherit from Constitution §8.5.
+- **[`TRUST.md`](TRUST.md)** — twelve public trust commitments (v1.0, v0.5.0) each with Claim / Verify-how / If-we-miss; scorecard + incident timeline + push-back channel. First quarterly publish 2026-07-22.
+- **[`SWOT.md`](SWOT.md)** — rolling self-audit (v1.0, v0.5.0). 14 Strengths / 18 Weaknesses / 10 Opportunities / 12 Threats with mitigation-by-wave roadmap through v1.0.0. Refreshed at every Keeper Test.
+- **[`SYSTEM-CARD.md`](SYSTEM-CARD.md)** — capabilities, limits, tested bounds (v1.0, v0.5.0). Honest "has not been tested" markers. Regenerated at every minor version bump by `skills/system-card`.
+- **[`THREAT-MODEL.md`](THREAT-MODEL.md)** — plugin-level STRIDE + OWASP ASI Top 10 + NIST AI RMF + MITRE ATLAS five-lens overlay (v1.0, v0.5.0). Residual-risk table by category.
+- **[`DISASTER-RECOVERY.md`](DISASTER-RECOVERY.md)** — RPO 24h / RTO 72h. Seven named playbooks (corrupted main, lost repo, compromised release, PAT compromise, read-only mode on 72h User unreach, Anthropic outage, hostile fork). Append-only restoration procedure.
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — Contributor Covenant 2.1 + 5 agency-specific expectations.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — contribution workflow. Amendment-class gates on founding documents.
+- [`CODEOWNERS`](CODEOWNERS) — path-to-council ownership map.
+- [`.well-known/security.txt`](.well-known/security.txt) — RFC 9116 disclosure contact.
 
 ## Install
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.4.2.plugin
+/plugin install devsecops-agency-0.5.0.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git
