@@ -2,13 +2,13 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.5.1` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md). Live ops console: [`command-center/`](command-center/) (deploys to GitHub Pages on every push).
+Status: `v0.5.2` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md). Live ops console: [`command-center/`](command-center/) (deploys to GitHub Pages on every push). Build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** (see [`VALUES.md`](VALUES.md) §12).
 
 ## Identity
 
 - **[`CONSTITUTION.md`](CONSTITUTION.md)** — **supreme document.** Ratified 2026-04-22 (Schedule A amended 2026-04-22 for v0.5.0). Preamble + 12 Articles + Bill of Rights + Schedule A (founding docs) + Schedule B (ratification) + Sources & Influences. RFC 2119 grammar. Read FIRST at every session start; cited by every amendment / waiver / drill report / close-audit. User is sovereign; only the User may amend it.
 - [`MISSION.md`](MISSION.md) — "Ship software that is secure, receipted, and reversible." North Stars, non-goals, one-sentence tagline.
-- [`VALUES.md`](VALUES.md) — 11 operating principles the CEO reads at every session start.
+- [`VALUES.md`](VALUES.md) — 12 operating principles the CEO reads at every session start. Value #12 (v0.5.2) fixes the build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** — when a trade-off forces a cut, cut scope before you demote a higher priority.
 - [`KEEPER-TEST.md`](KEEPER-TEST.md) — quarterly fire-readily review (Netflix-inspired). User has final vote on fires.
 - [`LESSONS.md`](LESSONS.md) — append-only cross-project learning ledger, one row per close.
 - [`RHYTHM.md`](RHYTHM.md) — daily / weekly / monthly / quarterly heartbeat cadence. The paper trail has a pulse; the CEO reads it at session start.
@@ -26,12 +26,13 @@ Status: `v0.5.1` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY
 - [`CODEOWNERS`](CODEOWNERS) — path-to-council ownership map.
 - [`.well-known/security.txt`](.well-known/security.txt) — RFC 9116 disclosure contact.
 - **[`command-center/`](command-center/)** — **public operations console (v0.1, v0.5.1).** Single `index.html` — no build step — showing CEO + 16 councils org chart (blocking vs informing chiefs flagged), live vital signs fetched from the GitHub API (councils / skills / agents / hooks), today's rhythm of four heartbeats, twelve Trust commitments panel (shows "pending" until 2026-07-22 scorecard), recent commits feed, Schedule-A founding-documents grid, and five one-click meeting launchers (Call a CEO meeting · Convene a council · Issue a new directive · Schedule a drill · Publish Trust Scorecard). Each launcher copies a pre-written slash-command prompt for Claude. Auto-deploys to GitHub Pages via `.github/workflows/pages.yml`; portable to Cloudflare Pages, Vercel, Netlify, or a Cowork artifact. Maintenance procedure in [`skills/command-center-web`](skills/command-center-web/SKILL.md).
+- **[`skills/ui-ux-pro-max`](skills/ui-ux-pro-max/SKILL.md)** — **design-system generator (v0.5.2).** Imported under MIT from `nextlevelbuilder/ui-ux-pro-max-skill@v2.2.1` (see [`LICENSES/MIT-ui-ux-pro-max.txt`](LICENSES/MIT-ui-ux-pro-max.txt)). Turns a short brief ("landing page for a fintech banking app, dark theme, Next.js") into a full token set: pattern, UI style (from 67), colors (from 96 palettes), typography (from 57 font pairings with Google Fonts imports), motion + shadows, anti-patterns, and a pre-delivery checklist. Composable via BM25 search over 13 domain CSVs + 16 stack-specific CSVs (React / Next.js / Vue / SwiftUI / Flutter / React Native / Tailwind / shadcn / Astro / Svelte / Nuxt / Angular / Laravel / Three.js / Jetpack Compose). Ownership: Product Council (CPO) — invoked during Phase 2 (Design) whenever a user-facing surface is in scope. Handoff always includes full token set + typography imports + anti-patterns to the Execution Council so VP-Eng implements against a concrete design, not prose.
 
 ## Install
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.5.1.plugin
+/plugin install devsecops-agency-0.5.2.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git
@@ -114,7 +115,7 @@ Depth cap: Chief → Specialist → Worker (three levels). Deeper fanout require
 | `/devsecops-agency:retro` | Post-deploy retrospective; also triggers REM dreaming on new patterns. |
 | `/devsecops-agency:ship-it` | Legacy v0.1 six-team pipeline. Still runnable. |
 
-Internal skills the CEO and Chiefs invoke (not user-facing): `taskflow`, `gates`, `worktree`, `memory`, `session-log`, `notify`, `model-tiering`, `skill-creator`, `fanout`, `ladder`, `audit`, `eval`, `budget`, `red-team`, `playbook`, `tool-scout`, `a2a`, `sandbox`, `model-routing`, `vision-doc`, `okr`, `adr`, `meeting-minutes`, `idea-pipeline`, `user-meeting`, `market-intel`, `positioning`, `roster`, `capacity`, `mcp-defense`, `mcp-authoring`, `observability`, `prompt-cache`, `dlp`, `injection-defense`, `finops`, `chaos`, `self-critique`, `oss-forensics`, `arxiv`, `messaging-formatting`, `container-isolation-posture`, `webapp-testing`, `sdlc-patterns`, `skill-eval`.
+Internal skills the CEO and Chiefs invoke (not user-facing): `taskflow`, `gates`, `worktree`, `memory`, `session-log`, `notify`, `model-tiering`, `skill-creator`, `fanout`, `ladder`, `audit`, `eval`, `budget`, `red-team`, `playbook`, `tool-scout`, `a2a`, `sandbox`, `model-routing`, `vision-doc`, `okr`, `adr`, `meeting-minutes`, `idea-pipeline`, `user-meeting`, `market-intel`, `positioning`, `roster`, `capacity`, `mcp-defense`, `mcp-authoring`, `observability`, `prompt-cache`, `dlp`, `injection-defense`, `finops`, `chaos`, `self-critique`, `oss-forensics`, `arxiv`, `messaging-formatting`, `container-isolation-posture`, `webapp-testing`, `sdlc-patterns`, `skill-eval`, `ui-ux-pro-max` *(Product / Design phase)*.
 
 ## The 7 phases
 
@@ -140,7 +141,7 @@ councils/                 # per-council contract + team card
   <council>/
     AGENTS.md             # must / must-not / gate heuristic  (contract)
     TEAM.md               # lead + specialists + worker patterns  (roster)
-skills/                   # 58 skills — orchestration, defense, memory, eval, ops
+skills/                   # 72 skills — orchestration, defense, memory, eval, ops, design
 runtime-hooks/            # read-only defender hooks (v0.3.1)
 LICENSES/                 # import provenance + upstream license text
 AGENTS.md                 # repo-root conventions: gates, ordering, anti-patterns

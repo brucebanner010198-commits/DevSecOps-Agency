@@ -546,7 +546,7 @@ A successor agent bootstrapped from the paper trail alone has the right to reach
 This Constitution binds, and is bound by, the following root documents, incorporated by reference:
 
 - `MISSION.md` — why the Agency exists; north stars; non-goals.
-- `VALUES.md` — the 11 operating principles.
+- `VALUES.md` — the 12 operating principles (v0.5.2 adds §12 — build-order priority: Security & Privacy → Design → Operations → Timely Delivery — under USER direction).
 - `GOVERNANCE.md` — decision matrix.
 - `RESILIENCE.md` — failure-mode map.
 - `KEEPER-TEST.md` — quarterly fire-readily review.

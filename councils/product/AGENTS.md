@@ -24,3 +24,7 @@
 - `green`: strategy names wedge + positioning, roadmap has ≤ 5 Now items, every item has acceptance criteria.
 - `yellow`: roadmap missing estimates or acceptance criteria on ≥ 1 item.
 - `red`: strategy contradicts CRO wedge, or Now list exceeds team capacity.
+
+## Skills owned by this council
+
+- [`skills/ui-ux-pro-max`](../../skills/ui-ux-pro-max/SKILL.md) — design-system generator (67 UI styles, 96 palettes, 57 font pairings, 25 chart types, 16 stack guides, 99 UX rules, 100 reasoning rules). Invoked by `pm-lead` during the Product Management phase whenever a shipped artifact has a user-facing surface (landing page, dashboard, mobile app, web app, component, full app, redesign). Output is the Design pillar of [`VALUES.md`](../../VALUES.md) §12. Handoff from this skill to the Execution council (VP-Eng) always includes the full token set + typography imports + anti-patterns list. Imported under MIT from `nextlevelbuilder/ui-ux-pro-max-skill@v2.2.1`; provenance in [`LICENSES/MIT-ui-ux-pro-max.txt`](../../LICENSES/MIT-ui-ux-pro-max.txt).

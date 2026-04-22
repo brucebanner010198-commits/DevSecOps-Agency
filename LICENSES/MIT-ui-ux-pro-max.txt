@@ -1,0 +1,51 @@
+MIT License
+
+Copyright (c) 2025 nextlevelbuilder
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Provenance note (DevSecOps-Agency v0.5.2):
+
+The following pieces of this plugin carry lineage from the above-licensed
+work at nextlevelbuilder/ui-ux-pro-max-skill@v2.2.1:
+
+  skills/ui-ux-pro-max/SKILL.md
+  skills/ui-ux-pro-max/references/quick-reference.md
+  skills/ui-ux-pro-max/scripts/search.py
+  skills/ui-ux-pro-max/scripts/core.py
+  skills/ui-ux-pro-max/scripts/design_system.py
+  skills/ui-ux-pro-max/data/*.csv (13 domain data files)
+  skills/ui-ux-pro-max/data/stacks/*.csv (16 stack-specific data files)
+
+Upstream repository: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+Upstream version at import time: v2.2.1
+Upstream license: MIT
+
+Integration notes:
+- Source tree copied without modification; no code changes applied in this wave.
+- Governance ownership: product council (CPO). The Product Council's lead
+  (pm-lead) may invoke this skill during the Product Management phase to
+  generate implementation-ready design systems before engineering begins.
+- Value #12 (Build order: Security & Privacy → Design → Operations → Timely
+  Delivery) places Design after Security but before Operations; this skill is
+  the primary tool supporting the Design step of that ordering.
+- No Agency secret, agent persona, or council contract was merged into the
+  imported files. The skill remains drop-in-replaceable from upstream.

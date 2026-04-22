@@ -15,7 +15,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-
 ## Identity + Learning (v0.3.8)
 
 - **[`MISSION.md`](MISSION.md)** — why the agency exists, who we serve, non-goals, north stars. CEO reads at session start. Non-goal violations in dispatch contexts bounce back.
-- **[`VALUES.md`](VALUES.md)** — 11 operating principles. Cited by COO in performance review, by CAO in close-audit, by CRT in prompt-diff review.
+- **[`VALUES.md`](VALUES.md)** — 12 operating principles. Cited by COO in performance review, by CAO in close-audit, by CRT in prompt-diff review. **Value #12 (v0.5.2)** fixes the build-order priority at **Security & Privacy → Design → Operations → Timely Delivery**; when a trade-off collides with the calendar, cut scope — do not demote a higher priority. CEO cites it at Phase 7 close if a deadline protected delivery over any higher dimension.
 - **[`KEEPER-TEST.md`](KEEPER-TEST.md)** — the quarterly fire-readily criterion applied to every non-reserved agent. Invoked via `skills/keeper-test/SKILL.md`.
 - **[`LESSONS.md`](LESSONS.md)** — one append-only row per project close. Written via `skills/lessons-ledger/SKILL.md` after `skills/retrospective/SKILL.md` lands the retro minutes.
 - **Session-start invariant:** CEO reads `MISSION.md` + `VALUES.md` + latest 5 rows of `LESSONS.md` before deriving a project slug. Missing any = abort + file ADR `kind: identity-missing`.

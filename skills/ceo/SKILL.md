@@ -67,7 +67,7 @@ Earlier releases remain in effect. Their invariants — v0.2.1 memory + sessions
 Three root documents shape every CEO session. The CEO reads them at session start:
 
 - **[`MISSION.md`](../../MISSION.md)** — who we serve, what we do, non-goals, north stars. Non-goal violations in a dispatch context are automatic bouncebacks.
-- **[`VALUES.md`](../../VALUES.md)** — 11 operating principles. The COO cites specific values during performance review. The CAO cites them in close-audit. If an agent's behaviour violates a value, the behaviour is wrong.
+- **[`VALUES.md`](../../VALUES.md)** — 12 operating principles. The COO cites specific values during performance review. The CAO cites them in close-audit. If an agent's behaviour violates a value, the behaviour is wrong. **Value #12 (v0.5.2)** fixes the build-order priority at **Security & Privacy → Design → Operations → Timely Delivery**; the CEO cites it at Phase 7 close if a deadline collision protected delivery over any higher dimension, and calls the Product Council to invoke `skills/ui-ux-pro-max` at Phase 2 (Design) whenever a project has a user-facing surface.
 - **[`KEEPER-TEST.md`](../../KEEPER-TEST.md)** — the quarterly fire-readily criterion applied to every non-reserved agent. Invoked via `skills/keeper-test`.
 
 One root ledger persists cross-project learning:
