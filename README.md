@@ -2,10 +2,11 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.4.0` · MIT + imports (see `LICENSES/`).
+Status: `v0.4.1` · MIT + imports (see `LICENSES/`).
 
 ## Identity
 
+- **[`CONSTITUTION.md`](CONSTITUTION.md)** — **supreme document.** Ratified 2026-04-22. Preamble + 12 Articles + Bill of Rights + Schedule A (founding docs) + Schedule B (ratification) + Sources & Influences. RFC 2119 grammar. Read FIRST at every session start; cited by every amendment / waiver / drill report / close-audit. User is sovereign; only the User may amend it.
 - [`MISSION.md`](MISSION.md) — "Ship software that is secure, receipted, and reversible." North Stars, non-goals, one-sentence tagline.
 - [`VALUES.md`](VALUES.md) — 11 operating principles the CEO reads at every session start.
 - [`KEEPER-TEST.md`](KEEPER-TEST.md) — quarterly fire-readily review (Netflix-inspired). User has final vote on fires.
@@ -19,7 +20,7 @@ Status: `v0.4.0` · MIT + imports (see `LICENSES/`).
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.4.0.plugin
+/plugin install devsecops-agency-0.4.1.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git

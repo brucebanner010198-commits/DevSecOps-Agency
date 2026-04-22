@@ -2,6 +2,16 @@
 
 Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-wave history lives in [`CHANGELOG.md`](CHANGELOG.md); this file is the active contract.
 
+## Constitution (v0.4.1)
+
+- **[`CONSTITUTION.md`](CONSTITUTION.md)** — **supreme document**. Ratified 2026-04-22. Binds every agent; the User is sovereign. Structure: Preamble + 12 Articles + Bill of Rights + Schedule A (founding docs) + Schedule B (ratification) + Sources & Influences. Uses RFC 2119 grammar (MUST / MUST NOT / SHOULD / MAY).
+- **Read-first invariant:** CEO reads CONSTITUTION.md BEFORE MISSION.md at every session start. Missing = abort + file ADR `kind: constitution-missing`.
+- **Supremacy clause (§1.1):** where any agent document conflicts with the Constitution, the Constitution prevails until amended under Article X.
+- **Hierarchy on conflict (§1.3):** (1) direct User instruction → (2) Constitution → (3) MISSION → (4) VALUES/GOVERNANCE/RESILIENCE co-equal → (5) KEEPER-TEST/CAREER/RHYTHM/LESSONS → (6) root AGENTS + skills/AGENTS → (7) per-council AGENTS → (8) per-skill SKILL + refs → (9) per-agent persona.
+- **Citation invariant:** ADRs covering constitutional matters (amendment, waiver grant, drill report, close-audit, tier / level change, fire, publish, spend) MUST cite the Constitution clause by §, not just "VALUES.md" or "GOVERNANCE.md".
+- **Amendment = USER-ONLY (Art X + §2.2 clause 1):** only the User amends the Constitution or any Schedule-A root doc. CEO files `kind: constitution-amend` ADR with CAO + CRT review mandatory; User approves via `user-meeting`. No emergency amendment path (§10.6).
+- **Enforcement = existing bodies (§11.1):** CAO + CRT + CEVO + CISO + runtime hooks enforce; no new council created. Penalties graded observation → warning → demotion → retirement (§11.3); tier changes stay USER-ONLY throughout.
+
 ## Identity + Learning (v0.3.8)
 
 - **[`MISSION.md`](MISSION.md)** — why the agency exists, who we serve, non-goals, north stars. CEO reads at session start. Non-goal violations in dispatch contexts bounce back.
@@ -225,3 +235,11 @@ Before a phase transition, a Chief must have read: its council's scoped `AGENTS.
 - Don't let multiple degraded modes compound silently. If ≥ 2 degraded modes are active, the daily heartbeat escalates to weekly-equivalent depth; ≥ 4 on one project = automatic Rung 4 replan.
 - Don't drill a blocking Chief (CISO, CEVO, CRT, CAO). Chief-unavailable drill rotates through the 12 non-blocking chiefs only. Blocking chiefs hold veto and cannot be safely offline even for 30 minutes.
 - Don't run drills and real incidents in parallel across overlapping subsystems. `skills/drill §Pre-flight` checks `_vision/rhythm/state.json` for active degraded modes before starting.
+- Don't read MISSION.md before CONSTITUTION.md at session start. The Constitution is the supreme document; it reads FIRST per `AGENTS.md §Constitution > Read-first invariant`. Skipping it = abort + `kind: constitution-missing` ADR.
+- Don't cite `VALUES.md §X` when the clause has a constitutional home. ADRs covering amendments, waivers, drills, close-audit, tier / level changes, fires, publishes, and spends MUST cite the Constitution clause by article + section (e.g., `§9.7`), not just the values rule.
+- Don't amend a root document (MISSION, VALUES, GOVERNANCE, RESILIENCE, KEEPER-TEST, CAREER, RHYTHM, LESSONS, SECURITY, or CONSTITUTION itself) without a `kind: constitution-amend` ADR + CAO + CRT review + User approval via `user-meeting`. That's Article X + §2.2 clause 1 in combination. No emergency amendment path.
+- Don't resolve a doc conflict by private interpretation. Per `CONSTITUTION.md §1.5` ambiguity rule, file a §10.1 amendment proposal — acting on a private read is a CAO red.
+- Don't skip the hierarchy on conflict. Per `CONSTITUTION.md §1.3`, the resolution order is: User instruction → Constitution → MISSION → VALUES/GOVERNANCE/RESILIENCE → KEEPER-TEST/CAREER/RHYTHM/LESSONS → root AGENTS → per-council AGENTS → per-skill SKILL → per-agent persona. Lower tiers cannot override higher.
+- Don't enforce the Constitution with a new council. Enforcement flows through CAO + CRT + CEVO + CISO + runtime hooks as they already exist (`§11.1`). Adding a fifth blocking council requires a §10 amendment + User approval.
+- Don't issue a penalty against the User. `§11.5` — the User is sovereign; enforcement bodies MUST NOT levy findings against the User. Receipt-integrity audits of User-directed ADRs are allowed; judgment audits are not.
+- Don't make silent enforcement actions. Per `§11.6` every enforcement action files a User-visible ADR. Silent observations, private warnings, or uncited demotions are themselves a CAO red.
