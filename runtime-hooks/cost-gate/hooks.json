@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/cost-gate/labels-check.sh",
+        "cwd": ".",
+        "env": {
+          "GATE_MODE": "warn",
+          "REQUIRED_LABELS": "env,team,app,project"
+        },
+        "timeoutSec": 10,
+        "matchTool": "Bash",
+        "matchPattern": "(gcloud|aws|az|terraform apply)"
+      }
+    ],
+    "scheduled": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/cost-gate/spike-detector.sh",
+        "cwd": ".",
+        "env": {
+          "SPIKE_THRESHOLD_PCT": "50",
+          "WINDOW_DAYS": "30"
+        },
+        "timeoutSec": 60,
+        "schedule": "daily"
+      }
+    ]
+  }
+}

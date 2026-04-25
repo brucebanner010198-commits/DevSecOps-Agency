@@ -2,6 +2,56 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.5.6 — WAF principles wire-through (2026-04-25)
+
+Wire-through release that makes the v0.5.5 Google Cloud Well-Architected Framework imports operationally honest. Three additive doc changes, one new assessment kit, one extension to the drill skill, and one new runtime hook (the seventh in the Agency, implementing the cost commitments scaffolded in v0.5.5). Constitution untouched in v0.5.6 — every addition fits under existing roots already incorporated by reference.
+
+### Documents — additive sections, not replacements
+
+- **`SECURITY.md` §13 'Design principles'** — seven WAF-security pillars layered over §1–§12 without replacing anything: security-by-design, zero-trust, shift-left security, preemptive cyber defense, AI security (for projects shipping AI/LLM), AI for security (for projects defending themselves with AI), regulatory compliance + privacy. Each principle ties to an existing Agency invariant and points at the operationalizing skill or hook. CISO owns the section.
+- **`RESILIENCE.md` 'SLOs and error budgets'** — proactive resilience layered over the existing reactive failure-mode map. User-focused SLIs (measure what the user experiences, not what the data center reports). SLOs as the threshold of user pain. Error budgets as the permission slip for risk-taking with explicit burn-rate response (2× linear → freeze risky deploys; exhausted → rollback). Conservative starting targets: 99.5% over 30 days for new services, 99.9% for revenue-bearing or trust-critical paths. CSRE owns acceptance criteria; CQO owns measurement instrumentation.
+- **`RESILIENCE.md` 'Chaos engineering'** — adds the unknown-unknown layer to drills (which cover known-unknowns from the failure-mode map). Six-step procedure: written hypothesis → blast radius with no-go set → steady-state metric → smallest-perturbation injection → observe-and-classify → recover-and-blameless-postmortem. Quarterly game days. Independence rule: the council that owns the subsystem under test cannot run its own game day; CSRE rotates the lead role across COO / CRT / CAO. Q2 game day fixed two weeks before the trust-scorecard publish (2026-07-15 for the upcoming cycle).
+
+### `councils/security/REVIEW-KIT.md` — new 71-question assessment kit
+
+Operationalizes `SECURITY.md` §13. 10 questions per principle (11 for compliance + privacy) organized as: question + severity bias (`critical` / `high` / `medium`) + the artifact where the answer must live + the Agency invariant that backs it. Phase 2 (Design) uses a focused 12–15-question subset; Phase 6 (Deploy) runs the full pass. CAO spot-checks REVIEW-KIT coverage at the quarterly trust-scorecard publish. Includes a 12-item cross-cutting validation checklist for fast pre-deploy review.
+
+### `skills/drill/SKILL.md` — chaos game-days procedure added
+
+Drills exercise named failure modes from `RESILIENCE.md`. Chaos game days exercise failure modes that aren't on the map. Added: cadence (one per quarter, Q2 fixed slot), six-step procedure, pass criteria (written hypothesis filed before injection, no-go set not breached, steady-state returned within window, property confirmed OR finding ADR filed, blameless post-mortem within 7 days), independence rule (rotates across COO / CRT / CAO), outputs (`ADR-NNNN-chaos-gameday-<YYYY-MM-DD>` always, `ADR-NNNN-chaos-finding-<slug>` per finding, `_vision/chaos/<YYYY-QN>.md` full log).
+
+### `runtime-hooks/cost-gate/` — new seventh runtime hook
+
+Implements the runtime enforcement promised by `COST-AWARENESS.md` v1.0 (v0.5.5).
+
+- **`labels-check.sh`** — `preToolUse` matcher on Bash invocations of `gcloud` / `aws` / `az` / `terraform apply`. Refuses or warns on cloud-resource provisioning that omits the four required labels (`env`, `team`, `app`, `project`) per COST §2.1. Three regex heuristics (gcloud no-`--labels=`, aws no-`--tags`, terraform-apply no-`labels=` / `tags=` block in any `.tf`).
+- **`spike-detector.sh`** — daily `scheduled` trigger. Reads cost data via four adapters (`gcp-bq` / `aws-cur` / `azure-cme` stubbed for v0.6.0 — they need billing-export credentials; `manual-csv` working in v0.5.6 for fixture-driven development). Compares current vs. previous month per project; writes a `cost-spike` row to `inbox.json` for any project with >50% MoM increase per COST §2.11 with full provenance: project + prev-spend + curr-spend + increase-pct + threshold-pct + source + ref.
+- Both ship in `warn` mode by default; `block` mode is opt-in per project. Both end-to-end smoke-tested against synthetic inputs (gcloud no-labels → warns; gcloud with labels → silent; spike-detector with 60% jump → SPIKE row to inbox.json; spike-detector with 4% jump → silent) prior to ship.
+- Hook-bypass remains a `runtime-hook-bypass` ADR per `TRUST.md` §2.7.
+
+### Council file updates
+
+- **`councils/security/AGENTS.md`** — added 'Added v0.5.6 — WAF principles wire-through' section explaining the seven-principle operating posture, mapping REVIEW-KIT sections to artifacts, and citing the import provenance.
+- **`councils/sre/AGENTS.md`** — added 'Added v0.5.6 — WAF reliability + chaos engineering + cost-gate hooks' section: SLO ownership at every shipped project, quarterly chaos game day cadence + independence rule, full description of the two cost-gate hook scripts and their warn/block modes.
+
+### Wire-through
+
+- `README.md` status line bumped + install command bumped + ledger of new artifacts (REVIEW-KIT, cost-gate, RESILIENCE additions, SECURITY §13).
+- `.claude-plugin/plugin.json` version + description appended.
+
+### Counts
+
+- Founding documents: unchanged at 21 (no Constitution amendment needed)
+- Skills: unchanged at 77 (no new skill — `drill` extended in place)
+- Runtime hooks: 6 → 7 (cost-gate added)
+- Council files updated: 2 (security + sre)
+- Root docs updated: 2 (SECURITY + RESILIENCE)
+- New files in this release: 5 (REVIEW-KIT.md + cost-gate/{hooks.json, labels-check.sh, spike-detector.sh, README.md})
+
+### Governance touch
+
+No new chief, no new council, no new USER-ONLY action, no new tool grant, no Constitution amendment. Pure wire-through release. Non-waivable classes (raw-secret + ASI-class + cost-driven downgrade of Security or Design) unchanged.
+
 ## v0.5.5 — Cloud capability port + COST-AWARENESS.md (2026-04-25)
 
 Capability + governance release. Two changes that travel together: the Agency becomes cloud-deploy-aware for the first time (five Google Cloud skills imported under Apache-2.0), and the Agency becomes cost-disciplined for the first time (`COST-AWARENESS.md` v1.0 — twelve commitments, CSRE owns, quarterly scorecard). The two are paired because cost discipline without deployment expertise is theatrical, and deployment expertise without cost discipline is irresponsible.

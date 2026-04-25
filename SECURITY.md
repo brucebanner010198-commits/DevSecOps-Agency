@@ -224,6 +224,44 @@ Framework influence (original synthesis; see `CONSTITUTION.md > Sources and Infl
 
 No text above is copied from any cited source; every clause is original to this Agency.
 
+## 13. Design principles (added v0.5.6 wire-through)
+
+The Agency adopts seven design principles from Google Cloud's Well-Architected Framework — Security pillar (Apache-2.0; see [`LICENSES/APACHE-2.0-google-skills.txt`](LICENSES/APACHE-2.0-google-skills.txt)). They are layered over §1–§12, not replacing anything. Each principle MUST be considered at Phase 2 (Design) and verified at Phase 6 (Deploy) using [`councils/security/REVIEW-KIT.md`](councils/security/REVIEW-KIT.md).
+
+### 13.1 Security by design
+
+Security is decided at architecture time, not retrofitted at QA time. Every project's `architecture.md` MUST contain a `§Security-from-day-zero` section before any code is written. Threat-model the trust boundaries, name the attacker classes, decide the controls — then build. The Agency's existing rule "STRIDE every trust boundary" (per `councils/security/AGENTS.md`) is the operational form of this principle. REVIEW-KIT §1.
+
+### 13.2 Zero trust
+
+Never trust, always verify — at every request, not at session start. No implicit trust based on network location, device posture alone, or previously-granted access. Continuous verification, least privilege at IAM and RBAC layers, encryption in transit AND at rest, default-deny perimeters. The `gcp-auth` skill's "never download service account keys" posture is the operational form. REVIEW-KIT §2.
+
+### 13.3 Shift-left security
+
+Security findings are cheaper to fix the earlier they're caught. The Agency's runtime hooks already enforce this: `runtime-hooks/secrets-scanner/` blocks at commit time; `runtime-hooks/dependency-license-checker/` blocks unlicensed dependencies; `runtime-hooks/commit-gate.sh` blocks `--no-verify` bypass attempts. Phase 5 (Security) is a SECOND pass after Phase 3 (Build) — the first pass should already have caught the obvious classes via shift-left. REVIEW-KIT §3.
+
+### 13.4 Preemptive cyber defense
+
+Don't wait to be attacked to find out you're attackable. Proactive measures: threat intelligence ingestion, regular penetration tests, threat-model refresh on every material architecture change (and at least quarterly), tabletop exercises and chaos drills (see `RESILIENCE.md` Drills + Chaos engineering). The Red-Team Council's quarterly red-team scan is the operational form. REVIEW-KIT §4.
+
+### 13.5 AI security (for projects that ship AI/LLM components)
+
+Treat AI/LLM components as a distinct attack surface. Model integrity, training-data provenance, adversarial-input resilience, prompt-injection defense (especially across persona / skill / session-log / MCP / inbox surfaces — already enumerated in §6.2), differential privacy where personal data is involved, explainability for high-stakes outputs. The `THREAT-MODEL.md` AI lens + OWASP ASI Top 10 + NIST AI RMF + MITRE ATLAS five-lens overlay is the operational form. REVIEW-KIT §5.
+
+### 13.6 AI for security (for projects that use AI to defend themselves)
+
+AI augments human security judgment — it never replaces it. Every AI-driven security control MUST have a documented manual fallback path. Precision, recall, and drift metrics MUST be tracked. False-positive and false-negative handling MUST have a runbook. The Red-Team Council's LLM-based scans are the operational form, with the human Chief always in the verdict path. REVIEW-KIT §6.
+
+### 13.7 Regulatory compliance and privacy
+
+Compliance is per-project: every shipped project MUST produce a `<slug>/security/compliance.md` that maps the project's data handling against the regulations that apply (or explicitly says "no regulated data, regulation X N/A"). The `skills/privacy/` skill (DPIA + GDPR/CCPA/DPDP/LGPD/PIPL) and the Legal Council are the operational forms. REVIEW-KIT §7.
+
+### Validation routing
+
+The 71-question assessment kit at [`councils/security/REVIEW-KIT.md`](councils/security/REVIEW-KIT.md) operationalizes §13.1–§13.7. Use it at Phase 2 (focused subset) and Phase 6 (full pass). CAO spot-checks REVIEW-KIT coverage at the quarterly trust-scorecard publish.
+
+---
+
 ## 12. Document control
 
 | Field | Value |

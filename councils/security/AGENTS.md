@@ -26,3 +26,20 @@
 - `green`: STRIDE complete, OWASP A01–A10 covered, compliance mapped, no unmitigated Critical/High.
 - `yellow`: one medium finding without mitigation plan, OR compliance posture unclear.
 - `red`: any Critical/High unmitigated, OR STRIDE incomplete, OR OWASP coverage missing an item.
+
+## Added v0.5.6 — WAF principles wire-through
+
+The Security Council now operates against the seven design principles in `SECURITY.md` §13 (security-by-design, zero-trust, shift-left, preemptive cyber defense, AI security, AI for security, regulatory compliance + privacy). Each principle is named in `<slug>/security/review-design.md` (Phase 2) and `<slug>/security/review-pre-deploy.md` (Phase 6).
+
+Operationalized via [`REVIEW-KIT.md`](REVIEW-KIT.md) — 71 questions across the seven principles, each mapped to artifact + severity + Agency invariant. Use a focused 12–15 question subset at Phase 2; run the full pass at Phase 6. CAO spot-checks coverage at the quarterly trust-scorecard publish.
+
+REVIEW-KIT sections:
+- §1 Security by design (10) — `<slug>/architecture.md`, `<slug>/threat-model.md`
+- §2 Zero trust (10) — `<slug>/security/auth.md`, `<slug>/infra/iam-bindings.tf`
+- §3 Shift-left security (10) — `.github/workflows/*.yml`, `runtime-hooks/*/hooks.json`
+- §4 Preemptive cyber defense (10) — quarterly threat-modeling refresh, `<slug>/observability/security-monitoring.md`
+- §5 AI security (10) — `<slug>/ai/*.md` (when AI/LLM components ship)
+- §6 AI for security (10) — `<slug>/security/ai-augmentation.md` (when AI defends)
+- §7 Compliance + privacy (11) — `<slug>/security/compliance.md`, `<slug>/security/privacy-controls.md`
+
+Imported principles trace to Google Cloud's Well-Architected Framework — Security pillar (Apache-2.0; see [`../../LICENSES/APACHE-2.0-google-skills.txt`](../../LICENSES/APACHE-2.0-google-skills.txt)). Synthesis is original.

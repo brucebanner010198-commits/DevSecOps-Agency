@@ -52,3 +52,16 @@ CSRE now invokes the following skills when a project touches cloud infrastructur
 - [`skills/networking-observability`](../../skills/networking-observability/SKILL.md) — SRE-style log-and-metric investigation with explicit anti-theater boundary rules ("no discrepancy loops", "conclusive acceptance of inactivity", "ban on auxiliary scripting").
 
 CTO additionally owns the deployment-runtime skills ([`cloud-run-basics`](../../skills/cloud-run-basics/SKILL.md), [`gke-basics`](../../skills/gke-basics/SKILL.md)); CISO + CTO jointly own [`gcp-auth`](../../skills/gcp-auth/SKILL.md) (service-account hygiene, Workload Identity Federation, no service-account-key downloads).
+
+## Added v0.5.6 — WAF reliability + chaos engineering + cost-gate hooks
+
+CSRE now operates against the nine WAF-reliability principles folded into [`RESILIENCE.md > SLOs and error budgets`](../../RESILIENCE.md) and [`RESILIENCE.md > Chaos engineering`](../../RESILIENCE.md). Operationally:
+
+- **Every shipped project carries a `<slug>/observability/slo.md`** with user-focused SLIs + SLO targets + error-budget policy. CSRE signs off; CQO instruments.
+- **Quarterly chaos game day** runs per the procedure in [`skills/drill/SKILL.md > Chaos game days`](../../skills/drill/SKILL.md). Q2 slot is fixed two weeks before the trust-scorecard publish (2026-07-15 for the upcoming cycle). Independence rule: the council that owns the subsystem under test cannot run its own game day; CSRE rotates the lead role across COO / CRT / CAO.
+- **`runtime-hooks/cost-gate/`** (new in v0.5.6) implements the runtime enforcement promised by `COST-AWARENESS.md` v1.0:
+  - `labels-check.sh` — `preToolUse` on `gcloud` / `aws` / `az` / `terraform apply`. Refuses or warns on cloud-resource provisioning that omits the four required labels (`env`, `team`, `app`, `project`) per COST §2.1.
+  - `spike-detector.sh` — daily `scheduled` trigger. Reads cost data, compares current vs. previous month per project, writes a `cost-spike` row to `inbox.json` for any project showing a >50% MoM increase per COST §2.11.
+  - Both run in `warn` mode by default in v0.5.6; `block` mode is opt-in per project. Cloud-native billing-export adapters (gcp-bq, aws-cur, azure-cme) ship in v0.6.0 — v0.5.6 ships the `manual-csv` adapter for development verification.
+
+Hook-bypass remains a `runtime-hook-bypass` ADR per `TRUST.md` §2.7.

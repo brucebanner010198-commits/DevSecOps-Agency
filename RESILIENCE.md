@@ -68,6 +68,37 @@ The agency guarantees:
 - Don't grant a waiver that doesn't expire. Permanent waivers violate `VALUES.md §4` (append-only — a waiver must have a closing row).
 - Don't run a drill during a live incident. Drills happen on quiet days; incidents use the real path.
 
+## SLOs and error budgets (added v0.5.6 wire-through)
+
+The Agency's pre-v0.5.6 RESILIENCE posture covered **reactive** resilience — what happens when things break (failure-mode map, degraded modes, drills, recovery guarantees). v0.5.6 layers **proactive** resilience over the top, imported from Google Cloud's Well-Architected Framework — Reliability pillar (Apache-2.0; see `LICENSES/APACHE-2.0-google-skills.txt`).
+
+Every shipped project MUST define:
+
+- **User-focused SLIs** (Service Level Indicators) — measure what the user actually experiences, not what the infrastructure reports. Latency p95 / p99 from the user's edge, not from inside the data center. Error rate as the user's session sees it, not as the load balancer reports.
+- **SLOs** (Service Level Objectives) — the target the SLI must meet over a rolling window. Conservative target ≠ best possible; it's the threshold at which user pain begins. Common starting points: 99.5% availability over 30 days for new services; 99.9% for revenue-bearing or trust-critical paths.
+- **Error budgets** — `1 - SLO` over the same window. The error budget is **the permission slip for risk-taking**: spend it on velocity (ship faster, accept more breakage), or save it (slow down, harden). When the budget burns at 2× the linear rate, freeze risky deploys; when exhausted, rollback the last risky change.
+
+Live in `<slug>/observability/slo.md` per shipped project. Reviewed at the quarterly retrospective.
+
+Owned by **CSRE** (acceptance criteria) and **CQO** (measurement instrumentation).
+
+## Chaos engineering (added v0.5.6 wire-through)
+
+Drills (above) exercise **named failure modes from the failure-mode map**. Chaos engineering exercises **failure modes that aren't on the map** — the unknowns the map doesn't cover.
+
+The `skills/drill` skill grew a **chaos-engineering procedure** in v0.5.6 (see `skills/drill/SKILL.md` §Chaos game days). The procedure:
+
+1. **Hypothesis.** Write down what you expect to happen when X breaks. Don't run chaos without a written hypothesis — you can't tell signal from noise without one.
+2. **Blast radius.** Define what fails first, what is allowed to fail next (the secondary cone), and what MUST NOT fail (the no-go set). The no-go set is non-negotiable; if a chaos injection threatens to breach it, abort.
+3. **Steady-state metric.** Pick the one metric that proves "the system is currently healthy." Read it before injection, during, after.
+4. **Inject.** Smallest possible perturbation that tests the hypothesis. Network partition between two specific services, not whole-region failure (yet). Latency injection at p99 only, not on every request.
+5. **Observe + classify.** Did reality match the hypothesis? If yes — note the confirmed property. If no — that's the finding. File a `chaos-finding` ADR.
+6. **Recover + post-mortem.** Always recover before time-boxing expires. Always blameless post-mortem (per Google WAF reliability principle 9 — `conduct postmortems`).
+
+Game days are quarterly (the Q2 game day for the Agency is the 2026-07-15 slot, two weeks before the trust-scorecard publish). Game-day participation is mandatory for the chiefs of any council touched by the test scope.
+
+Owned by **CSRE**. Independence rule (per Drills section above): the chaos game day for a subsystem CANNOT be run by the council that owns that subsystem.
+
 ## Interaction with other root docs
 
 - `MISSION.md` non-goal "not a speed demon" — resilience over velocity when they conflict.

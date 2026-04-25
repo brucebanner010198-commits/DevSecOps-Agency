@@ -88,6 +88,37 @@ For one non-reserved specialist, simulate session-log loss: `_sessions/<agent>/<
 - Paper-trail reads (ADRs, memory, LESSONS, session-log predecessors) are sufficient.
 - Post-drill, the moved-aside session-log is restored — the drill is non-destructive.
 
+## Chaos game days (added v0.5.6 wire-through)
+
+Drills above exercise **named failure modes from `RESILIENCE.md > Failure-mode map`** — known unknowns. Chaos game days exercise **failure modes that aren't on the map** — unknown unknowns. They are quarterly, end-to-end, and require a written hypothesis.
+
+**Cadence.** One game day per quarter. Q2's game day is fixed to the slot two weeks before the trust-scorecard publish (so findings can be cited in the scorecard). Game-day participation is mandatory for the chiefs of any council whose subsystem is in the test scope.
+
+**Procedure (per `RESILIENCE.md > Chaos engineering`):**
+
+1. **Hypothesis (written, before any injection).** What do we expect to happen when X breaks? Without a hypothesis we can't tell signal from noise.
+2. **Blast radius.** Define `first-to-fail` (the targeted component), `secondary-cone` (collateral that's allowed to fail), and `no-go set` (what MUST NOT fail). The no-go set is non-negotiable.
+3. **Steady-state metric.** Pick the one user-facing metric that proves "system healthy now." Read it before, during, after.
+4. **Inject.** Smallest perturbation that tests the hypothesis. Network partition between two services, not whole-region failure. Latency at p99 only, not on every request.
+5. **Observe + classify.** Reality vs hypothesis. Match → confirmed property documented. Mismatch → file `chaos-finding` ADR with severity.
+6. **Recover + blameless post-mortem.** Always recover before the time-box expires. The post-mortem follows the same blameless rules as `RESILIENCE.md > Drills` post-mortems.
+
+**Pass criteria:**
+
+- Written hypothesis filed before injection.
+- No-go set was not breached during or after injection.
+- Steady-state metric returned to baseline within the documented recovery window.
+- Either the property was confirmed (no surprises) or a finding ADR was filed (surprise documented).
+- Post-mortem published within 7 days, blameless, with at least one corrective-action stepping stone.
+
+**Independence (same as drills):** the chaos game day for a subsystem CANNOT be run by the council that owns that subsystem. CSRE rotates the lead role across COO / CRT / CAO so no single council is always the disruptor.
+
+**Outputs:**
+
+- `_decisions/ADR-NNNN-chaos-gameday-<YYYY-MM-DD>.md` — always.
+- `_decisions/ADR-NNNN-chaos-finding-<slug>.md` — one per finding.
+- `_vision/chaos/<YYYY-QN>.md` — full game-day log (hypothesis, blast radius, steady-state metric, injection, observation, recovery, post-mortem links).
+
 ## Independence
 
 `drill` cannot be run by the same council as the subsystem being drilled. Model-outage drill is run by CSRE's drill specialist; chief-unavailable drill is run by COO's drill specialist. This parallels red-team independence rules.

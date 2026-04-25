@@ -2,7 +2,7 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.5.5` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md). Trust commitments: [`TRUST.md`](TRUST.md). Cost discipline: [`COST-AWARENESS.md`](COST-AWARENESS.md) (new in v0.5.5 — twelve commitments, CSRE owns, first scorecard 2026-07-22). Live ops console: [`command-center/`](command-center/) at [`https://brucebanner010198-commits.github.io/DevSecOps-Agency/`](https://brucebanner010198-commits.github.io/DevSecOps-Agency/). v0.5.5 ports five Google Cloud skills under Apache-2.0 — the Agency is now cloud-deploy-aware (Cloud Run · GKE · auth) and cost-disciplined. Build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** (see [`VALUES.md`](VALUES.md) §12).
+Status: `v0.5.6` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md) (v0.5.6 adds §13 — seven WAF design principles). Trust commitments: [`TRUST.md`](TRUST.md). Cost discipline: [`COST-AWARENESS.md`](COST-AWARENESS.md) (twelve commitments, CSRE owns, first scorecard 2026-07-22; v0.5.6 ships the `runtime-hooks/cost-gate/` enforcement). Security review kit: [`councils/security/REVIEW-KIT.md`](councils/security/REVIEW-KIT.md) (71 questions across 7 principles, new in v0.5.6). Resilience: [`RESILIENCE.md`](RESILIENCE.md) (v0.5.6 adds SLOs + error budgets + chaos-engineering procedure with quarterly game days). Live ops console: [`command-center/`](command-center/) at [`https://brucebanner010198-commits.github.io/DevSecOps-Agency/`](https://brucebanner010198-commits.github.io/DevSecOps-Agency/). Build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** (see [`VALUES.md`](VALUES.md) §12).
 
 ## Identity
 
@@ -34,7 +34,7 @@ Status: `v0.5.5` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.5.5.plugin
+/plugin install devsecops-agency-0.5.6.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git
