@@ -2,6 +2,61 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.5.5 — Cloud capability port + COST-AWARENESS.md (2026-04-25)
+
+Capability + governance release. Two changes that travel together: the Agency becomes cloud-deploy-aware for the first time (five Google Cloud skills imported under Apache-2.0), and the Agency becomes cost-disciplined for the first time (`COST-AWARENESS.md` v1.0 — twelve commitments, CSRE owns, quarterly scorecard). The two are paired because cost discipline without deployment expertise is theatrical, and deployment expertise without cost discipline is irresponsible.
+
+### Five skills ported from `google/skills` (Apache-2.0)
+
+Provenance and the full Apache-2.0 license text are in [`LICENSES/APACHE-2.0-google-skills.txt`](LICENSES/APACHE-2.0-google-skills.txt). Imports are by-reference into the Agency's skill catalog; original SKILL.md and references/ contents are preserved unchanged.
+
+- **[`skills/cloud-run-basics`](skills/cloud-run-basics/SKILL.md)** (7 files, 52 KB) — serverless container runtime. Services / Jobs / Worker pools triad. The CRITICAL golden rule ("listen on 0.0.0.0 + $PORT or the container will crash on boot") plus a three-step deployment-failure debug recipe (IAM error → fetch logs → Buildpacks fallback for native deps). Required IAM roles enumerated. **Owners: CTO + VPO.**
+- **[`skills/gke-basics`](skills/gke-basics/SKILL.md)** (27 files, 188 KB — the bulk of the port) — Kubernetes on GKE. Includes a 21-file reference library covering the golden-path Autopilot defaults, Day-0 checklist, networking (private clusters, VPC-native, Gateway API), security (Workload Identity, Secret Manager, RBAC, Binary Auth, gVisor), scaling (HPA, VPA, autoscaler, NAP), compute classes (Spot fallback, GPU/TPU node pools), cost, GPU/TPU AI/ML inference (vLLM, GIQ), observability (Prometheus, Grafana, alerts), multi-tenancy, batch+HPC (MPI, parallel), backup+DR (CMEK), storage (PVC, Filestore, GCS FUSE), reliability (PDB, probes, topology spread, graceful shutdown), upgrades (release channels, maintenance windows). The "golden path" concept maps almost 1:1 onto the Agency's `VALUES.md` §12 build-order pattern. **Owner: CTO.**
+- **[`skills/gcp-auth`](skills/gcp-auth/SKILL.md)** (1 file, 16 KB — renamed from upstream `google-cloud-recipe-auth` for our convention) — the universal Google Cloud auth recipe. Distinguishes human vs service-to-service vs external workloads. Application Default Credentials, service-account impersonation (replaces dangerous service-account-key downloads), Workload Identity for GKE, Workload Identity Federation for AWS/Azure/on-prem code, OIDC ID tokens for service-to-service. The never-download-service-account-keys posture matches the Agency's non-waivable raw-secret class in Constitution §8.5 exactly. **Owners: CISO + CTO.**
+- **[`skills/waf-cost-optimization`](skills/waf-cost-optimization/SKILL.md)** (1 file, 12 KB) — Google Cloud Well-Architected Framework Cost Optimization pillar. 4 core principles (align spending with business value, foster cost-awareness culture, optimize resource usage, optimize continuously) + relevant Google Cloud products (Billing reports, BigQuery billing export, Looker Studio dashboards, Active Assist Recommender, FinOps hub, Cloud Hub Optimization, Spot VMs, CUDs, lifecycle policies, Resource Manager + Labels + Org Policy) + 10-item validation checklist. **Owner: CSRE.**
+- **[`skills/networking-observability`](skills/networking-observability/SKILL.md)** (8 files, 52 KB — renamed from upstream `google-cloud-networking-observability`) — SRE-style investigation skill for VPC Flow Logs, firewall logs, Cloud NAT, Cloud Monitoring metrics, Connectivity Tests. **The reason we ported it:** explicit operational boundary rules ("never run more than 2 exploratory queries", "conclusive acceptance of inactivity", "no discrepancy loops", "ban on auxiliary scripting") that are the same anti-theater posture our Constitution §8 expresses. Worth the port for the philosophy alone, even where the GCP-specific references aren't immediately applicable. **Owner: CSRE.**
+
+### `COST-AWARENESS.md` v1.0 — net-new root document
+
+Modeled on `TRUST.md`'s Claim / Verify-how / If-we-miss tripartite. Twelve commitments, RFC 2119 grammar:
+
+- §2.1 100% labeled resources (env / team / app / project)
+- §2.2 Granular billing visibility — billing export to BigQuery / S3+Athena / Cost-Mgmt-Export at Phase 1
+- §2.3 Budgets + 3 alert thresholds before first resource provisioned
+- §2.4 **Pre-deploy cost estimate at Phase 6 (non-waivable)**
+- §2.5 30-day post-deploy reconciliation; variance >25% triggers cause-analysis ADR
+- §2.6 Monthly idle-resource sweep with deletion teeth
+- §2.7 Quarterly rightsizing review against cloud-native recommenders
+- §2.8 Storage lifecycle policies on every persistent bucket
+- §2.9 Managed-services bias (self-managed requires ADR)
+- §2.10 CUD/RI commitment review on workloads ≥6 months old
+- §2.11 **Same-day User notification on >50% MoM spend jumps**
+- §2.12 **Cost-driven downgrade of Security or Design is non-waivable except via Article X (USER-ONLY)**
+
+Quarterly cost scorecard publishes alongside the trust scorecard. First publish 2026-07-22.
+
+### Wire-through
+
+- **`CONSTITUTION.md` Schedule A** grew 20 → 21 founding documents (added `COST-AWARENESS.md`).
+- **`CONSTITUTION.md` Schedule B** logged the v0.5.5 amendment row + the v0.5.5 import provenance note (5 skills under Apache-2.0).
+- **`councils/sre/AGENTS.md`** grew Cost-discipline invariant + Phase-6/7 + daily/monthly/quarterly convening triggers + skill-ownership mapping (waf-cost-optimization + networking-observability for CSRE; cloud-run-basics + gke-basics for CTO; gcp-auth jointly with CISO).
+- **`README.md`** status line bumped + install command bumped + Identity section grew bullets for COST-AWARENESS.md and the five new cloud skills.
+- **`.claude-plugin/plugin.json`** version + description appended.
+- **`LICENSES/APACHE-2.0-google-skills.txt`** records single combined provenance for all five imports.
+
+### Counts
+
+- Founding documents: 20 → 21
+- Skills: 72 → 77 (`skills/` count by directory)
+- Council count: unchanged (16)
+- Chiefs: unchanged (no CFO seat — CSRE absorbs cost ownership)
+- USER-ONLY actions: unchanged (10)
+- Runtime hooks: unchanged shipped count (the `cost-gate/labels-check.sh` and `cost-gate/spike-detector.sh` referenced in COST §2.1 + §2.11 ship as scaffolding in v0.5.5; full hook implementation lands in v0.5.6 alongside the WAF principles wire-through)
+
+### Governance touch
+
+No new chief, no new council, no new USER-ONLY action, no new tool grant. Constitution amendment is the additive Schedule A row only — no Article-level changes. Non-waivable classes (raw-secret + ASI-class) unchanged; cost-driven downgrade of Security or Design joins them as a routing rule per `COST-AWARENESS.md` §2.12.
+
 ## v0.5.4 — Command Center redesign (2026-04-23)
 
 Design release. The Agency eats its own Design-Priority dog food for the first time — VALUES §12 applied to an agency-owned surface. `skills/ui-ux-pro-max` generated the ops-console design system (pattern: Real-Time / Operations; style: Dark OLED; tokens: `#020617` bg · `#0f172a` primary · `#22c55e` operational-green accent · `#f87171` destructive · `#f8fafc` fg · `#334155` border; typography: Inter 300–700 + JetBrains Mono 400–500 via Google Fonts; effects: minimal glow, low white emission, visible focus; accessibility target: WCAG AAA for dark mode). That design system was then applied to `command-center/index.html` as a complete rewrite — single file, no build step, Tailwind CDN preserved, GitHub API wiring preserved, all five action prompts preserved byte-for-byte.

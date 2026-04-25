@@ -565,6 +565,7 @@ This Constitution binds, and is bound by, the following root documents, incorpor
 - `CONTRIBUTING.md` — contribution workflow (v0.5.0).
 - `CODEOWNERS` — path-to-council ownership map (v0.5.0).
 - `.well-known/security.txt` — RFC 9116 disclosure contact (v0.5.0).
+- `COST-AWARENESS.md` — twelve cost-discipline commitments owned by CSRE; quarterly cost scorecard (v0.5.5).
 
 Amending any of these is a USER-ONLY action (§2.2 clause 1). Amending the list itself is a Constitution amendment under Article X.
 
@@ -578,7 +579,11 @@ Amending any of these is a USER-ONLY action (§2.2 clause 1). Amending the list 
 
 **VALUES.md amendment 2026-04-22** by the User on the v0.5.2 release cut — added §12 "Build in this order: Security & Privacy → Design → Operations → Timely Delivery" to `VALUES.md` (11 → 12 operating principles). Schedule A pointer updated to reflect the new count. No other articles amended. Rationale: give the Agency a fixed priority stack for resolving build-order trade-offs; delivery is a goal, not the goal. Ownership at Phase 2 scope-cut sits with the CPO; CISO / GC vetoes from Value #2 remain independent; CEO cites §12 at Phase 7 Close when reviewing scope-cut records. Effective from merge commit `2ee6199` (v0.5.2).
 
-**Schedule B note — ADR backfill (outstanding).** The v0.5.0 and v0.5.2 amendment ADRs referenced above live under `_decisions/<slug>/adrs/` once a project slug exists; a central `adrs/` directory at the repo root is not yet created. When the first ADR is filed, this note is deleted and the path is hard-linked in the amendment rows above.
+**Schedule A amendment 2026-04-25** by the User on the v0.5.5 release cut — added `COST-AWARENESS.md` to the founding-document list (20 → 21 documents). Rationale: cost discipline becomes a first-class governance dimension under the Operations pillar of `VALUES.md` §12; CSRE owns the document and signs off on every project's pre-deploy cost estimate (non-waivable per `COST-AWARENESS.md` §2.4) and post-deploy reconciliation (`COST §2.5`). CAO countersigns at the quarterly cost scorecard (first publish 2026-07-22, alongside the trust scorecard). No new chief; CSRE's existing portfolio is extended. No other articles amended. Effective from merge commit (recorded post-merge).
+
+**v0.5.5 import provenance.** Five skills were imported from `google/skills` under Apache-2.0 in v0.5.5 (cloud-run-basics, gke-basics, gcp-auth, waf-cost-optimization, networking-observability). Provenance and full Apache-2.0 license text are in `LICENSES/APACHE-2.0-google-skills.txt`. Imports are by reference into the Agency's skill catalog; they do not change governance, no new councils, no new USER-ONLY actions, no new runtime hooks. The cost-gate runtime hooks referenced in `COST-AWARENESS.md` §2.1, §2.11 ship as scaffolding in v0.5.5 and are scheduled for full implementation in v0.5.6 alongside the WAF principles wire-through.
+
+**Schedule B note — ADR backfill (outstanding).** The v0.5.0, v0.5.2, and v0.5.5 amendment ADRs referenced above live under `_decisions/<slug>/adrs/` once a project slug exists; a central `adrs/` directory at the repo root is not yet created. When the first ADR is filed, this note is deleted and the path is hard-linked in the amendment rows above.
 
 Signed into force by the CEO persona, which MUST read this Constitution at every session start going forward and MUST cite it in every amendment proposal, waiver grant, drill report, and close-audit.
 
