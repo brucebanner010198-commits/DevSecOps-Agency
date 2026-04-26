@@ -113,6 +113,52 @@ If any check fails, the ADR is not complete. Re-run the failing stage.
 | `regression-detector` (CEVO specialist) | Inspects panel-rotation log across quarters for drift signal. Reports drift findings via standard CEVO regression flow. |
 | `csre` (Cost discipline) | Cost summary from each panel run feeds the COST-AWARENESS spike-detector via `_vision/cost/manual-billing.csv`. Panel cost is itself line-itemed against any project's cost-estimate. |
 
+## v0.6.0 — research-grade modes you now operate
+
+The v0.5.7 baseline (single-round, parallel, Claude-only, average-rank) remains the default. v0.6.0 adds four opt-in modes per `skills/cross-model-panel/SKILL.md` and its references. Each mode is opt-in PER PANEL — the convening council names the mode in the request, and you log the mode in the ADR.
+
+**`multi-round`** — see [`references/multi-round-debate.md`](../../skills/cross-model-panel/references/multi-round-debate.md). Opt-in for math, factual recall, structured reasoning. INAPPROPRIATE for subjective judgment, time-pressured decisions, or Constitution amendments. Round 1 raw is the inviolable diversity record. Each round adds ~30% cost. Hard cap: 3 rounds. KEY DISAGREEMENTS at every round are required; empty blocks fire `funneling-suspicious`.
+
+**`adversarial-pair`** — see [`references/adversarial-pair.md`](../../skills/cross-model-panel/references/adversarial-pair.md). Opt-in for binary / comparative / verdict-frame questions. Two of four panelists assigned AFFIRMATIVE / NEGATIVE roles with role-specific Stage 1 prompts; the other two run parallel. Role assignment rotates per `panel-rotation.md` — no panelist AFFIRMATIVE > 60% of trailing 10 panels (`role_history_check`). Anonymized labels in Stage 2 hide role assignment; only revealed in the ADR. Chairman MUST identify unrebutted arguments and defer to the User if both sides have strong unrebutted points. INAPPROPRIATE for open-ended generative questions or Constitution amendments.
+
+**`cross-vendor`** — see [`references/cross-vendor-panel.md`](../../skills/cross-model-panel/references/cross-vendor-panel.md). Opt-in when the User has provisioned `OPENROUTER_API_KEY`. Standard cross-vendor panel: Claude Opus + GPT-5.1 + Gemini-3-Pro + Grok-4 (OR Mistral Large 2). Chairman stays on direct Anthropic API. Minimum 3 distinct vendors for the label to apply. Vendor mix rotates per `panel-rotation.md`. Failure-mode handling: API down → `claude-only-fallback`; vendor outage → substitute Claude + log; budget exhausted → notify User via `inbox.json` priority `cost-spike` and fall back. **Security check before convening with regulated data:** security-lead `cross-vendor-data-flow-authorized` ADR is REQUIRED.
+
+**`score-aggregation comparison`** — see [`references/score-aggregation.md`](../../skills/cross-model-panel/references/score-aggregation.md). **Always-on in v0.6.0** (recording only — default winner is still average rank). Compute Borda count and Condorcet alongside average rank. Fire `aggregation-method-discrepancy` flag when methods disagree. Condorcet cycle (no winner) MUST be reported as a cycle and route to User. Computation is local, no extra model calls.
+
+### Mode composition rules
+
+- `multi-round` + `cross-vendor`: supported. Multiplies cost.
+- `adversarial-pair` + `cross-vendor`: supported.
+- `adversarial-pair` + `multi-round`: NOT supported in v0.6.0 (deferred to v0.6.1+ pending literature review). Refuse the request with a `mode-composition-deferred` ADR.
+- `score-aggregation comparison` composes with everything (it's always-on).
+
+### Process additions for v0.6.0 modes
+
+Extend the v0.5.7 11-step process:
+
+- Step 0 (new): **Mode-flag check.** Read the convening council's mode flags. Validate composition rules. If invalid, file `mode-composition-deferred` ADR and decline.
+- Step 0.5 (new for `cross-vendor`): **OpenRouter key check.** Test `OPENROUTER_API_KEY` presence. If absent, log `openrouter-key-not-provisioned` and convening council decides: fall back to Claude-only (default) or abort. If regulated data is involved, verify `cross-vendor-data-flow-authorized` ADR exists.
+- Step 0.7 (new for `adversarial-pair`): **Frame validation.** Convening council MUST specify binary / comparative / verdict frame. If absent, refuse with `frame-required-for-adversarial` ADR.
+- Step 1 (extended for `multi-round`): Run round 1 (= original Stage 1). Preserve verbatim. Then run round 2 with peer responses. Optionally round 3 if disagreements remain on critical facts.
+- Step 1 (extended for `adversarial-pair`): Slot 1 gets AFFIRMATIVE prompt; Slot 2 gets NEGATIVE prompt; Slots 3-4 standard. Log role assignment immediately.
+- Step 1 (extended for `cross-vendor`): Panelists invoked via OpenRouter HTTP endpoint with the standard cross-vendor model IDs. Chairman stays on direct Anthropic API.
+- Step 2 (extended for `multi-round`): Stage 2 ranks responses from the LAST round, not round 1.
+- Step 5 (extended for `score-aggregation comparison`): Compute average rank + Borda + Condorcet. Fire `aggregation-method-discrepancy` flag if winners diverge or Condorcet cycle.
+- Step 7 (extended for `multi-round`): Chairman receives ALL rounds + ranking; explicitly instructed to surface convergence vs disagreement.
+- Step 8 (ADR fields extended): `mode`, `rounds_run`, `role_assignment`, `vendor_diversity`, `aggregation` blocks all populated per the relevant reference doc.
+
+### Updated quality gates for v0.6.0
+
+In addition to the v0.5.7 gates:
+
+- [ ] Mode flag(s) recorded in ADR (or `mode: baseline` if v0.5.7 procedure).
+- [ ] If `multi-round`: `stage_1_round_1` is preserved verbatim; KEY DISAGREEMENTS captured at every round.
+- [ ] If `adversarial-pair`: role assignment logged; `role_history_check.rotation_compliant: true`; frame validated.
+- [ ] If `cross-vendor`: OpenRouter key present OR `claude-only-fallback` logged; vendor count ≥ 3 for the label to apply; security ADR cited if regulated data.
+- [ ] Always-on: `aggregation` block contains all three methods + `agreement_check`.
+- [ ] If aggregation discrepancy fired: Chairman's synthesis prompt includes the discrepancy note; synthesis explicitly addresses it.
+- [ ] If Condorcet cycle: Chairman recommends User defer per `score-aggregation.md`.
+
 ## When you decline to convene
 
 - The trigger is routine (no default-trigger event matches; no council-chief invocation; no Keeper-Test or Constitution event).

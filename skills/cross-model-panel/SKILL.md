@@ -2,9 +2,10 @@
 name: cross-model-panel
 description: Three-stage cross-model deliberation skill for the Agency's highest-stakes decisions. Concept-port of llm-council (Karpathy, no-LICENSE Saturday hack — pattern only, no code copied). Panel of Claude tiers (Opus 4 + Sonnet 4.5 + Haiku 4.5 + Opus 4 with thinking) answers a hard question independently (Stage 1), evaluates each other's responses anonymized as Response A/B/C/D with dual-order bias mitigation (Stage 2), then a designated Chairman synthesizes (Stage 3). Every panel files an append-only ADR with all raw responses + both Stage-2 orderings + per-panelist rankings + bias-mitigation evidence + Chairman synthesis. Default triggers: ASI-class findings (Constitution §8.5), Constitution amendment proposals (Article X), USER-ONLY decisions above the COST §2.4 threshold. Owned by CEVO with CRT co-ownership. Independence rule per Council file. Cites Council Mode (35.9% HaluEval reduction), Anthropic CCAI ensemble robustness finding, and the broader Multi-Agent Debate literature.
 metadata:
-  version: "1.0.0"
-  ratified: "2026-04-25"
-  shipped_with_plugin: "0.5.7"
+  version: "2.0.0"
+  ratified: "2026-04-26"
+  shipped_with_plugin: "0.6.0"
+  baseline_shipped_with_plugin: "0.5.7"
 ---
 
 # cross-model-panel
@@ -209,11 +210,29 @@ Synthesis is original. No text from any cited source is copied.
 | `rca` | A `chaos-finding` (per `RESILIENCE.md > Chaos engineering`) of severity ≥ high MAY auto-invoke a cross-model-panel for the corrective-action stepping stone. |
 | `cost-gate` (runtime hook) | Each panel run logs to `_vision/cost/manual-billing.csv` so the spike-detector can see panel-cost trends. |
 
-## v0.6.0 deferred
+## v0.6.0 — research-grade modes (all opt-in, defaults unchanged)
 
-- **Multi-round debate mode** — successive rounds where panelists see each other's evaluations and revise. Mitigates the funneling effect by preserving round-1 outputs separately as the diversity record. Useful for math/factuality questions per the Multi-Agent Debate literature.
-- **Adversarial-pair mode** — two panelists explicitly assigned "affirmative" and "negative" roles, exchanging critiques before the broader panel evaluates. Catches blind spots single-perspective panels miss.
-- **Cross-vendor opt-in panel** — OpenRouter integration for genuine model-diversity benefit. Requires User-provisioned API key + COST-AWARENESS line item for billing exposure.
-- **Score-aggregation experiments** — Borda count and Condorcet voting alongside average rank, to surface cases where the aggregation method changes the winner.
+The v0.5.7 baseline (single-round, parallel, Claude-only, average-rank aggregation) remains the default. v0.6.0 adds four opt-in modes documented in their own reference files. Each is opt-in PER PANEL; modes can compose where the literature supports it (multi-round + cross-vendor: yes; adversarial-pair + multi-round: deferred to v0.6.1+).
 
-See `references/stage-prompts.md`, `references/bias-mitigation-evidence.md`, and `references/panel-rotation-policy.md` for per-stage detail.
+| Mode | Reference | When to use | Default? |
+|---|---|---|---|
+| **Multi-round debate** | [`references/multi-round-debate.md`](references/multi-round-debate.md) | Math, factual recall, structured reasoning where revision improves accuracy. INAPPROPRIATE for subjective judgment, time-pressured decisions, or Constitution amendments (funneling effect risks suppressing legitimate dissent). Round-1 raw is preserved verbatim as the inviolable diversity record. | No |
+| **Adversarial-pair** | [`references/adversarial-pair.md`](references/adversarial-pair.md) | Binary, comparative, or verdict-frame questions where parallel panels might converge prematurely. Two panelists assigned AFFIRMATIVE / NEGATIVE roles; the other two run parallel. Role-rotation cap: no panelist AFFIRMATIVE > 60% of trailing 10 panels. INAPPROPRIATE for open-ended generative questions or Constitution amendments. | No |
+| **Cross-vendor via OpenRouter** | [`references/cross-vendor-panel.md`](references/cross-vendor-panel.md) | High-stakes decisions where Claude-specific blind spots matter — Constitution amendments (RECOMMENDED if key provisioned per Anthropic CCAI ensemble-robustness finding), ASI-class determinations, governance questions where Claude's RLHF could bias the answer. Requires User-provisioned `OPENROUTER_API_KEY`; minimum 3 distinct vendors for the label to apply. | No |
+| **Score-aggregation comparison** | [`references/score-aggregation.md`](references/score-aggregation.md) | Always computed, always recorded — average rank (default winner) + Borda count + Condorcet. Discrepancies fire `aggregation-method-discrepancy` flag. Condorcet cycles signal genuinely contested preferences and route to User. | Always-on (recording only; default winner unchanged) |
+
+### Composition rules
+
+- `multi-round` + `cross-vendor`: supported. The cross-vendor cost multiplies with rounds (~$1.20-$3.00 for 2-round cross-vendor).
+- `adversarial-pair` + `multi-round`: deferred to v0.6.1+ pending literature on funneling+polarization compounding.
+- `adversarial-pair` + `cross-vendor`: supported. Useful for "which-vendor-makes-the-strongest-case" framings on contested governance questions.
+- `score-aggregation comparison`: applies to all panel modes; Condorcet cycle detection becomes more likely with cross-vendor (genuine vendor-perspective differences).
+
+## v0.6.1+ deferred
+
+- **Multi-round adversarial.** Funneling-effect compounding with role-induced polarization needs literature characterization first.
+- **Multi-round mode for Constitution amendments.** Currently forbidden per `multi-round-debate.md` anti-patterns; revisit if the Anthropic CCAI follow-up research changes the recommendation.
+- **More aggregation methods (Schulze, IRV, Approval).** Diminishing returns until we have empirical data on which discrepancies matter most in practice.
+- **Automated drift detection across panels** — currently the panel-chair manually inspects `panel-rotation.md` for drift signals; a regression-detector specialist could automate this.
+
+See `references/stage-prompts.md`, `references/bias-mitigation-evidence.md`, `references/panel-rotation-policy.md`, `references/multi-round-debate.md`, `references/adversarial-pair.md`, `references/cross-vendor-panel.md`, and `references/score-aggregation.md` for per-stage and per-mode detail.

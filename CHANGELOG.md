@@ -2,6 +2,70 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.6.0 — Cross-model panel research-grade build (2026-04-26)
+
+Minor version bump. Takes `cross-model-panel` from MVP (v0.5.7 — single-round, parallel, Claude-only, average-rank) to **research-grade**: four opt-in modes that ship the v0.5.7-deferred features. Baseline behavior remains the v0.5.7 default for backwards compatibility — the new modes are opt-in per panel via the convening council's mode flag.
+
+### Four new opt-in modes
+
+Each mode lives in its own reference file under `skills/cross-model-panel/references/` and the convening council names the mode in the panel request. Composition is documented in `SKILL.md`.
+
+- **`multi-round` debate** — successive rounds where panelists see each other's evaluations and revise. Round 1 raw is preserved verbatim as the **inviolable diversity record** (per Multi-Agent Debate Strategies survey, Springer Nature 2025). KEY DISAGREEMENTS captured at every round (empty blocks fire `funneling-suspicious` flag). Hard cap 3 rounds. Cost +30% per added round. INAPPROPRIATE for subjective judgment, time-pressured decisions, or Constitution amendments. See `references/multi-round-debate.md`.
+
+- **`adversarial-pair`** — two of four panelists assigned AFFIRMATIVE / NEGATIVE roles for binary, comparative, or verdict-frame questions (per Khan et al. 2024 + Liang et al. 2024). Role assignment hidden in Stage 2 anonymization, revealed in ADR. Role-rotation cap: no panelist AFFIRMATIVE > 60% of trailing 10 panels. Chairman MUST identify unrebutted arguments and defer to User if both sides have strong unrebutted points. INAPPROPRIATE for open-ended generative questions or Constitution amendments. See `references/adversarial-pair.md`.
+
+- **`cross-vendor`** via OpenRouter — opt-in genuine model-diversity across Anthropic + OpenAI + Google + xAI / Mistral. Chairman stays on direct Anthropic API for predictable cost + behavior. Minimum 3 distinct vendors for the label to apply. Failure modes handled: API down → `claude-only-fallback`; vendor outage → substitute Claude + log; budget exhausted → User notification via `inbox.json` priority `cost-spike`. **Security check before convening with regulated data** MUST cite `cross-vendor-data-flow-authorized` ADR per `councils/security/REVIEW-KIT.md` §2.8 + §7.6. OpenRouter key is non-waivable raw-secret per Constitution §8.5; per-project budget cap MUST be set in OpenRouter dashboard before any cross-vendor convening. Cost roughly $0.80-$2.00 per panel vs $0.30-$0.60 Claude-only baseline. See `references/cross-vendor-panel.md`.
+
+- **`score-aggregation` comparison** — **always-on in v0.6.0** (recording only — default winner unchanged). Compute Borda count + Condorcet alongside average rank for every panel. `aggregation-method-discrepancy` flag fires on winner divergence. Condorcet cycle (no winner) signals genuinely contested preferences and routes to User with all three perspectives attached. Trivial cost (O(n²) on n ≤ 4 panelists, no extra model calls). See `references/score-aggregation.md`.
+
+### Mode composition rules
+
+| Combination | Status |
+|---|---|
+| `multi-round` + `cross-vendor` | Supported. Cost multiplies. |
+| `adversarial-pair` + `cross-vendor` | Supported. |
+| `adversarial-pair` + `multi-round` | **Deferred to v0.6.1+** pending literature on funneling+polarization compounding. Panel-chair refuses with `mode-composition-deferred` ADR. |
+| `score-aggregation` comparison | Composes with everything (always-on). |
+
+### Wire-through
+
+- **`skills/cross-model-panel/SKILL.md`** — frontmatter version 1.0.0 → 2.0.0 (baseline_shipped_with_plugin = 0.5.7 noted); the v0.5.7 "deferred" section replaced with the v0.6.0 mode table and composition rules.
+- **`skills/cross-model-panel/references/`** — 4 new reference files (multi-round-debate, adversarial-pair, cross-vendor-panel, score-aggregation).
+- **`skills/cross-model-panel/references/panel-rotation-policy.md`** — added vendor-rotation rules (no more than 2 consecutive cross-vendor panels with identical vendor mix; ≥ 1 vendor change per quarter per trigger category; minimum 3 distinct vendors for the label) and adversarial-role-rotation rules (60% trailing-10 cap on AFFIRMATIVE/NEGATIVE per panelist, per Multi-Agent Debate Strategies survey).
+- **`agents/evaluation/panel-chair.md`** — added v0.6.0 process: Step 0 mode-flag check + composition validation (refuses unsupported combinations), Step 0.5 OpenRouter key check + regulated-data security ADR verification for cross-vendor, Step 0.7 frame validation for adversarial-pair, Step 1 / 2 / 5 / 7 / 8 extensions per mode, 7 new quality-gate checklist items.
+- **`COST-AWARENESS.md`** — added §2.12.5 Cross-vendor model spend commitment requiring per-project line-item separation of direct-Anthropic vs OpenRouter spend, distinct billing rows feeding spike-detector, vendor column in `manual-billing.csv`, and a setup gate.
+- **`README.md` + `.claude-plugin/plugin.json`** — version + status bumped.
+
+### Empirical validation cited inline
+
+- **Du et al. 2023, "Improving Factuality and Reasoning with Multiagent Debate"** — multi-round factuality result; basis for `multi-round` mode.
+- **Khan et al. 2024, Liang et al. 2024** — adversarial framing for blind-spot detection; basis for `adversarial-pair` mode.
+- **Multi-Agent Debate Strategies survey, Springer Nature 2025** — funneling effect quantification; 60% role-rotation threshold for adversarial settings.
+- **Arrow's impossibility theorem + social choice literature** — basis for documenting all three aggregation methods rather than picking one.
+- **Anthropic Collective Constitutional AI** — recommendation to use cross-vendor for Constitution amendment proposals when key is provisioned.
+
+### Provenance honesty
+
+`SKILL.md` continues to cite `llm-council` (User's no-LICENSE Saturday hack at `brucebanner010198-commits/llm-council`) as the original 3-stage pattern inspiration. v0.6.0 additions are Agency-original synthesis from the broader Multi-Agent Debate / LLM-as-Judge / Social Choice literature. **No code is imported from any source.**
+
+### Counts
+
+- Founding documents: unchanged at 21
+- Skills: unchanged at 78 (`cross-model-panel` extended in place, not duplicated)
+- Agents: unchanged (`panel-chair` extended in place)
+- Runtime hooks: unchanged at 7
+- Council count: unchanged at 16
+- New files in this release: 4 (the four reference docs)
+- Modified files: 5 (`SKILL.md`, `panel-chair.md`, `panel-rotation-policy.md`, `COST-AWARENESS.md`, plus README/plugin.json/CHANGELOG bookkeeping)
+
+### Governance touch
+
+No new chief, no new council, no new USER-ONLY action, no new tool grant, no Constitution amendment. **Four consecutive zero-Constitution-touch releases** (v0.5.5 needed one Schedule A row; v0.5.6, v0.5.7, v0.6.0 needed nothing). The additions all fit under existing roots. Non-waivable classes unchanged. The OpenRouter API key is non-waivable raw-secret per Constitution §8.5 (existing rule, not a new invariant).
+
+### v0.6.1+ deferred
+
+Multi-round adversarial composition (funneling + polarization compounding literature first) · multi-round mode for Constitution amendments (currently forbidden per `multi-round-debate.md` anti-patterns) · additional aggregation methods (Schulze, IRV, Approval — diminishing returns until empirical data on which discrepancies matter most) · automated drift detection across panels via a regression-detector specialist.
+
 ## v0.5.7 — Cross-model panel (2026-04-25)
 
 The Agency's first cross-model deliberation primitive. **Concept-port** (NOT code-port) of Karpathy's `llm-council` Saturday-hack 3-stage pattern, with research-backed bias-mitigation engineering layered in. Mid scope: skill + dedicated specialist agent under CEVO.

@@ -93,6 +93,13 @@ Each commitment has three fields: **Claim**, **How to verify**, **If we miss**. 
 - **How to verify.** `runtime-hooks/cost-gate/spike-detector.sh` (added in v0.5.5) runs daily on the billing export and writes to `inbox.json` when triggered. CAO cross-checks `inbox.json` cost-spike entries against the billing export at the monthly audit.
 - **If we miss.** Silent overrun = ASI-class finding (analogous to §2.10 of TRUST.md "loudly, not silently") → CRT review → User notified the next session.
 
+### §2.12.5 Cross-vendor model spend (added v0.6.0)
+
+- **Claim.** Any project that invokes `skills/cross-model-panel` in `cross-vendor` mode (per [`skills/cross-model-panel/references/cross-vendor-panel.md`](skills/cross-model-panel/references/cross-vendor-panel.md)) MUST line-item OpenRouter spend separately from direct-Anthropic spend in `<slug>/cost-estimate.md`. The two cost categories MUST be tracked as distinct rows in the billing data feeding the spike-detector — a 50% jump in OpenRouter spend in a project that previously had zero OpenRouter spend is a §2.11 spike independent of total spend.
+- **How to verify.** `<slug>/cost-estimate.md` has explicit `direct_anthropic_usd` and `openrouter_usd` rows in its line-item breakdown when cross-vendor is in use. The `manual-billing.csv` (or BigQuery export equivalent) carries `vendor` as a column. CAO spot-checks at quarterly cost scorecard.
+- **If we miss.** Cross-vendor spend lumped under "AI" without vendor split = compliance-drift; CSRE files `cost-vendor-attribution-missing` ADR. Repeated misses route through Rung 3 of the never-give-up ladder.
+- **Setup gate.** Before any project enables `cross-vendor` mode, the User MUST provision `OPENROUTER_API_KEY` in vault refs (per Constitution §8.5 non-waivable raw-secret class) AND set a per-project budget cap in OpenRouter's dashboard (recommend $50/month default; raise on need). Setup checklist is in [`cross-vendor-panel.md`](skills/cross-model-panel/references/cross-vendor-panel.md).
+
 ### §2.12 No cost optimization at the expense of higher pillars
 
 - **Claim.** Cost optimization MUST NOT override Security & Privacy or Design (per `VALUES.md` §12 build-order). The Agency MUST NOT skip a pen-test, downgrade a managed-DB to an unmanaged-DB on a security-critical workload, remove redundancy from a production tier, or weaken accessibility — to reduce cost. Cost cuts MUST come from waste reduction, rightsizing, commitment strategy, or scope cuts approved by the CEO + User.

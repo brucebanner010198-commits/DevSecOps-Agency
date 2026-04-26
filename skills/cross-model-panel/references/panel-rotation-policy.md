@@ -40,8 +40,44 @@ If `panel-rotation.md` shows the same composition for ≥ 3 consecutive panels (
 
 The panel-chair compares ranking patterns across panels of identical composition. If the same panelist's #1 ranking position drifts by ≥ 1 position over a calendar quarter (controlling for question difficulty), file a `judge-drift-detected` row in `_vision/cross-model-panel/<YYYY-QN>.md`. This is not a red — it's a signal worth the User's attention. Repeated drift across multiple quarters routes through CEVO's regression-detector.
 
-## Future enhancements (v0.6.0+)
+## v0.6.0 additions — vendor and role rotation
 
-- Cross-vendor rotation: once OpenRouter is wired in, the rotation includes vendor-mix not just tier-mix. Vendor-diversity is the strongest signal against single-vendor blind spots.
-- Drift-detection automation: a regression-detector specialist could compare panel-rotation outputs across quarters and surface drift signal automatically rather than relying on panel-chair manual inspection.
-- Adversarial-pair mode: when adversarial mode is enabled (deferred to v0.6.0), the rotation log records which pair was assigned affirmative/negative and rotates those assignments too.
+### Cross-vendor rotation (added v0.6.0)
+
+When a panel runs in `cross-vendor` mode (per [`cross-vendor-panel.md`](cross-vendor-panel.md)), the rotation log captures vendor mix in addition to model mix:
+
+```
+| Date       | Panel-ID | Mode          | Vendor mix                         | Notes |
+|------------|----------|---------------|------------------------------------|-------|
+| 2026-05-15 | P-014    | cross-vendor  | anthropic + openai + google + xai  | first ever cross-vendor; baseline |
+| 2026-06-02 | P-019    | cross-vendor  | anthropic + openai + google + xai  | 2nd consecutive same vendor mix; rotate next |
+| 2026-06-18 | P-024    | cross-vendor  | anthropic + openai + google + mistral | rotated xai → mistral per rule below |
+```
+
+**Vendor-rotation rules:**
+- No more than **2 consecutive** cross-vendor panels with identical vendor mix.
+- At least **one vendor change per quarter** for any given trigger category (ASI-class, Constitution amendment, etc.).
+- Minimum 3 distinct vendors for the cross-vendor label to apply (per `cross-vendor-panel.md`).
+
+**Vendor-rotation enforcement:** if a request would violate the consecutive-mix cap, the panel-chair substitutes the longest-serving vendor in the mix with a different supported vendor and logs `vendor-rotation-substitute` in the ADR.
+
+### Adversarial-role rotation (added v0.6.0)
+
+When a panel runs in `adversarial-pair` mode (per [`adversarial-pair.md`](adversarial-pair.md)), the rotation log captures role assignment per panel:
+
+```
+| Date       | Panel-ID | Mode             | Role assignment                                              | Notes |
+|------------|----------|------------------|--------------------------------------------------------------|-------|
+| 2026-05-20 | P-016    | adversarial-pair | Slot1=AFF, Slot2=NEG, Slot3=PARALLEL, Slot4=PARALLEL         | first; default rotation |
+| 2026-06-05 | P-021    | adversarial-pair | Slot2=AFF, Slot1=NEG, Slot3=PARALLEL, Slot4=PARALLEL         | swapped AFF/NEG to break monotony |
+```
+
+**Role-rotation rule:** no panelist may be AFFIRMATIVE more than **60% of the trailing 10** `adversarial-pair` panels. Same cap applies to NEGATIVE. The panel-chair computes `role_history_check.{slot_id}_affirmative_pct_last_10` before each adversarial panel and fires `role-rotation-violation` ADR if the cap would be breached.
+
+**Why 60%:** documented threshold from the Multi-Agent Debate Strategies survey for adversarial settings — high enough to allow meaningful rotation, low enough to prevent stable "this model always argues yes" patterns that the Chairman could systematically discount.
+
+## Future enhancements (v0.6.1+)
+
+- **Drift-detection automation:** a regression-detector specialist could compare panel-rotation outputs across quarters and surface drift signal automatically rather than relying on panel-chair manual inspection.
+- **Tier-mix experimentation:** explore whether 2-Opus + 2-Haiku panels (extreme tiers) produce different deliberation patterns than the default tier mix.
+- **Multi-round + adversarial composition:** once the funneling+polarization compounding literature is characterized, add the composed mode and its rotation rules.
