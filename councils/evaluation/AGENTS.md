@@ -13,6 +13,7 @@ Telegraph. Read before dispatching any Evaluation specialist.
 - `regression-detector` · cross-project quality drift.
 - `budget-monitor` · token/$ burn vs budget.
 - `token-compactor` · compress session logs without losing decisions.
+- `panel-chair` (added v0.5.7) · convenes 4-panelist Claude-only cross-model deliberation panels per [`skills/cross-model-panel/SKILL.md`](../../skills/cross-model-panel/SKILL.md). Co-owned with CRT for bias-mitigation. Default-trigger events: ASI-class findings (Constitution §8.5), Constitution amendment proposals (Article X), USER-ONLY decisions above COST §2.4 threshold. Cannot be a panelist on a panel it chairs (independence rule, parallels Audit / Eval / Red-Team independence).
 
 ## Council role
 

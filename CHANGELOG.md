@@ -2,6 +2,83 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.5.7 — Cross-model panel (2026-04-25)
+
+The Agency's first cross-model deliberation primitive. **Concept-port** (NOT code-port) of Karpathy's `llm-council` Saturday-hack 3-stage pattern, with research-backed bias-mitigation engineering layered in. Mid scope: skill + dedicated specialist agent under CEVO.
+
+### Skill — `skills/cross-model-panel/`
+
+Prescribes a 4-panelist Claude-only deliberation panel for the Agency's highest-stakes decisions:
+
+- **Panel composition** (v0.5.7, Claude-only): Opus 4 + Sonnet 4.5 + Haiku 4.5 + Opus 4 with thinking enabled. Cross-vendor opt-in panel via OpenRouter is deferred to v0.6.0+ (requires User-provisioned API key + COST-AWARENESS line item for billing exposure).
+- **3-stage flow:** independent first opinions in parallel (Stage 1) → anonymized peer review with strict `FINAL RANKING:` format (Stage 2) → Chairman synthesis (Stage 3).
+- **Default-trigger events** (auto-invoke):
+  - **ASI-class finding determination** (Constitution §8.5 non-waivable). Cross-model panel hardens the determination.
+  - **Constitution amendment proposal** (Article X). Anthropic's Collective Constitutional AI research finds ensembling principles produces more robust preference models.
+  - **USER-ONLY decision over COST-AWARENESS.md §2.4 threshold** (≥ $1k/month projected, or any production data path).
+- **Receipts:** every panel files an append-only `ADR-NNNN-cross-model-panel-<topic>-<YYYY-MM-DD>.md` (kind: `cross-model-panel`) with structured YAML covering convening reason, question, panel composition, Chairman, all 4 raw Stage 1 responses verbatim, both Stage 2 orderings (forward + reversed) with per-panelist rankings, aggregate ranking, bias-flag results, Stage 3 synthesis, cost summary line-itemed by stage, wall-time. Append-only per Constitution §5.2.
+
+### Bias-mitigation engineering (research-backed)
+
+Eight specific gaps surfaced by the LLM-as-Judge / Multi-Agent Debate literature, all addressed in v0.5.7:
+
+| Bias | Source | Mitigation |
+|---|---|---|
+| Position bias (40% GPT-4 inconsistency from order alone) | A Systematic Study of Position Bias in LLM-as-a-Judge, ACL 2025 | Stage 2 runs **twice** per panelist — forward `[A,B,C,D]` and reversed `[D,C,B,A]`. Average rankings. Flag `position-bias-detected` if any panelist's avg-position differs by ≥1.5 between orderings. |
+| Verbosity bias (~15% inflation on 1-10 scales) | A Survey on LLM-as-a-Judge | Use rank (1st-4th), not score (1-10). Stage 1 prompt forbids boilerplate openers. |
+| Self-enhancement bias (5-7% favoring own style) | Justice or Prejudice? arxiv 2410.02736 | 3-gram overlap between each panelist's Stage 1 response and its #1-ranked Stage 2 response; flag if > 0.7. Recorded but does not reject the ranking. |
+| Funneling effect (round-1 diversity collapses) | Multi-Agent Debate Strategies, Springer Nature 2025 | Preserve Stage 1 raw verbatim in the ADR as the "diversity record". Chairman explicitly instructed: "Do not paper over genuine divergence." |
+| Judge drift (model-as-judge evaluations drift over time) | LLM-as-Judge survey | `panel-chair` maintains `_vision/cross-model-panel/panel-rotation.md` with rotation rules (Chairman MUST cycle across ≥3 distinct configs within any 5 consecutive panels). |
+| Authority bias | LLM-as-Judge survey | Stage 1 prompt: "Cite reasoning, not authority." Partial mitigation; full fix in v0.6.0 adversarial mode. |
+| Affirmative/negative blind spot | Multi-Agent Debate literature | Adversarial-pair mode deferred to v0.6.0. |
+| Score-aggregation method dependence | aggregation theory | Document the choice — v0.5.7 uses average rank, ADR records method, v0.6.0+ adds Borda + Condorcet for comparison. |
+
+### Specialist agent — `agents/evaluation/panel-chair.md`
+
+New Sonnet-tier specialist under CEVO with **CRT co-ownership** for the bias-mitigation aspect. Role-card v1, two examples, 11-step process, 9-item quality-gate checklist, explicit independence invariant (cannot be a panelist on a panel it chairs — parallels Audit / Eval / Red-Team independence). Briefs CRT every time a bias-flag fires. Files `panel-decline` row with reason when convening is inappropriate.
+
+### Cost discipline (COST-AWARENESS integration)
+
+A single panel run is ~13 model-call equivalents (vs ~1 for a single-model answer): 4 Stage 1 + 8 Stage 2 (4 panelists × 2 orderings) + 1 Stage 3. Per the LLM-as-Judge survey, that's the documented "3-5x cost for 30-40% bias reduction" trade-off, justified for the high-stakes default-trigger set, kept rare by calibration. Each panel writes a row to `_vision/cost/manual-billing.csv` for COST-AWARENESS.md §2.11 spike-detector compatibility.
+
+### Constitutional amendment exception
+
+For Constitution amendment proposals, the Chairman MUST be a separate model from any panelist (no self-chairing on amendment work — matches Constitution §8 no-self-dealing principle). For all other panels, the Chairman MAY be a panelist (with their Stage 2 ranking excluded from aggregate to avoid self-grading the synthesis input).
+
+### Provenance honesty
+
+`SKILL.md` cites [`llm-council`](https://github.com/brucebanner010198-commits/llm-council) (the User's own no-LICENSE Saturday hack) as inspiration. The 3-stage pattern and the strict `FINAL RANKING:` format are taken from that repo. **No code is imported** — the source has no LICENSE, and the FastAPI/React shape doesn't fit a Claude Code plugin. Synthesis is original.
+
+### Empirical validation cited inline
+
+- Council Mode paper (arxiv 2604.02923) — **35.9% relative reduction in hallucination on HaluEval, 7.8-point improvement on TruthfulQA**.
+- Multi-Agent Debate biography-facts result — 30%+ reduction in factual errors.
+- Anthropic Collective Constitutional AI — basis for Constitution-amendment auto-trigger.
+
+### v0.6.0 deferred
+
+Multi-round debate mode (with funneling-effect mitigation), adversarial-pair mode, cross-vendor opt-in panel via OpenRouter, score-aggregation experiments (Borda + Condorcet alongside average rank).
+
+### Wire-through
+
+- `councils/evaluation/AGENTS.md` adds `panel-chair` specialist row with co-ownership note + default-trigger callout.
+- `README.md` status line bumped + install command bumped + cross-model-panel mention in Identity section.
+- `.claude-plugin/plugin.json` version bump + description appended.
+
+### Counts
+
+- Founding documents: unchanged at 21
+- Skills: 77 → 78
+- Agents (md files under `agents/`): +1 (`panel-chair`)
+- Runtime hooks: unchanged at 7
+- Council files updated: 1 (evaluation)
+- Council count: unchanged at 16
+- New files in this release: 5 (`skills/cross-model-panel/SKILL.md` + 3 references + `agents/evaluation/panel-chair.md`)
+
+### Governance touch
+
+No new chief, no new council, no new USER-ONLY action, no new tool grant, no Constitution amendment. The additions all fit under existing roots already incorporated by reference (Schedule A §evaluation council; Article §8 no-self-dealing; Article X amendment process; COST §2.4 + §2.11; TRUST §2.7 hooks). Non-waivable classes (raw-secret + ASI-class + cost-driven downgrade of Security or Design) unchanged. Three consecutive zero-Constitution-touch releases (v0.5.5 needed one Schedule A row; v0.5.6 and v0.5.7 needed nothing).
+
 ## v0.5.6 — WAF principles wire-through (2026-04-25)
 
 Wire-through release that makes the v0.5.5 Google Cloud Well-Architected Framework imports operationally honest. Three additive doc changes, one new assessment kit, one extension to the drill skill, and one new runtime hook (the seventh in the Agency, implementing the cost commitments scaffolded in v0.5.5). Constitution untouched in v0.5.6 — every addition fits under existing roots already incorporated by reference.
