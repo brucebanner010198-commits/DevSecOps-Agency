@@ -2,6 +2,60 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.6.1 — Skills For Real Engineers — Wave 1 (2026-04-26)
+
+Concept-only port of five engineering/productivity skills + one runtime hook from the broader engineering-skills community. **No prose, code, or specific examples copied** — the skills are written from first principles in the Agency's voice and council-dispatch model. Citations attach to the underlying primary sources (Eric Evans, Kent Beck, John Ousterhout, Hunt + Thomas, Michael Nygard) — not to any single curator. The `mattpocock/skills` repository (MIT, ~54k stars) is the curator that surfaced this combination of patterns to the Agency in the v0.6.1 cycle; see `docs/adr/ADR-0003-skills-real-engineers-wave-1.md` for the User-approved decision to concept-port without per-file attribution.
+
+### Five new skills
+
+- **[`skills/grill-with-docs`](skills/grill-with-docs/SKILL.md)** — relentless interview pattern for in-flight clarification. Walks the design tree one question per turn; updates `<slug>/CONTEXT.md` inline as terms get sharpened; files ADRs sparingly per the Nygard 2011 three-way test (hard to reverse + surprising + real trade-off).
+- **[`skills/tdd`](skills/tdd/SKILL.md)** — strict red-green-refactor with vertical-slice progression. Horizontal slicing (writing all tests first, then all code) is explicitly an anti-pattern. Owned by CQO. Tests target observable behavior through public interfaces, not implementation details.
+- **[`skills/zoom-out`](skills/zoom-out/SKILL.md)** — short, sharp request pattern for orienting an agent in unfamiliar code. One-prompt skill (no procedure); routes the response through `<slug>/CONTEXT.md` vocabulary and surfaces ADR constraints. Owned by CTO. `disable-model-invocation: true` prevents auto-trigger noise.
+- **[`skills/improve-codebase-architecture`](skills/improve-codebase-architecture/SKILL.md)** — periodic deepening review (Ousterhout's "deep modules") informed by CONTEXT.md and ADRs. Owned by CTO. Step 3 drops into a grilling conversation on the chosen candidate; step 4 produces a refactor brief and hands off to `tdd` or queues at `<slug>/architecture-backlog.md`. Recommended every two weeks per active project.
+- **[`skills/caveman`](skills/caveman/SKILL.md)** — opt-in ultra-compressed agent communication mode (~60-75% token reduction on internal traffic). NEVER on User-facing surfaces. Valid for session logs, agent-to-agent dispatch, council meeting receipts. v0.6.2 plans a measured experiment defaulting caveman for the daily heartbeat reporter agent for one calendar quarter.
+
+### One new runtime hook (the 8th)
+
+- **[`runtime-hooks/git-guardrails/`](runtime-hooks/git-guardrails/README.md)** — `preToolUse` hook on `^git ` Bash invocations. Blocks (exit 2) force-pushes, plain pushes (USER-ONLY per Constitution §2.2), hard resets, working-tree wipes, branch force-deletes, force restores, history rewrites, aggressive GC. Owned by CSRE. **Smoke-tested against 6 synthetic inputs prior to ship**: 3 BLOCK cases all returned exit 2; 3 ALLOW cases all returned exit 0.
+
+### Two new founding-document conventions
+
+- **[`CONTEXT.md`](CONTEXT.md) per-project requirement.** Agency-level glossary at repo root; per-project `<slug>/CONTEXT.md` files inherit and override per project scope. The "ubiquitous language" pattern from Eric Evans, *Domain-Driven Design* (2003). Updated inline by `grill-with-docs` as terms get sharpened. Documented in `docs/adr/ADR-0001-context-md-convention.md`. **Founding-document count: 21 → 22.**
+- **[`docs/adr/`](docs/adr/) central directory at Agency root.** Establishes the home for Agency-level ADRs (conventions, founding-document amendments, plugin-wide patterns) — distinct from per-project `_decisions/<slug>/adrs/`. **Closes the v0.5.0 Schedule B "ADR backfill outstanding" note that has been open through v0.5.5/v0.5.6/v0.5.7/v0.6.0.** Documented in `docs/adr/ADR-0002-docs-adr-directory.md`.
+
+### Three Agency-level ADRs filed
+
+- `docs/adr/ADR-0001-context-md-convention.md` — establishes CONTEXT.md per-project + Agency-level
+- `docs/adr/ADR-0002-docs-adr-directory.md` — establishes docs/adr/ at Agency root, closes Schedule B note
+- `docs/adr/ADR-0003-skills-real-engineers-wave-1.md` — User-approved concept-port-without-per-file-attribution decision; documents primary-source citation policy
+
+### Wire-through
+
+- `councils/quality/AGENTS.md` adds TDD ownership row + Phase-4 spot-check additions for SKILL.md anti-patterns
+- `councils/architecture/AGENTS.md` adds zoom-out + improve-codebase-architecture ownership rows + architectural-vocabulary discipline
+- `councils/sre/AGENTS.md` adds git-guardrails ownership row + 8-hook chain summary + smoke-test results
+- `CONSTITUTION.md` Schedule A grew 21 → 22 (added CONTEXT.md); Schedule B logged the v0.6.1 amendment row + import provenance note + housekeeping (removed the ADR backfill outstanding note)
+- `README.md` status line bumped + install command bumped + Identity bullets for CONTEXT.md and docs/adr/
+- `.claude-plugin/plugin.json` version + description appended
+
+### Counts
+
+- Founding documents: 21 → 22
+- Skills: 78 → 83 (5 new)
+- Agents: unchanged
+- Runtime hooks: 7 → 8 (git-guardrails added)
+- Council count: unchanged at 16
+- Council files updated: 3 (quality, architecture, sre)
+- New files: 11 (5 SKILL.mds + 3 hook files + 3 ADR files + CONTEXT.md + docs/adr/README.md)
+
+### Governance touch
+
+Schedule A amendment + Schedule B housekeeping; no Article-level Constitution changes. Non-waivable classes unchanged. **Five consecutive zero-Constitution-Article-touch releases** (v0.5.5 + v0.6.1 needed Schedule A rows; v0.5.6 + v0.5.7 + v0.6.0 needed nothing; no Article-level changes anywhere).
+
+### v0.6.2 deferred (Wave 2)
+
+Harmonize Agency skills against curated variants we have rough analogues of (engineering:debug vs diagnose, taskflow vs triage, write-spec vs to-prd/to-issues, skill-creator vs write-a-skill, commit-gate vs setup-pre-commit). Re-scope the v0.5.4-deferred intake-router as the bootstrap step that grill-with-docs feeds rather than as a competing skill. Run the caveman default-on experiment on the daily heartbeat reporter agent — measure token-cost delta + CAO spot-check pass rate + cross-model-panel bias-flag false-positive rate + Sovereign comprehension; default-on for broader categories requires the experiment data to land within tolerance.
+
 ## v0.6.0 — Cross-model panel research-grade build (2026-04-26)
 
 Minor version bump. Takes `cross-model-panel` from MVP (v0.5.7 — single-round, parallel, Claude-only, average-rank) to **research-grade**: four opt-in modes that ship the v0.5.7-deferred features. Baseline behavior remains the v0.5.7 default for backwards compatibility — the new modes are opt-in per panel via the convening council's mode flag.

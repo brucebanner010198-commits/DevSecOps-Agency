@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/git-guardrails/guard-git.sh",
+        "cwd": ".",
+        "env": {
+          "GUARD_MODE": "block"
+        },
+        "timeoutSec": 5,
+        "matchTool": "Bash",
+        "matchPattern": "^git "
+      }
+    ]
+  }
+}

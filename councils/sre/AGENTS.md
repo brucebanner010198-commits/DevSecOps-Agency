@@ -65,3 +65,13 @@ CSRE now operates against the nine WAF-reliability principles folded into [`RESI
   - Both run in `warn` mode by default in v0.5.6; `block` mode is opt-in per project. Cloud-native billing-export adapters (gcp-bq, aws-cur, azure-cme) ship in v0.6.0 — v0.5.6 ships the `manual-csv` adapter for development verification.
 
 Hook-bypass remains a `runtime-hook-bypass` ADR per `TRUST.md` §2.7.
+
+## Added v0.6.1 — git-guardrails (the 8th runtime hook)
+
+CSRE owns [`runtime-hooks/git-guardrails/`](../../runtime-hooks/git-guardrails/) — `preToolUse` hook on `^git ` Bash invocations that blocks (exit 2) destructive git operations before they execute. Pattern set covers force-pushes, plain pushes (USER-ONLY per Constitution §2.2 "publish externally"), hard resets, working-tree wipes, branch force-deletes, force restores, history rewrites, and aggressive GC.
+
+The 8 runtime hooks now: secrets-scanner, tool-guardian, governance-audit, dependency-license-checker, session-logger, commit-gate, cost-gate (v0.5.6), git-guardrails (v0.6.1). Per `TRUST.md` §2.7, all hooks are non-optional; bypass attempts file a `runtime-hook-bypass` ADR.
+
+Smoke-tested against six synthetic inputs at v0.6.1 ratification: 3 BLOCK cases (`git push origin main`, `git reset --hard HEAD~3`, `git clean -fd`) all returned exit 2; 3 ALLOW cases (`git status`, `git log --oneline -10`, `git commit -m hello`) all returned exit 0.
+
+Customization: if a project has a legitimate need for a blocked pattern (e.g. a release-bot owning force-pushes to a release branch), file a `git-guardrails-exception-<reason>` ADR with CSRE + CRT countersign before adding a project-local exception. Do NOT remove patterns from the central hook without an Agency-wide ADR.

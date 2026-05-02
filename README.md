@@ -2,7 +2,7 @@
 
 A Claude Code plugin that turns one prompt into a shipped project. You speak only to the **CEO**; the CEO runs a board of 16 Chiefs; each Chief runs a council of specialists; specialists may, when the work shards cleanly, spawn **workers** to run in parallel. Research-first, security-second, receipts-always.
 
-Status: `v0.6.0` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md) (§13 = seven WAF design principles). Trust commitments: [`TRUST.md`](TRUST.md). Cost discipline: [`COST-AWARENESS.md`](COST-AWARENESS.md) (12 commitments + §2.12.5 cross-vendor spend, CSRE owns, scorecard 2026-07-22). Security review kit: [`councils/security/REVIEW-KIT.md`](councils/security/REVIEW-KIT.md) (71 questions across 7 principles). Resilience: [`RESILIENCE.md`](RESILIENCE.md) (SLOs + error budgets + chaos game days). Cross-model panel: [`skills/cross-model-panel/`](skills/cross-model-panel/SKILL.md) **(v0.6.0 = research-grade build with four opt-in modes: multi-round debate, adversarial-pair, cross-vendor via OpenRouter, score-aggregation comparison; default still single-round Claude-only for backwards compatibility)**. Live ops console: [`command-center/`](command-center/) at [`https://brucebanner010198-commits.github.io/DevSecOps-Agency/`](https://brucebanner010198-commits.github.io/DevSecOps-Agency/). Build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** (see [`VALUES.md`](VALUES.md) §12).
+Status: `v0.6.1` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY.md`](SECURITY.md) (§13 = seven WAF design principles). Trust commitments: [`TRUST.md`](TRUST.md). Cost discipline: [`COST-AWARENESS.md`](COST-AWARENESS.md). Security review kit: [`councils/security/REVIEW-KIT.md`](councils/security/REVIEW-KIT.md). Ubiquitous language: [`CONTEXT.md`](CONTEXT.md) **(new in v0.6.1 — Agency-level glossary; per-project `<slug>/CONTEXT.md` files inherit and override per project scope)**. Agency-level ADRs: [`docs/adr/`](docs/adr/) **(established v0.6.1 — closes the v0.5.0 Schedule B backfill note)**. Resilience: [`RESILIENCE.md`](RESILIENCE.md) (SLOs + error budgets + chaos game days). Cross-model panel: [`skills/cross-model-panel/`](skills/cross-model-panel/SKILL.md) (v0.6.0 research-grade with multi-round + adversarial-pair + cross-vendor + score-aggregation modes). Live ops console: [`command-center/`](command-center/) at [`https://brucebanner010198-commits.github.io/DevSecOps-Agency/`](https://brucebanner010198-commits.github.io/DevSecOps-Agency/). Build-order priority: **Security & Privacy → Design → Operations → Timely Delivery** (see [`VALUES.md`](VALUES.md) §12).
 
 ## Identity
 
@@ -34,7 +34,7 @@ Status: `v0.6.0` · MIT + imports (see `LICENSES/`). Security policy: [`SECURITY
 
 ```bash
 # Option 1 — from a local .plugin archive
-/plugin install devsecops-agency-0.6.0.plugin
+/plugin install devsecops-agency-0.6.1.plugin
 
 # Option 2 — from this repo (inside a Claude Code workspace)
 git clone https://github.com/brucebanner010198-commits/DevSecOps-Agency.git

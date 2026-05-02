@@ -26,3 +26,11 @@
 - `green`: tests pass, coverage acceptable, perf p95 within target, a11y baseline met.
 - `yellow`: one known flaky test with a recorded fix plan, or one a11y medium issue with ticket.
 - `red`: failing test, missing coverage on a mitigated threat, perf regression > 2x baseline, a11y critical.
+
+## Added v0.6.1 — TDD ownership
+
+CQO owns [`skills/tdd`](../../skills/tdd/SKILL.md) — strict red-green-refactor loop with vertical-slice progression. The skill is the recommended path for building a feature or fixing a bug; **horizontal slicing** (writing all tests first, then all implementation) is explicitly an anti-pattern documented in the SKILL.md.
+
+The Phase-4 quality gate now spot-checks the test suite for the SKILL.md anti-patterns: tests asserting on private state, mocking internal collaborators, querying internal data stores directly. Failures route through the never-give-up ladder per `RESILIENCE.md`.
+
+Test names should use `<slug>/CONTEXT.md` vocabulary so the test reads like a specification in the project's own language. CONTEXT.md as a per-project requirement is established in `docs/adr/ADR-0001-context-md-convention.md`.

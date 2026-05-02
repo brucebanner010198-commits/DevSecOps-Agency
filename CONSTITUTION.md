@@ -566,6 +566,7 @@ This Constitution binds, and is bound by, the following root documents, incorpor
 - `CODEOWNERS` — path-to-council ownership map (v0.5.0).
 - `.well-known/security.txt` — RFC 9116 disclosure contact (v0.5.0).
 - `COST-AWARENESS.md` — twelve cost-discipline commitments owned by CSRE; quarterly cost scorecard (v0.5.5).
+- `CONTEXT.md` — Agency-level ubiquitous-language glossary (DDD pattern); per-project `<slug>/CONTEXT.md` files inherit from this and override for project scope (v0.6.1).
 
 Amending any of these is a USER-ONLY action (§2.2 clause 1). Amending the list itself is a Constitution amendment under Article X.
 
@@ -583,7 +584,11 @@ Amending any of these is a USER-ONLY action (§2.2 clause 1). Amending the list 
 
 **v0.5.5 import provenance.** Five skills were imported from `google/skills` under Apache-2.0 in v0.5.5 (cloud-run-basics, gke-basics, gcp-auth, waf-cost-optimization, networking-observability). Provenance and full Apache-2.0 license text are in `LICENSES/APACHE-2.0-google-skills.txt`. Imports are by reference into the Agency's skill catalog; they do not change governance, no new councils, no new USER-ONLY actions, no new runtime hooks. The cost-gate runtime hooks referenced in `COST-AWARENESS.md` §2.1, §2.11 ship as scaffolding in v0.5.5 and are scheduled for full implementation in v0.5.6 alongside the WAF principles wire-through.
 
-**Schedule B note — ADR backfill (outstanding).** The v0.5.0, v0.5.2, and v0.5.5 amendment ADRs referenced above live under `_decisions/<slug>/adrs/` once a project slug exists; a central `adrs/` directory at the repo root is not yet created. When the first ADR is filed, this note is deleted and the path is hard-linked in the amendment rows above.
+**Schedule A amendment 2026-04-26** by the User on the v0.6.1 release cut — added `CONTEXT.md` to the founding-document list (21 → 22 documents). Rationale: the ubiquitous-language pattern (Eric Evans, *Domain-Driven Design*) becomes a first-class founding-document convention at two scopes — Agency-level (`CONTEXT.md` at repo root) and per-project (`<slug>/CONTEXT.md` inheriting from Agency-level, overriding for project scope). Updated inline by the new `skills/grill-with-docs` skill as terms get sharpened during grilling sessions; CAO spot-checks at quarterly trust scorecard. Effective from merge commit (recorded post-merge). Documented in `docs/adr/ADR-0001-context-md-convention.md`.
+
+**Schedule B housekeeping 2026-04-26** — the prior "Schedule B note — ADR backfill (outstanding)" is removed in v0.6.1. The central `docs/adr/` directory at the Agency root is now created; the directory's `README.md` documents the format, and `docs/adr/ADR-0002-docs-adr-directory.md` records the establishment. Per-project ADRs continue to live under `_decisions/<slug>/adrs/`. The split is documented in `docs/adr/README.md`.
+
+**v0.6.1 import provenance.** v0.6.1 ships five new skills (`grill-with-docs`, `tdd`, `zoom-out`, `improve-codebase-architecture`, `caveman`) and one new runtime hook (`git-guardrails`). All are concept-port adaptations from the broader engineering-skills community. The `mattpocock/skills` repository (MIT, 2026, ~54k stars) is the curator that surfaced this combination of patterns to the Agency in the v0.6.1 cycle. No prose, code, or specific examples are copied; citations attach to the underlying primary sources (Eric Evans, Kent Beck, John Ousterhout, Hunt + Thomas, Michael Nygard). The User-approved decision to concept-port without per-file attribution is documented in `docs/adr/ADR-0003-skills-real-engineers-wave-1.md`. No `LICENSES/` file added.
 
 Signed into force by the CEO persona, which MUST read this Constitution at every session start going forward and MUST cite it in every amendment proposal, waiver grant, drill report, and close-audit.
 
