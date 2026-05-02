@@ -2,6 +2,38 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.6.2 — Plugin manifest fix (2026-05-02)
+
+Patch release. Plugin install validation was failing in Claude Code at v0.6.1. Root cause: `description` and `keywords` had been growing every release as I appended release-note summaries to the manifest. By v0.6.1 the description was **37,039 characters** and keywords was **359 entries** — both wildly oversized vs the practical Claude Code parser limits and the field's typical norms (50-250 chars for description, 5-15 for keywords).
+
+The Claude Code plugin spec (https://code.claude.com/docs/en/plugins-reference) doesn't document hard limits, but the parser breaks well below where v0.6.1 sat. The CHANGELOG.md (split out at v0.3.7) is the right home for release history; the manifest description should be a one-liner describing what the plugin IS.
+
+### Changes
+
+- **`.claude-plugin/plugin.json`** — full rewrite. Manifest size **45,367 → 1,074 bytes (42× smaller)**:
+  - `description`: 37,039 → 511 chars. Single paragraph describing what the plugin is, ending with "See CHANGELOG.md for full version history."
+  - `keywords`: 359 → 13 entries. Trimmed to the most relevant: `devsecops`, `agents`, `orchestration`, `autonomous`, `security`, `owasp`, `stride`, `sbom`, `slsa`, `governance`, `ceo-driven`, `councils`, `ai-agency`.
+  - **Added** `homepage` (the live Command Center at GitHub Pages) — strongly recommended per spec for discoverability.
+  - **Added** `repository` (the GitHub URL) — strongly recommended per spec.
+  - **Added** `email` to the `author` block.
+  - `name` / `version` / `license` unchanged.
+- **`README.md`** — status line + install command bumped to `v0.6.2`.
+- **No other changes.** This is a manifest-only patch. All skills, hooks, councils, conventions, ADRs from v0.6.1 are intact.
+
+### Going forward (operational rule)
+
+Future release notes go in CHANGELOG.md only. The plugin.json description is treated as a stable one-paragraph identity, not a release-note append-log. Bumps that touch the description require a written reason in the commit message (e.g. "the Agency now ships X new core capability that warrants surfacing in the manifest description").
+
+The previously-deferred v0.6.2 wave (Skills For Real Engineers Wave 2: skills harmonization + intake-router re-scope + caveman default-on experiment) becomes **v0.6.3**.
+
+### Counts
+
+- Founding documents: unchanged at 22
+- Skills: unchanged at 83
+- Runtime hooks: unchanged at 8
+- Council count: unchanged at 16
+- Constitution: untouched
+
 ## v0.6.1 — Skills For Real Engineers — Wave 1 (2026-04-26)
 
 Concept-only port of five engineering/productivity skills + one runtime hook from the broader engineering-skills community. **No prose, code, or specific examples copied** — the skills are written from first principles in the Agency's voice and council-dispatch model. Citations attach to the underlying primary sources (Eric Evans, Kent Beck, John Ousterhout, Hunt + Thomas, Michael Nygard) — not to any single curator. The `mattpocock/skills` repository (MIT, ~54k stars) is the curator that surfaced this combination of patterns to the Agency in the v0.6.1 cycle; see `docs/adr/ADR-0003-skills-real-engineers-wave-1.md` for the User-approved decision to concept-port without per-file attribution.
