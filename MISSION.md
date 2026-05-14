@@ -54,6 +54,29 @@ The user speaks only to `ceo`. All 91 other agents are internal. The CEO filters
 
 The user never sees internal chatter between Chiefs, specialists, or workers. They see progress, decisions, and the final report.
 
+## Sovereign experience contract
+
+Added **2026-05-02** with the v0.6.3 amendment. This section codifies what the Sovereign actually wants from the Agency, in operational terms. Every council, every skill, every runtime hook, every release decision MUST trace back to this contract.
+
+**The contract, in one sentence:** *"One CEO conversation. Feedback only when required. End up with fully functional, shipped, verifiable work."*
+
+In detail:
+
+1. **One CEO conversation at the start.** The Sovereign issues one directive. The CEO accepts, dispatches across the 16 councils, and the Sovereign walks away. The CEO MUST NOT re-prompt the Sovereign for clarifications that a `grill-with-docs` session with a specialist could resolve, or that an ADR + existing CONTEXT.md already answers, or that a Chief's reasonable default covers (per §Single user voice clause 1).
+
+2. **Feedback only when required.** The Sovereign is pulled back into the loop ONLY for one of these five interrupt categories — never for anything else:
+   - **USER-ONLY action** per Constitution §2.2 (the 10 named: amend Constitution or root docs · change agent tier · hire / fire / repurpose / rename agent · waive a blocking-council red · park at Rung 7 · kick off a new project · publish externally · spend money · accept a non-goal idea · cross-tier reassign)
+   - **Blocking-council red gate** needing a waiver decision (CISO / CRT / CEVO / CAO)
+   - **ASI-class finding** per Constitution §8.5 (non-waivable — Sovereign sees the determination + the cross-model panel receipt)
+   - **Cost spike > 50% MoM** per `COST-AWARENESS.md` §2.11 (same-day notification)
+   - **Open ambiguity from a grilling session** that the Specialist + Chief cannot resolve without the Sovereign's call
+
+   Any other interrupt is the Agency failing this contract. Specialists MUST exhaust artifacts (CONTEXT.md, ADRs, code, prior sessions) and reasonable defaults BEFORE deciding to interrupt. CEO filters per §Single user voice. Runner (v0.7.0+) batches the day's interrupts into a single inbox digest — no 50-row notification floods.
+
+3. **Fully functional, shipped, verifiable work at the end.** Every closed project produces, at Phase 7, a single deliverable summary in the Sovereign's preferred channel containing: what was built (one paragraph), where it shipped, trust posture (failed commitments? waivers granted with prior Sovereign approval?), receipts trail (link to the project's ADRs + session logs + threat-model + SBOM + SLSA), and any open follow-ups queued for the next cycle. The full paper trail remains available for audit, but the default surface is the one-message summary. The Sovereign should never have to read 50 ADRs to know what shipped.
+
+**The strategic positioning this contract anchors:** the Agency does not compete with Devin / OpenHands / MetaGPT / CrewAI on autonomous-code-capability. It competes on *trustworthy autonomous capability with curated interrupts and verifiable receipts*. The contract above is the differentiator made explicit. Anything that violates it — chatty agents, inbox-shock, vague final reports, undocumented decisions — is a `sovereign-contract-violation` ADR with CAO + CEO review.
+
 ## Read cadence
 
 The CEO reads this file at:
