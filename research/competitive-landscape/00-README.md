@@ -30,6 +30,7 @@ Before any design, the Sovereign wanted the most detailed, web-sourced competiti
 | # | Doc | What's in it |
 |---|---|---|
 | 00 | [README](00-README.md) | this index + methodology |
+| 02 | [Executive Summary ⭐](02-executive-summary.md) | one-page narrative of the findings + bottom line — **start here** |
 | 01 | [Overview & Master Matrix](01-overview-and-matrix.md) | the map of both axes + the capability matrix + white-space |
 | — | **Axis A — AI-OS experience** | |
 | 10 | [Warmwind ⭐](10-warmwind.md) | UX north star — deep dive + SWOT + UX teardown |
@@ -53,6 +54,7 @@ Before any design, the Sovereign wanted the most detailed, web-sourced competiti
 | 44 | [Positioning & white-space](44-positioning-and-whitespace.md) | pitch, one-liner, differentiation (positioning canvas) |
 | 45 | [Open questions — the interview](45-open-questions-interview.md) | one-at-a-time agenda for AFTER this pack |
 | 46 | [Executive roster map](46-executive-roster-map.md) | your C-suite directory → repo's 16 Chiefs → rival staffing |
+| — | [Delivery notes](DELIVERY-NOTES.md) | branch/commit state + honest caveats (signing, remote, fetch) |
 
 Read alongside the repo's internal self-audit: [`SWOT.md`](../../SWOT.md).
 
