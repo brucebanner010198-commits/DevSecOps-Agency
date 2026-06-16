@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+demos/.b2-demo-ledger/
+demos/.*-demo-ledger/
+*.sock
