@@ -4,6 +4,13 @@ Before proposing this code for merge we red-teamed our own trust spine, because 
 *trust* product that ships unverified trust code is the thing we exist not to be.
 This is the record of what the red-team found and how each finding was resolved.
 
+> **A second, deeper pass followed.** This is **pass 1** (14 findings). A
+> subsequent stress test went after what pass 1 missed and fixed 5 more
+> (nonce replay across restart, side-car DoS, peer auth, offline actor→key
+> binding, torn-write recovery). See
+> [`STRESS-TEST-2026-06-16.md`](STRESS-TEST-2026-06-16.md). Combined: **105 tests
+> passing**.
+
 ## Method
 
 Two multi-agent adversarial reviews (8 security dimensions total), each finding
@@ -54,7 +61,7 @@ test that re-opens it loudly if it regresses.
 ## Reproduce
 
 ```bash
-for p in trust-spine desktop broker; do (cd os/$p && python3 -m pytest -q); done   # 98 passing
+for p in trust-spine desktop broker; do (cd os/$p && python3 -m pytest -q); done   # 105 passing (pass 1 + pass 2)
 ```
 
 Every row above maps to a named test; the hardening tests live in

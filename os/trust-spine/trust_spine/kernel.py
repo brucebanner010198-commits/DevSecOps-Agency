@@ -25,6 +25,13 @@ from .vault import FieldDescriptor, UseResult, Vault
 from .verifier import ALLOW, PENDING, VETO, Decision, Verifier
 
 
+def _nonce_digest(nonce: str) -> str:
+    """SHA-256 of a golden-share nonce — what gets persisted in the durable
+    redeemed-nonce store (so the raw nonce is never written to disk, matching the
+    receipt's `nonce_sha256` field)."""
+    return hashlib.sha256(nonce.encode("utf-8")).hexdigest()
+
+
 def _json_safe(value: Any) -> Any:
     """Coerce arbitrary inputs/context into JSON before hashing into a receipt,
     so a stray dataclass or callable never crashes receipt creation (and a
@@ -113,8 +120,10 @@ class TrustKernel:
         # by an agent per-request — so a reserved effect is reconstructed from
         # the signed intent, not from anything the agent controls out-of-band.
         self._effects: Dict[str, Callable[["SignedEffect"], Any]] = dict(effect_registry or {})
-        # Single-use nonces already redeemed — one approval, one execution.
-        self._used_nonces: set[str] = set()
+        # Single-use nonces are tracked DURABLY in the ledger (redeemed_nonces),
+        # so "one approval, one execution" survives a crash/reboot — an in-memory
+        # set would reset on restart and re-open a captured approval to replay.
+        # (Red-team 2026-06-16, finding F1.)
 
     def register_effect(
         self, action: str, handler: Callable[["SignedEffect"], Any]
@@ -172,7 +181,7 @@ class TrustKernel:
                     "handler; opaque effects are not permitted for golden-gated "
                     "actions · " + decision.reason,
                 )
-            elif req.nonce in self._used_nonces:
+            elif self.ledger.is_nonce_redeemed(_nonce_digest(req.nonce)):
                 decision = Decision(
                     VETO,
                     decision.tier,
@@ -183,7 +192,9 @@ class TrustKernel:
                     req.actor, req.action, req.inputs, req.context, nonce=req.nonce
                 )
                 if self.golden_share.verify(intent, req.golden_share):
-                    self._used_nonces.add(req.nonce)
+                    # Burn the nonce DURABLY before the effect runs (write-ahead):
+                    # a crash mid-effect can never re-open the approval.
+                    self.ledger.redeem_nonce(_nonce_digest(req.nonce))
                     decision = Decision(
                         ALLOW, decision.tier, "golden-share approved · " + decision.reason
                     )

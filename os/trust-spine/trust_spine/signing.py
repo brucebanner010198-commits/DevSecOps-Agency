@@ -180,3 +180,10 @@ class KeyRing:
 
     def public_key_hex(self, actor: str) -> str:
         return self.signer_for(actor).public_key_bytes().hex()
+
+    def public_keys(self) -> Dict[str, str]:
+        """actor → public-key hex for every actor with a signing key. Pass this
+        to ``Ledger.verify_log(known_keys=…)`` so offline verification can bind a
+        receipt's signer key to its claimed actor and reject key-substitution
+        forgeries. (Red-team finding F4.)"""
+        return {actor: s.public_key_bytes().hex() for actor, s in self._keys.items()}

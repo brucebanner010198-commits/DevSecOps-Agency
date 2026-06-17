@@ -22,13 +22,16 @@ Simon Willison's "lethal trifecta").
 | **[`desktop/`](desktop/)** | the dual-interface app model — a typed side-car agent API routed through the trust spine (kills screen-scraping injection) | 9 | `b2_dual_interface` |
 | **[`broker/`](broker/)** | the de-identification broker — mask → default-deny → receipt → re-identify; identity stays home | 12 | `b3_broker` |
 
-**98 tests passing.** Each sub-project's README has run instructions.
+**105 tests passing.** Each sub-project's README has run instructions.
 
-> **Self-red-teamed.** This code was adversarially reviewed against itself before
-> merge: 14 confirmed findings (2 critical) — including golden-share effect
-> substitution, a Vault plaintext leak, and a `web.fetch` egress bypass — were
-> fixed, each pinned by a regression test. See
-> [`SECURITY-REDTEAM.md`](SECURITY-REDTEAM.md).
+> **Self-red-teamed, twice.** This code was adversarially reviewed against itself
+> before merge: a first pass fixed 14 confirmed findings (2 critical) — golden-share
+> effect substitution, a Vault plaintext leak, a `web.fetch` egress bypass — see
+> [`SECURITY-REDTEAM.md`](SECURITY-REDTEAM.md). A **second, deeper pass**
+> (2026-06-16) then found and fixed 5 more — golden-share nonce **replay across a
+> restart**, a side-car **DoS**, missing **peer auth**, an offline **actor→key
+> binding** gap, and a torn-write **recovery** bug — each PoC-confirmed and pinned
+> by a regression test. See [`STRESS-TEST-2026-06-16.md`](STRESS-TEST-2026-06-16.md).
 
 ## Run everything
 
