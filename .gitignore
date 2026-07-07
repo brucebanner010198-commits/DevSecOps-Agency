@@ -1,3 +1,16 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Research — kept local, not versioned
+research/
+
+# Local strategy & design docs — kept local, not versioned (public repo)
+/VISION.md
+/docs/design/
+/docs/adr/ADR-0004-foundation-architecture.md
+
+# Local tooling scratch — kept local, not versioned
+/.superpowers/
+/docs/superpowers/
+/_salvaged-from-Codex/
