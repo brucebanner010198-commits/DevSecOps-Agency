@@ -1,0 +1,10 @@
+# Trust Spine v0 runtime deps.
+cryptography>=42,<46
+pytest>=8
+
+# Optional post-quantum backend. When present, receipts sign with ML-DSA-65
+# (FIPS 204) automatically. Needs the native liboqs library; install with:
+#   brew install liboqs   # macOS
+#   pip install liboqs-python
+# Until then, receipts sign with Ed25519 (tamper-evident, PQC pluggable).
+# liboqs-python>=0.10
