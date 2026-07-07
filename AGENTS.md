@@ -122,6 +122,14 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-
 - Power-user: `/devsecops-agency:board-meeting`, `/devsecops-agency:council-meeting`.
 - Retro + REM dreaming: `/devsecops-agency:retro`.
 
+## Research
+
+- All research lives under `research/` — **master index: `research/README.md`** (lists every file with a one-line description). Layout: `briefs/` (internal briefs + verification reports), `raw/` (raw external dumps), `competitive-landscape/` themed by numbered subfolder: `00-index/`, `10-direct-competitors/`, `20-frameworks-and-workforce/`, `30-infra-and-academic/`, `40-strategy-and-positioning/`, `50-deep-dives/`, `60-os-and-infra-foundations/`.
+- `research/` is **gitignored** — never tracked, never committed. Local only.
+- Numbering encodes the theme and matches the folder (`1x` → `10-direct-competitors/`, etc.). New files take the next number within their theme's folder; update `research/README.md` when adding one.
+- Cross-check tool: `~/.claude/skills/gemini-consult/SKILL.md` — fire `agy -p "PROMPT" > /tmp/gemini-consult-<slug>.md 2>&1 &` for a fire-and-forget second opinion. Results available in ~15 seconds. Use before treating any competitive claim as settled.
+- Key whitespace finding (2026-06-06): no competitor ships recursive org + standing verifier + per-agent least-privilege + PQC + sovereign identity + signed receipts as a combined architectural commitment. SomaOS (`53-somaos-deep-research.md`) is the closest in architecture; OpenClaw is the most funded.
+
 ## Scoped rules
 
 - `agents/AGENTS.md` — rules for every agent (persona, tools, output shape, citation, Role Card).
@@ -163,6 +171,8 @@ Before a phase transition, a Chief must have read: its council's scoped `AGENTS.
 - Don't create a meeting action item without a paired `taskflow` task ID. Orphaned actions rot.
 - Don't start a new project with empty backlog without invoking `idea-pipeline`. (Skipping the pipeline = building whatever came to mind first.)
 - Don't present ≥ 2 options to the user outside the `user-meeting` 4-phase flow. Ad-hoc selection conversations don't commit, and uncommitted picks rot.
+- Don't commit anything under `research/` — it is gitignored intentionally; local only.
+- Don't treat a competitive claim as settled without a `gemini-consult` cross-check or equivalent verification. Unverified claims in research docs are flagged UNVERIFIED, not stated as fact.
 - Don't let CSO duplicate CRO's per-project work. Strategy is portfolio-only. Cross-project market-researcher output is a code smell.
 - Don't let opportunity-ranker score without all 4 upstream artifacts. Return `blocked` instead of a half-scored shortlist.
 - Don't write launch copy before positioning.md lands. Cart before horse.
