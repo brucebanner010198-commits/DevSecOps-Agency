@@ -1,0 +1,366 @@
+# Instincts generated from https://github.com/brucebanner010198-commits/DevSecOps-Agency
+# Generated: 2026-06-03T00:32:30.869Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: DevSecOps-Agency-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/brucebanner010198-commits/DevSecOps-Agency
+---
+
+# DevSecOps Agency Commit Length
+
+## Action
+
+Write moderate-length commit messages (~63 characters)
+
+## Evidence
+
+- Average commit message length: 63 chars
+- Based on 2 commits
+
+---
+id: DevSecOps-Agency-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/brucebanner010198-commits/DevSecOps-Agency
+---
+
+# DevSecOps Agency Naming Files
+
+## Action
+
+Use kebab-case naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: kebab-case
+
+---
+id: DevSecOps-Agency-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/brucebanner010198-commits/DevSecOps-Agency
+---
+
+# DevSecOps Agency Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: DevSecOps-Agency-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/brucebanner010198-commits/DevSecOps-Agency
+---
+
+# DevSecOps Agency Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: DevSecOps-Agency-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/brucebanner010198-commits/DevSecOps-Agency
+---
+
+# DevSecOps Agency Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: DevSecOps-Agency-workflow-add-research-pack
+trigger: "when doing add research pack"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/brucebanner010198-commits/DevSecOps-Agency
+---
+
+# DevSecOps Agency Workflow Add Research Pack
+
+## Action
+
+Follow the add-research-pack workflow:
+1. Create a new subfolder under research/ (e.g., research/competitive-landscape/)
+2. Add multiple structured markdown files (e.g., 00-README.md, 01-overview-and-matrix.md, etc.) covering different aspects of the research topic
+3. Include a _TEMPLATE.md for future additions
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: research/competitive-landscape/00-README.md, research/competitive-landscape/01-overview-and-matrix.md, research/competitive-landscape/*-*.md
+
+---
+id: DevSecOps-Agency-workflow-update-research-pack-with-summary-and-notes
+trigger: "when doing update research pack with summary and notes"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/brucebanner010198-commits/DevSecOps-Agency
+---
+
+# DevSecOps Agency Workflow Update Research Pack With Summary And Notes
+
+## Action
+
+Follow the update-research-pack-with-summary-and-notes workflow:
+1. Add an executive summary markdown file (e.g., 02-executive-summary.md) to the research pack folder
+2. Add DELIVERY-NOTES.md to capture delivery state and caveats
+3. Update the index file (00-README.md) to link to the new summary and notes
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: research/competitive-landscape/00-README.md, research/competitive-landscape/02-executive-summary.md, research/competitive-landscape/DELIVERY-NOTES.md
+
+---
+id: devsecops-agency-instinct-file-naming
+trigger: "When creating or renaming files in the codebase"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct File Naming
+
+## Action
+
+Use kebab-case for all file names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.files
+
+---
+id: devsecops-agency-instinct-function-naming
+trigger: "When defining a function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Function Naming
+
+## Action
+
+Use camelCase for function names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.functions
+
+---
+id: devsecops-agency-instinct-class-naming
+trigger: "When defining a class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.classes
+
+---
+id: devsecops-agency-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants
+
+---
+id: devsecops-agency-instinct-import-style
+trigger: "When importing modules in TypeScript files"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in codeStyle.importStyle
+
+---
+id: devsecops-agency-instinct-export-style
+trigger: "When exporting modules or functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle
+
+---
+id: devsecops-agency-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Test Location
+
+## Action
+
+Place test files in a separate directory from source files
+
+## Evidence
+
+- Pattern in architecture.testLocation: 'separate'
+
+---
+id: devsecops-agency-instinct-git-commit-prefix
+trigger: "When writing a commit message for research-related changes"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Git Commit Prefix
+
+## Action
+
+Prefix the commit message with 'research:'
+
+## Evidence
+
+- Seen in commits: 'research: add AI-OS / AI-company competitive landscape pack'
+- Pattern in commits.prefixes
+
+---
+id: devsecops-agency-instinct-git-commit-length
+trigger: "When writing a research commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Git Commit Length
+
+## Action
+
+Keep the commit message concise, around 60-70 characters
+
+## Evidence
+
+- Pattern in commits.averageLength: 63
+
+---
+id: devsecops-agency-instinct-add-research-pack
+trigger: "When someone wants to introduce a comprehensive research analysis or landscape review"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Add Research Pack
+
+## Action
+
+Create a new subfolder under research/, add multiple structured markdown files (e.g., 00-README.md, 01-overview-and-matrix.md), and include a _TEMPLATE.md for future additions
+
+## Evidence
+
+- Workflow: add-research-pack
+- Example commits and files in workflow definition
+
+---
+id: devsecops-agency-instinct-update-research-pack-summary
+trigger: "When someone wants to finalize or summarize a research pack with high-level findings and delivery metadata"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: brucebanner010198-commits/DevSecOps-Agency
+---
+
+# Devsecops Agency Instinct Update Research Pack Summary
+
+## Action
+
+Add 02-executive-summary.md and DELIVERY-NOTES.md to the research pack folder, and update 00-README.md to link to these files
+
+## Evidence
+
+- Workflow: update-research-pack-with-summary-and-notes
+- Example commits and files in workflow definition
+
