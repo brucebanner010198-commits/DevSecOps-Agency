@@ -1,0 +1,17 @@
+# LiveKit server config for os/voice: one self-hosted node on a LAN or localhost.
+# API keys are NOT in this file. docker-compose.voice.yml passes them through the
+# LIVEKIT_KEYS environment variable (livekit-server --keys).
+port: 7880
+rtc:
+  tcp_port: 7881
+  # Single UDP mux port. port_range_start / port_range_end must stay unset for this to
+  # take effect (config-sample.yaml in the livekit repo). Matches the published 7882/udp.
+  udp_port: 7882
+  # LAN and localhost only. Set true (or set node_ip) when clients connect over the internet.
+  use_external_ip: false
+redis:
+  # The compose redis service. Optional for a single node; present because the compose
+  # file ships one. Remove this block together with that service to run without Redis.
+  address: redis:6379
+logging:
+  level: info

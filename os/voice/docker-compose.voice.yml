@@ -1,0 +1,73 @@
+# Local infrastructure for os/voice: LiveKit server, Redis, pgvector, Kokoro TTS.
+#
+#   cp .env.example .env      # fill in every value
+#   docker compose -f docker-compose.voice.yml up -d
+#
+# Every credential is read from the environment as ${VAR:?message}. Compose stops with
+# the message when the variable is unset or empty, so no credential has a default and
+# nothing here is a secret. The agent itself runs on the host (python3 -m voice.agent).
+#
+# Fixes relative to the JARVIS prototypes:
+#   - LiveKit's API key pair comes from LIVEKIT_KEYS (livekit-server --keys, env $LIVEKIT_KEYS)
+#     instead of a keys block inside livekit.yaml (JARVIS-1.0 hard-coded one).
+#   - rtc.udp_port 7882 is set in livekit.yaml so the published UDP port matches what the
+#     server uses (JARVIS-1.0 published 7882 but configured a 50000 to 60000 range).
+#   - Postgres credentials come from the environment (JARVIS-2.0 hard-coded them).
+#   - Kokoro image is the ghcr.io build (the Docker Hub name in JARVIS-2.0 returns 404) and
+#     the container port is 8880 (JARVIS-2.0 mapped to 8000, where nothing listens).
+#   - No n8n: nothing in either prototype called it.
+#   - Redis is kept because the task asked for it, wired through the redis block in
+#     livekit.yaml. A single node runs without it; remove both to drop it.
+
+name: voice-surface
+
+services:
+  livekit:
+    image: livekit/livekit-server:latest
+    command: --config /etc/livekit.yaml
+    environment:
+      # "key: secret" per line, the format livekit-server --keys documents.
+      LIVEKIT_KEYS: "${LIVEKIT_API_KEY:?set LIVEKIT_API_KEY in .env}: ${LIVEKIT_API_SECRET:?set LIVEKIT_API_SECRET in .env}"
+    ports:
+      - "7880:7880"        # signalling (ws) and HTTP API
+      - "7881:7881"        # RTC over TCP
+      - "7882:7882/udp"    # RTC over UDP (single mux port, see livekit.yaml)
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    # No host port: only the livekit service reaches it, on the compose network.
+    restart: unless-stopped
+
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:?set POSTGRES_USER in .env}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}"
+      POSTGRES_DB: "${POSTGRES_DB:?set POSTGRES_DB in .env}"
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - voice-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  kokoro:
+    # CPU build. GPU builds: ghcr.io/remsky/kokoro-fastapi-gpu:latest (CUDA) or
+    # ghcr.io/remsky/kokoro-fastapi-rocm:latest, per the Kokoro-FastAPI README.
+    image: ghcr.io/remsky/kokoro-fastapi-cpu:latest
+    ports:
+      - "127.0.0.1:8880:8880"
+    restart: unless-stopped
+
+volumes:
+  voice-db-data:

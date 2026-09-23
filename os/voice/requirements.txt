@@ -1,0 +1,24 @@
+# os/voice runtime and test deps. Exact pins by task instruction (trust-spine uses ranges).
+#
+# livekit-agents 1.8.2 is the newest release on the package index at the time of writing
+# (GitHub release dated 2026-09-15). AgentServer, rtc_session, AgentSession, Agent.llm_node
+# and turn_handling["interruption"] were read from this exact wheel before agent.py was written.
+# The three plugins ship on the same release train and 1.8.2 exists for each on the index.
+livekit-agents==1.8.2
+livekit-plugins-silero==1.8.2      # VAD (silero.VAD.load), as in both JARVIS prototypes
+livekit-plugins-openai==1.8.2      # STT (gpt-4o-mini-transcribe), LLM client for Ollama and cloud, TTS client for Kokoro
+livekit-plugins-deepgram==1.8.2    # optional STT, used when STT_PROVIDER=deepgram
+
+# Installed locally at these versions when the scaffold was written; both fall inside the
+# ranges livekit-agents 1.8.2 declares (aiohttp~=3.10). python-dotenv only loads .env in main().
+aiohttp==3.12.14
+python-dotenv==1.1.1
+
+# Tests.
+pytest==9.0.1
+
+# Optional: long-term memory on mem0 + pgvector (MEMORY_BACKEND=mem0).
+# 2.1.0 is the current index release. Its AsyncMemory.from_config / add / search signatures
+# were read from the 2.1.0 wheel but never executed here, so the adapter is a stub and this
+# pin is unverified at runtime. Uncomment to try it.
+# mem0ai==2.1.0
