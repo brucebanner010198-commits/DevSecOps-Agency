@@ -38,14 +38,14 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-
 
 ## Start
 
-- Single user voice: CEO. All other agents are internal.
+- Two channels to the Chairman: direct call to CEO, or a Board of Directors meeting the Chairman chairs. All other agents are internal.
 - Reply refs: repo-relative or project-relative paths only, e.g. `agents/research/market-researcher.md:40` or `<slug>/security/code-audit.md:§XSS`. No absolute `/sessions/...`, no `~/...`.
 - Cite every factual claim with `file:line` (or `file:§section`). No uncited claims.
 - If you're not sure, say "unknown" and stop. Do not fabricate.
 
 ## Architecture
 
-- CEO → 16 Chiefs → 75 specialists. Three tiers (CEO / Chief / Specialist) with an optional fourth — **workers** — that a specialist may spawn under `skills/fanout/`. Depth cap is three levels by default; deeper requires a council-lead ADR.
+- Chairman of the Board → Board of Directors → CEO → 16 Chiefs → 75 specialists. Three delivery tiers (CEO / Chief / Specialist) with an optional fourth — **workers** — that a specialist may spawn under `skills/fanout/`. Depth cap is three levels by default; deeper requires a council-lead ADR. The Board sits above the CEO in governance, parallel to this delivery depth cap — it does not add a fourth delivery tier.
 - Dual-hat: `engineering-lead` covers Architecture (CTO) and Execution (VP-Eng). Audit + Evaluation + Red-Team + SRE councils have strict independence invariants — no dual-hatting with any delivery role.
 - Agent files live at `agents/<council>/<agent>.md` (e.g. `agents/security/threat-modeler.md`). The only exception is `agents/ceo.md` at the root.
 - Council contracts live at `councils/<council>/AGENTS.md` (the must / must-not / gate heuristic). Council rosters live at `councils/<council>/TEAM.md` (lead + specialists + worker patterns).
@@ -119,7 +119,7 @@ Root rules only. **Read scoped `AGENTS.md` before touching a subtree.** Wave-by-
 
 - Main entry: `/devsecops-agency:ceo <idea>`.
 - Dashboard: `/devsecops-agency:command-center`.
-- Power-user: `/devsecops-agency:board-meeting`, `/devsecops-agency:council-meeting`.
+- Power-user: `/devsecops-agency:board-meeting` (Board of Directors), `/devsecops-agency:exec-meeting` (CEO + Chiefs), `/devsecops-agency:council-meeting`.
 - Retro + REM dreaming: `/devsecops-agency:retro`.
 
 ## Research
@@ -144,14 +144,15 @@ Before a phase transition, a Chief must have read: its council's scoped `AGENTS.
 
 ## CEO
 
-- `agents/ceo.md` is the only user-facing agent.
+- `agents/ceo.md` is the primary Chairman-facing agent for direct calls; `agents/board/board-director.md` represents the Board in a convened Board of Directors meeting.
 - Must not write code, run tests, or produce design artifacts — delegate and decide only.
-- Must escalate to the user via `inbox.json` + user-meeting before waiving a blocking council red, changing a project budget, or firing / hiring an agent.
+- Must escalate to the Chairman via `inbox.json` + `user-meeting` (direct call) or `board-meeting` (group decision) before waiving a blocking council red, changing a project budget, or firing / hiring an agent.
 - Must file an ADR in the same turn as any material decision.
+- Reports to the Board of Directors (chaired by the Chairman); is reachable directly by the Chairman for 1:1 execution.
 
 ## Anti-patterns
 
-- Don't talk to the user mid-phase. CEO only, after a board decision.
+- Don't talk to the user mid-phase. CEO only, after an exec decision.
 - Don't skip STRIDE or OWASP for "quick" projects. No such project.
 - Don't cite facts without `file:line`.
 - Don't expose `/sessions/...` absolute paths in replies to the user.
@@ -253,3 +254,5 @@ Before a phase transition, a Chief must have read: its council's scoped `AGENTS.
 - Don't enforce the Constitution with a new council. Enforcement flows through CAO + CRT + CEVO + CISO + runtime hooks as they already exist (`§11.1`). Adding a fifth blocking council requires a §10 amendment + User approval.
 - Don't issue a penalty against the User. `§11.5` — the User is sovereign; enforcement bodies MUST NOT levy findings against the User. Receipt-integrity audits of User-directed ADRs are allowed; judgment audits are not.
 - Don't make silent enforcement actions. Per `§11.6` every enforcement action files a User-visible ADR. Silent observations, private warnings, or uncited demotions are themselves a CAO red.
+- Don't call the CEO+Chiefs meeting a "board meeting." That is the `exec-meeting` — the Board of Directors meeting is the Chairman's group convening (`skills/board-meeting`).
+- Don't route a group decision through a direct CEO call. Group decisions — strategy, project-goal approval, USER-ONLY actions needing group review — go through `skills/board-meeting`, not `skills/user-meeting`.

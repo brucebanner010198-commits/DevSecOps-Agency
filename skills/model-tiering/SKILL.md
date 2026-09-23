@@ -57,7 +57,7 @@ No `inherit`, no blank, no unknown values. `skill-creator` refuses to author an 
 
 ## Dispatch enforcement
 
-The CEO's dispatch step (in `skills/ceo/SKILL.md > ## 3. Board meetings`) reads the target agent's frontmatter before calling the Task tool. If `model:` is missing or unknown, the CEO:
+The CEO's dispatch step (in `skills/ceo/SKILL.md > ## 3. Executive sessions`) reads the target agent's frontmatter before calling the Task tool. If `model:` is missing or unknown, the CEO:
 
 1. Logs an `error` entry to its session log with `"missing model tier for <agent>"`.
 2. Invokes `skill-creator` to add the tier per `references/tier-rules.md`.

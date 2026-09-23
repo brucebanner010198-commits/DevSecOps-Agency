@@ -8,7 +8,7 @@ The 4 retro kinds, their triggers, attendance, and output path.
 
 **Attendees (required):** `ceo`, `cao`, `cevo`, `crt`. The three informing-council chiefs are here because their close-audit / close-eval / pre-release-red-team outputs are the primary inputs.
 
-**Optional:** the user (Sir), at the user's request via `user-meeting`.
+**Optional:** the Chairman, at the Chairman's request via `user-meeting`.
 
 **Output:** `_meetings/<slug>-retro-<YYYY-MM-DD>.md`.
 

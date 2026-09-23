@@ -72,4 +72,4 @@ After writing the skill, add a row to `skills/AGENTS.md > ## Skill index`:
 | `<name>` | <one-line trigger> |
 ```
 
-Keep the table alphabetical after the core skills (ceo, ship-it, command-center, board-meeting, council-meeting, intake, status, escalate, retro, memory, session-log, gates, taskflow, worktree).
+Keep the table alphabetical after the core skills (ceo, ship-it, command-center, board-meeting, exec-meeting, council-meeting, intake, status, escalate, retro, memory, session-log, gates, taskflow, worktree).

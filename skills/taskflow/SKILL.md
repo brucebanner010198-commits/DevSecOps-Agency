@@ -2,7 +2,7 @@
 name: taskflow
 description: >
   Internal skill. Defines the task state machine the CEO uses to track every
-  unit of work the board has dispatched: state transitions, fix-loop caps,
+  unit of work the executive session has dispatched: state transitions, fix-loop caps,
   handoff invariants, dependency rules, and the `tasks[]` array in status.json.
   Invoked by the CEO on every dispatch, report, fix-loop, and escalation. Not a
   user-facing skill.
@@ -124,7 +124,7 @@ Any other transition is a bug. The CEO bounces it.
 | CEO accepts waiver                        | `needs-decision`| `done`          | write `waiver` entry to chat.jsonl               |
 | Fix attempts reach 3                      | `needs-decision`| `blocked`       | seed `ladderRung=2`, dispatch Rung 2 owner       |
 | User responds to inbox                    | `blocked`       | `in-progress` OR `done` OR `cancelled` | consume inbox item           |
-| CEO kills the task                        | any non-terminal| `cancelled`     | write `board-decision` entry                     |
+| CEO kills the task                        | any non-terminal| `cancelled`     | write `exec-decision` entry                      |
 
 ## Fix-loop cap
 
@@ -143,7 +143,7 @@ A handoff from phase N to phase N+1 is legal only when:
 3. `status.json > gates.byPhase[N]` is set to `green` or `yellow`.
 4. If any `blocking-council` red was waived, `gates.waivers` has the entry and the user-consent `inboxItem` is closed.
 
-If any invariant fails, the CEO refuses to advance the phase and emits a `board-decision` entry explaining which invariant tripped.
+If any invariant fails, the CEO refuses to advance the phase and emits an `exec-decision` entry explaining which invariant tripped.
 
 ## Dependency rules
 

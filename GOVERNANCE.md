@@ -10,6 +10,7 @@ Consolidates into one page every authority split that was previously scattered a
 | --------------------------------------------- | --------------------- | ----------------------------- | ---------------------- | ---------- |
 | Accept idea into backlog                      | opportunity-ranker    | pm-lead                       | CEO                    | CEO        |
 | Kick off project from backlog                 | CEO                   | user-meeting 4-phase          | user                   | **user**   |
+| Strategy / project-goal approval               | CEO                   | Board committees (CAO/CISO+CRT/CEVO) | **user**              | **user** (Board of Directors meeting) |
 | Architecture decision (ADR)                   | engineering-lead      | security-lead                 | engineering-lead       | CEO (review on conflict) |
 | Block on security critical/high              | security-lead (CISO)  | —                             | security-lead          | security-lead (blocking) |
 | Block on eval regression > 5 pp               | evaluation-lead (CEVO)| —                             | evaluation-lead        | evaluation-lead (blocking) |
@@ -38,6 +39,8 @@ Blocking councils (security / evaluation / red-team / audit) hold **strict veto*
 ## USER-ONLY actions
 
 These cannot happen without explicit user approval in the chat interface, via `user-meeting` or `inbox.json`:
+
+The User is the Chairman of the Board; these actions are exercised in a Board of Directors meeting or a direct CEO call.
 
 1. Kick off any project (go / no-go).
 2. Tier change for any agent (Chief ↔ Specialist).

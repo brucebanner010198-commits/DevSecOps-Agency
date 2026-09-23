@@ -5,14 +5,16 @@ description: >
   synchronous decision-making moment with ≥ 2 attendees (humans or agents).
   It writes durable minutes in `_meetings/<date>-<kind>.md` with attendees,
   agenda, discussion, decisions, and action items. The CEO invokes it for:
-  (1) board meetings (CEO + Chiefs on phase transitions); (2) council
-  meetings (Chief + specialists); (3) user meetings (CEO + user — top-5
-  idea pitch, ETA commit, scope review); (4) red-team councils (future Wave 6);
-  (5) audit reviews (future Wave 3 CAO); (6) any other formally convened
-  discussion. Trigger phrases: "write the minutes", "minutes of", "meeting
-  notes", "document this discussion", "convene council — document it", or
-  internal invocation by the `ceo`, `board-meeting`, or `council-meeting`
-  skills. Part of Wave 1 of v0.3.0 — the company release.
+  (1) executive sessions (CEO + Chiefs on phase transitions); (2) council
+  meetings (Chief + specialists); (3) direct Chairman↔CEO calls (top-5
+  idea pitch, ETA commit, scope review); (4) Board of Directors meetings
+  (Chairman + Board + CEO — strategy/goal approval); (5) red-team councils
+  (future Wave 6); (6) audit reviews (future Wave 3 CAO); (7) any other
+  formally convened discussion. Trigger phrases: "write the minutes",
+  "minutes of", "meeting notes", "document this discussion", "convene
+  council — document it", or internal invocation by the `ceo`,
+  `exec-meeting`, `board-meeting`, or `council-meeting` skills. Part of
+  Wave 1 of v0.3.0 — the company release.
 metadata:
   version: "0.1.0"
 ---
@@ -86,13 +88,16 @@ Exactly this shape, every meeting:
 
 Cap: **180 lines of markdown per meeting.** Meetings longer than that fracture into topic-specific minutes.
 
-## Six meeting kinds (as of v0.3.0)
+## Seven meeting kinds (as of v0.7.0)
 
 ### `user`
-CEO + the user. Top-5 idea pitch, ETA commit, scope review, retro review, escalations from `inbox.json`. Mandatory minutes for every user meeting regardless of length.
+Direct 1:1 Chairman ↔ CEO call. Top-5 idea pitch, ETA commit, scope review, retro review, escalations from `inbox.json`. Mandatory minutes for every user meeting regardless of length.
 
 ### `board`
-CEO + a subset of Chiefs. Phase transitions. Mandatory minutes if ≥ 2 Chiefs convened simultaneously. Single-Chief phase reports go to `chat.jsonl > board-decision` instead and DO NOT need a minutes file.
+Chairman + Board of Directors (`board-director` + committee Chiefs) + CEO. Strategy/goal approval, CEO oversight, USER-ONLY decisions needing group review. The **only** group meeting the Chairman attends. Mandatory minutes for every convening. See `skills/board-meeting`.
+
+### `exec`
+CEO + a subset of Chiefs. Phase transitions. No Chairman present. Mandatory minutes if ≥ 2 Chiefs convened simultaneously. Single-Chief phase reports go to `chat.jsonl > exec-decision` instead and DO NOT need a minutes file. See `skills/exec-meeting`.
 
 ### `council-<council-slug>`
 Chief + their specialists. Scope planning, fix-loop triage, waiver consideration. Mandatory minutes if the council is **blocking** (security, legal) or if a waiver is considered. Informing councils (product, devops, qa, docs, research) log to `chat.jsonl` only unless convened for waiver consideration.
@@ -141,9 +146,10 @@ Generated on every write. Sorted by date descending, then by filename.
 
 ## Contract with other skills
 
-- **`board-meeting`** — invokes `meeting-minutes` on start, updates on progress, finalises on end.
+- **`board-meeting`** — invokes `meeting-minutes` (kind: `board`) on start, updates on progress, finalises on end. Chairman + Board + CEO attendees.
+- **`exec-meeting`** — invokes `meeting-minutes` (kind: `exec`) on start, updates on progress, finalises on end. CEO + Chiefs attendees.
 - **`council-meeting`** — same, but only for blocking councils or waiver-considering sessions.
-- **`ceo`** — invokes `meeting-minutes` for every user meeting.
+- **`ceo`** — invokes `meeting-minutes` for every direct Chairman↔CEO call (kind: `user`).
 - **`adr`** — any decision in a meeting that fires an ADR trigger is cross-linked (ADR's `Related:` ↔ minutes `Decisions` row).
 - **`taskflow`** — every action item becomes a task; minutes store the task ID.
 - **`retro`** — reads all meetings in the retro window; surfaces meeting frequency, decision count, unfiled-ADR count.

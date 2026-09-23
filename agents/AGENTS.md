@@ -15,6 +15,7 @@ Telegraph. Read before authoring or editing an agent file.
 | Council       | Color     | Agents                                              |
 | ------------- | --------- | --------------------------------------------------- |
 | CEO           | purple    | `ceo`                                               |
+| Board         | emerald   | `board-director`                                    |
 | Research      | teal      | `cro`, market-researcher, tech-scout, literature-reviewer, user-researcher |
 | Product       | cyan      | `pm-lead`, spec-writer, product-strategist, roadmap-planner |
 | Architecture  | blue      | `engineering-lead` (CTO hat), system-architect, api-designer, data-architect, infra-architect |

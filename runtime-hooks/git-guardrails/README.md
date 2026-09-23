@@ -16,12 +16,12 @@ The Agency's existing runtime hooks (secrets-scanner, tool-guardian, governance-
 
 ## What gets blocked
 
-Patterns are intentionally broad — better to block a benign variant than miss a destructive one. The Sovereign can run blocked operations directly outside the agent if intended.
+Patterns are intentionally broad — better to block a benign variant than miss a destructive one. The Chairman can run blocked operations directly outside the agent if intended.
 
 | Category | Pattern examples | Why blocked |
 |---|---|---|
 | **Force pushes** | `git push --force`, `git push -f`, `git push --force-with-lease`, `git push --mirror` | Destroys remote history; can lose other contributors' commits |
-| **All pushes** | `git push`, `git push origin`, `git push --tags` | USER-ONLY per Constitution §2.2 (publish externally) — Sovereign decides |
+| **All pushes** | `git push`, `git push origin`, `git push --tags` | USER-ONLY per Constitution §2.2 (publish externally) — Chairman decides |
 | **Hard resets** | `git reset --hard`, `git reset --keep` | Destroys uncommitted work; reflog recovers commits but not working-tree changes |
 | **Working-tree wipes** | `git clean -f`, `git clean -fd`, `git clean -fdx`, `git clean -dx` | Untracked files NOT recoverable from reflog |
 | **Branch force-deletes** | `git branch -D`, `git branch --delete --force` | Bypasses merge-check |
@@ -54,7 +54,7 @@ Hook chain order is enforced by the runtime — preToolUse hooks run in the orde
 
 Bypass attempts (e.g. invoking the destructive command via `bash -c "git push origin main"` to dodge the matcher, or via `eval` evaluation, or via writing the command to a file and sourcing it) file a `runtime-hook-bypass` ADR per `TRUST.md` §2.7. The hook itself does not detect those bypasses — `governance-audit` does, in its session-end pass. This hook's job is to catch the obvious-and-honest cases at preToolUse time.
 
-If the Sovereign wants to genuinely run a destructive command, the right path is to leave the agent session, run the command directly in their own terminal, and then resume the agent session. This is by design — destructive operations are the Sovereign's call, not the agent's.
+If the Chairman wants to genuinely run a destructive command, the right path is to leave the agent session, run the command directly in their own terminal, and then resume the agent session. This is by design — destructive operations are the Chairman's call, not the agent's.
 
 ## Local testing
 

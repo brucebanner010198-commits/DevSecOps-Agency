@@ -1,23 +1,25 @@
 ---
 name: user-meeting
 description: >
-  This skill should be used when the CEO convenes the user for a selection
-  meeting — most commonly the top-5 idea pipeline handoff, but also ETA
-  commits, pivot approvals, and mid-project user escalations. The skill
-  provides a deterministic 4-phase flow (brief → present → capture → commit)
-  that ends with a durable `_meetings/<date>-user.md` entry, an ADR for any
-  material decision, and taskflow tasks for every action item. Exactly one
-  of these meetings per top-5 cycle. Also renders a live Cowork artifact so
-  the user can read the top-5 side-by-side with chat. Trigger phrases:
-  "user meeting", "take it to the user", "present top-5", "user picks",
-  "commit ETA", "escalate to user".
+  This skill should be used when the CEO convenes the Chairman of the Board
+  for a direct 1:1 selection meeting — most commonly the top-5 idea pipeline
+  handoff, but also ETA commits, pivot approvals, and mid-project
+  escalations. The skill provides a deterministic 4-phase flow (brief →
+  present → capture → commit) that ends with a durable
+  `_meetings/<date>-user.md` entry, an ADR for any material decision, and
+  taskflow tasks for every action item. Exactly one of these meetings per
+  top-5 cycle. Also renders a live Cowork artifact so the Chairman can read
+  the top-5 side-by-side with chat. Trigger phrases: "user meeting", "take
+  it to the Chairman", "present top-5", "Chairman picks", "commit ETA",
+  "escalate to the Chairman". **Group decisions use `skills/board-meeting`
+  instead** — this skill is the direct 1:1 Chairman ↔ CEO channel only.
 metadata:
   version: "0.3.0-alpha.2"
 ---
 
-# user-meeting — the CEO/user selection flow
+# user-meeting — the direct Chairman ↔ CEO channel
 
-The only structured agency ↔ user convening. Everything else is a chat message. Used when the decision at hand requires the user's signature.
+The direct 1:1 agency ↔ Chairman convening. Everything else is a chat message. Used when the decision at hand requires the Chairman's signature but does not need the full Board. See `skills/board-meeting` for the group convening.
 
 ## When to invoke
 

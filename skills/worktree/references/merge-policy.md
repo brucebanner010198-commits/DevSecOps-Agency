@@ -93,7 +93,7 @@ When merge returns `STALE(touched)`:
 ```json
 {
   "ts": "<iso>",
-  "scope": "board",
+  "scope": "exec",
   "from": "ceo",
   "to": "<chief>",
   "type": "merge",
@@ -110,7 +110,7 @@ On conflict:
 ```json
 {
   "ts": "<iso>",
-  "scope": "board",
+  "scope": "exec",
   "from": "ceo",
   "to": "<chief>",
   "type": "merge",
@@ -128,7 +128,7 @@ On structural conflict (task goes `blocked`, not merged):
 ```json
 {
   "ts": "<iso>",
-  "scope": "board",
+  "scope": "exec",
   "from": "ceo",
   "to": "<chief>",
   "type": "escalate",

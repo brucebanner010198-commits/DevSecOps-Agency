@@ -8,7 +8,7 @@ description: >
   cross-project analysis. Trigger phrases: "show me what market-researcher has
   concluded across projects", "replay the CISO's recent decisions", "what did
   we say about OAuth last time", or internal invocation by the `ceo`,
-  `board-meeting`, and `council-meeting` skills after every dispatch.
+  `exec-meeting`, `board-meeting`, and `council-meeting` skills after every dispatch.
 metadata:
   version: "0.1.0"
 ---

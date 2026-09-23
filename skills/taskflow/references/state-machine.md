@@ -1,6 +1,6 @@
 # State machine — entry and exit conditions
 
-Reference for each of the six states. If a task is in a state but the invariants don't hold, the CEO treats it as a bug and writes a `board-decision` entry noting the inconsistency.
+Reference for each of the six states. If a task is in a state but the invariants don't hold, the CEO treats it as a bug and writes an `exec-decision` entry noting the inconsistency.
 
 ## queued
 

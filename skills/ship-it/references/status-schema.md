@@ -169,15 +169,15 @@ Aggregate view. The `gates` skill is the single writer; the command-center is th
 One JSON object per line. New fields: `scope`, `council`, `gate`, `artifacts` (array):
 
 ```json
-{"ts":"<iso>","scope":"board","from":"ceo","to":"cro","type":"dispatch","phase":"discovery","note":"run the research council"}
-{"ts":"<iso>","scope":"board","from":"cro","to":"ceo","type":"report","phase":"discovery","gate":"green","artifacts":["research-brief.md"],"note":"wedge: dorms"}
+{"ts":"<iso>","scope":"exec","from":"ceo","to":"cro","type":"dispatch","phase":"discovery","note":"run the research council"}
+{"ts":"<iso>","scope":"exec","from":"cro","to":"ceo","type":"report","phase":"discovery","gate":"green","artifacts":["research-brief.md"],"note":"wedge: dorms"}
 {"ts":"<iso>","scope":"council","council":"research","from":"cro","to":"market-researcher","type":"dispatch","artifact":"research/market.md"}
 {"ts":"<iso>","scope":"memory","from":"ceo","to":"_memory","type":"write","tier":"light","artifact":"_memory/memory/2026-04-20.md","note":"5 bullets"}
 ```
 
-`type` vocabulary: `dispatch · report · handoff · board-decision · fix-loop · escalate · resume · write · waiver · merge · stale · conflict`.
+`type` vocabulary: `dispatch · report · handoff · exec-decision · board-decision · fix-loop · escalate · resume · write · waiver · merge · stale · conflict`.
 `gate` vocabulary: `green · yellow · red · n/a` (see `skills/gates/SKILL.md` for meaning and blocking-council rules).
-`scope` vocabulary: `board · council · memory`.
+`scope` vocabulary: `board · exec · council · memory`. `board` = the Chairman's Board of Directors meeting (`skills/board-meeting`); `exec` = CEO + Chiefs (`skills/exec-meeting`).
 `tier` vocabulary (memory scope only): `light · deep · rem`.
 `state` vocabulary (tasks[]): `queued · in-progress · needs-decision · blocked · done · cancelled` (see `skills/taskflow/SKILL.md`).
 

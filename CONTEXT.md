@@ -33,9 +33,17 @@ An agent reporting to a Chief, owning a specific skill or workflow. E.g. `panel-
 An ephemeral, parallel-dispatched agent spawned by a Specialist when work shards cleanly. See `agents/AGENTS.md` Worker tier.
 *Avoid*: "subagent" (Worker is the precise term in the Agency).
 
-### Sovereign / User
-The single human directing the Agency. Holds the **ten USER-ONLY actions** per Constitution §2.2. The Agency has exactly one Sovereign per session.
-*Avoid*: "owner," "operator," "client."
+### Chairman of the Board (the User)
+The single human directing the Agency. Chairs the **Board of Directors** — the only *group* meeting the human attends. Holds the ten USER-ONLY actions per Constitution §2.2. Is *sovereign*: holds ultimate authority. The Agency has exactly one Chairman per session.
+*Avoid*: "owner," "operator," "client," "sovereign" as a role name (sovereignty is a property, not the title), "Sir."
+
+### Board of Directors
+The AI governance body chaired by the Chairman. Oversees the CEO, sets and approves strategy/goals, holds the blocking-veto committees. Distinct from the C-suite: the Board governs; the CEO + 16 Chiefs operate.
+*Avoid*: "the board" for CEO+Chiefs meetings (that is the **Executive session**).
+
+### Executive session
+The CEO's meeting with the 16 Chiefs to run a phase. Formerly mis-named "board meeting."
+*Avoid*: "board meeting."
 
 ## Process entities
 
@@ -74,6 +82,8 @@ End-to-end resilience exercise per `RESILIENCE.md > Drills`. Five named kinds (c
 ### Panel
 A run of `cross-model-panel` (added v0.5.7, expanded v0.6.0). Four panelists deliberate on a hard question; Chairman synthesizes; ADR captures the receipt.
 *Avoid*: "council" (a Panel is NOT a Council — Council is the long-lived organizational body; Panel is a one-shot deliberation event).
+
+**Disambiguation:** the Panel's Stage-3 synthesizer is the *panel Chairman* / Panel Chair — unrelated to the **Chairman of the Board** (the human).
 
 ### Trigger event
 Any event that auto-invokes a skill or specialist. Cross-model-panel default-triggers: ASI-class findings, Constitution amendments, USER-ONLY decisions over COST §2.4 threshold.

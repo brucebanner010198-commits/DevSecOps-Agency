@@ -33,9 +33,9 @@ RIGHT (vertical):
 
 ## Workflow
 
-### 1. Plan with the Sovereign
+### 1. Plan with the Chairman
 
-Before writing any code, the Specialist confirms with the Sovereign (or with the convening Council if the Sovereign already approved a scoped brief):
+Before writing any code, the Specialist confirms with the Chairman (or with the convening Council if the Chairman already approved a scoped brief):
 
 - Which **public interface** will be exposed or changed
 - Which **behaviors** are most important to test, ranked

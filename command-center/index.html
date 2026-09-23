@@ -353,7 +353,7 @@
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
           <h2 class="text-[17px] font-semibold tracking-tight">Organization</h2>
-          <p class="text-slate-400 text-[13px] mt-0.5">Sovereign → CEO → 16 councils. Four chiefs hold blocking vetoes. Tap a tile for roster.</p>
+          <p class="text-slate-400 text-[13px] mt-0.5">Chairman of the Board → Board of Directors → CEO → 16 councils. Four chiefs hold blocking vetoes (Board standing committees). Tap a tile for roster.</p>
         </div>
         <span class="chip chip-info">Chief → Specialist → Worker</span>
       </div>
@@ -361,9 +361,15 @@
       <!-- Hierarchy nodes -->
       <div class="flex flex-col items-center gap-0 mb-5">
         <div class="card rounded-xl px-5 py-2.5 text-center" style="border-color: rgba(56,189,248,0.35); box-shadow: 0 0 18px rgba(56,189,248,0.10);">
-          <div class="text-[9.5px] uppercase tracking-[0.22em] text-sky-300 font-medium">Sovereign</div>
-          <div class="font-semibold text-[14px] mt-0.5">You — the User</div>
-          <div class="text-[10.5px] text-slate-400 mono mt-0.5">Directs the CEO · 10 USER-ONLY actions</div>
+          <div class="text-[9.5px] uppercase tracking-[0.22em] text-sky-300 font-medium">Chairman of the Board</div>
+          <div class="font-semibold text-[14px] mt-0.5">You — the Chairman</div>
+          <div class="text-[10.5px] text-slate-400 mono mt-0.5">Chairs the Board of Directors · 10 USER-ONLY actions</div>
+        </div>
+        <div class="w-px h-5" style="background: linear-gradient(to bottom, rgba(148,163,184,0.3), transparent);"></div>
+        <div class="card rounded-xl px-5 py-2.5 text-center" style="border-color: rgba(74,222,128,0.35); box-shadow: 0 0 18px rgba(74,222,128,0.10);">
+          <div class="text-[9.5px] uppercase tracking-[0.22em] text-emerald-300 font-medium">Board of Directors</div>
+          <div class="font-semibold text-[14px] mt-0.5">Board</div>
+          <div class="text-[10.5px] text-slate-400 mono mt-0.5">Sets & approves strategy · standing committees: CAO, CISO, CRT, CEVO</div>
         </div>
         <div class="w-px h-5" style="background: linear-gradient(to bottom, rgba(148,163,184,0.3), transparent);"></div>
         <div class="card rounded-xl px-5 py-2.5 text-center" style="border-color: rgba(168,85,247,0.35); box-shadow: 0 0 18px rgba(168,85,247,0.10);">
@@ -533,7 +539,8 @@ const COUNCILS = [
 
 const RHYTHM = [
   { label:"Daily heartbeat",         time:"End of day",            skill:"heartbeat",        note:"session-log + 1-line status" },
-  { label:"Weekly board meeting",    time:"Fridays",               skill:"board-meeting",    note:"CEO + chiefs of blocking councils" },
+  { label:"Board of Directors meeting", time:"As convened",         skill:"board-meeting",    note:"Chairman chairs · strategy & goal approval" },
+  { label:"Weekly executive session",  time:"Fridays",              skill:"exec-meeting",     note:"CEO + chiefs of blocking councils" },
   { label:"Monthly council meeting", time:"Month-end",             skill:"council-meeting",  note:"each of the 16 councils, rotating" },
   { label:"Quarterly retrospective", time:"Jan/Apr/Jul/Oct 31",    skill:"retrospective",    note:"scorecard + lessons" },
 ];

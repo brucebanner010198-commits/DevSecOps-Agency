@@ -31,7 +31,8 @@ If two meetings of the same kind happen the same day:
 
 ## Attendee roles (free text, but conventional)
 
-- `user` — Sir (the human user).
+- `user` — the Chairman of the Board (the human).
+- `board-director` — represents the Board of Directors in a convened Board meeting.
 - `ceo`, `cro`, `cpo`, `cto`, `ciso`, `cqo`, `vp-eng`, `vp-ops`, `cko`, `gc` — Chief slugs.
 - `coo`, `cao`, `cmo`, `cfo`, `cso`, `eval-lead`, `sre-lead` — future Chief slugs (Waves 2–7).
 - `<specialist-slug>` — any agent filename under `agents/`.

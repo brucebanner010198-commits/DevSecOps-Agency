@@ -45,7 +45,7 @@ Every Chief report writes one gate entry to `chat.jsonl`:
 ```json
 {
   "ts": "<iso>",
-  "scope": "board",
+  "scope": "exec",
   "from": "<chief>",
   "to": "ceo",
   "type": "report",
@@ -118,7 +118,7 @@ The aggregate lives in `status.json > gates`:
 A waiver is an explicit CEO-logged override of a `red` from a non-blocking council, recorded after the user accepts the risk in `inbox.json`.
 
 ```json
-{"ts":"<iso>","scope":"board","from":"ceo","to":"<chief>","type":"waiver","gate":"red","reason":"user accepted: tutorial red because feature is behind a flag","waivedBy":"user","inboxItem":"inbox-004"}
+{"ts":"<iso>","scope":"exec","from":"ceo","to":"<chief>","type":"waiver","gate":"red","reason":"user accepted: tutorial red because feature is behind a flag","waivedBy":"user","inboxItem":"inbox-004"}
 ```
 
 A waiver turns a `red` into effectively `yellow` for aggregation and forces a `followups` entry. Blocking-council reds cannot be waived by the CEO alone — they require a user waiver via `inbox.json`.
@@ -130,7 +130,7 @@ When a Chief re-runs after a fix attempt, the new report supersedes the previous
 ## Invocation points (for the CEO)
 
 - After every Chief report: validate gate color, require `followups` on yellow, re-run aggregation, update `status.json > gates`.
-- At each phase close: emit a `board-decision` entry with the phase's aggregate gate.
+- At each phase close: emit a `exec-decision` entry with the phase's aggregate gate.
 - At project close: emit the overall gate and include it in the user-facing summary.
 
 ## Progressive disclosure

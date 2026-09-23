@@ -100,7 +100,7 @@ On a `green` or `yellow` report:
 5. Move the worktree dir to `_worktrees/_merged/<id>-<mergeTs>/` (keep for audit, not active). Update `worktree.json > status: "merged"`, `mergedAt: <iso>`.
 6. Append a `merge` entry to `chat.jsonl`:
    ```json
-   {"ts":"<iso>","scope":"board","from":"ceo","to":"<chief>","type":"merge","worktree":"<id>","writes":["..."],"note":"clean merge"}
+   {"ts":"<iso>","scope":"exec","from":"ceo","to":"<chief>","type":"merge","worktree":"<id>","writes":["..."],"note":"clean merge"}
    ```
 7. Clear `worktree` on the task row.
 

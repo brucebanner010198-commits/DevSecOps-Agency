@@ -35,7 +35,7 @@ _vision/roster/
 3. **COO synthesises `coo-brief.md`** with the standard 4-section shape: census delta, capacity, performance flags, recommendations.
 4. **CEO accepts each recommendation explicitly.** Every accepted recommendation is an ADR in the same CEO turn — never deferred. See `skills/adr/references/decision-triggers.md > People-ops`.
 5. **`skill-creator` executes.** Hires and repurposes go through `skill-creator`. Fires file an archive redirect; the agent file moves to `_vision/roster/_archive/<name>.md`.
-6. **Meeting minutes capture the board-style discussion** if more than one recommendation is debated. 1:1 taskflow-task mapping for every action item per root AGENTS.md.
+6. **Meeting minutes capture the exec-style discussion** if more than one recommendation is debated. 1:1 taskflow-task mapping for every action item per root AGENTS.md.
 
 ## Invariants
 
@@ -51,7 +51,7 @@ _vision/roster/
 
 - `okr.score` runs on every COO report. `okr_alignment` is against agency-capacity OKRs only.
 - `gates.validate` uses People-ops heuristic in `councils/people-ops/AGENTS.md > Gate heuristic`.
-- `meeting-minutes` writes if board discussion involves ≥ 2 recommendations.
+- `meeting-minutes` writes if exec discussion involves ≥ 2 recommendations.
 - `capacity` skill (sibling) supplies the utilization bands that `roster-manager` reads.
 - `audit` skill (sibling) validates the resulting paper trail in the next close-audit.
 

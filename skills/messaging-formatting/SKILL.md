@@ -178,7 +178,7 @@ All gates green.
 ## Integration points
 
 - `status-writer`, `incident-comms`, `standup-writer`, `stakeholder-update`, `daily-briefing`, `release-announcement` — any specialist that ends a shift by posting to a human channel.
-- `board-meeting`, `council-meeting` — meeting minutes posted back to the room.
+- `board-meeting`, `exec-meeting`, `council-meeting` — meeting minutes posted back to the room.
 - `notify` — push-notify on completion; picks surface from the channel descriptor.
 - `escalate`, `ladder` — escalation messages need correct at-mentions or they silently fail to notify.
 

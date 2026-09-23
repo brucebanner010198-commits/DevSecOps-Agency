@@ -111,7 +111,8 @@
   .msg { display: grid; grid-template-columns: 70px auto 1fr; gap: 8px; align-items: baseline;
     font-size: 12px; padding: 6px 8px; border-radius: 6px; background: var(--panel-2); }
   .msg.scope-council { background: rgba(27,36,51,.5); border-left: 2px solid var(--line); padding-left: 10px; }
-  .msg.scope-board { background: var(--panel-2); border-left: 2px solid var(--accent); }
+  .msg.scope-exec { background: var(--panel-2); border-left: 2px solid var(--accent); }
+  .msg.scope-board { background: var(--panel-2); border-left: 2px solid var(--good); }
   .msg time { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 11px; }
   .msg .who { color: var(--text); }
   .msg .who b { color: var(--accent); }
@@ -121,7 +122,8 @@
   .b-handoff       { background: rgba(79,140,255,.18);  color: var(--accent); }
   .b-dispatch      { background: rgba(89,194,255,.18);  color: var(--info); }
   .b-report        { background: rgba(61,220,151,.18);  color: var(--good); }
-  .b-boarddecision { background: rgba(179,136,255,.18); color: var(--ceo); }
+  .b-execdecision  { background: rgba(179,136,255,.18); color: var(--ceo); }
+  .b-boarddecision { background: rgba(74,222,128,.18);  color: var(--good); }
   .b-decision      { background: rgba(255,180,84,.18);  color: var(--warn); }
   .b-escalate      { background: rgba(255,93,108,.2);   color: var(--bad); }
   .b-resume        { background: rgba(61,220,151,.18);  color: var(--good); }
@@ -167,10 +169,10 @@
     <h2>Organisation</h2>
     <div class="ceo-node">
       <div>
-        <div class="ceo-title">CEO · single point of contact</div>
+        <div class="ceo-title">CEO · single executive point of contact</div>
         <div class="ceo-name" id="ceo-name">ceo</div>
       </div>
-      <div class="ceo-sub">chairs the board · filters to 1 voice for the user</div>
+      <div class="ceo-sub">chairs the executive session · filters to 1 voice for the Chairman</div>
     </div>
     <div class="org" id="org"></div>
   </section>
@@ -186,6 +188,7 @@
       <span class="chat-filter">
         <button data-filter="all" class="active">All</button>
         <button data-filter="board">Board</button>
+        <button data-filter="exec">Exec</button>
         <button data-filter="council">Council</button>
       </span>
     </h2>

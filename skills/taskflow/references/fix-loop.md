@@ -18,7 +18,7 @@ When issuing a fix-loop, the CEO writes a `fix-loop` entry to `chat.jsonl` that 
 ```json
 {
   "ts": "<iso>",
-  "scope": "board",
+  "scope": "exec",
   "from": "ceo",
   "to": "<chief>",
   "type": "fix-loop",

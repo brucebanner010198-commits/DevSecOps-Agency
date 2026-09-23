@@ -56,7 +56,7 @@ Any single `red` → phase `red`. No `red` but any `yellow` → phase `yellow`. 
 - A test report or metric file.
 
 **Red** evidence:
-- A decision documented in `chat.jsonl > board-decision`.
+- A decision documented in `chat.jsonl > exec-decision`.
 - A regression detected by QA or red-team.
 - A cost / time / scope change that worsens the KR.
 

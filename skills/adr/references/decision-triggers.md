@@ -135,7 +135,7 @@ Heuristic: **if you'd want a future Chief to know why, file an ADR.**
 
 ## Enforcement
 
-The CEO SKILL.md (v0.3.0+) includes an `adr.check` step inside the board-meeting loop. After each gate validation, the CEO asks: "did this phase fire any of the mandatory triggers?" If yes and no ADR was filed in this project's `_decisions/` since the phase started, the CEO pauses the pipeline until the ADR exists.
+The CEO SKILL.md (v0.3.0+) includes an `adr.check` step inside the exec-meeting loop. After each gate validation, the CEO asks: "did this phase fire any of the mandatory triggers?" If yes and no ADR was filed in this project's `_decisions/` since the phase started, the CEO pauses the pipeline until the ADR exists.
 
 This is a soft gate — the CEO can escalate to the user if the pause persists, but the default is: file the ADR, resume.
 

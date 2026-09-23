@@ -86,9 +86,9 @@ See `references/rollup-rubric.md` for aggregation edge cases.
 
 ## Integration with the CEO skill
 
-CEO SKILL.md section 3 (Board meetings) will be updated to:
+CEO SKILL.md section 3 (Executive sessions) will be updated to:
 - Run `okr.score` after receiving a Chief report (before `gates.validate`).
-- Emit the `okr_alignment` line into the `chat.jsonl > board-decision` entry.
+- Emit the `okr_alignment` line into the `chat.jsonl > exec-decision` entry.
 - If `okr_alignment: red` AND council gate is `green`, escalate a decision item to `inbox.json` (user choice: proceed-with-misalignment vs halt). Record via `adr`.
 
 CEO SKILL.md section 5 (Close-out) will be updated to:

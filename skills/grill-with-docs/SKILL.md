@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: A relentless interview pattern that the Agency invokes when an agent realizes it doesn't have enough information to make a decision well. Walk down each branch of the design tree one question at a time, resolve dependencies between decisions before continuing, and update the project's CONTEXT.md and ADRs inline as terms get sharpened and load-bearing decisions crystallize. Distinct from intake-router (proposed v0.5.4, deferred v0.7.0) which decides project mode at Phase 1; grill-with-docs is the in-flight clarification tool that any specialist invokes mid-task when ambiguity surfaces. Default convening reasons include CONTEXT.md term resolution at Phase 2 (Design), ADR drafting on architecturally-load-bearing trade-offs, and bridging the gap between a Sovereign's prose directive and the testable acceptance criteria that QA gates against.
+description: A relentless interview pattern that the Agency invokes when an agent realizes it doesn't have enough information to make a decision well. Walk down each branch of the design tree one question at a time, resolve dependencies between decisions before continuing, and update the project's CONTEXT.md and ADRs inline as terms get sharpened and load-bearing decisions crystallize. Distinct from intake-router (proposed v0.5.4, deferred v0.7.0) which decides project mode at Phase 1; grill-with-docs is the in-flight clarification tool that any specialist invokes mid-task when ambiguity surfaces. Default convening reasons include CONTEXT.md term resolution at Phase 2 (Design), ADR drafting on architecturally-load-bearing trade-offs, and bridging the gap between a Chairman's prose directive and the testable acceptance criteria that QA gates against.
 metadata:
   version: "1.0.0"
   ratified: "2026-04-26"
@@ -15,7 +15,7 @@ A Specialist invokes `grill-with-docs` when one of these conditions holds:
 
 - The current task references a term whose meaning is unclear in this project's `<slug>/CONTEXT.md` or in the Agency-level `CONTEXT.md`.
 - An architectural choice is being made that satisfies the three-way ADR test (hard to reverse, surprising without context, real trade-off).
-- The Sovereign's directive is prose; QA needs testable acceptance criteria; the gap between the two is wider than the Specialist can close alone.
+- The Chairman's directive is prose; QA needs testable acceptance criteria; the gap between the two is wider than the Specialist can close alone.
 - Two prior council outputs disagree on a domain term and the disagreement is load-bearing.
 
 `grill-with-docs` is NOT the right tool when the Specialist just hasn't tried hard enough. Read the existing `CONTEXT.md`, `<slug>/architecture.md`, recent ADRs first. Convene only after the artifacts are exhausted.
@@ -23,7 +23,7 @@ A Specialist invokes `grill-with-docs` when one of these conditions holds:
 ## Inputs
 
 - The current question or decision the Specialist needs resolved.
-- The convening Specialist's role-card identity (so the Sovereign knows who's asking).
+- The convening Specialist's role-card identity (so the Chairman knows who's asking).
 - Read access to `CONTEXT.md` (Agency-level), `<slug>/CONTEXT.md` (project-level if exists), `<slug>/architecture.md`, recent ADRs in `_decisions/<slug>/adrs/`, and the codebase under `<slug>/`.
 
 ## Outputs
@@ -36,7 +36,7 @@ A Specialist invokes `grill-with-docs` when one of these conditions holds:
 
 ### 1. Read what exists first
 
-Before asking any question of the Sovereign, the Specialist reads:
+Before asking any question of the Chairman, the Specialist reads:
 
 - Agency-level `CONTEXT.md`
 - Per-project `<slug>/CONTEXT.md` (if exists; create lazily during the session if needed)
@@ -44,19 +44,19 @@ Before asking any question of the Sovereign, the Specialist reads:
 - All ADRs in `_decisions/<slug>/adrs/` matching the area being discussed
 - Spot-check the relevant code modules to verify the artifacts match reality
 
-If a question can be answered by the existing artifacts or by reading the code, **answer it from there**. Never ask the Sovereign a question that the artifacts already answer.
+If a question can be answered by the existing artifacts or by reading the code, **answer it from there**. Never ask the Chairman a question that the artifacts already answer.
 
 ### 2. Walk the design tree one question at a time
 
-Ask **exactly one question per turn**. Wait for the Sovereign's answer before continuing.
+Ask **exactly one question per turn**. Wait for the Chairman's answer before continuing.
 
-For each question, propose your **recommended answer** as part of the question. The Sovereign confirms, redirects, or expands. Recommendations make the conversation faster than open-ended questions because the Sovereign can react instead of having to author from scratch.
+For each question, propose your **recommended answer** as part of the question. The Chairman confirms, redirects, or expands. Recommendations make the conversation faster than open-ended questions because the Chairman can react instead of having to author from scratch.
 
 Before asking the next question, decide if the answer to the previous one resolves a dependency for any other branch of the tree. If so, take that branch next; if not, return to the next sibling branch.
 
 ### 3. Inline-update CONTEXT.md as terms get resolved
 
-When the Sovereign uses a term that conflicts with the existing `CONTEXT.md`, surface the conflict immediately:
+When the Chairman uses a term that conflicts with the existing `CONTEXT.md`, surface the conflict immediately:
 
 > *Your CONTEXT.md defines `cancellation` as the customer-initiated termination of an active subscription, but you're using it here to mean a refund of an already-fulfilled order. Should I add `refund` as a separate canonical term, or is `cancellation` actually meant to cover both?*
 
@@ -66,7 +66,7 @@ When a term is resolved, **update CONTEXT.md immediately** — same conversation
 
 ### 4. Cross-reference with code
 
-When the Sovereign states how something works, check whether the code agrees. If you find a contradiction, surface it:
+When the Chairman states how something works, check whether the code agrees. If you find a contradiction, surface it:
 
 > *Your code at `src/orders/cancel.ts:47` cancels entire Orders. You just said partial cancellation is supported. The code doesn't match the spec — which is the truth right now?*
 
@@ -90,7 +90,7 @@ The session ends when the Specialist has enough resolved to proceed with the ori
 
 Before reporting the session complete, the Specialist verifies:
 
-- [ ] Every question that could have been answered by existing artifacts WAS answered from artifacts (no unnecessary Sovereign-time spent).
+- [ ] Every question that could have been answered by existing artifacts WAS answered from artifacts (no unnecessary Chairman-time spent).
 - [ ] Every term resolved during the session has a row in the appropriate `CONTEXT.md`.
 - [ ] Every load-bearing trade-off has either an ADR filed or a written justification for not filing.
 - [ ] Code-vs-spec contradictions surfaced during the session are recorded somewhere (ADR if load-bearing; project notes if not).
@@ -98,13 +98,13 @@ Before reporting the session complete, the Specialist verifies:
 
 ## Anti-patterns
 
-- **Asking the Sovereign questions the existing artifacts already answer.** Read first.
+- **Asking the Chairman questions the existing artifacts already answer.** Read first.
 - **Asking multiple questions at once.** One per turn. Walk the tree.
-- **Open-ended questions without a recommended answer.** Slower for the Sovereign; lazier for the Specialist.
+- **Open-ended questions without a recommended answer.** Slower for the Chairman; lazier for the Specialist.
 - **Batching CONTEXT.md updates to the end of the session.** They get forgotten or merged wrong. Update inline.
 - **Filing an ADR for every decision.** ADRs are receipts for load-bearing decisions only — three-way Nygard test or skip.
 - **Coupling CONTEXT.md to implementation details.** Only domain-meaningful terms. If a term is meaningful only to one module's implementation, it doesn't belong in the project's ubiquitous language.
-- **Treating the session as therapy.** It's a focused work session. The Sovereign's time is finite; resolve the dependency tree and end the session.
+- **Treating the session as therapy.** It's a focused work session. The Chairman's time is finite; resolve the dependency tree and end the session.
 - **Convening during a live incident.** Incidents use `incident-response`. Grilling is for design and clarification, not crisis.
 
 ## Interaction with other skills
@@ -116,7 +116,7 @@ Before reporting the session complete, the Specialist verifies:
 | `intake-router` (deferred v0.7.0) | Convened at Phase 1 to set project scope/mode. `grill-with-docs` is the in-flight clarification tool that any phase can convene; they don't compete. |
 | `cross-model-panel` | When a grilling session surfaces a question that warrants cross-model deliberation (ASI-class, Constitution amendment, USER-ONLY at COST §2.4 threshold), the Specialist hands off to `panel-chair`. |
 | `tdd` | After grilling resolves what to build, `tdd` runs the red-green-refactor loop. The grilling output (acceptance criteria + interface design) is one input to `tdd`. |
-| `improve-codebase-architecture` | Step 3 of that skill drops into a grilling conversation when the Sovereign picks a deepening candidate. Same procedure as this skill, scoped to the candidate. |
+| `improve-codebase-architecture` | Step 3 of that skill drops into a grilling conversation when the Chairman picks a deepening candidate. Same procedure as this skill, scoped to the candidate. |
 
 ## Provenance
 

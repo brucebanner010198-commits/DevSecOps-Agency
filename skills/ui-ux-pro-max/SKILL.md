@@ -50,7 +50,7 @@ Parse the user's request for six slots:
 - **Both critical slots present** → skip to confirmation. One-line restatement showing what was understood and the defaults applied. Ask "confirm or adjust?" Proceed on any affirmative.
 - **One critical slot missing** → ask exactly one targeted question to fill it, then restate + confirm.
 - **Both critical slots missing** → ask at most two questions in a single round (never more), then restate + confirm.
-- **Never ask more than two questions in one round.** Sir's constraint: few inputs, best output.
+- **Never ask more than two questions in one round.** Chairman's constraint: few inputs, best output.
 
 **Defaults to apply silently (mention in confirmation so the user can override):**
 

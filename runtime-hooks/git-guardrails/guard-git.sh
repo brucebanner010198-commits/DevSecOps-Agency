@@ -44,7 +44,7 @@ fi
 # 4. Branch deletions and force-restores (destroy branches and unstaged changes)
 #
 # Patterns are intentionally broad — better to block a benign variant than miss a
-# destructive one. Sovereign can run blocked operations directly outside the agent.
+# destructive one. Chairman can run blocked operations directly outside the agent.
 
 DANGEROUS_PATTERNS=(
   # Force pushes (any form)
@@ -95,7 +95,7 @@ DANGEROUS_PATTERNS=(
 for pattern in "${DANGEROUS_PATTERNS[@]}"; do
   if echo "$COMMAND" | grep -qE -- "$pattern"; then
     MSG="git-guardrails: BLOCKED — '$COMMAND' matches dangerous pattern '$pattern'."
-    REASON="This operation can destroy work that is not recoverable from git reflog, or it requires User-only authorization per Constitution §2.2 (publish externally). The Sovereign can run this operation directly outside the agent if intended."
+    REASON="This operation can destroy work that is not recoverable from git reflog, or it requires User-only authorization per Constitution §2.2 (publish externally). The Chairman can run this operation directly outside the agent if intended."
     echo "$MSG" >&2
     echo "$REASON" >&2
     if [[ "$GUARD_MODE" == "block" ]]; then

@@ -9,7 +9,7 @@ description: >
   Trigger phrases include "open the command center", "show me the agency
   dashboard", "what are the agents doing", "open the project board", "show me
   the board", or /devsecops-agency:command-center. Also called internally by
-  the ceo / ship-it / board-meeting / council-meeting skills after every
+  the ceo / ship-it / exec-meeting / board-meeting / council-meeting skills after every
   handoff so the artifact stays fresh.
 metadata:
   version: "0.3.0"

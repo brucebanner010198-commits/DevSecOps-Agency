@@ -48,7 +48,7 @@ Row format:
 [HH:MM:SS]  [type]  from → to  [gate]  note · artifacts
 ```
 
-Board entries have a blue left border; council entries have a subtle grey left border and lower background opacity.
+Executive-session entries have a blue left border; Board of Directors entries have a green left border; council entries have a subtle grey left border and lower background opacity.
 
 Type badges:
 | Badge              | Color       |
@@ -56,7 +56,8 @@ Type badges:
 | dispatch           | cyan        |
 | report             | green       |
 | handoff            | blue        |
-| board-decision     | purple      |
+| exec-decision      | purple      |
+| board-decision     | emerald     |
 | fix-loop           | orange      |
 | escalate           | red         |
 | resume             | green       |

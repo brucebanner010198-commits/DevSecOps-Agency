@@ -122,7 +122,7 @@ The `okr` skill reads `VISION.md` + `projects/<slug>.md` to score every phase re
 
 ## Integration with the CEO skill
 
-CEO SKILL.md section 1 (Project init) invokes the bootstrap flow if `_vision/` is missing. Section 3 (Board meetings) invokes the pre-dispatch flow before every Task dispatch. Section 5 (Close-out) invokes the update flow if the project introduced a new outcome.
+CEO SKILL.md section 1 (Project init) invokes the bootstrap flow if `_vision/` is missing. Section 3 (Executive sessions) invokes the pre-dispatch flow before every Task dispatch. Section 5 (Close-out) invokes the update flow if the project introduced a new outcome.
 
 ## Anti-patterns
 

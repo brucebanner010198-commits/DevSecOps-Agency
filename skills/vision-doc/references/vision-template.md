@@ -31,7 +31,7 @@ YYYY-MM-DD by <actor> — <one-line rationale>
 # devsecops-agency · vision
 
 ## Mission
-Ship revenue-positive software products for Sir, autonomously, at 2 launches per quarter.
+Ship revenue-positive software products for the Chairman, autonomously, at 2 launches per quarter.
 
 ## Active OKRs (this quarter)
 - [O1] Launch 2 revenue-positive products by 2026-07-31

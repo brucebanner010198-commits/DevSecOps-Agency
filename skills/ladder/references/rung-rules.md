@@ -64,7 +64,7 @@ Authoritative table. Every ladder climb is measured against this file.
 
 ## Rung 6 — User consult (irreducible)
 
-- **Owner:** User (with CEO as scribe).
+- **Owner:** Chairman (with CEO as scribe).
 - **Entry:** Rung 5 failed, OR the blocker is provably user-only from the start (credentials, payment authorization, legal waiver, irreducible product judgment, blocking-council red with no technical workaround).
 - **Action:** CEO writes a single-question `user-meeting` (minutes `kind: user`). Question is yes/no or bounded multiple-choice. Options include: waiver, scope narrowing, park, cancel.
 - **Budget:** 1 question. Timeout = 7 days (CEO calendar). No answer → auto-advance to Rung 7.

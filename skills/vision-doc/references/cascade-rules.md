@@ -54,7 +54,7 @@ Scores (after bonuses):
 Selected slice:
 ```
 ## Vision slice (read-only, for alignment)
-Mission: Ship revenue-positive software products for Sir, autonomously, at 2 launches per quarter.
+Mission: Ship revenue-positive software products for the Chairman, autonomously, at 2 launches per quarter.
 Relevant OKRs:
 - [KR3.1] ≥ 3 memory/patterns/*.md cited per new project brief
 - [KR1.1] Product A reaches $100 MRR within 30 days of launch

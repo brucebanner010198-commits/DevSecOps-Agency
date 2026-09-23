@@ -10,7 +10,7 @@ Concretely:
 
 - `cao`, `adr-auditor`, `gate-auditor`, `okr-auditor`, `memory-auditor` never appear as dispatch agents in a project's `chat.jsonl` with `scope: delivery`.
 - They never author artifacts under `<slug>/` except `<slug>/audit-report.md` (close audit's slug-scoped output).
-- They never vote in a board meeting. Audit reports into board meetings; it doesn't participate in decisions.
+- They never vote in an executive session. Audit reports into executive sessions; it doesn't participate in decisions.
 
 ## Dual-hatting forbidden
 
@@ -38,7 +38,7 @@ Audit agents **may**:
 
 - Read from `_decisions/`, `_meetings/`, `_sessions/`, `_memory/`, `<slug>/chat.jsonl`, `<slug>/status.json`, council `AGENTS.md` files, skill `SKILL.md` files. That's the job.
 - Cite findings from other councils' delivery work. The finding is not participation.
-- Attend a board meeting as a **reporting** presence (their `audit-report.md` is read aloud) without being a decision-maker.
+- Attend an executive session as a **reporting** presence (their `audit-report.md` is read aloud) without being a decision-maker.
 
 ## Audit-of-audit (meta-integrity)
 

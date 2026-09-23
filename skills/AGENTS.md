@@ -34,7 +34,8 @@ Telegraph. Read before authoring or editing a skill.
 | `ceo`              | Main entry point. `/devsecops-agency:ceo`.              |
 | `ship-it`          | Legacy v0.1 pipeline.                                   |
 | `command-center`   | Dashboard artifact.                                     |
-| `board-meeting`    | Power-user re-run of a board phase.                     |
+| `board-meeting`    | Board of Directors convening, chaired by the Chairman.  |
+| `exec-meeting`     | Power-user re-run of an executive-session phase.        |
 | `council-meeting`  | Power-user re-run of a council.                         |
 | `intake`           | Q&A only, no engineering.                               |
 | `status`           | Text summary.                                           |
@@ -51,9 +52,9 @@ Telegraph. Read before authoring or editing a skill.
 | **`vision-doc`** (v0.3.0) | Workspace VISION.md — mission + ≤ 5 OKRs + ≤ 5 non-goals. 3-bullet slice prepended to every dispatch. |
 | **`okr`** (v0.3.0) | Per-project OKR derivation, per-report scoring, quarter roll-up. CEO invokes on every report. |
 | **`adr`** (v0.3.0) | Decision receipts (`_decisions/ADR-NNNN-*.md`). CEO invokes on every material decision trigger. |
-| **`meeting-minutes`** (v0.3.0) | Durable minutes for user / board / blocking-council / red-team / audit / retro convenings. |
+| **`meeting-minutes`** (v0.3.0) | Durable minutes for user / board / exec / blocking-council / red-team / audit / retro convenings. |
 | **`idea-pipeline`** (v0.3.0 Wave 2) | 4-stage portfolio ideation: raw → screened → ranked → top-5. CEO invokes on "what next" / quarter / REM / empty-backlog. |
-| **`user-meeting`** (v0.3.0 Wave 2) | 4-phase CEO ↔ user selection flow (brief → present → capture → commit). Only structured convening with user. |
+| **`user-meeting`** (v0.3.0 Wave 2) | 4-phase CEO ↔ Chairman direct 1:1 selection flow (brief → present → capture → commit). Group decisions use `board-meeting` instead. |
 | **`market-intel`** (v0.3.0 Wave 2) | Canonical shapes for market artifacts. Parsed by section header; readers fail-fast on schema drift. |
 | **`positioning`** (v0.3.0 Wave 2) | Messaging canvas + narrative-score rubric. Consumed by opportunity-ranker, top-5 one-pager, comms-writer. |
 | **`roster`** (v0.3.0 Wave 3) | Living agent registry + hire/fire/tier-change/repurpose lifecycle. COO-owned. Every mutation files an ADR. |
@@ -80,3 +81,5 @@ Telegraph. Read before authoring or editing a skill.
 | **`career-ladder`** (v0.3.9) | Per-agent L1 (trial) → L2 (steady) → L3 (principal) within-tier level engine. Quarterly sub-step of `rhythm` + ad-hoc on stepping-stone / mentor events. Inter-tier mobility is USER-ONLY. Reserved names (CEO + 16 Chiefs + `skill-creator`) always L3. |
 | **`waivers`** (v0.4.0) | Formal time-boxed waiver flow for clearing a blocking-council red without fixing the underlying finding. Proposer = council lead; reviewer = blocking chief + CEO; approver = user-only. Every waiver has a calendar expiration ≤ 90 days; paired `waiver-expiry` ADR files on expiry day. One-finding-one-artifact-one-project scope. ASI-class + raw-secret findings are not waivable. |
 | **`drill`** (v0.4.0) | Scheduled + on-demand resilience drills across 5 drill kinds (chief-unavailable, heartbeat-miss, model-outage, waiver-expiry, compaction-loss) on 4 cadences (monthly, quarterly, annual, on-demand). Every drill files a `drill-report` ADR with outcome (pass / pass-with-gaps / fail) + gaps + remediation. Missed drills are CAO reds. Drills never run during a live incident affecting the same subsystem. |
+
+Scope split: `board-meeting` uses `chat.jsonl` `scope:"board"` (Chairman present, group decision) — `exec-meeting` uses `scope:"exec"` (CEO + Chiefs, no Chairman).

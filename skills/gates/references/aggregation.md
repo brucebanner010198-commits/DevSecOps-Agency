@@ -56,7 +56,7 @@ Security is blocking. CEO cannot waive alone. Flow:
 2. User picks "fix in v1.1 with feature flag."
 3. CEO writes `waiver` entry to `chat.jsonl`:
    ```json
-   {"ts":"<iso>","scope":"board","from":"ceo","to":"security-lead","type":"waiver","gate":"red","reason":"user accepted: ship behind flag, fix in v1.1","waivedBy":"user","inboxItem":"security-red-auth-rate-limit"}
+   {"ts":"<iso>","scope":"exec","from":"ceo","to":"security-lead","type":"waiver","gate":"red","reason":"user accepted: ship behind flag, fix in v1.1","waivedBy":"user","inboxItem":"security-red-auth-rate-limit"}
    ```
 4. Aggregator treats the waived red as yellow and appends a `followups` entry with `severity: "high"` and `state: "open"`.
 5. Rule 3 applies → **project gate: `yellow`**.

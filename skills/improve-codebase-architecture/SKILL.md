@@ -72,27 +72,27 @@ For each candidate:
 
 Do NOT list every theoretical refactor an existing ADR forbids. The skill is informed by ADRs, not blind to them.
 
-**Do NOT propose specific interfaces yet.** The exploration produces a numbered list; the Sovereign picks which one to explore further. Save interface design for step 3.
+**Do NOT propose specific interfaces yet.** The exploration produces a numbered list; the Chairman picks which one to explore further. Save interface design for step 3.
 
 ### 3. Grilling loop on the chosen candidate
 
-Once the Sovereign picks a candidate, drop into a `grill-with-docs`-style conversation. Walk the design tree with them — constraints, dependencies, the shape of the deepened module, what sits behind the seam, what tests survive.
+Once the Chairman picks a candidate, drop into a `grill-with-docs`-style conversation. Walk the design tree with them — constraints, dependencies, the shape of the deepened module, what sits behind the seam, what tests survive.
 
 Side effects happen inline (same discipline as `grill-with-docs`):
 
 - **Naming a deepened module after a concept not yet in `<slug>/CONTEXT.md`?** Add the term to `CONTEXT.md` immediately. Same lazy-creation rule — create the file if it doesn't yet exist.
 - **Sharpening a fuzzy term during the conversation?** Update `CONTEXT.md` right there.
-- **Sovereign rejects the candidate with a load-bearing reason?** Offer an ADR, framed as: *"Want me to record this so future architecture reviews don't re-suggest it?"* Only offer when the reason would be needed by a future explorer to avoid re-suggesting the same thing — skip ephemeral reasons ("not worth it right now") and self-evident ones.
+- **Chairman rejects the candidate with a load-bearing reason?** Offer an ADR, framed as: *"Want me to record this so future architecture reviews don't re-suggest it?"* Only offer when the reason would be needed by a future explorer to avoid re-suggesting the same thing — skip ephemeral reasons ("not worth it right now") and self-evident ones.
 
 ### 4. Produce the refactor brief (or queue it)
 
-If the Sovereign greenlights the deepening:
+If the Chairman greenlights the deepening:
 
 - Produce a refactor brief describing the new module's interface (using `CONTEXT.md` vocabulary) and the migration steps.
 - Hand off to `tdd` for implementation IF the refactor changes observable behavior. Otherwise hand off to a normal Engineering Council dispatch.
 - File a `deepening-decision` ADR under `_decisions/<slug>/adrs/` recording what was deepened and why.
 
-If the Sovereign queues the deepening for later:
+If the Chairman queues the deepening for later:
 
 - Add a row to `<slug>/architecture-backlog.md` with the candidate description and the conversation summary, so the next run of this skill doesn't re-discover the same opportunity from scratch.
 
@@ -105,12 +105,12 @@ Skipping multiple consecutive runs without a written reason routes the project t
 ## Anti-patterns
 
 - **Re-litigating ADRs without real friction.** ADRs are the result of past trade-offs; only surface contradictions when current friction makes the prior trade-off worth reopening.
-- **Proposing interfaces in step 2.** Save interface design for the grilling loop in step 3, after the Sovereign picks a candidate.
+- **Proposing interfaces in step 2.** Save interface design for the grilling loop in step 3, after the Chairman picks a candidate.
 - **Using "service / component / API / boundary" vocabulary** instead of the architectural-vocabulary terms above. Vocabulary drift defeats the point.
 - **Skipping the deletion test.** It's the load-bearing diagnostic; without it, "shallow" claims are subjective.
 - **Treating one adapter as a seam.** One adapter = hypothetical seam. Two adapters = real seam.
 - **Convening during a live incident** affecting the same subsystem. Use `incident-response`. Architectural review is a calm-day activity.
-- **Auto-deepening without Sovereign approval.** This skill produces candidates and briefs; refactor execution requires explicit greenlight.
+- **Auto-deepening without Chairman approval.** This skill produces candidates and briefs; refactor execution requires explicit greenlight.
 
 ## Interaction with other skills
 

@@ -56,7 +56,7 @@ Called by any Chief at the start of their phase work. Can also be invoked direct
 
 5. **Close the council.** Append:
    ```json
-   {"ts":"<iso>","scope":"council","council":"<name>","from":"<chief>","to":"council","type":"board-decision","gate":"<g/y/r>","note":"<one line>"}
+   {"ts":"<iso>","scope":"council","council":"<name>","from":"<chief>","to":"council","type":"exec-decision","gate":"<g/y/r>","note":"<one line>"}
    ```
 
 6. Chief is now ready to report up to the CEO.

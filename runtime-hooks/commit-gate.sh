@@ -5,7 +5,7 @@
 # Differences from the upstream auto-commit hook:
 #   - Stages ONLY files listed in $COMMIT_FILES (no `git add -A`)
 #   - NEVER passes --no-verify (pre-commit hooks must run)
-#   - NEVER auto-pushes (push is the CEO's decision, gated on board-meeting signal)
+#   - NEVER auto-pushes (push is the CEO's decision, gated on exec-meeting signal)
 #   - Refuses to commit if secrets-scanner, tool-guardian, or governance-audit
 #     have a "threat" line in the latest session log
 #

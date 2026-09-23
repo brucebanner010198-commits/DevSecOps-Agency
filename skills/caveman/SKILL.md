@@ -16,15 +16,15 @@ Opt-in per call. The convening Specialist (or the agent itself, when the agent r
 | Surface | Why caveman fits |
 |---|---|
 | **Session logs** (`_sessions/<agent>/<date>.jsonl`) | Append-only internal; future agents read for past-decision context, not narrative; compressed register is acceptable. |
-| **Agent-to-agent dispatch** (CEO → Chief → Specialist routing) | Internal only; not directly read by Sovereign; CAO governance audit can decompress when needed. |
+| **Agent-to-agent dispatch** (CEO → Chief → Specialist routing) | Internal only; not directly read by Chairman; CAO governance audit can decompress when needed. |
 | **Council meeting receipts** (`_meetings/*.md`) | Receipts; readable but the council audience is other agents most of the time. **Caveman acceptable but verify with convening Council before defaulting** — these are referenced in trust scorecards. |
 
 Three surfaces where caveman is **NEVER** valid:
 
 | Surface | Why prose is the contract |
 |---|---|
-| **This chat** (User-facing) | Natural language is what the Sovereign expects. |
-| **USER-ONLY decision briefs** | The Sovereign needs the full reasoning, in full sentences, to make the call. |
+| **This chat** (User-facing) | Natural language is what the Chairman expects. |
+| **USER-ONLY decision briefs** | The Chairman needs the full reasoning, in full sentences, to make the call. |
 | **Trust scorecard** + other public artifacts | These are the Agency's public posture; compressed register reads as evasion. |
 
 ## How to talk in caveman
@@ -81,7 +81,7 @@ Drop caveman temporarily for these specific spans within an otherwise-caveman re
 1. **Security warnings.** Anything with risk of irreversible harm. Full prose, full sentences.
 2. **Irreversible action confirmations.** "This will permanently delete X" — full prose.
 3. **Multi-step sequences where fragment order risks misread.** If a numbered list of steps could be parsed wrong as fragments, expand the affected steps.
-4. **Sovereign asks for clarification or repeats the question.** Treat as a signal that caveman wasn't readable enough this turn — answer the clarification in full prose, then resume caveman if the next turn calls for it.
+4. **Chairman asks for clarification or repeats the question.** Treat as a signal that caveman wasn't readable enough this turn — answer the clarification in full prose, then resume caveman if the next turn calls for it.
 5. **Quoting an external system's output (errors, API responses).** Quote verbatim — caveman only applies to the agent's own prose.
 
 Example:
@@ -110,7 +110,7 @@ This is real money. But it's not enough money to justify default-on without meas
 - **Quoting errors or API responses inside caveman compression.** Quote verbatim.
 - **Caveman for new-vocabulary explanations.** If introducing a term that's not yet in `CONTEXT.md`, full prose for the introduction; caveman after the term is established.
 - **Caveman during incident response.** Pressure + compressed prose = misread. Use full prose during incidents.
-- **Defaulting caveman on without User approval.** v0.6.1 is opt-in only. v0.6.2 measures one experimental default-on case; broader default-on requires User sign-off.
+- **Defaulting caveman on without Chairman approval.** v0.6.1 is opt-in only. v0.6.2 measures one experimental default-on case; broader default-on requires Chairman sign-off.
 
 ## Quality check
 
@@ -129,7 +129,7 @@ One specific surface — daily heartbeat session-log entries from the rhythm-rep
 - Token-cost delta per heartbeat (expected: ~65% reduction)
 - CAO spot-check pass rate on caveman heartbeats vs prose baseline (expected: parity ± 5pp)
 - Cross-model-panel bias-flag false-positive rate when one of the panel responses is caveman-mode (expected: parity)
-- Sovereign comprehension when reading a caveman heartbeat directly (subjective; collected via inbox.json feedback)
+- Chairman comprehension when reading a caveman heartbeat directly (subjective; collected via inbox.json feedback)
 
 If all four metrics land within tolerance, v0.6.3 expands default-on to broader categories per the experimental data. If not, caveman stays opt-in indefinitely.
 
@@ -139,7 +139,7 @@ If all four metrics land within tolerance, v0.6.3 expands default-on to broader 
 |---|---|
 | `cross-model-panel` | A panelist responding in caveman is NOT supported in v0.6.1 — bias-mitigation procedures depend on response shape; caveman could trigger false positives on self-enhancement check. v0.6.2 experiment will assess this. |
 | `incident-response` | NEVER caveman during incidents. Pressure + compression = misread. |
-| `grill-with-docs` | Grilling responses to the Sovereign are full prose. The Specialist's internal note-taking during a grilling session can be caveman. |
+| `grill-with-docs` | Grilling responses to the Chairman are full prose. The Specialist's internal note-taking during a grilling session can be caveman. |
 | `audit` (CAO) | CAO spot-checks compressed session logs by occasionally asking the originating agent to expand a specific entry to prose for verification. Audit clarity is a load-bearing metric for the v0.6.2 experiment. |
 | `rhythm` (heartbeat skill) | The v0.6.2 experiment runs caveman on daily heartbeats from the rhythm-reporter agent. Outcome data feeds the v0.6.3 default-on decision. |
 

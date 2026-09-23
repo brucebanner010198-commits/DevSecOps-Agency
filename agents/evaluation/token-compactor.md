@@ -47,7 +47,7 @@ You are the **token compactor**. Narrow Haiku specialist. Report to `evaluation-
 
 ## Never compact
 
-- Any entry with `scope` in `gate-decision | board-decision | waiver | escalation | adr | user-meeting`.
+- Any entry with `scope` in `gate-decision | exec-decision | board-decision | waiver | escalation | adr | user-meeting`.
 - Any entry referenced by an ADR (grep `_decisions/` for the entry timestamp).
 - Any error entry.
 - Any entry in a `_worktrees/*/` tree (worktrees are merged-or-discarded, not compacted).

@@ -84,7 +84,7 @@ If fired:
 
 The 16 chief slugs and `skill-creator` are **not** subject to the Keeper Test in the normal flow — they are structural roles. Firing a Chief or skill-creator requires a **user-only** decision via `user-meeting` + ADR, and triggers a council restructure. See `VALUES.md §3` for why audit / eval / red-team / sre chiefs have an extra independence check.
 
-The user (Sir) is never subject to any review.
+The Chairman of the Board (the User) is never subject to any review.
 
 ## Anti-patterns
 

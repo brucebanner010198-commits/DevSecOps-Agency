@@ -107,7 +107,7 @@ We will use Supabase for auth, database, and RLS. The backend is a thin Node API
 
 ## Context
 
-The finance-dashboard is an internal tool with a single user (CFO). QA's a11y audit flagged 3 medium findings (contrast, focus-ring, aria-label). Fixing them extends the launch by ~2 days, which pushes past the KR target. User (Sir) confirmed in 2026-04-22 meeting that internal-only single-user tools can carry a11y debt through v1.
+The finance-dashboard is an internal tool with a single user (CFO). QA's a11y audit flagged 3 medium findings (contrast, focus-ring, aria-label). Fixing them extends the launch by ~2 days, which pushes past the KR target. The Chairman confirmed in 2026-04-22 meeting that internal-only single-user tools can carry a11y debt through v1.
 
 We do not waive a11y for any user-facing product. This waiver is scoped tightly.
 
