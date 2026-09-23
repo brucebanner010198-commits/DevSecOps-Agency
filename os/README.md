@@ -24,6 +24,17 @@ Simon Willison's "lethal trifecta").
 
 **105 tests passing.** Each sub-project's README has run instructions.
 
+## The personal surface (added 2026-09-23)
+
+| Dir | What it is | Tests | Run |
+|---|---|---|---|
+| **[`voice/`](voice/)** | the spoken front door of Personal AI Mode: a LiveKit voice loop (Silero VAD, STT, Kokoro TTS) in front of a local-first brain that recalls memory, classifies the request, answers from local Ollama or a cloud model, and saves the turn | 57 | `python3 -m voice.agent console` |
+
+Scaffolded from the JARVIS-1.0 and JARVIS-2.0 prototypes; what was taken,
+rejected and stubbed is in [`voice/README.md`](voice/README.md) and
+[`../docs/adr/ADR-0006-personal-ai-surface.md`](../docs/adr/ADR-0006-personal-ai-surface.md).
+Not yet wired to the trust spine.
+
 > **Self-red-teamed, twice.** This code was adversarially reviewed against itself
 > before merge: a first pass fixed 14 confirmed findings (2 critical) — golden-share
 > effect substitution, a Vault plaintext leak, a `web.fetch` egress bypass — see
@@ -36,7 +47,7 @@ Simon Willison's "lethal trifecta").
 ## Run everything
 
 ```bash
-for p in trust-spine desktop broker; do (cd os/$p && python3 -m pytest -q); done
+for p in trust-spine desktop broker voice; do (cd os/$p && python3 -m pytest -q); done
 ```
 
 ## What maps to which threat (regression stress-test → code)
