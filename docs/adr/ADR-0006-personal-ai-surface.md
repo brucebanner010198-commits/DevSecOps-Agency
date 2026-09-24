@@ -6,7 +6,7 @@ date: 2026-09-23
 deciders: user
 kind: product-surface
 shipped-with-plugin: 0.7.0 (no version bump; nothing under skills/ or plugin.json changed contract)
-related: VISION.md, MISSION.md, ADR-0004 (OS foundation), ADR-0005 (Chairman and Board model), os/voice/README.md, skills/ariv-mentor/SKILL.md
+related: VISION.md, MISSION.md, ADR-0004 (OS foundation), ADR-0005 (Chairman and Board model), os/voice/README.md
 ---
 
 # ADR-0006: Personal AI surface, mined from the JARVIS prototypes
@@ -43,10 +43,9 @@ API used in the port was then checked against the livekit-agents 1.8.2 and
 livekit-plugins-openai 1.8.2 wheels, and the mem0 config keys against the
 mem0ai 2.1.0 wheel, before code was written.
 
-Two more things arrived with the same directive: the ARIV Mentor OS (seven
-markdown files defining a personal coaching mentor with five modes), and a
-thesis draft, `AI-arch.md`, on an understanding-gated architecture for
-reasoning and memory.
+One more thing arrived with the same directive: a thesis draft,
+`AI-arch.md`, on an understanding-gated architecture for reasoning and
+memory.
 
 `kind: product-surface` is new. ADR-0005 used `constitution-amend`; ADR-0004
 has no kind. This record does not touch the Constitution or the org model, so
@@ -115,12 +114,10 @@ a new kind was chosen rather than reusing one that does not fit.
    directive asked for exact pins, and the global rule that dependencies be
    pinned agrees.
 
-8. **ARIV became a skill.** `skills/ariv-mentor/SKILL.md` describes the five
-   modes (TEACH, TRAIN, COACH, EXAMINE, SPAR), the session ritual and the hard
-   limits, and the seven source files were copied unchanged into
-   `skills/ariv-mentor/references/`, keeping their original names. A row was
-   added to `skills/AGENTS.md`. It is the coaching face of the personal
-   surface: the same person the voice loop serves, in a different mode.
+8. **ARIV Mentor OS stays a separate private project.** It was considered
+   for a coaching skill here and rejected on 2026-09-24: its files carry
+   personal facts about the owner and this repo is public. It lives in its
+   own private repository and is not referenced from this one.
 
 9. **`AI-arch.md` sits in local-only research.** It was copied to
    `research/AI-arch-understanding-gated-predictive-intelligence.md` and
@@ -148,13 +145,6 @@ a new kind was chosen rather than reusing one that does not fit.
 
 **Negative:**
 
-- `skills/ariv-mentor/references/PROFILE_SWOT.md` and `EVOLUTION_LOG.md`
-  carry personal facts about the owner (employer type, visa constraint,
-  weekly hours) and mutable state. The root `.gitignore` calls this repo
-  public. They were committed because the directive said to copy all seven
-  files unchanged; the owner should decide before any push whether to
-  gitignore those two, move them to a data path, or accept them as tracked.
-  Nothing has been pushed.
 - `agent.py`, the openai-plugin route to Kokoro and the mem0 adapter have not
   been executed against live services in this scaffold. Console mode is the
   first thing to run.
@@ -193,9 +183,6 @@ a new kind was chosen rather than reusing one that does not fit.
   empty by default.
 - **Drop Redis.** Not done, because the directive listed it; recorded as
   optional instead.
-- **Rename the ARIV reference files to lowercase kebab-case** to match the
-  repo's `references/` convention. Not done: the directive said unchanged,
-  and `diff -r` against the source proves it.
 
 ## Verification
 
@@ -207,8 +194,6 @@ a new kind was chosen rather than reusing one that does not fit.
 - `docker compose -f docker-compose.voice.yml config` succeeds with the five
   credential variables set and fails naming each missing one when they are
   unset.
-- `diff -r` between `ARIV-mentor-os/` and `skills/ariv-mentor/references/`
-  reports no differences.
 - A grep of the new tree for the three credential literals seen in the
   JARVIS-2.0 sources returns nothing; a grep for em dashes, en dashes and
   ellipsis characters in the new prose returns nothing.
@@ -218,8 +203,8 @@ a new kind was chosen rather than reusing one that does not fit.
 
 - The owner's directive for this session (2026-09-23), relayed through a
   workflow run: build the personal-AI surface in this repo from the two
-  JARVIS prototypes, add ARIV as a skill, keep `AI-arch.md` in local
-  research, file this ADR as proposed.
+  JARVIS prototypes, keep `AI-arch.md` in local research, file this ADR as
+  proposed. On 2026-09-24 the owner ruled that ARIV Mentor OS stays separate.
 - `VISION.md` lines 19 and 44 and `MISSION.md` lines 14 and 83 for what the
   surface must be.
 - `JARVIS-1.0/agent.py`, `plan.md` line 21, `docker-compose.yml`,
