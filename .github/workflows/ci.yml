@@ -1,0 +1,79 @@
+name: CI
+
+# Lint the plugin's agent and skill files, validate the plugin, check the
+# runtime hooks, and run every test suite. `ci` is the single aggregate check:
+# it fails unless every other job succeeded.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12"
+  CLAUDE_CODE_VERSION: "2.1.318"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: python -m pip install --disable-pip-version-check pyyaml==6.0.3
+      - name: Agent and skill frontmatter parses
+        run: python scripts/frontmatter.py check
+      - name: plugin.json lists every agent
+        run: python scripts/plugin_agents.py check
+      - name: Hook configs are valid JSON
+        run: for f in runtime-hooks/*/hooks.json; do jq empty "$f" || exit 1; done
+      - name: Hook scripts pass shellcheck (errors)
+        run: shellcheck -S error runtime-hooks/*.sh runtime-hooks/*/*.sh
+
+  plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+      - run: npm install --global --no-fund --no-audit "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
+      - name: claude plugin validate
+        run: claude plugin validate .
+
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [os/trust-spine, os/broker, os/desktop, os/voice, scripts, runtime-hooks/tests]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install test dependencies
+        # The voice tests do not import livekit, so only the trust-spine
+        # runtime deps and pytest are needed.
+        run: python -m pip install --disable-pip-version-check -r os/trust-spine/requirements.txt pytest==9.0.1 pyyaml==6.0.3
+      - name: pytest ${{ matrix.suite }}
+        working-directory: ${{ startsWith(matrix.suite, 'os/') && matrix.suite || '.' }}
+        run: python -m pytest -q ${{ startsWith(matrix.suite, 'os/') && '.' || matrix.suite }}
+
+  ci:
+    if: always()
+    needs: [lint, plugin, tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every job succeeded
+        run: |
+          echo '${{ toJSON(needs) }}' | jq -e 'all(.[]; .result == "success")'
