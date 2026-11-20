@@ -247,7 +247,7 @@ Token-per-session cost is non-trivial for long councils. Sustainability council 
 - **The Constitution is new** — ratified 2026-04-20. Probation period is 12 months.
 - **The trust scorecard** ([`TRUST.md`](TRUST.md) §3) is defined but has not yet published its first quarterly scorecard. First publication: 2026-07-22.
 - **No SOC 2, ISO 27001, ISO 42001, or FedRAMP certification exists.** Alignment is claimed; certification is not.
-- **The plugin is MIT licensed.** Forks may strip safety controls — the name "DevSecOps-Agency" belongs to this repository; forks using similar names without the USER-ONLY list and non-waivable classes are not endorsed.
+- **The plugin is not open source** (all rights reserved; see [ADR-0007](docs/adr/ADR-0007-repository-adjustments.md)). Copies may strip safety controls — the name "DevSecOps-Agency" belongs to this repository; forks using similar names without the USER-ONLY list and non-waivable classes are not endorsed.
 
 ---
 

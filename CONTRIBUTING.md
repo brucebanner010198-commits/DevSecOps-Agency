@@ -153,7 +153,7 @@ CI automation (v0.6.0 target) will run hooks on every PR.
 
 ## 9. Licensing of contributions
 
-By submitting a contribution, you agree that your contribution is licensed under the [MIT license](LICENSES/README.md) of this repository.
+This repository has no open-source license: all rights are reserved ([ADR-0007](docs/adr/ADR-0007-repository-adjustments.md)). Terms for outside contributions have not been set yet. Ask the owner before opening a pull request.
 
 You also agree that your contribution does not violate any third-party license or copyright.
 
