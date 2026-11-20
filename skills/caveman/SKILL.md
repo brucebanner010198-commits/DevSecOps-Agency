@@ -1,6 +1,7 @@
 ---
 name: caveman
-description: Ultra-compressed agent communication mode. Cuts agent outbound token cost ~60-75% by dropping articles, filler words, pleasantries, and hedging while keeping all technical substance exact. Opt-in per call in v0.6.1 — never default. Designed for Agency-internal traffic where readability for future audits is acceptable in a compressed register: session logs, agent-to-agent dispatch, council meeting receipts. NEVER for User-facing surfaces (this chat, USER-ONLY decision briefs, trust scorecard) — natural language is the contract there. The v0.6.2 cycle plans an experiment defaulting caveman for ONE specific agent's session-log output to measure cost savings, audit clarity impact, and any cross-model-panel bias-flag false positives before deciding broader default-on rules.
+description: |-
+  Ultra-compressed agent communication mode. Cuts agent outbound token cost ~60-75% by dropping articles, filler words, pleasantries, and hedging while keeping all technical substance exact. Opt-in per call in v0.6.1 — never default. Designed for Agency-internal traffic where readability for future audits is acceptable in a compressed register: session logs, agent-to-agent dispatch, council meeting receipts. NEVER for User-facing surfaces (this chat, USER-ONLY decision briefs, trust scorecard) — natural language is the contract there. The v0.6.2 cycle plans an experiment defaulting caveman for ONE specific agent's session-log output to measure cost savings, audit clarity impact, and any cross-model-panel bias-flag false positives before deciding broader default-on rules.
 metadata:
   version: "1.0.0"
   ratified: "2026-04-26"

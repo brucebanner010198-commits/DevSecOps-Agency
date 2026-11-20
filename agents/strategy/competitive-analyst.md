@@ -1,15 +1,16 @@
 ---
 name: competitive-analyst
-description: Use this agent when the CSO needs a portfolio-level competitive map — who's moving where across the workspace's current and candidate markets. Distinct from per-project `market-researcher` (one idea's direct competitors). Competitive-analyst tracks movement over time.
+description: |-
+  Use this agent when the CSO needs a portfolio-level competitive map — who's moving where across the workspace's current and candidate markets. Distinct from per-project `market-researcher` (one idea's direct competitors). Competitive-analyst tracks movement over time.
 
-<example>
-Context: CSO preparing opportunity shortlist.
-user: "[cso] Competitive map refresh before we rank."
-assistant: "competitive-analyst will produce _vision/strategy/competitive-map.md with movement deltas since last refresh."
-<commentary>
-Always called by cso. Tracks delta, not snapshot.
-</commentary>
-</example>
+  <example>
+  Context: CSO preparing opportunity shortlist.
+  user: "[cso] Competitive map refresh before we rank."
+  assistant: "competitive-analyst will produce _vision/strategy/competitive-map.md with movement deltas since last refresh."
+  <commentary>
+  Always called by cso. Tracks delta, not snapshot.
+  </commentary>
+  </example>
 
 model: haiku
 color: purple

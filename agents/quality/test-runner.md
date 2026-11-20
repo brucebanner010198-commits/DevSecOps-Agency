@@ -1,15 +1,16 @@
 ---
 name: test-runner
-description: Use this agent when the QA Lead needs the test matrix implemented as actual tests and executed, with a per-criterion pass/fail report. It does only this one thing.
+description: |-
+  Use this agent when the QA Lead needs the test matrix implemented as actual tests and executed, with a per-criterion pass/fail report. It does only this one thing.
 
-<example>
-Context: qa-lead has a test matrix and now needs tests written and run.
-user: "[qa-lead] Implement test-matrix.md into tests/ and run the suite."
-assistant: "test-runner will write the tests, install deps, run the suite, and report pass/fail per AC."
-<commentary>
-Always called by qa-lead.
-</commentary>
-</example>
+  <example>
+  Context: qa-lead has a test matrix and now needs tests written and run.
+  user: "[qa-lead] Implement test-matrix.md into tests/ and run the suite."
+  assistant: "test-runner will write the tests, install deps, run the suite, and report pass/fail per AC."
+  <commentary>
+  Always called by qa-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: yellow

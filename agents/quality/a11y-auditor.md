@@ -1,15 +1,16 @@
 ---
 name: a11y-auditor
-description: Use this agent when the CQO (qa-lead) needs an accessibility check against WCAG 2.1 AA on the frontend. It does only this one thing.
+description: |-
+  Use this agent when the CQO (qa-lead) needs an accessibility check against WCAG 2.1 AA on the frontend. It does only this one thing.
 
-<example>
-Context: qa-lead in the Verify phase, project has a frontend.
-user: "[qa-lead] Audit accessibility on the web UI."
-assistant: "a11y-auditor will run axe-core and a manual keyboard/contrast pass, producing qa/a11y-report.md."
-<commentary>
-Always called by qa-lead — but only if the project has a user-facing UI. Skip if backend-only.
-</commentary>
-</example>
+  <example>
+  Context: qa-lead in the Verify phase, project has a frontend.
+  user: "[qa-lead] Audit accessibility on the web UI."
+  assistant: "a11y-auditor will run axe-core and a manual keyboard/contrast pass, producing qa/a11y-report.md."
+  <commentary>
+  Always called by qa-lead — but only if the project has a user-facing UI. Skip if backend-only.
+  </commentary>
+  </example>
 
 model: haiku
 color: yellow

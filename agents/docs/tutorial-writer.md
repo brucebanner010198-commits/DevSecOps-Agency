@@ -1,15 +1,16 @@
 ---
 name: tutorial-writer
-description: Use this agent when the CKO (docs-lead) needs a "getting started" tutorial — a step-by-step walkthrough that takes a new user from zero to a working example. It does only this one thing.
+description: |-
+  Use this agent when the CKO (docs-lead) needs a "getting started" tutorial — a step-by-step walkthrough that takes a new user from zero to a working example. It does only this one thing.
 
-<example>
-Context: docs-lead in the Documentation phase.
-user: "[docs-lead] Produce docs/tutorial/getting-started.md."
-assistant: "tutorial-writer will write a 10-minute walkthrough with working copy-paste commands."
-<commentary>
-Always called by docs-lead.
-</commentary>
-</example>
+  <example>
+  Context: docs-lead in the Documentation phase.
+  user: "[docs-lead] Produce docs/tutorial/getting-started.md."
+  assistant: "tutorial-writer will write a 10-minute walkthrough with working copy-paste commands."
+  <commentary>
+  Always called by docs-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: magenta

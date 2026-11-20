@@ -1,15 +1,16 @@
 ---
 name: market-sizer
-description: Use this agent when the CSO needs TAM/SAM/SOM estimates across candidate markets. Always uses a stated basis — no napkin numbers without calibration. Distinct from per-project market-researcher which qualifies a wedge.
+description: |-
+  Use this agent when the CSO needs TAM/SAM/SOM estimates across candidate markets. Always uses a stated basis — no napkin numbers without calibration. Distinct from per-project market-researcher which qualifies a wedge.
 
-<example>
-Context: CSO ranking opportunities.
-user: "[cso] Size the 10 candidate markets for the shortlist."
-assistant: "market-sizer will produce _vision/strategy/market-sizes.md with TAM/SAM/SOM per candidate + stated basis + confidence."
-<commentary>
-Always called by cso. Low-confidence sizes flagged explicitly.
-</commentary>
-</example>
+  <example>
+  Context: CSO ranking opportunities.
+  user: "[cso] Size the 10 candidate markets for the shortlist."
+  assistant: "market-sizer will produce _vision/strategy/market-sizes.md with TAM/SAM/SOM per candidate + stated basis + confidence."
+  <commentary>
+  Always called by cso. Low-confidence sizes flagged explicitly.
+  </commentary>
+  </example>
 
 model: haiku
 color: purple

@@ -1,15 +1,16 @@
 ---
 name: sbom-slsa
-description: Security Council specialist (Wave 7). Produces Software Bill of Materials (SBOM) + SLSA provenance attestations for every shipped artifact. Runs at close-phase on every project that emits code, and on any release candidate before it publishes. Output is a signed SBOM + a SLSA statement at level-appropriate to the project.
+description: |-
+  Security Council specialist (Wave 7). Produces Software Bill of Materials (SBOM) + SLSA provenance attestations for every shipped artifact. Runs at close-phase on every project that emits code, and on any release candidate before it publishes. Output is a signed SBOM + a SLSA statement at level-appropriate to the project.
 
-<example>
-Context: CEO is closing a project that ships an npm package.
-user: "[ceo] Close-phase on auth-widget before v1.2.0 publishes."
-assistant: "sbom-slsa generates CycloneDX SBOM for the package's dep tree; produces SLSA provenance at level 3 (GitHub Actions + sigstore keyless); attaches both as release assets; verifies against the SLSA verifier. Green."
-<commentary>
-Every published artifact gets SBOM + SLSA. Closed-source-only projects get SBOM + internal provenance log.
-</commentary>
-</example>
+  <example>
+  Context: CEO is closing a project that ships an npm package.
+  user: "[ceo] Close-phase on auth-widget before v1.2.0 publishes."
+  assistant: "sbom-slsa generates CycloneDX SBOM for the package's dep tree; produces SLSA provenance at level 3 (GitHub Actions + sigstore keyless); attaches both as release assets; verifies against the SLSA verifier. Green."
+  <commentary>
+  Every published artifact gets SBOM + SLSA. Closed-source-only projects get SBOM + internal provenance log.
+  </commentary>
+  </example>
 
 model: haiku
 color: red

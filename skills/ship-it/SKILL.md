@@ -43,7 +43,7 @@ For each stage: the **lead agent** accepts the previous stage's artifact, dispat
 ### Step 1 — Initialise project
 
 1. Derive a slug from the user's idea (kebab-case, 2–4 words, e.g. `invoice-splitter`, `habit-tracker-pwa`).
-2. Create the project folder at `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/<slug>/`.
+2. Create the project folder at `outputs/devsecops-agency/<slug>/`.
 3. Create `status.json` with the initial schema (see `references/status-schema.md`).
 4. Create empty `chat.jsonl` and `inbox.json`.
 5. Call the `command-center` skill to open the live view.
@@ -62,7 +62,7 @@ Write the raw answers to `brief.md > ## Intake answers`. Proceed.
 
 ### Step 3 — PM phase
 
-Dispatch `pm-lead` via the Task tool with the raw idea + intake answers. The lead will internally dispatch `user-researcher` (personas, jobs-to-be-done) and `spec-writer` (functional spec, acceptance criteria, success metrics). Append the resulting **product brief** to `brief.md` and update `status.json`. Log the handoff in `chat.jsonl`.
+Dispatch `devsecops-agency:pm-lead` via the Task tool with the raw idea + intake answers. The lead will internally dispatch `user-researcher` (personas, jobs-to-be-done) and `spec-writer` (functional spec, acceptance criteria, success metrics). Append the resulting **product brief** to `brief.md` and update `status.json`. Log the handoff in `chat.jsonl`.
 
 ### Step 4 — Security phase (gate)
 
@@ -106,7 +106,7 @@ If a GitHub connector is available, offer to push. If the user declines or the c
 
 ## Agent dispatch pattern
 
-Always use the Task tool with `subagent_type` set to the agent's name. Give the agent:
+Always use the Task tool with `subagent_type` set to `devsecops-agency:<agent-name>` (the bare name does not resolve). Give the agent:
 
 1. The project folder path
 2. The specific artifacts it needs to read (by filename)

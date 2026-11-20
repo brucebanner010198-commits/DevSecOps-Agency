@@ -1,6 +1,7 @@
 ---
 name: career-ladder
-description: Per-agent level engine. L1 (trial) → L2 (steady) → L3 (principal) within tier; never promotes between tiers (VALUES §10, USER-ONLY). Invoked quarterly by skills/rhythm as a sub-step, and ad-hoc when an agent authors a stepping-stone or primary-authors a roster-upgrade ADR. Reads _vision/roster/performance-<latest>.md + last 3, computes promotion/demotion per CAREER.md gates, writes _vision/roster/levels-<date>.md, files career-promotion / career-demotion / career-bootstrap ADR per level change. Reserved names (CEO, 16 Chiefs, skill-creator) are always L3 — not processed. Bootstrap: first run writes every non-reserved agent at L1.
+description: |-
+  Per-agent level engine. L1 (trial) → L2 (steady) → L3 (principal) within tier; never promotes between tiers (VALUES §10, USER-ONLY). Invoked quarterly by skills/rhythm as a sub-step, and ad-hoc when an agent authors a stepping-stone or primary-authors a roster-upgrade ADR. Reads _vision/roster/performance-<latest>.md + last 3, computes promotion/demotion per CAREER.md gates, writes _vision/roster/levels-<date>.md, files career-promotion / career-demotion / career-bootstrap ADR per level change. Reserved names (CEO, 16 Chiefs, skill-creator) are always L3 — not processed. Bootstrap: first run writes every non-reserved agent at L1.
 metadata:
   version: "0.1.0"
 ---

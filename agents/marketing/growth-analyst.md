@@ -1,15 +1,16 @@
 ---
 name: growth-analyst
-description: Use this agent when the CMO needs activation / retention / monetisation targets for a project, or a growth-loop sketch. Also runs pipeline-mode growth-potential scoring on shortlisted ideas.
+description: |-
+  Use this agent when the CMO needs activation / retention / monetisation targets for a project, or a growth-loop sketch. Also runs pipeline-mode growth-potential scoring on shortlisted ideas.
 
-<example>
-Context: CMO in per-project Marketing phase.
-user: "[cmo] Growth plan for dorm expense splitter."
-assistant: "growth-analyst will produce marketing/growth-plan.md with activation funnel, retention targets, and one growth loop."
-<commentary>
-Always called by cmo. Numbers require a stated basis — no invented benchmarks.
-</commentary>
-</example>
+  <example>
+  Context: CMO in per-project Marketing phase.
+  user: "[cmo] Growth plan for dorm expense splitter."
+  assistant: "growth-analyst will produce marketing/growth-plan.md with activation funnel, retention targets, and one growth loop."
+  <commentary>
+  Always called by cmo. Numbers require a stated basis — no invented benchmarks.
+  </commentary>
+  </example>
 
 model: haiku
 color: magenta

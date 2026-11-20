@@ -1,15 +1,16 @@
 ---
 name: data-architect
-description: Use this agent when the CTO (engineering-lead) needs the data model — entities, relationships, indexes, retention, PII classification. It does only this one thing.
+description: |-
+  Use this agent when the CTO (engineering-lead) needs the data model — entities, relationships, indexes, retention, PII classification. It does only this one thing.
 
-<example>
-Context: engineering-lead is in the Architecture phase.
-user: "[engineering-lead] Produce the data model."
-assistant: "data-architect will produce architecture/data-model.md with ER and PII classification."
-<commentary>
-Always called by engineering-lead. PII classification is shared with threat-modeler.
-</commentary>
-</example>
+  <example>
+  Context: engineering-lead is in the Architecture phase.
+  user: "[engineering-lead] Produce the data model."
+  assistant: "data-architect will produce architecture/data-model.md with ER and PII classification."
+  <commentary>
+  Always called by engineering-lead. PII classification is shared with threat-modeler.
+  </commentary>
+  </example>
 
 model: haiku
 color: blue

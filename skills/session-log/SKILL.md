@@ -20,14 +20,14 @@ Ported pattern from openclaw's `skills/session-logs/SKILL.md`. JSONL, grep-addre
 ## Storage layout
 
 ```
-/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/_sessions/
+outputs/devsecops-agency/_sessions/
 ├── sessions.json                  # index across all agents
 └── <agentId>/
     ├── sessions.json              # per-agent index
     └── <sessionId>.jsonl          # one JSON object per line, append-only
 ```
 
-`<agentId>` = the subagent_type name: `ceo`, `cro`, `market-researcher`, `security-lead`, `threat-modeler`, etc.
+`<agentId>` = the agent name without the `devsecops-agency:` prefix: `ceo`, `cro`, `market-researcher`, `security-lead`, `threat-modeler`, etc.
 `<sessionId>` = a random short hex (12 chars). One session ID per *project* per *agent*. An agent reused across two projects has two sessions.
 
 ## JSONL entry shape

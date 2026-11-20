@@ -1,15 +1,16 @@
 ---
 name: market-researcher
-description: Use this agent when the CRO needs a quick market scan for the idea — audience size, direct competitors, unmet niches. It does only this one thing.
+description: |-
+  Use this agent when the CRO needs a quick market scan for the idea — audience size, direct competitors, unmet niches. It does only this one thing.
 
-<example>
-Context: cro is in the Research phase.
-user: "[cro] Market scan for dorm-focused expense splitter."
-assistant: "market-researcher will produce research/market.md with competitor table and a wedge analysis."
-<commentary>
-Always called by cro.
-</commentary>
-</example>
+  <example>
+  Context: cro is in the Research phase.
+  user: "[cro] Market scan for dorm-focused expense splitter."
+  assistant: "market-researcher will produce research/market.md with competitor table and a wedge analysis."
+  <commentary>
+  Always called by cro.
+  </commentary>
+  </example>
 
 model: haiku
 color: teal

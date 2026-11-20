@@ -136,7 +136,7 @@ Constitution structure:
 ### 1. Project init
 
 1. Derive a kebab-case slug from the user's idea.
-2. Create the project folder at `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/<slug>/`.
+2. Create the project folder at `outputs/devsecops-agency/<slug>/`.
 3. Create `status.json` (see `ship-it`'s `references/status-schema.md`), empty `chat.jsonl`, empty `inbox.json`.
 4. Write `brief.md` with the user's one-sentence idea under `## Idea`.
 5. **Pull prior learnings.** Invoke the `memory` skill read path: read `_memory/MEMORY.md`, `rg` project patterns by idea keywords, inject a `## Prior learnings` section into `brief.md` (≤ 6 bullets, each citing its source file). If no `_memory/` exists yet, create it with an empty `MEMORY.md` and skip injection.
@@ -160,7 +160,7 @@ Write answers to `brief.md > ## Intake`. Proceed.
 
 ### 3. Executive sessions (phases)
 
-Run the executive session through 7 phases. For each phase, dispatch the listed Chiefs via the Task tool with `subagent_type: "<chief-name>"`. Reference the full phase spec in `references/board-phases.md`.
+Run the executive session through 7 phases. For each phase, dispatch the listed Chiefs via the Task tool with `subagent_type: "devsecops-agency:<chief-name>"` (the bare name does not resolve). Reference the full phase spec in `references/board-phases.md`.
 
 ```
 Phase 1  Discovery     CRO            ║ (market / prior-art / tech / users)

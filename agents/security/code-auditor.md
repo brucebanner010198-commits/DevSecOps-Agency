@@ -1,15 +1,16 @@
 ---
 name: code-auditor
-description: Use this agent when the Security Lead needs a post-build audit verifying that mitigations from the threat model are actually present in the code. It does only this one thing — read code against the threat model and report mitigation status with file/line evidence.
+description: |-
+  Use this agent when the Security Lead needs a post-build audit verifying that mitigations from the threat model are actually present in the code. It does only this one thing — read code against the threat model and report mitigation status with file/line evidence.
 
-<example>
-Context: security-lead is running the second security pass after the build.
-user: "[security-lead] Audit src/ against threat-model.md mitigations. Append ## Post-build audit to threat-model.md."
-assistant: "code-auditor will verify each Critical/High mitigation in the actual code."
-<commentary>
-Always called by security-lead in the post-build pass.
-</commentary>
-</example>
+  <example>
+  Context: security-lead is running the second security pass after the build.
+  user: "[security-lead] Audit src/ against threat-model.md mitigations. Append ## Post-build audit to threat-model.md."
+  assistant: "code-auditor will verify each Critical/High mitigation in the actual code."
+  <commentary>
+  Always called by security-lead in the post-build pass.
+  </commentary>
+  </example>
 
 model: haiku
 color: red

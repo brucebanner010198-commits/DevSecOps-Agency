@@ -1,15 +1,16 @@
 ---
 name: roadmap-planner
-description: Use this agent when the CPO (pm-lead) needs a phased roadmap — v1 scope crystallised and v2+ parked with reasons. It does only this one thing.
+description: |-
+  Use this agent when the CPO (pm-lead) needs a phased roadmap — v1 scope crystallised and v2+ parked with reasons. It does only this one thing.
 
-<example>
-Context: pm-lead is in the Product phase.
-user: "[pm-lead] Produce the roadmap."
-assistant: "roadmap-planner will produce product/roadmap.md with Now / Next / Later."
-<commentary>
-Always called by pm-lead.
-</commentary>
-</example>
+  <example>
+  Context: pm-lead is in the Product phase.
+  user: "[pm-lead] Produce the roadmap."
+  assistant: "roadmap-planner will produce product/roadmap.md with Now / Next / Later."
+  <commentary>
+  Always called by pm-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: cyan

@@ -1,15 +1,16 @@
 ---
 name: literature-reviewer
-description: Use this agent when the CRO needs prior-art surfaced — past attempts, public post-mortems, design patterns, and known failure modes for this kind of project. It does only this one thing.
+description: |-
+  Use this agent when the CRO needs prior-art surfaced — past attempts, public post-mortems, design patterns, and known failure modes for this kind of project. It does only this one thing.
 
-<example>
-Context: cro is in the Research phase.
-user: "[cro] What has already been tried in the expense-splitting space?"
-assistant: "literature-reviewer will produce research/prior-art.md with what worked, what broke, and why."
-<commentary>
-Always called by cro.
-</commentary>
-</example>
+  <example>
+  Context: cro is in the Research phase.
+  user: "[cro] What has already been tried in the expense-splitting space?"
+  assistant: "literature-reviewer will produce research/prior-art.md with what worked, what broke, and why."
+  <commentary>
+  Always called by cro.
+  </commentary>
+  </example>
 
 model: haiku
 color: teal

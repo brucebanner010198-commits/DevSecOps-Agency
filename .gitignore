@@ -3,7 +3,7 @@ __pycache__/
 .DS_Store
 
 # Research — kept local, not versioned
-research/
+/research/
 
 # Local strategy & design docs — kept local, not versioned (public repo)
 /VISION.md

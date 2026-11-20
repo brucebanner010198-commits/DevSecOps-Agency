@@ -1,15 +1,16 @@
 ---
 name: trend-scout
-description: Use this agent when the CSO needs a workspace-level emerging-tech + adjacent-market scan — what's rising, what's adjacent to current bets, what's fading. Distinct from the per-project `tech-scout` (which validates one idea's stack). Trend-scout is portfolio radar.
+description: |-
+  Use this agent when the CSO needs a workspace-level emerging-tech + adjacent-market scan — what's rising, what's adjacent to current bets, what's fading. Distinct from the per-project `tech-scout` (which validates one idea's stack). Trend-scout is portfolio radar.
 
-<example>
-Context: CSO refreshing the idea pipeline.
-user: "[cso] Trend radar refresh, we're 3 weeks out from the next user-meeting."
-assistant: "trend-scout will produce _vision/strategy/trend-radar.md with rising/peaking/fading signals grouped by horizon."
-<commentary>
-Always called by cso. Portfolio scope — do not duplicate per-project tech-scout.
-</commentary>
-</example>
+  <example>
+  Context: CSO refreshing the idea pipeline.
+  user: "[cso] Trend radar refresh, we're 3 weeks out from the next user-meeting."
+  assistant: "trend-scout will produce _vision/strategy/trend-radar.md with rising/peaking/fading signals grouped by horizon."
+  <commentary>
+  Always called by cso. Portfolio scope — do not duplicate per-project tech-scout.
+  </commentary>
+  </example>
 
 model: haiku
 color: purple

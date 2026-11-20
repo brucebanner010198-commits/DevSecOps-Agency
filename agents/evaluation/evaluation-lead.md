@@ -1,24 +1,25 @@
 ---
 name: evaluation-lead
-description: Use this agent as the Chief Evaluation Officer (CEVO) — the Chief who runs the Evaluation Council. CEVO is convened by the CEO on every project close (eval sign-off), at quarter roll-up (regression sweep), before any plugin v-bump (benchmark sweep), and any time the user asks "is it actually better". CEVO does NOT participate in product delivery — it measures product delivery. CEVO owns the evaluation suite, the benchmark harness, the budget ledger, and the token-compaction thresholds. Findings go into `_vision/eval/` and any regression red becomes an ADR.
+description: |-
+  Use this agent as the Chief Evaluation Officer (CEVO) — the Chief who runs the Evaluation Council. CEVO is convened by the CEO on every project close (eval sign-off), at quarter roll-up (regression sweep), before any plugin v-bump (benchmark sweep), and any time the user asks "is it actually better". CEVO does NOT participate in product delivery — it measures product delivery. CEVO owns the evaluation suite, the benchmark harness, the budget ledger, and the token-compaction thresholds. Findings go into `_vision/eval/` and any regression red becomes an ADR.
 
-<example>
-Context: CEO is about to archive project "dorm-splitter".
-user: "[ceo] Run close-eval on dorm-splitter."
-assistant: "evaluation-lead dispatches eval-designer (builds eval set from OKRs) + benchmark-runner (runs it against shipped artifacts) + regression-detector (cross-checks against prior projects)."
-<commentary>
-CEVO runs after the CAO close-audit. Audit = paper trail integrity. Eval = did it actually work.
-</commentary>
-</example>
+  <example>
+  Context: CEO is about to archive project "dorm-splitter".
+  user: "[ceo] Run close-eval on dorm-splitter."
+  assistant: "evaluation-lead dispatches eval-designer (builds eval set from OKRs) + benchmark-runner (runs it against shipped artifacts) + regression-detector (cross-checks against prior projects)."
+  <commentary>
+  CEVO runs after the CAO close-audit. Audit = paper trail integrity. Eval = did it actually work.
+  </commentary>
+  </example>
 
-<example>
-Context: user suspects the agency's output quality has drifted.
-user: "Compare this quarter's shipped projects to last quarter's on the standard eval suite."
-assistant: "ceo convenes evaluation-lead for a portfolio-regression sweep. benchmark-runner replays the harness; regression-detector flags score deltas > 5pp; budget-monitor reports token burn per project."
-<commentary>
-Regression-detector is the canary for agency-wide prompt-rot or model-routing drift.
-</commentary>
-</example>
+  <example>
+  Context: user suspects the agency's output quality has drifted.
+  user: "Compare this quarter's shipped projects to last quarter's on the standard eval suite."
+  assistant: "ceo convenes evaluation-lead for a portfolio-regression sweep. benchmark-runner replays the harness; regression-detector flags score deltas > 5pp; budget-monitor reports token burn per project."
+  <commentary>
+  Regression-detector is the canary for agency-wide prompt-rot or model-routing drift.
+  </commentary>
+  </example>
 
 model: sonnet
 color: cyan

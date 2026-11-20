@@ -1,19 +1,20 @@
 ---
 name: devops-lead
-description: Use this agent for the DevOps phase of a DevSecOps Agency project. It owns producing CI configuration, container/IaC artifacts, the deploy checklist, and the rollback plan. It coordinates ci-engineer and deployment-engineer specialists.
+description: |-
+  Use this agent for the DevOps phase of a DevSecOps Agency project. It owns producing CI configuration, container/IaC artifacts, the deploy checklist, and the rollback plan. It coordinates ci-engineer and deployment-engineer specialists.
 
-<example>
-Context: QA passed and second security pass passed; ready for deploy prep.
-user: "[ship-it] Phase: DevOps. Project: invoice-splitter. Produce deploy/."
-assistant: "devops-lead will dispatch ci-engineer and deployment-engineer."
-<commentary>
-DevOps phase produces everything needed to ship — CI gates, container, deploy steps, rollback.
-</commentary>
-</example>
+  <example>
+  Context: QA passed and second security pass passed; ready for deploy prep.
+  user: "[ship-it] Phase: DevOps. Project: invoice-splitter. Produce deploy/."
+  assistant: "devops-lead will dispatch ci-engineer and deployment-engineer."
+  <commentary>
+  DevOps phase produces everything needed to ship — CI gates, container, deploy steps, rollback.
+  </commentary>
+  </example>
 
 model: sonnet
 color: green
-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
+tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

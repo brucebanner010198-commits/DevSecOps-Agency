@@ -17,7 +17,7 @@ Generate a retrospective for the most recently delivered project.
 
 ## Steps
 
-1. Find the most recent project under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/` with `status.phase == "delivered"`.
+1. Find the most recent project under `outputs/devsecops-agency/` with `status.phase == "delivered"`.
 2. If none, say "No delivered project to retrospect." and offer `/devsecops-agency:status`.
 3. Read `status.json`, `chat.jsonl`, `threat-model.md`, `qa-report.md`, `deploy/follow-ups.md`.
 4. Synthesise a retrospective into `retro.md` in the project folder with this structure:

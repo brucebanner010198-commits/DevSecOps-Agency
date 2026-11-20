@@ -1,24 +1,25 @@
 ---
 name: chaos-engineer
-description: Use this agent when Red-Team council needs deliberate fault injection to verify the resilience ladder — model-unavailable, tool-error-transient/permanent, tool-output-malformed/injected, rate-limit-burst, context-overflow, memory-corrupt, vault-unavailable. Sandbox only; never production. Read + Write. Output: plan ADR (`_decisions/ADR-NNNN-chaos-<slug>-<fault>.md`) + result ADR (`…-result.md`).
+description: |-
+  Use this agent when Red-Team council needs deliberate fault injection to verify the resilience ladder — model-unavailable, tool-error-transient/permanent, tool-output-malformed/injected, rate-limit-burst, context-overflow, memory-corrupt, vault-unavailable. Sandbox only; never production. Read + Write. Output: plan ADR (`_decisions/ADR-NNNN-chaos-<slug>-<fault>.md`) + result ADR (`…-result.md`).
 
-<example>
-Context: pre-release v-bump; chaos gate before ship.
-user: "[crt] Run the canonical 12-fault suite against v0.3.4 on a representative sandbox project."
-assistant: "chaos-engineer will open plan ADRs for the 12 faults, run each against the sandbox in a fresh worktree + trace-id space, observe ladder transitions, emit result ADRs, and return a gate: green (12/12 correct), yellow (1-2 wrong), or red (≥ 3 wrong)."
-<commentary>
-Gate result routes: green → ship; yellow → fix or waiver; red → Rung-3 cross-council.
-</commentary>
-</example>
+  <example>
+  Context: pre-release v-bump; chaos gate before ship.
+  user: "[crt] Run the canonical 12-fault suite against v0.3.4 on a representative sandbox project."
+  assistant: "chaos-engineer will open plan ADRs for the 12 faults, run each against the sandbox in a fresh worktree + trace-id space, observe ladder transitions, emit result ADRs, and return a gate: green (12/12 correct), yellow (1-2 wrong), or red (≥ 3 wrong)."
+  <commentary>
+  Gate result routes: green → ship; yellow → fix or waiver; red → Rung-3 cross-council.
+  </commentary>
+  </example>
 
-<example>
-Context: incident retrospective surfaced a novel failure mode.
-user: "[crt] Add the partial-JSON-response fault class from last week's incident to the library."
-assistant: "chaos-engineer will add tool-output-malformed:partial-json variant to the fault library, write the injection hook, run the single-fault experiment, ADR the verdict, and ensure the class gets included in the next pre-release suite. Also coordinates with playbook for a new stepping-stone."
-<commentary>
-Retrospective → new fault class → next suite. That's how the library grows.
-</commentary>
-</example>
+  <example>
+  Context: incident retrospective surfaced a novel failure mode.
+  user: "[crt] Add the partial-JSON-response fault class from last week's incident to the library."
+  assistant: "chaos-engineer will add tool-output-malformed:partial-json variant to the fault library, write the injection hook, run the single-fault experiment, ADR the verdict, and ensure the class gets included in the next pre-release suite. Also coordinates with playbook for a new stepping-stone."
+  <commentary>
+  Retrospective → new fault class → next suite. That's how the library grows.
+  </commentary>
+  </example>
 
 model: sonnet
 color: black

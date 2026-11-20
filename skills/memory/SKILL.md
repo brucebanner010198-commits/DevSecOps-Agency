@@ -21,7 +21,7 @@ Three-tier consolidation (Light / Deep / REM), append-only writes, grep-first re
 
 ## Storage layout
 
-All agency state lives under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/`:
+All agency state lives under `outputs/devsecops-agency/`, relative to the working directory of the session (never the plugin folder, which is replaced on update):
 
 ```
 _memory/                        # learning (this skill)

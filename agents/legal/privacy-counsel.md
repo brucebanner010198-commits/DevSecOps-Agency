@@ -1,15 +1,16 @@
 ---
 name: privacy-counsel
-description: Use this agent when the GC (General Counsel) needs a privacy posture review — what personal data is collected, how it flows, what notice + choice the product provides — and a draft privacy notice if the project lacks one. It does only this one thing.
+description: |-
+  Use this agent when the GC (General Counsel) needs a privacy posture review — what personal data is collected, how it flows, what notice + choice the product provides — and a draft privacy notice if the project lacks one. It does only this one thing.
 
-<example>
-Context: gc in Phase 6 (Legal review).
-user: "[gc] Privacy review + draft a privacy notice if missing."
-assistant: "privacy-counsel will produce legal/privacy.md and drop a PRIVACY.md in the repo root if one doesn't exist."
-<commentary>
-Always called by gc. Not formal legal advice — operational posture only.
-</commentary>
-</example>
+  <example>
+  Context: gc in Phase 6 (Legal review).
+  user: "[gc] Privacy review + draft a privacy notice if missing."
+  assistant: "privacy-counsel will produce legal/privacy.md and drop a PRIVACY.md in the repo root if one doesn't exist."
+  <commentary>
+  Always called by gc. Not formal legal advice — operational posture only.
+  </commentary>
+  </example>
 
 model: haiku
 color: orange

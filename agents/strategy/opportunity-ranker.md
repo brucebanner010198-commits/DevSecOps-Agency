@@ -1,15 +1,16 @@
 ---
 name: opportunity-ranker
-description: Use this agent when the CSO needs the candidate opportunities ranked against a shared scorecard — RICE + strategic-fit + narrative-score from CMO. Produces the final pre-meeting shortlist ranking that CEO uses to pick the top-5 for the user.
+description: |-
+  Use this agent when the CSO needs the candidate opportunities ranked against a shared scorecard — RICE + strategic-fit + narrative-score from CMO. Produces the final pre-meeting shortlist ranking that CEO uses to pick the top-5 for the user.
 
-<example>
-Context: CSO running idea pipeline, all inputs (trend, competitive, sizing, narrative) are in.
-user: "[cso] Rank the 10 candidates, produce top-5 for the user-meeting."
-assistant: "opportunity-ranker will emit _vision/strategy/opportunity-scorecard.md with RICE + strategic-fit + CMO-narrative merged, plus a recommended top-5."
-<commentary>
-Always called by cso. Final ranker — everyone else scores on one axis.
-</commentary>
-</example>
+  <example>
+  Context: CSO running idea pipeline, all inputs (trend, competitive, sizing, narrative) are in.
+  user: "[cso] Rank the 10 candidates, produce top-5 for the user-meeting."
+  assistant: "opportunity-ranker will emit _vision/strategy/opportunity-scorecard.md with RICE + strategic-fit + CMO-narrative merged, plus a recommended top-5."
+  <commentary>
+  Always called by cso. Final ranker — everyone else scores on one axis.
+  </commentary>
+  </example>
 
 model: haiku
 color: purple

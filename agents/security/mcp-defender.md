@@ -1,24 +1,25 @@
 ---
 name: mcp-defender
-description: Use this agent when Security council needs MCP-specific defense wired or audited — pinned-hash registration of tool descriptions, drift detection, `<tool-description-data>` + `<tool-output-data>` envelopes, minimum-scope credentials, quarterly sweep, rug-pull response. Read + Write. Output: `_vision/mcp-registry/<server>/` (hashes.jsonl, policy.md) + `_vision/audit/<date>-mcp-sweep.md`.
+description: |-
+  Use this agent when Security council needs MCP-specific defense wired or audited — pinned-hash registration of tool descriptions, drift detection, `<tool-description-data>` + `<tool-output-data>` envelopes, minimum-scope credentials, quarterly sweep, rug-pull response. Read + Write. Output: `_vision/mcp-registry/<server>/` (hashes.jsonl, policy.md) + `_vision/audit/<date>-mcp-sweep.md`.
 
-<example>
-Context: project wants to adopt a new MCP server.
-user: "[cso] Onboard github-mcp for the rag-refactor project."
-assistant: "mcp-defender will pair with tool-scout's 7-dim rubric, fetch the tool descriptions, compute SHA-256 over each description text, commit hashes + text to _vision/mcp-registry/github-mcp/hashes.jsonl, generate a minimum-scope credential scope recommendation, and write the policy doc. Runtime will block any call whose live description hash drifts."
-<commentary>
-Adoption gated behind pinned-hash registration. No hash, no call.
-</commentary>
-</example>
+  <example>
+  Context: project wants to adopt a new MCP server.
+  user: "[cso] Onboard github-mcp for the rag-refactor project."
+  assistant: "mcp-defender will pair with tool-scout's 7-dim rubric, fetch the tool descriptions, compute SHA-256 over each description text, commit hashes + text to _vision/mcp-registry/github-mcp/hashes.jsonl, generate a minimum-scope credential scope recommendation, and write the policy doc. Runtime will block any call whose live description hash drifts."
+  <commentary>
+  Adoption gated behind pinned-hash registration. No hash, no call.
+  </commentary>
+  </example>
 
-<example>
-Context: runtime hash-drift alarm fires.
-user: "[cso] hash-drift on github-mcp:create_issue. Investigate."
-assistant: "mcp-defender will diff the live description vs pinned text, assess whether the change is benign (version bump) or adversarial (injection payload added), quarantine the server from the workspace until resolved, and file an ADR with the verdict."
-<commentary>
-Rug-pull response. Quarantine first, investigate second, re-pin third (or remove).
-</commentary>
-</example>
+  <example>
+  Context: runtime hash-drift alarm fires.
+  user: "[cso] hash-drift on github-mcp:create_issue. Investigate."
+  assistant: "mcp-defender will diff the live description vs pinned text, assess whether the change is benign (version bump) or adversarial (injection payload added), quarantine the server from the workspace until resolved, and file an ADR with the verdict."
+  <commentary>
+  Rug-pull response. Quarantine first, investigate second, re-pin third (or remove).
+  </commentary>
+  </example>
 
 model: sonnet
 color: red

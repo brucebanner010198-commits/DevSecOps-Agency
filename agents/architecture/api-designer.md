@@ -1,15 +1,16 @@
 ---
 name: api-designer
-description: Use this agent when the Engineering Lead needs the API surface designed — endpoints, request/response schemas, auth requirements, and error codes — derived from the functional spec and threat model. It does only this one thing.
+description: |-
+  Use this agent when the Engineering Lead needs the API surface designed — endpoints, request/response schemas, auth requirements, and error codes — derived from the functional spec and threat model. It does only this one thing.
 
-<example>
-Context: engineering-lead is in the architecture phase.
-user: "[engineering-lead] Read brief.md + threat-model.md. Design the API surface."
-assistant: "api-designer will produce a complete endpoint list with auth, schemas, and error codes."
-<commentary>
-Always called by engineering-lead.
-</commentary>
-</example>
+  <example>
+  Context: engineering-lead is in the architecture phase.
+  user: "[engineering-lead] Read brief.md + threat-model.md. Design the API surface."
+  assistant: "api-designer will produce a complete endpoint list with auth, schemas, and error codes."
+  <commentary>
+  Always called by engineering-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: blue

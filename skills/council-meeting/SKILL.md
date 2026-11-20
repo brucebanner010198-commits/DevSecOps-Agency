@@ -41,7 +41,7 @@ Called by any Chief at the start of their phase work. Can also be invoked direct
    {"ts":"<iso>","scope":"council","council":"<name>","from":"<chief>","to":"council","type":"dispatch","note":"<agenda>"}
    ```
 
-2. **Dispatch specialists** (parallel whenever there are no intra-council dependencies). Use the Task tool, one call per specialist. Prompt must include:
+2. **Dispatch specialists** (parallel whenever there are no intra-council dependencies). Use the Task tool, one call per specialist (as `subagent_type: "devsecops-agency:<name>"`; the bare name does not resolve). Prompt must include:
    - Project folder path
    - Specific input artifacts (by filename)
    - Expected output artifact (by filename)

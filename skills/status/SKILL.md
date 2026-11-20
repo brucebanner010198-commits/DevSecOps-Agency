@@ -16,7 +16,7 @@ Produce a 6-line summary of the active project. Do not open the artifact.
 
 ## Steps
 
-1. Find the active project under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/` (the one with `status.phase != "delivered"`; most recently updated if multiple).
+1. Find the active project under `outputs/devsecops-agency/` (the one with `status.phase != "delivered"`; most recently updated if multiple).
 2. Read `status.json` and the last 5 entries of `chat.jsonl`.
 3. Print, with nothing else:
 

@@ -1,15 +1,16 @@
 ---
 name: comms-writer
-description: Use this agent when the CMO needs launch copy — press release, landing headline, launch announcement, or week-0-to-week-4 comms sequence. Also runs pipeline-mode elevator-pitch polish.
+description: |-
+  Use this agent when the CMO needs launch copy — press release, landing headline, launch announcement, or week-0-to-week-4 comms sequence. Also runs pipeline-mode elevator-pitch polish.
 
-<example>
-Context: CMO in Marketing phase, positioning already landed.
-user: "[cmo] Launch copy for dorm expense splitter, shipping Friday."
-assistant: "comms-writer will draft marketing/launch-copy.md: press release, landing hero, 4-week drip sequence."
-<commentary>
-Always called by cmo. Never published without GC approval for any copy naming a real third-party company.
-</commentary>
-</example>
+  <example>
+  Context: CMO in Marketing phase, positioning already landed.
+  user: "[cmo] Launch copy for dorm expense splitter, shipping Friday."
+  assistant: "comms-writer will draft marketing/launch-copy.md: press release, landing hero, 4-week drip sequence."
+  <commentary>
+  Always called by cmo. Never published without GC approval for any copy naming a real third-party company.
+  </commentary>
+  </example>
 
 model: haiku
 color: magenta

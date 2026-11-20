@@ -1,15 +1,16 @@
 ---
 name: observability-engineer
-description: Use this agent when the VP-Ops (devops-lead) needs the observability baseline wired up — structured logs, health endpoint, basic metrics, and an alert policy stub. It does only this one thing.
+description: |-
+  Use this agent when the VP-Ops (devops-lead) needs the observability baseline wired up — structured logs, health endpoint, basic metrics, and an alert policy stub. It does only this one thing.
 
-<example>
-Context: devops-lead in the Ship phase.
-user: "[devops-lead] Wire up the observability baseline."
-assistant: "observability-engineer will add structured logging, /healthz + /readyz, metrics endpoint, and deploy/observability.md describing the alert policy."
-<commentary>
-Always called by devops-lead.
-</commentary>
-</example>
+  <example>
+  Context: devops-lead in the Ship phase.
+  user: "[devops-lead] Wire up the observability baseline."
+  assistant: "observability-engineer will add structured logging, /healthz + /readyz, metrics endpoint, and deploy/observability.md describing the alert policy."
+  <commentary>
+  Always called by devops-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: green

@@ -1,15 +1,16 @@
 ---
 name: positioning-strategist
-description: Use this agent when the CMO needs a positioning statement for a project or a narrative score on a shortlisted pipeline idea. Produces messaging canvas (audience · promise · proof · wedge · category).
+description: |-
+  Use this agent when the CMO needs a positioning statement for a project or a narrative score on a shortlisted pipeline idea. Produces messaging canvas (audience · promise · proof · wedge · category).
 
-<example>
-Context: CMO in per-project Marketing phase.
-user: "[cmo] Positioning for dorm expense splitter."
-assistant: "positioning-strategist will produce marketing/positioning.md with wedge + elevator pitch + messaging hierarchy."
-<commentary>
-Always called by cmo.
-</commentary>
-</example>
+  <example>
+  Context: CMO in per-project Marketing phase.
+  user: "[cmo] Positioning for dorm expense splitter."
+  assistant: "positioning-strategist will produce marketing/positioning.md with wedge + elevator pitch + messaging hierarchy."
+  <commentary>
+  Always called by cmo.
+  </commentary>
+  </example>
 
 model: haiku
 color: magenta

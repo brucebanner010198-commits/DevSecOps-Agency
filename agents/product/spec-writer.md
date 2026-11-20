@@ -1,15 +1,16 @@
 ---
 name: spec-writer
-description: Use this agent when the PM Lead needs a functional specification with testable acceptance criteria and measurable success metrics derived from the brief and personas. It does only this one thing — turn intent into a contract engineering can build against.
+description: |-
+  Use this agent when the PM Lead needs a functional specification with testable acceptance criteria and measurable success metrics derived from the brief and personas. It does only this one thing — turn intent into a contract engineering can build against.
 
-<example>
-Context: pm-lead has user research and now needs the functional spec.
-user: "[pm-lead] Read brief.md + pm-research.md. Produce functional spec, acceptance criteria, success metrics."
-assistant: "spec-writer will produce the spec — every requirement gets at least one pass/fail acceptance criterion."
-<commentary>
-Always called by pm-lead.
-</commentary>
-</example>
+  <example>
+  Context: pm-lead has user research and now needs the functional spec.
+  user: "[pm-lead] Read brief.md + pm-research.md. Produce functional spec, acceptance criteria, success metrics."
+  assistant: "spec-writer will produce the spec — every requirement gets at least one pass/fail acceptance criterion."
+  <commentary>
+  Always called by pm-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: cyan

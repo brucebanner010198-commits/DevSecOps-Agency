@@ -1,24 +1,25 @@
 ---
 name: finops-analyst
-description: Use this agent when Evaluation council needs cost attribution work — 4-column × 3-dim token tracking, weekly FinOps report generation, anomaly triage (span > $1, trace > $10, runaway thresholds), prompt-cache savings accounting, quarterly portfolio roll-up for CAO audit. Read + Write. Output: `_vision/finops/<yyyy-ww>-weekly.md` + `_vision/finops/anomalies/<ts>-<kind>.md` + `_vision/finops/projects/<slug>.jsonl` + quarterly roll-up feeds for `audit`.
+description: |-
+  Use this agent when Evaluation council needs cost attribution work — 4-column × 3-dim token tracking, weekly FinOps report generation, anomaly triage (span > $1, trace > $10, runaway thresholds), prompt-cache savings accounting, quarterly portfolio roll-up for CAO audit. Read + Write. Output: `_vision/finops/<yyyy-ww>-weekly.md` + `_vision/finops/anomalies/<ts>-<kind>.md` + `_vision/finops/projects/<slug>.jsonl` + quarterly roll-up feeds for `audit`.
 
-<example>
-Context: Monday weekly cadence; FinOps report due.
-user: "[cevo] Weekly FinOps for week 2026-17."
-assistant: "finops-analyst will aggregate cached/input/output tokens across all projects, compute top-5 projects + councils + agent-phase combos, flag anomalies, attribute prompt-cache savings, and compare actuals vs budget burn. Writes _vision/finops/2026-17-weekly.md."
-<commentary>
-Weekly cadence keeps drift caught early. Rung-6 budget triggers surface here.
-</commentary>
-</example>
+  <example>
+  Context: Monday weekly cadence; FinOps report due.
+  user: "[cevo] Weekly FinOps for week 2026-17."
+  assistant: "finops-analyst will aggregate cached/input/output tokens across all projects, compute top-5 projects + councils + agent-phase combos, flag anomalies, attribute prompt-cache savings, and compare actuals vs budget burn. Writes _vision/finops/2026-17-weekly.md."
+  <commentary>
+  Weekly cadence keeps drift caught early. Rung-6 budget triggers surface here.
+  </commentary>
+  </example>
 
-<example>
-Context: single trace exceeded $10 on a context-overflow retry loop.
-user: "[cevo] Investigate yesterday's $47 trace."
-assistant: "finops-analyst will pull the trace, decompose cost by span (prompt/tool/memory/response), identify the loop, attribute to project + council + agent-phase, file the anomaly ADR with remediation proposal (Rung-5 scope pivot + chaos test for the fault class)."
-<commentary>
-Anomaly investigation feeds back into chaos test library.
-</commentary>
-</example>
+  <example>
+  Context: single trace exceeded $10 on a context-overflow retry loop.
+  user: "[cevo] Investigate yesterday's $47 trace."
+  assistant: "finops-analyst will pull the trace, decompose cost by span (prompt/tool/memory/response), identify the loop, attribute to project + council + agent-phase, file the anomaly ADR with remediation proposal (Rung-5 scope pivot + chaos test for the fault class)."
+  <commentary>
+  Anomaly investigation feeds back into chaos test library.
+  </commentary>
+  </example>
 
 model: sonnet
 color: cyan

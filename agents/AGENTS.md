@@ -5,7 +5,8 @@ Telegraph. Read before authoring or editing an agent file.
 ## File shape
 
 - One `.md` file per agent. YAML frontmatter: `name`, `description`, `tools`, `color`.
-- `name` = `subagent_type` string. Kebab-case. Matches filename minus `.md`.
+- `name` = kebab-case, matches filename minus `.md`. Dispatch with `subagent_type: "devsecops-agency:<name>"`; the bare name does not resolve.
+- Every agent file must be listed in `.claude-plugin/plugin.json`: run `python scripts/plugin_agents.py write` after adding, moving or removing one, and `check` before committing.
 - `description` = two lines: who the agent is, what it produces. Start with a verb.
 - `tools` = minimum required. Do not grant `Bash` to non-execution agents.
 - `color` = council tint. See mapping below.

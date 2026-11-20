@@ -1,24 +1,25 @@
 ---
 name: dlp-scanner
-description: Use this agent when Security council needs outbound Data Loss Prevention wired or audited — per-tool-call pre-egress scan, chain-of-tool correlation for split-secret detection, URL-path exfil checks, custom per-project term onboarding, waiver flow review. Read + Write. Output: `_vision/dlp/<slug>-policy.md` + `_vision/dlp/<slug>-custom.jsonl` + `_vision/dlp/<slug>-audit.md`.
+description: |-
+  Use this agent when Security council needs outbound Data Loss Prevention wired or audited — per-tool-call pre-egress scan, chain-of-tool correlation for split-secret detection, URL-path exfil checks, custom per-project term onboarding, waiver flow review. Read + Write. Output: `_vision/dlp/<slug>-policy.md` + `_vision/dlp/<slug>-custom.jsonl` + `_vision/dlp/<slug>-audit.md`.
 
-<example>
-Context: project kickoff; Chief of Security needs DLP policy in place before any outbound tool call.
-user: "[cso] Wire DLP for multi-agent-router."
-assistant: "dlp-scanner will list the outbound-call surface (MCP tools, HTTP clients, API wrappers), declare the static + NLP + chain-correlation pipeline, load the standard pattern library, build the project's custom term file from kickoff-brief code names, and write the policy doc."
-<commentary>
-Without DLP, a single prompt-injected tool call can exfiltrate credentials. Policy declared before first dispatch.
-</commentary>
-</example>
+  <example>
+  Context: project kickoff; Chief of Security needs DLP policy in place before any outbound tool call.
+  user: "[cso] Wire DLP for multi-agent-router."
+  assistant: "dlp-scanner will list the outbound-call surface (MCP tools, HTTP clients, API wrappers), declare the static + NLP + chain-correlation pipeline, load the standard pattern library, build the project's custom term file from kickoff-brief code names, and write the policy doc."
+  <commentary>
+  Without DLP, a single prompt-injected tool call can exfiltrate credentials. Policy declared before first dispatch.
+  </commentary>
+  </example>
 
-<example>
-Context: chain-correlation window flagged a split-secret candidate across 4 calls.
-user: "[cso] DLP flagged a chain-split on yesterday's run. Investigate."
-assistant: "dlp-scanner will pull the trace, confirm the concatenation matches a known pattern, ADR the block, notify the owning council, and propose whether the tool-chain needs a re-prompt or a chaos test in the next pre-release suite."
-<commentary>
-Chain-split is the dangerous class. Never dismiss as false positive without ADR citing the false-positive rationale.
-</commentary>
-</example>
+  <example>
+  Context: chain-correlation window flagged a split-secret candidate across 4 calls.
+  user: "[cso] DLP flagged a chain-split on yesterday's run. Investigate."
+  assistant: "dlp-scanner will pull the trace, confirm the concatenation matches a known pattern, ADR the block, notify the owning council, and propose whether the tool-chain needs a re-prompt or a chaos test in the next pre-release suite."
+  <commentary>
+  Chain-split is the dangerous class. Never dismiss as false positive without ADR citing the false-positive rationale.
+  </commentary>
+  </example>
 
 model: sonnet
 color: red

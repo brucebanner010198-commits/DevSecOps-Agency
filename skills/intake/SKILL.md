@@ -18,7 +18,7 @@ A lightweight alternative to the full `ship-it` pipeline. Run intake and the PM 
 ## Steps
 
 1. Derive a project slug from the user's idea.
-2. Create the project folder at `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/<slug>/` if it does not exist.
+2. Create the project folder at `outputs/devsecops-agency/<slug>/` if it does not exist.
 3. Initialise `status.json` (phase = `pm`), `chat.jsonl`, `inbox.json`.
 4. Run the intake Q&A batch (same as `ship-it`'s Step 2).
 5. Dispatch `pm-lead` with the raw idea + intake answers.
