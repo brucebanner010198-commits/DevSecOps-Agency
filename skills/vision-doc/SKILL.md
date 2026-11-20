@@ -22,7 +22,7 @@ Every real company has a vision doc. So does this one. The CEO owns it; every Ch
 
 ## Storage layout
 
-All vision lives under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/_vision/`:
+All vision lives under `outputs/devsecops-agency/_vision/`:
 
 ```
 _vision/

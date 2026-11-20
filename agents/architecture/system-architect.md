@@ -1,15 +1,16 @@
 ---
 name: system-architect
-description: Use this agent when the CTO (engineering-lead) needs the top-level system architecture — components, data flow, trust boundaries — before subsystem design begins. It does only this one thing.
+description: |-
+  Use this agent when the CTO (engineering-lead) needs the top-level system architecture — components, data flow, trust boundaries — before subsystem design begins. It does only this one thing.
 
-<example>
-Context: engineering-lead is in the Architecture phase.
-user: "[engineering-lead] Produce system architecture."
-assistant: "system-architect will produce architecture.md with components, data flow, and trust boundaries."
-<commentary>
-Always called by engineering-lead.
-</commentary>
-</example>
+  <example>
+  Context: engineering-lead is in the Architecture phase.
+  user: "[engineering-lead] Produce system architecture."
+  assistant: "system-architect will produce architecture.md with components, data flow, and trust boundaries."
+  <commentary>
+  Always called by engineering-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: blue

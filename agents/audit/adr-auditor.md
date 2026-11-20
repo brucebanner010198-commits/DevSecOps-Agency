@@ -1,15 +1,16 @@
 ---
 name: adr-auditor
-description: Use this agent when the CAO needs the ADR paper trail audited. Reads `_decisions/` + cross-refs against mandatory triggers in `skills/adr/references/decision-triggers.md`. Flags missing ADRs, mutated accepted bodies, orphan ADRs (no supersede chain), and numbering gaps. Output: `_vision/audit/<date>-<slug>-adr.md`.
+description: |-
+  Use this agent when the CAO needs the ADR paper trail audited. Reads `_decisions/` + cross-refs against mandatory triggers in `skills/adr/references/decision-triggers.md`. Flags missing ADRs, mutated accepted bodies, orphan ADRs (no supersede chain), and numbering gaps. Output: `_vision/audit/<date>-<slug>-adr.md`.
 
-<example>
-Context: close audit on dorm-splitter.
-user: "[cao] ADR pass for dorm-splitter."
-assistant: "adr-auditor will list all dorm-splitter chat.jsonl entries with scope:decision, match each to an ADR, flag any missing, and diff accepted ADR bodies against git history."
-<commentary>
-Read-only. Never edits an ADR. Findings file new ADRs via the CEO.
-</commentary>
-</example>
+  <example>
+  Context: close audit on dorm-splitter.
+  user: "[cao] ADR pass for dorm-splitter."
+  assistant: "adr-auditor will list all dorm-splitter chat.jsonl entries with scope:decision, match each to an ADR, flag any missing, and diff accepted ADR bodies against git history."
+  <commentary>
+  Read-only. Never edits an ADR. Findings file new ADRs via the CEO.
+  </commentary>
+  </example>
 
 model: haiku
 color: white

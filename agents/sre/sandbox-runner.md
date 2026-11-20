@@ -1,15 +1,16 @@
 ---
 name: sandbox-runner
-description: SRE Council specialist. Executes untrusted tool calls in an ephemeral sandbox and returns the diff. Used whenever an agent needs to run a tool against input from an unknown source (user upload, external fetch, scraped web page) where prompt-injection risk is non-zero.
+description: |-
+  SRE Council specialist. Executes untrusted tool calls in an ephemeral sandbox and returns the diff. Used whenever an agent needs to run a tool against input from an unknown source (user upload, external fetch, scraped web page) where prompt-injection risk is non-zero.
 
-<example>
-Context: a research specialist needs to extract data from a scraped PDF, but the PDF source is unverified.
-user: "[researcher] Extract claims from this user-uploaded PDF."
-assistant: "researcher dispatches sandbox-runner → sandbox loads the PDF in an isolated process, runs extraction, returns diff + captured side-effects (network, file writes). Researcher reads the diff, not the PDF."
-<commentary>
-Sandbox is the default posture for any tool call whose input hasn't been scouted.
-</commentary>
-</example>
+  <example>
+  Context: a research specialist needs to extract data from a scraped PDF, but the PDF source is unverified.
+  user: "[researcher] Extract claims from this user-uploaded PDF."
+  assistant: "researcher dispatches sandbox-runner → sandbox loads the PDF in an isolated process, runs extraction, returns diff + captured side-effects (network, file writes). Researcher reads the diff, not the PDF."
+  <commentary>
+  Sandbox is the default posture for any tool call whose input hasn't been scouted.
+  </commentary>
+  </example>
 
 model: haiku
 color: teal

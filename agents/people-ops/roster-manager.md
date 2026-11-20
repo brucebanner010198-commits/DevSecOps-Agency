@@ -1,15 +1,16 @@
 ---
 name: roster-manager
-description: Use this agent when the COO needs the living agent census — who exists, tier, last-used, utilization band. Read-only scan of `agents/` + `_sessions/` last 30 days. Output: `_vision/roster/census.md` (full rewrite, alphabetized).
+description: |-
+  Use this agent when the COO needs the living agent census — who exists, tier, last-used, utilization band. Read-only scan of `agents/` + `_sessions/` last 30 days. Output: `_vision/roster/census.md` (full rewrite, alphabetized).
 
-<example>
-Context: COO opening a roster checkpoint.
-user: "[coo] Refresh the census."
-assistant: "roster-manager will glob agents/*.md, read every model: + color: frontmatter, cross-ref the last 30 days of _sessions/ dispatches, emit _vision/roster/census.md."
-<commentary>
-Always called by coo.
-</commentary>
-</example>
+  <example>
+  Context: COO opening a roster checkpoint.
+  user: "[coo] Refresh the census."
+  assistant: "roster-manager will glob agents/*.md, read every model: + color: frontmatter, cross-ref the last 30 days of _sessions/ dispatches, emit _vision/roster/census.md."
+  <commentary>
+  Always called by coo.
+  </commentary>
+  </example>
 
 model: haiku
 color: gray

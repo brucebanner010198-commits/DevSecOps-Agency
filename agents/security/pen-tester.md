@@ -1,15 +1,16 @@
 ---
 name: pen-tester
-description: Use this agent when the CISO (security-lead) needs a hands-on security probe of the actually-implemented code — not the spec. Runs after Execution phase completes. It does only this one thing.
+description: |-
+  Use this agent when the CISO (security-lead) needs a hands-on security probe of the actually-implemented code — not the spec. Runs after Execution phase completes. It does only this one thing.
 
-<example>
-Context: security-lead in Phase 4 (Verify) — code is written.
-user: "[security-lead] Pen-test the implementation."
-assistant: "pen-tester will probe the code paths for OWASP Top 10 classes and write security/pentest-report.md."
-<commentary>
-Always called by security-lead. Runs after code-auditor's static review.
-</commentary>
-</example>
+  <example>
+  Context: security-lead in Phase 4 (Verify) — code is written.
+  user: "[security-lead] Pen-test the implementation."
+  assistant: "pen-tester will probe the code paths for OWASP Top 10 classes and write security/pentest-report.md."
+  <commentary>
+  Always called by security-lead. Runs after code-auditor's static review.
+  </commentary>
+  </example>
 
 model: haiku
 color: red

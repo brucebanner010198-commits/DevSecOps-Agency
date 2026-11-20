@@ -1,24 +1,25 @@
 ---
 name: skill-evaluator
-description: Use this agent when a new or changed skill needs evaluation evidence before it lands in the plugin, when a skill's behavior has drifted and needs benchmarking, or when CEVO needs variance-analyzed evidence that a skill actually works. Runs the `skill-eval` harness — single-run eval, multi-trial benchmark with variance, description-tuning loop. Complements (does NOT replace) the `skill-creator` agent. Read + Write. Output: `_vision/eval/skills/<skill>/<date>/report.md` + benchmark CSVs + aggregated variance stats.
+description: |-
+  Use this agent when a new or changed skill needs evaluation evidence before it lands in the plugin, when a skill's behavior has drifted and needs benchmarking, or when CEVO needs variance-analyzed evidence that a skill actually works. Runs the `skill-eval` harness — single-run eval, multi-trial benchmark with variance, description-tuning loop. Complements (does NOT replace) the `skill-creator` agent. Read + Write. Output: `_vision/eval/skills/<skill>/<date>/report.md` + benchmark CSVs + aggregated variance stats.
 
-<example>
-Context: skill-creator just authored a new skill.
-user: "[evaluation-lead] Evaluate the new `release-gates` skill before it goes in the plugin."
-assistant: "skill-evaluator will run quick_validate.py first to confirm the SKILL.md parses, then run the full benchmark with n=10 trials, compute pass-rate mean/stdev, require σ/μ ≤ 0.15, and write the report to _vision/eval/skills/release-gates/2026-04-22/report.md. If the variance is too high or pass-rate is low, feedback goes back to skill-creator."
-<commentary>
-Every new skill through the benchmark. Variance gate, not just mean.
-</commentary>
-</example>
+  <example>
+  Context: skill-creator just authored a new skill.
+  user: "[evaluation-lead] Evaluate the new `release-gates` skill before it goes in the plugin."
+  assistant: "skill-evaluator will run quick_validate.py first to confirm the SKILL.md parses, then run the full benchmark with n=10 trials, compute pass-rate mean/stdev, require σ/μ ≤ 0.15, and write the report to _vision/eval/skills/release-gates/2026-04-22/report.md. If the variance is too high or pass-rate is low, feedback goes back to skill-creator."
+  <commentary>
+  Every new skill through the benchmark. Variance gate, not just mean.
+  </commentary>
+  </example>
 
-<example>
-Context: a skill is triggering on the wrong prompts.
-user: "[evaluation-lead] The `adr` skill is over-triggering — fire on too many prompts that shouldn't use it."
-assistant: "skill-evaluator will build a labeled trigger-dataset (prompts tagged should-trigger yes/no), then run run_loop.py to iteratively refine the description:. Best-performing rewrite commits back to the skill with an ADR explaining the precision/recall improvement."
-<commentary>
-Description-tuning loop is for trigger precision, not skill body behavior.
-</commentary>
-</example>
+  <example>
+  Context: a skill is triggering on the wrong prompts.
+  user: "[evaluation-lead] The `adr` skill is over-triggering — fire on too many prompts that shouldn't use it."
+  assistant: "skill-evaluator will build a labeled trigger-dataset (prompts tagged should-trigger yes/no), then run run_loop.py to iteratively refine the description:. Best-performing rewrite commits back to the skill with an ADR explaining the precision/recall improvement."
+  <commentary>
+  Description-tuning loop is for trigger precision, not skill body behavior.
+  </commentary>
+  </example>
 
 model: sonnet
 color: cyan

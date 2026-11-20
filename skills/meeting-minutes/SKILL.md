@@ -25,7 +25,7 @@ Every meeting leaves a trail. The trail is machine-greppable, human-readable, an
 
 ## Storage layout
 
-All minutes live under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/_meetings/`:
+All minutes live under `outputs/devsecops-agency/_meetings/`:
 
 ```
 _meetings/

@@ -1,15 +1,16 @@
 ---
 name: infra-architect
-description: Use this agent when the CTO (engineering-lead) needs the infrastructure shape — where things run, how they scale, what the dependency surface looks like — tuned to the chosen deployment target. It does only this one thing.
+description: |-
+  Use this agent when the CTO (engineering-lead) needs the infrastructure shape — where things run, how they scale, what the dependency surface looks like — tuned to the chosen deployment target. It does only this one thing.
 
-<example>
-Context: engineering-lead is in the Architecture phase.
-user: "[engineering-lead] Produce infra design for Fly.io target."
-assistant: "infra-architect will produce architecture/infra.md with runtime, datastore, and dependency choices."
-<commentary>
-Always called by engineering-lead. Feeds deployment-engineer downstream.
-</commentary>
-</example>
+  <example>
+  Context: engineering-lead is in the Architecture phase.
+  user: "[engineering-lead] Produce infra design for Fly.io target."
+  assistant: "infra-architect will produce architecture/infra.md with runtime, datastore, and dependency choices."
+  <commentary>
+  Always called by engineering-lead. Feeds deployment-engineer downstream.
+  </commentary>
+  </example>
 
 model: haiku
 color: blue

@@ -1,37 +1,38 @@
 ---
 name: engineering-lead
-description: Use this agent for the Architecture and Build phases of a DevSecOps Agency project. It owns turning the brief + threat model into a coherent architecture, then dispatching backend and frontend developers to implement it. It also handles fix loops triggered by QA failures and post-build security findings.
+description: |-
+  Use this agent for the Architecture and Build phases of a DevSecOps Agency project. It owns turning the brief + threat model into a coherent architecture, then dispatching backend and frontend developers to implement it. It also handles fix loops triggered by QA failures and post-build security findings.
 
-<example>
-Context: Security phase has produced threat-model.md; architecture is next.
-user: "[ship-it] Phase: Architecture. Project: invoice-splitter. Read brief.md and threat-model.md, produce architecture.md."
-assistant: "engineering-lead will design the system and run the api-designer."
-<commentary>
-Architecture must reference every Critical/High mitigation from the threat model.
-</commentary>
-</example>
+  <example>
+  Context: Security phase has produced threat-model.md; architecture is next.
+  user: "[ship-it] Phase: Architecture. Project: invoice-splitter. Read brief.md and threat-model.md, produce architecture.md."
+  assistant: "engineering-lead will design the system and run the api-designer."
+  <commentary>
+  Architecture must reference every Critical/High mitigation from the threat model.
+  </commentary>
+  </example>
 
-<example>
-Context: Architecture is done; build phase begins.
-user: "[ship-it] Phase: Build. Implement architecture.md into src/."
-assistant: "engineering-lead will dispatch backend-dev and frontend-dev in parallel."
-<commentary>
-Build phase parallelises specialists where the architecture allows it.
-</commentary>
-</example>
+  <example>
+  Context: Architecture is done; build phase begins.
+  user: "[ship-it] Phase: Build. Implement architecture.md into src/."
+  assistant: "engineering-lead will dispatch backend-dev and frontend-dev in parallel."
+  <commentary>
+  Build phase parallelises specialists where the architecture allows it.
+  </commentary>
+  </example>
 
-<example>
-Context: QA has reported test failures; engineering needs to fix.
-user: "[ship-it] Fix loop. qa-report.md flags 3 failing acceptance criteria."
-assistant: "engineering-lead will re-dispatch the relevant developers to fix and re-run."
-<commentary>
-Fix loops are bounded — max 2 rounds before escalation.
-</commentary>
-</example>
+  <example>
+  Context: QA has reported test failures; engineering needs to fix.
+  user: "[ship-it] Fix loop. qa-report.md flags 3 failing acceptance criteria."
+  assistant: "engineering-lead will re-dispatch the relevant developers to fix and re-run."
+  <commentary>
+  Fix loops are bounded — max 2 rounds before escalation.
+  </commentary>
+  </example>
 
 model: sonnet
 color: blue
-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
+tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

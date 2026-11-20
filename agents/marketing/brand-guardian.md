@@ -1,15 +1,16 @@
 ---
 name: brand-guardian
-description: Use this agent when the CMO needs a brand consistency check on naming, tone, or visual direction, or when a new project's name/tagline risks collision with prior work. Also runs workspace-level brand-guide maintenance.
+description: |-
+  Use this agent when the CMO needs a brand consistency check on naming, tone, or visual direction, or when a new project's name/tagline risks collision with prior work. Also runs workspace-level brand-guide maintenance.
 
-<example>
-Context: CMO finalising marketing brief.
-user: "[cmo] Brand check on launch-copy.md and product name."
-assistant: "brand-guardian will cross-reference _vision/VISION.md + prior _memory/patterns/*.md and emit marketing/brand-check.md with naming conflicts + tone flags."
-<commentary>
-Always called by cmo. Red gate signal if name collides with prior shipped project.
-</commentary>
-</example>
+  <example>
+  Context: CMO finalising marketing brief.
+  user: "[cmo] Brand check on launch-copy.md and product name."
+  assistant: "brand-guardian will cross-reference _vision/VISION.md + prior _memory/patterns/*.md and emit marketing/brand-check.md with naming conflicts + tone flags."
+  <commentary>
+  Always called by cmo. Red gate signal if name collides with prior shipped project.
+  </commentary>
+  </example>
 
 model: haiku
 color: magenta

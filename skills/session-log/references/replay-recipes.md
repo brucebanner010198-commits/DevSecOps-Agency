@@ -2,7 +2,7 @@
 
 Zero-infrastructure replay. Run directly via Bash.
 
-All examples assume `$OUT=/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency`.
+All examples assume `$OUT=outputs/devsecops-agency`.
 
 ## Agent-scoped queries
 

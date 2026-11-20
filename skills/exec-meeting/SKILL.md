@@ -39,7 +39,7 @@ Every executive session has:
    {"ts":"<iso>","scope":"exec","from":"ceo","to":"exec","type":"dispatch","phase":"<phase>","note":"<agenda>","invitees":[...]}
    ```
 
-2. **Dispatch Chiefs.** Use the Task tool, one call per Chief (in parallel if permitted). Prompt template:
+2. **Dispatch Chiefs.** Use the Task tool, one call per Chief (as `subagent_type: "devsecops-agency:<name>"`; the bare name does not resolve), in parallel if permitted. Prompt template:
 
    ```
    You are {chief-name}, attending an executive session chaired by the CEO.

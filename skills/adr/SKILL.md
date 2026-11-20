@@ -22,7 +22,7 @@ If it's worth arguing about, it's worth writing down. ADRs are the agency's pape
 
 ## Storage layout
 
-All ADRs live under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/_decisions/`:
+All ADRs live under `outputs/devsecops-agency/_decisions/`:
 
 ```
 _decisions/

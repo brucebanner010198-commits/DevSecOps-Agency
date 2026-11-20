@@ -1,15 +1,16 @@
 ---
 name: performance-tester
-description: Use this agent when the CQO (qa-lead) needs a basic performance probe — load test on the hot paths, p95 latency measurement, and a N+1 query check. It does only this one thing.
+description: |-
+  Use this agent when the CQO (qa-lead) needs a basic performance probe — load test on the hot paths, p95 latency measurement, and a N+1 query check. It does only this one thing.
 
-<example>
-Context: qa-lead in the Verify phase.
-user: "[qa-lead] Probe performance on the hot paths."
-assistant: "performance-tester will write tests/perf/ scripts, run them, and report p50/p95/p99."
-<commentary>
-Always called by qa-lead. Keeps it minimal for v1 — not a full perf engineering exercise.
-</commentary>
-</example>
+  <example>
+  Context: qa-lead in the Verify phase.
+  user: "[qa-lead] Probe performance on the hot paths."
+  assistant: "performance-tester will write tests/perf/ scripts, run them, and report p50/p95/p99."
+  <commentary>
+  Always called by qa-lead. Keeps it minimal for v1 — not a full perf engineering exercise.
+  </commentary>
+  </example>
 
 model: haiku
 color: yellow

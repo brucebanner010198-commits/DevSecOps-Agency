@@ -1,15 +1,16 @@
 ---
 name: readme-writer
-description: Use this agent when the Docs Lead needs a polished top-level README for the generated project — overview, quick start, configuration, test, deploy, troubleshooting, and a security note. It does only this one thing.
+description: |-
+  Use this agent when the Docs Lead needs a polished top-level README for the generated project — overview, quick start, configuration, test, deploy, troubleshooting, and a security note. It does only this one thing.
 
-<example>
-Context: docs-lead is in the Docs phase.
-user: "[docs-lead] Produce the project README."
-assistant: "readme-writer will produce a README with copy-pasteable commands cross-checked against the actual code."
-<commentary>
-Always called by docs-lead.
-</commentary>
-</example>
+  <example>
+  Context: docs-lead is in the Docs phase.
+  user: "[docs-lead] Produce the project README."
+  assistant: "readme-writer will produce a README with copy-pasteable commands cross-checked against the actual code."
+  <commentary>
+  Always called by docs-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: magenta

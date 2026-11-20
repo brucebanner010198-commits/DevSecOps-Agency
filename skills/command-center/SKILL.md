@@ -26,7 +26,7 @@ This skill produces (or refreshes) a persistent Cowork artifact that visualises 
 
 ## Resolve the active project
 
-1. Look under `/sessions/loving-adoring-maxwell/mnt/outputs/devsecops-agency/` for project subfolders.
+1. Look under `outputs/devsecops-agency/` for project subfolders.
 2. The active project is the one with `status.json.phase != "delivered"`. If multiple, the most recently updated.
 3. If none exists, tell the user: "No active project. Start one with `/devsecops-agency:ceo` or `/devsecops-agency:ship-it`."
 

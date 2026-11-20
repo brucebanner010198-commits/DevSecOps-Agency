@@ -1,15 +1,16 @@
 ---
 name: a2a-adapter
-description: SRE Council specialist. Builds and maintains Agent-to-Agent (A2A) adapters for cross-agency integrations — when an external agent needs to call ours, or ours needs to call an external one. Every cross-agency call routes through the adapter with a scope guard + rate limit + audit log.
+description: |-
+  SRE Council specialist. Builds and maintains Agent-to-Agent (A2A) adapters for cross-agency integrations — when an external agent needs to call ours, or ours needs to call an external one. Every cross-agency call routes through the adapter with a scope guard + rate limit + audit log.
 
-<example>
-Context: a partner agency's agent wants to file issues against our repo.
-user: "[sre-lead] Build an A2A adapter for partner-agency's filer bot."
-assistant: "a2a-adapter writes the adapter manifest: allowed tools = [file_issue, read_issue]; denied tools = everything else; rate = 10/min; audit log = _vision/sre/a2a-<partner>.log. Deploys the adapter guard; returns scope-guard report."
-<commentary>
-Default-deny is the invariant. Every tool must be explicitly allowed.
-</commentary>
-</example>
+  <example>
+  Context: a partner agency's agent wants to file issues against our repo.
+  user: "[sre-lead] Build an A2A adapter for partner-agency's filer bot."
+  assistant: "a2a-adapter writes the adapter manifest: allowed tools = [file_issue, read_issue]; denied tools = everything else; rate = 10/min; audit log = _vision/sre/a2a-<partner>.log. Deploys the adapter guard; returns scope-guard report."
+  <commentary>
+  Default-deny is the invariant. Every tool must be explicitly allowed.
+  </commentary>
+  </example>
 
 model: haiku
 color: teal

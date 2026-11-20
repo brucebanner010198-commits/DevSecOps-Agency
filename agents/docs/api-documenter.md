@@ -1,15 +1,16 @@
 ---
 name: api-documenter
-description: Use this agent when the Docs Lead needs API reference documentation generated from the architecture and the actual implemented code. It does only this one thing.
+description: |-
+  Use this agent when the Docs Lead needs API reference documentation generated from the architecture and the actual implemented code. It does only this one thing.
 
-<example>
-Context: docs-lead is in the Docs phase.
-user: "[docs-lead] Produce docs/api/ from architecture.md + src/."
-assistant: "api-documenter will generate per-endpoint reference docs cross-checked against the implementation."
-<commentary>
-Always called by docs-lead.
-</commentary>
-</example>
+  <example>
+  Context: docs-lead is in the Docs phase.
+  user: "[docs-lead] Produce docs/api/ from architecture.md + src/."
+  assistant: "api-documenter will generate per-endpoint reference docs cross-checked against the implementation."
+  <commentary>
+  Always called by docs-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: magenta

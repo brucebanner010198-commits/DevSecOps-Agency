@@ -1,15 +1,16 @@
 ---
 name: integrations-engineer
-description: Use this agent when the VP-Eng (engineering-lead) needs third-party integrations wired up — auth providers, payment, email, object storage, external APIs. It does only this one thing.
+description: |-
+  Use this agent when the VP-Eng (engineering-lead) needs third-party integrations wired up — auth providers, payment, email, object storage, external APIs. It does only this one thing.
 
-<example>
-Context: engineering-lead is in the Execution phase.
-user: "[engineering-lead] Wire up email sending (Resend) and OAuth (Google)."
-assistant: "integrations-engineer will implement the clients, feature-flag them, and write interface shims so tests can swap them out."
-<commentary>
-Always called by engineering-lead.
-</commentary>
-</example>
+  <example>
+  Context: engineering-lead is in the Execution phase.
+  user: "[engineering-lead] Wire up email sending (Resend) and OAuth (Google)."
+  assistant: "integrations-engineer will implement the clients, feature-flag them, and write interface shims so tests can swap them out."
+  <commentary>
+  Always called by engineering-lead.
+  </commentary>
+  </example>
 
 model: haiku
 color: blue

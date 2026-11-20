@@ -1,19 +1,20 @@
 ---
 name: qa-lead
-description: Use this agent for the Quality Assurance phase of a DevSecOps Agency project. It owns deriving a test matrix from the acceptance criteria, writing tests, executing them, and producing a qa-report. It coordinates test-designer and test-runner specialists and triggers fix loops back to engineering if tests fail.
+description: |-
+  Use this agent for the Quality Assurance phase of a DevSecOps Agency project. It owns deriving a test matrix from the acceptance criteria, writing tests, executing them, and producing a qa-report. It coordinates test-designer and test-runner specialists and triggers fix loops back to engineering if tests fail.
 
-<example>
-Context: Build phase finished; QA needs to validate against acceptance criteria.
-user: "[ship-it] Phase: QA. Project: invoice-splitter. Validate src/ against brief.md acceptance criteria."
-assistant: "qa-lead will dispatch test-designer to derive the matrix and test-runner to execute."
-<commentary>
-QA phase always starts with deriving the test matrix from the spec, not from the code.
-</commentary>
-</example>
+  <example>
+  Context: Build phase finished; QA needs to validate against acceptance criteria.
+  user: "[ship-it] Phase: QA. Project: invoice-splitter. Validate src/ against brief.md acceptance criteria."
+  assistant: "qa-lead will dispatch test-designer to derive the matrix and test-runner to execute."
+  <commentary>
+  QA phase always starts with deriving the test matrix from the spec, not from the code.
+  </commentary>
+  </example>
 
 model: sonnet
 color: yellow
-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
+tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card
