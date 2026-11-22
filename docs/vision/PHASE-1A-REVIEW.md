@@ -13,7 +13,7 @@ Status: **for the Chairman's prompt-diff review.** The changes are committed on 
 - `cao` adds correction lines;
 - `token-compactor` adds roll-ups.
 
-The guard planned as 2a's first rule: on any path the repo calls append-only, a `Write` to an existing file passes only if the new content starts with the current content, and a write outside the caller's scope is refused.
+The guard planned as 2a's first rule: on any path the repo calls append-only, a `Write` to an existing file passes only if the new content starts with the current content. It is now built: see [PHASE-2A-REVIEW.md](PHASE-2A-REVIEW.md) on `feat/phase-2a-guard-hooks`. Writes outside the caller's scope are logged there, not refused, because the Part 14 scope notes don't match the real layout. Two shared files are still not covered: `threat-model.md` and the cao and token-compactor ledgers.
 
 **The alternative for you:** restore Edit to those twelve agents until 2a lands, accepting that they can then change what they review.
 
