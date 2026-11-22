@@ -179,4 +179,4 @@ What the hook log shows:
 - **D1 and D2 got no checker.** One builder and nothing else, so the CEO's skip remains. The difference is that the work is now delegated to the small model.
 - **Writes outside the project.** In D3, `frontend-dev` and `devops-lead` wrote the app into `Projects/brucebanner010198-commits/tip-split/` under the user's home folder, following the user-level `CLAUDE.md` rule that the headless session inherited. The folder had no git repo and nothing was pushed. It has been moved to the scratchpad. This is the strongest argument for 2a's write scope: today nothing stops an agent from writing anywhere the user can.
 
-Spend for this whole build step, against the $25 cap: baseline $3.87, D3a $6.78, probes $1.02 (`--agent` ×2, `maxTurns`, settings route), regression $4.58. **Total $16.25.**
+Spend for this whole build step, against the $25 cap: baseline $3.87 (including the two `--agent` probes), D3a $6.78, probes $0.62 (`maxTurns` and the settings route), regression $4.58. **Total $15.85.**
