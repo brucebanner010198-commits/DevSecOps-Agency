@@ -86,3 +86,98 @@ Dispatches: 10 attempts, 1 refused. The CEO dispatched three chiefs (engineering
 4. **Cross-council dispatch.** engineering-lead → frontend-dev happened in every multi-agent run, and pm-lead → frontend-dev is decision 4 in the 1a pack. Either make it a recorded exception, or move the builders into the architecture council's reach.
 5. **Coverage.** Add `threat-model.md` and the cao and token-compactor ledgers to B2, or leave those agents able to replace them.
 6. **Where products live.** B1 keeps every write inside the directory the session was launched in. Your user-level rule puts new projects under `Projects/<owner>/<repo>`, and the agency's own layout puts them under `outputs/devsecops-agency/<slug>/`. To build a product as its own repo, launch the agency in that repo's folder. Otherwise, choose a second allowed root. R3 is what the current rule prevents: the agency created `Projects/brucebanner010198-commits/tip-split` on its own. If the agency is launched inside a product repo, `.devsecops-agency/receipts.jsonl` sits there untracked and holds absolute local paths, so that repo should git-ignore `.devsecops-agency/`.
+
+## Plugin validation
+
+`claude plugin validate .` on this branch: **passed with one warning.** The warning is advice about the README: it has no marketplace install line. That warning is unrelated to 2a. The validator lists the hook under "Provides" (`PreToolUse Write|Edit|MultiEdit|NotebookEdit|Agent|Task`, command `python3 "${CLAUDE_PLUGIN_ROOT}/hooks/guard.py"`).
+
+## Advisor reviews
+
+The work was reviewed four times, in this order:
+
+1. **Before block mode, on the replay counts.**
+   - The advisor asked for:
+     - a reproduction of the D3a condensing case;
+     - glob anchoring to the real output layout;
+     - protection for the receipts folder (B4);
+     - refusal messages that name the fix.
+   - Rulings on the replay hits:
+     - keep the B1 blocks on the scratchpad and the plugin `LESSONS.md`, with no exceptions;
+     - keep B3 on `web-fetch` and point to `cro`;
+     - L1 and L2 stay log-only.
+   - Trace evidence disproved its guess that B2 had missed a rewrite: Claude Code itself had refused the specialist's write. The reproduction was still added as a test.
+   - Block mode was cleared once those fixes were committed. A second replay before the run was not required.
+2. **After G1.**
+   - The advisor asked for:
+     - every nested shell command to be swept, not just the tail of the sweep;
+     - the orphan's timeline to be read, which showed it ran alongside the real run;
+     - the replay to be re-run on the final guard;
+     - the `history/` glob to be anchored;
+     - three pack corrections: the PyYAML gap is visible, not fixed; Linux CI has not run; a pointer from the 1a pack.
+   - It also asked for decision 6.
+   - **The replay on the post-fix guard ran after G1, not before it.** Its counts matched the first replay.
+3. **On the finished state.** The advisor asked for:
+   - the Store-Python smoke check (it passed: exit 2, with the L0 note in the receipt);
+   - a check of the CI shellcheck glob (it covers only `runtime-hooks/`);
+   - a check of the handoff format;
+   - three small pack edits.
+4. **Final review.** No changes to the guard. The advisor asked for this record, the plugin validation, and fixes to stale hashes and to the handoff format.
+
+## The reserved decisions, in the agreed 6-point format
+
+For each decision: (1) the issue, (2) why the plan can't absorb it, (3) what was investigated, (4) the alternatives, (5) the recommendation, (6) the impact.
+
+**D1. The prompt-diff review of 1a and 2a.**
+1. The 1a agent-file changes and the 2a guard are not reviewed.
+2. Agent-file changes need your review, under the standing rule.
+3. Investigated: stage commits, the D3a run, regression runs R1 to R3, the replay, and G1.
+4. Alternatives: merge 1a and 2a together; or merge 1a alone after putting Edit back on the 12 appenders.
+5. **Recommendation:** merge them together. Removing Edit is only safe once B2 exists.
+6. Impact: the tool grants and limits take effect, and the guard blocks B1 to B4 in every agency session.
+
+**D2. The 1a pack's decisions 1 to 5, and the shell-dependent steps.**
+1. Some agent bodies still describe steps that need a shell those agents no longer have.
+2. Giving those steps an owner or a shell changes either a grant or a prompt.
+3. Investigated: the table "Shell-dependent steps after the removals" in the 1a pack.
+4. Alternatives: delegate each step to a specialist that has a shell; or grant a read-only shell; or drop the step.
+5. **Recommendation:** accept the stage commits. Delegate the steps as was done in `033d005`. Leave the remaining steps listed until you choose.
+6. Impact: those steps do not run until then.
+
+**D3. The 2a decisions 1 to 6 in this pack.**
+1. These are the lessons-ledger path, the scope notes, cross-council dispatch, B2 coverage, and where products live.
+2. Each is either a prompt change or a choice about what to protect.
+3. Investigated: the replay hits and G1.
+4. The alternatives are given under each decision above.
+5. **Recommendations:**
+   - a project-local ledger;
+   - scope stays log-only;
+   - a recorded exception for engineering-lead → frontend-dev and backend-dev;
+   - extend B2 coverage;
+   - launch the agency in the product's own repo, and git-ignore `.devsecops-agency/` there.
+6. Impact: small prompt and guard edits, then another review.
+
+**D4. ADR-0008, direction "verified releases".**
+1. It is only proposed, and 1a and 2a were built on it as a working assumption.
+2. Accepting it is a direction call, and direction is yours.
+3. Investigated: design review R2 (E1), proposal C, and the Codex blueprint note.
+4. Alternatives: accept it; change the direction; or keep it as an assumption.
+5. **Recommendation:** accept it, with its kill check (one product live with a verified release by 2027-01-31).
+6. Impact: it unlocks the plan for the thin slice. That slice still needs E3 and E4.
+
+**D5. Bash for chaos-engineer.**
+1. Part 14 grants it Bash, but its own instructions forbid it.
+2. The two documents disagree.
+3. Investigated: its role card and agent body.
+4. Alternatives: grant it; keep holding it; or edit the instructions.
+5. **Recommendation:** hold it until there is an OS sandbox (E5), because B1 to B4 do not contain a shell.
+6. Impact: no chaos drills until then.
+
+**D6. Push, PRs and merge.**
+1. `review/design-review-1`, `feat/phase-1a-enforced-contract` and `feat/phase-2a-guard-hooks` are all local.
+2. Any push needs your approval.
+3. Investigated: plugin validation passes, and the local tests pass. Linux CI has never run.
+4. Alternatives:
+   - push and open PRs, with 2a stacked on 1a, both into `feat/personal-ai-surface`;
+   - or hold.
+5. **Recommendation:** push after D1, and let CI run before any merge.
+6. Impact: CI's first run on the hooks.
