@@ -205,3 +205,12 @@ def test_deny_messages_point_to_the_fix(project, tmp_path_factory):
     out = tmp_path_factory.mktemp("elsewhere") / "a.txt"
     assert str(project) in blocks(call("Write", {"file_path": str(out), "content": ""}))[0]
     assert "devsecops-agency:cro" in blocks(call("Agent", {"subagent_type": "web-fetch"}))[0]
+
+
+def test_missing_cards_are_noted_not_silent(project, monkeypatch):
+    monkeypatch.setattr(guard, "load_cards", lambda: {})
+    monkeypatch.setattr(sys, "stdin", type("S", (), {"buffer": __import__("io").BytesIO(json.dumps(
+        call("Write", {"file_path": str(project / "a.txt"), "content": ""})).encode())})())
+    assert guard.main() == 0
+    rec = json.loads((project / ".devsecops-agency" / "receipts.jsonl").read_text().splitlines()[-1])
+    assert any(r.startswith("L0") for r in rec["rules"])

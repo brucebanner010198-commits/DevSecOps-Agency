@@ -205,7 +205,10 @@ def main() -> int:
     d = json.loads(sys.stdin.buffer.read().decode("utf-8"))
     if not (d.get("agent_type") or "").startswith(PREFIX):
         return 0
-    block, note = check(d)
+    cards = load_cards()
+    block, note = check(d, cards)
+    if not cards:
+        note.append("L0 cards: role cards unavailable (PyYAML missing or role-cards.yaml unreadable); L1 and L2 not checked")
     enforce = os.environ.get("DEVSECOPS_GUARD_MODE", "block") != "log"
     decision = "deny" if block and enforce else ("would-deny" if block else "allow")
     receipt(d, block, note, decision)
