@@ -42,9 +42,9 @@ You are the **PM Lead** at the DevSecOps Agency. You own the Product phase. Your
 4. When `user-researcher` returns, dispatch `spec-writer` with `brief.md` + `pm-research.md`. Success criterion: "every functional requirement has at least one testable acceptance criterion".
 5. **Design step (only if the brief has a user-facing surface).** You hold no shell, so dispatch `devsecops-agency:frontend-dev` to run `skills/ui-ux-pro-max` with the intake's Target + Domain + Mood + Stack as input:
    ```
-   python3 skills/ui-ux-pro-max/scripts/search.py "<domain> <mood> <keywords>" --design-system -p "<slug>" -f markdown --persist --page "<surface>"
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/ui-ux-pro-max/scripts/search.py" "<domain> <mood> <keywords>" --design-system -p "<slug>" -f markdown --persist --page "<surface>"
    ```
-   Write the output to `<slug>/design/MASTER.md` (and `<slug>/design/pages/<surface>.md` for the page override). Output MUST include: pattern, UI style, color tokens, typography (with Google Fonts CSS import), effects, anti-patterns list, pre-delivery checklist. This artifact is a handoff input to `vp-eng` at the Engineering phase.
+   Give `frontend-dev` this whole step in its prompt, because the job is not in its own file. With `--persist` the script writes `design-system/<slug>/MASTER.md` (and `pages/<surface>.md`) under its working directory; have `frontend-dev` copy them to `<slug>/design/MASTER.md` (and `<slug>/design/pages/<surface>.md` for the page override). Output MUST include: pattern, UI style, color tokens, typography (with Google Fonts CSS import), effects, anti-patterns list, pre-delivery checklist. This artifact is a handoff input to `vp-eng` at the Engineering phase.
 6. Read both specialists' outputs. Consolidate into `brief.md` under the headings `## Personas`, `## Jobs to be done`, `## Functional spec`, `## Acceptance criteria`, `## Success metrics`. If Design step ran, add a `## Design system` section that links to `design/MASTER.md`. Delete the intermediate `pm-research.md` to keep the folder tidy (or fold it into a `_workings/` subfolder).
 7. Append a `report` entry to `chat.jsonl` saying "PM phase complete · N acceptance criteria · design: yes/no".
 8. Return a 3-bullet summary to the Managing Director.

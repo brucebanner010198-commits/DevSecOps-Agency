@@ -189,3 +189,34 @@ Spend for this whole build step, against the $25 cap: baseline $3.87 (including 
 - **Allowlist denials:** R1 had 1 and R2 had 2, all of them shell commands in the run directory; R3 had none.
 - **Outside the run directories:** the only writes outside were R3's `tip-split` folder (moved) and one helper script in that session's own scratchpad. The other out-of-directory calls were reads and read-only `git ls-remote` lookups. `git status` is clean in the real checkouts, apart from the two files the main checkout always leaves untracked. The test runner now refuses any write outside its run directory, and any shell command that touches the Projects folder; the refusal is fail-closed.
 - **Attribution:** R3 differs from D3a in five ways: every grant, the limits, the moved examples, the run directory and the allowlist. There is one run of each. Neither the lower cost nor the fewer specialists can be put down to any single change.
+
+## Shell-dependent steps after the removals
+
+All 18 agents that lost Bash were read in full, along with the parts of the skills they run that contain commands.
+
+**Fixed (each step now goes to the council specialist that holds the shell):**
+- `engineering-lead`: the smoke check, and its re-run in the fix loop, go to the specialist who built or fixed the code.
+- `devops-lead`: `docker build` goes to `deployment-engineer`; `actionlint` goes to `ci-engineer`.
+- `docs-lead`: it spot-checks with Grep, and dispatches `tutorial-writer` when a command must actually run.
+- `pm-lead`: the design search now uses `${CLAUDE_PLUGIN_ROOT}` and passes the whole step to `frontend-dev`, including where the script writes its output. This is still a cross-council dispatch (decision 4).
+- `readme-writer`: Grep only.
+
+**Already delegated, and the wording holds:**
+- `qa-lead` (the suite goes to `test-runner`);
+- `security-lead` (the post-build audit goes to `code-auditor`);
+- `gc` (licences go to `license-checker`);
+- `evaluation-lead` (benchmarks go to `benchmark-runner`);
+- `sre-lead` (the adapter goes to `a2a-adapter`).
+
+In R3, `qa-lead` still did not dispatch `test-runner`. That is behaviour, not a gap in its instructions.
+
+**Not fixed. Each needs a decision, because the fix hands a capability to someone else:**
+
+| Agent | Step that needs execution | Options |
+| --- | --- | --- |
+| `panel-chair` | Checks that `OPENROUTER_API_KEY` is set, and calls the cross-vendor panel over HTTP with that key. **Every cross-vendor run is now blocked.** | Give `panel-chair` a narrow shell or tool for this one call. Or route the call through `benchmark-runner`, which means handing it the key. Or keep cross-vendor runs off until a vault tool exists |
+| `ip-lineage` | Perceptual-hash and n-gram similarity checks; its rules forbid shipping without them | Give it sandboxed Bash, or move the check to `license-checker` |
+| `token-compactor` | Byte ranges and sizes for compaction records | Give it read-only Bash, or accept counts estimated in the model |
+| `sre-lead`, `model-routing-override` | Confirming an outage from a status page needs WebFetch, which neither holds; the sandbox check has no owner | Give `model-routing-override` WebFetch, or route the check through `sandbox-runner` |
+| CEO and `red-team-lead`, through `skills/worktree` | Moving a merged worktree folder to `_merged/` needs a shell | Have a shell-holding specialist do the move, or change the skill to copy and leave the folder in place |
+| `evaluation-lead`, `panel-chair` | Exact byte counts and overlap scores | Dispatch `benchmark-runner` (it holds a shell), or accept estimates |
