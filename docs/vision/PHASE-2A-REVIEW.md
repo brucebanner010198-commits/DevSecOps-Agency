@@ -18,7 +18,7 @@ Status: **for the Chairman's review.** The work is committed on the local branch
 
 Every decision is appended to `<project>/.devsecops-agency/receipts.jsonl`. `DEVSECOPS_GUARD_MODE=log` turns the blocking rules into log-only ones.
 
-There are 31 tests in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 72 tests in `hooks` and `scripts` pass locally.
+There are 43 tests (counting parametrised cases) in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 72 tests in `hooks` and `scripts` pass locally.
 
 ## Evidence
 
