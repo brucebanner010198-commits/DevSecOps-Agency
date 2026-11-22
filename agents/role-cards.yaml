@@ -1,0 +1,1615 @@
+# Role cards: the single source for each agent's enforced fields.
+# scripts/role_cards.py writes `tools`, `effort` and `maxTurns` into each agent's frontmatter from here,
+# and `check` fails CI if they drift. `model` is recorded but never written: tier changes are Chairman-only.
+# `shell` is enforced by Phase 2a hooks, not by Claude Code. `descriptive.write_scope_note` is Part 14's
+# free-text scope; Phase 2a turns it into enforced path globs.
+# Source: alignment plan Part 14 (grants), Part 4 (board-director), Part 2B Stage 2 (limits).
+version: 1
+agents:
+  api-designer:
+    file: agents/architecture/api-designer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Contract-first; intolerant of ambiguity
+      write_scope_note: docs/api/
+  data-architect:
+    file: agents/architecture/data-architect.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Guards integrity; classifies every field
+      write_scope_note: architecture/data-model.md
+  engineering-lead:
+    file: agents/architecture/engineering-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: core
+      personality: Sets direction; weighs the long-term cost of every choice
+      write_scope_note: architecture.md, architecture/
+  infra-architect:
+    file: agents/architecture/infra-architect.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Prefers boring, proven infrastructure
+      write_scope_note: architecture/infra.md
+  system-architect:
+    file: agents/architecture/system-architect.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: core
+      personality: Thinks in boundaries and failure modes
+      write_scope_note: architecture.md
+  adr-auditor:
+    file: agents/audit/adr-auditor.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      - Bash
+      shell: read-only
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Literal; a missing record is the finding
+      write_scope_note: _vision/audit/
+  agent-governance-reviewer:
+    file: agents/audit/agent-governance-reviewer.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: on-demand
+      personality: Reads agent files like contracts
+      write_scope_note: _vision/audit/
+  cao:
+    file: agents/audit/cao.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Assumes the record is incomplete until shown otherwise
+      write_scope_note: _vision/audit/
+  gate-auditor:
+    file: agents/audit/gate-auditor.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Recomputes every gate; trusts no summary
+      write_scope_note: _vision/audit/
+  memory-auditor:
+    file: agents/audit/memory-auditor.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      - Bash
+      shell: read-only
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Hunts leaked secrets and uncited claims
+      write_scope_note: _vision/audit/
+  okr-auditor:
+    file: agents/audit/okr-auditor.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Checks promises against outcomes
+      write_scope_note: _vision/audit/
+  board-director:
+    file: agents/board/board-director.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: opus
+      effort: high
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Independent; checks from the record, not the conversation
+      write_scope_note: none (reads the project record)
+  ceo:
+    file: agents/ceo.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: opus
+      effort: null
+      maxTurns: null
+    descriptive:
+      tier: core
+      personality: Strategic and decisive; rejects unsupported claims
+      write_scope_note: status.json, chat.jsonl, inbox.json, _decisions/
+  ci-engineer:
+    file: agents/devops/ci-engineer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: full
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Automates everything; trusts nothing unpinned
+      write_scope_note: CI workflows
+  deployment-engineer:
+    file: agents/devops/deployment-engineer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: full
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Cautious; rehearses the rollback first
+      write_scope_note: deploy/
+  devops-lead:
+    file: agents/devops/devops-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: core
+      personality: Calm operator; no release without a rollback
+      write_scope_note: deploy/
+  observability-engineer:
+    file: agents/devops/observability-engineer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: full
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: If it is not measured, it is not running
+      write_scope_note: deploy/observability.md
+  api-documenter:
+    file: agents/docs/api-documenter.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Precise; documents what the code does
+      write_scope_note: docs/api/
+  docs-lead:
+    file: agents/docs/docs-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Editor; no placeholders, no stale pages
+      write_scope_note: docs/
+  readme-writer:
+    file: agents/docs/readme-writer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Plain-spoken; writes for the first-time reader
+      write_scope_note: docs/README.md
+  tutorial-writer:
+    file: agents/docs/tutorial-writer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Follows its own steps before publishing
+      write_scope_note: docs/tutorial/
+  benchmark-runner:
+    file: agents/evaluation/benchmark-runner.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Measures; reports variance with every number
+      write_scope_note: _vision/eval/
+  budget-monitor:
+    file: agents/evaluation/budget-monitor.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Watches burn; raises early
+      write_scope_note: _vision/eval/
+  eval-designer:
+    file: agents/evaluation/eval-designer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Writes the test from the promise, before results
+      write_scope_note: _vision/eval/
+  evaluation-lead:
+    file: agents/evaluation/evaluation-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: core
+      personality: Judges against the original promise, not the effort
+      write_scope_note: _vision/eval/
+  finops-analyst:
+    file: agents/evaluation/finops-analyst.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Counts every token and dollar
+      write_scope_note: _vision/eval/
+  panel-chair:
+    file: agents/evaluation/panel-chair.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Agent
+      - Grep
+      - Glob
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: on-demand
+      personality: Neutral chair; records dissent faithfully
+      write_scope_note: _vision/eval/
+  regression-detector:
+    file: agents/evaluation/regression-detector.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Distrusts any improvement without a baseline
+      write_scope_note: _vision/eval/
+  skill-evaluator:
+    file: agents/evaluation/skill-evaluator.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: on-demand
+      personality: Scores on evidence, not polish
+      write_scope_note: _vision/eval/
+  token-compactor:
+    file: agents/evaluation/token-compactor.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Economical; never drops a cited record
+      write_scope_note: _vision/eval/
+  backend-dev:
+    file: agents/execution/backend-dev.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Pragmatic executor; follows contracts exactly
+      write_scope_note: src/ (own worktree)
+  db-engineer:
+    file: agents/execution/db-engineer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Careful; every migration is reversible
+      write_scope_note: migrations, data layer
+  frontend-dev:
+    file: agents/execution/frontend-dev.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: User-minded; ships simple, accessible interfaces
+      write_scope_note: src/ (own worktree)
+  integrations-engineer:
+    file: agents/execution/integrations-engineer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Distrusts third parties; wraps and mocks them
+      write_scope_note: src/integrations/
+  compliance-drift:
+    file: agents/legal/compliance-drift.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - WebFetch
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: on-demand
+      personality: Early-warning mindset; reports small drift
+      write_scope_note: legal/
+  gc:
+    file: agents/legal/gc.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Conservative; states risk plainly
+      write_scope_note: legal/
+  ip-lineage:
+    file: agents/legal/ip-lineage.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Traces the origin of everything shipped
+      write_scope_note: legal/
+  license-checker:
+    file: agents/legal/license-checker.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Reads the license text, not the label
+      write_scope_note: legal/
+  privacy-counsel:
+    file: agents/legal/privacy-counsel.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Data-minimizer; user rights first
+      write_scope_note: legal/
+  brand-guardian:
+    file: agents/marketing/brand-guardian.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Consistent; rejects off-voice copy
+      write_scope_note: marketing/
+  cmo:
+    file: agents/marketing/cmo.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Positioning before any copy
+      write_scope_note: marketing/
+  comms-writer:
+    file: agents/marketing/comms-writer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Concise; claims only what is proven
+      write_scope_note: marketing/
+  growth-analyst:
+    file: agents/marketing/growth-analyst.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Numbers-first; skeptical of vanity metrics
+      write_scope_note: marketing/
+  positioning-strategist:
+    file: agents/marketing/positioning-strategist.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Sharp; one audience, one promise
+      write_scope_note: marketing/
+  coo:
+    file: agents/people-ops/coo.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Fair and procedural; staffs by evidence
+      write_scope_note: _vision/roster/
+  hiring-lead:
+    file: agents/people-ops/hiring-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Hires only for a defined gap
+      write_scope_note: _vision/roster/
+  performance-reviewer:
+    file: agents/people-ops/performance-reviewer.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      - Edit
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Evidence-based; no recency bias
+      write_scope_note: _vision/roster/
+  roster-manager:
+    file: agents/people-ops/roster-manager.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Meticulous record keeper
+      write_scope_note: _vision/roster/
+  skill-creator:
+    file: agents/people-ops/skill-creator.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Careful author; smallest grant that works
+      write_scope_note: agents/, skills/ (after prompt-diff review)
+  pm-lead:
+    file: agents/product/pm-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: core
+      personality: User-first; says no to unmeasured features
+      write_scope_note: product/
+  product-strategist:
+    file: agents/product/product-strategist.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Seeks the wedge; cuts scope
+      write_scope_note: product/strategy.md
+  roadmap-planner:
+    file: agents/product/roadmap-planner.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Sequencer; honest about trade-offs
+      write_scope_note: product/roadmap.md
+  spec-writer:
+    file: agents/product/spec-writer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Exact; every requirement is testable
+      write_scope_note: product/
+  a11y-auditor:
+    file: agents/quality/a11y-auditor.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Speaks for users who are usually forgotten
+      write_scope_note: qa/a11y-report.md
+  performance-tester:
+    file: agents/quality/performance-tester.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Measures; distrusts averages
+      write_scope_note: qa/perf-report.md
+  qa-lead:
+    file: agents/quality/qa-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: core
+      personality: Assumes defects exist; gates on evidence
+      write_scope_note: qa/, qa-report.md
+  test-designer:
+    file: agents/quality/test-designer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Hunts edge cases
+      write_scope_note: tests/
+  test-runner:
+    file: agents/quality/test-runner.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Reports exactly what ran and what failed
+      write_scope_note: tests/, qa/
+  adversarial-prompter:
+    file: agents/red-team/adversarial-prompter.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Inventive attacker of prompts
+      write_scope_note: red-team findings
+  chaos-engineer:
+    file: agents/red-team/chaos-engineer.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: on-demand
+      personality: Breaks things on purpose, safely
+      write_scope_note: red-team findings
+    held:
+      add:
+      - Bash
+      why: Part 14 adds it, but the agent body forbids Bash; needs a decision
+  data-exfil-tester:
+    file: agents/red-team/data-exfil-tester.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Thinks like a thief; synthetic data only
+      write_scope_note: red-team findings
+  model-poisoning-scout:
+    file: agents/red-team/model-poisoning-scout.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Bash
+      shell: read-only
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Paranoid about tampered instructions
+      write_scope_note: none (reports to lead)
+  playbook-author:
+    file: agents/red-team/playbook-author.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Turns attacks into reusable defenses
+      write_scope_note: playbook
+  red-team-lead:
+    file: agents/red-team/red-team-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Adversarial; assumes controls can be bypassed
+      write_scope_note: red-team findings
+  social-engineering-tester:
+    file: agents/red-team/social-engineering-tester.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Tests whether agents can be talked into it
+      write_scope_note: red-team findings
+  supply-chain-attacker:
+    file: agents/red-team/supply-chain-attacker.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Distrusts every dependency
+      write_scope_note: none (reports to lead)
+  tool-abuse-tester:
+    file: agents/red-team/tool-abuse-tester.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Misuses every tool it is given
+      write_scope_note: red-team findings
+  cro:
+    file: agents/research/cro.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: core
+      personality: Evidence-led; gives a clear build or don't-build
+      write_scope_note: research-brief.md
+  literature-reviewer:
+    file: agents/research/literature-reviewer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - WebSearch
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Scholarly; separates findings from claims
+      write_scope_note: research/prior-art.md
+  market-researcher:
+    file: agents/research/market-researcher.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - WebSearch
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Skeptical of hype; cites every number
+      write_scope_note: research/market.md
+  tech-scout:
+    file: agents/research/tech-scout.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - WebSearch
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Curious; tests maturity before recommending
+      write_scope_note: research/tech-landscape.md
+  user-researcher:
+    file: agents/research/user-researcher.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - WebSearch
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Listens for the real problem
+      write_scope_note: research/user-needs.md
+  code-auditor:
+    file: agents/security/code-auditor.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Bash
+      - Write
+      shell: sandboxed
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: core
+      personality: Assumes the code is vulnerable; never fixes it
+      write_scope_note: security/code-audit.md
+  compliance-officer:
+    file: agents/security/compliance-officer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Precise about obligations
+      write_scope_note: security/compliance.md
+  dlp-scanner:
+    file: agents/security/dlp-scanner.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Watches every outbound byte
+      write_scope_note: security/
+  mcp-defender:
+    file: agents/security/mcp-defender.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Pins and verifies every tool
+      write_scope_note: security/
+  pen-tester:
+    file: agents/security/pen-tester.md
+    enforced:
+      tools:
+      - Read
+      - Bash
+      - Write
+      - Grep
+      - Glob
+      shell: sandboxed
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Persistent attacker; proves the exploit
+      write_scope_note: security/pentest-report.md
+  sbom-slsa:
+    file: agents/security/sbom-slsa.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: No artifact without provenance
+      write_scope_note: SBOM and provenance files
+  secrets-vault:
+    file: agents/security/secrets-vault.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Never lets a raw secret appear
+      write_scope_note: vault references
+  security-lead:
+    file: agents/security/security-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: core
+      personality: Risk-first; will not trade a Critical for a date
+      write_scope_note: threat-model.md, security/
+  threat-modeler:
+    file: agents/security/threat-modeler.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Systematic; enumerates before judging
+      write_scope_note: threat-model.md
+  a2a-adapter:
+    file: agents/sre/a2a-adapter.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Treats every external agent as untrusted
+      write_scope_note: _vision/sre/
+  agent-telemetry-engineer:
+    file: agents/sre/agent-telemetry-engineer.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      - Edit
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: department
+      personality: Instruments first, never speculates
+      write_scope_note: _vision/sre/
+  mcp-author:
+    file: agents/sre/mcp-author.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      - Edit
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: on-demand
+      personality: Minimal surface; explicit schemas
+      write_scope_note: MCP server sources
+  mcp-registry-scout:
+    file: agents/sre/mcp-registry-scout.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Wary; verifies before adopting
+      write_scope_note: _vision/sre/
+  model-routing-override:
+    file: agents/sre/model-routing-override.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Same-tier only; documents every override
+      write_scope_note: _vision/sre/
+  prompt-cache-tuner:
+    file: agents/sre/prompt-cache-tuner.md
+    enforced:
+      tools:
+      - Read
+      - Grep
+      - Glob
+      - Write
+      - Edit
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 25
+    descriptive:
+      tier: on-demand
+      personality: Order-obsessed; measures hit rates
+      write_scope_note: _vision/sre/
+  sandbox-runner:
+    file: agents/sre/sandbox-runner.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Bash
+      shell: sandboxed
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Contains everything; trusts no input
+      write_scope_note: sandbox results
+  sre-lead:
+    file: agents/sre/sre-lead.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Reliability-minded; default deny
+      write_scope_note: _vision/sre/
+  competitive-analyst:
+    file: agents/strategy/competitive-analyst.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - WebSearch
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Fair to rivals; verifies claims
+      write_scope_note: _vision/strategy/
+  cso:
+    file: agents/strategy/cso.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - Agent
+      shell: null
+      model: sonnet
+      effort: medium
+      maxTurns: 30
+    descriptive:
+      tier: department
+      personality: Portfolio thinker; long horizon
+      write_scope_note: _vision/strategy/
+  market-sizer:
+    file: agents/strategy/market-sizer.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - WebSearch
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Shows the arithmetic behind every estimate
+      write_scope_note: _vision/strategy/
+  opportunity-ranker:
+    file: agents/strategy/opportunity-ranker.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: department
+      personality: Ranks by evidence; refuses half-scored lists
+      write_scope_note: _vision/strategy/
+  trend-scout:
+    file: agents/strategy/trend-scout.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Edit
+      - Grep
+      - Glob
+      - WebSearch
+      - WebFetch
+      shell: null
+      model: haiku
+      effort: low
+      maxTurns: 20
+    descriptive:
+      tier: on-demand
+      personality: Separates signal from fashion
+      write_scope_note: _vision/strategy/

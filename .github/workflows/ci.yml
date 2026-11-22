@@ -34,6 +34,8 @@ jobs:
         run: python scripts/frontmatter.py check
       - name: plugin.json lists every agent
         run: python scripts/plugin_agents.py check
+      - name: Agent frontmatter matches its role card
+        run: python scripts/role_cards.py check
       - name: Hook configs are valid JSON
         run: for f in runtime-hooks/*/hooks.json; do jq empty "$f" || exit 1; done
       - name: Hook scripts pass shellcheck (errors)
