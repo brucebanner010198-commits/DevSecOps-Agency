@@ -25,7 +25,7 @@ The same three tasks and prompts as Run 1 D1 to D3, each in a fresh directory an
 
 ### What D3 shows
 
-- **The small tier can build.** `frontend-dev` on Haiku wrote the app, its tests and a smoke check for $0.06. That partly answers review A's F7 question.
+- **The small tier built most of it, not all of it.** `frontend-dev` on Haiku wrote the app, its tests and a smoke check for $0.06. Its build had a round-up defect, which the Opus CEO then found and fixed itself. So F7 is only partly answered: Haiku can draft, but nothing independent checked the result.
 - **The CEO does the work around it itself.** The main session:
   - edited `src/calc.js`, the tests and `index.html` itself (it fixed a round-up defect);
   - wrote the security review and the SBOM itself, so the release check was a self-review;
@@ -61,4 +61,5 @@ D1's first turn wrote about 64,000 tokens to the cache, the session's fixed over
 
 1. **Make the CEO an agent.** The entry point must start the session with `--agent devsecops-agency:ceo`, through a launcher or a project setting. Without it no grant binds the CEO. This is confirmed.
 2. **Remove the CEO's Edit and Bash.** In D3 it edited code, reviewed its own work and wrote into the plugin folder.
-3. **Make the minimum pipeline enforced, not advisory.** Even with no cap pressure, the CEO convened at most one agent per task and skipped every checker.
+3. **The pipeline is still advisory.** Even with no cap pressure, the CEO convened at most one agent per task and skipped every checker. Enforcing a minimum pipeline is Phase 2a and later, not 1a.
+4. **Removing Edit is not containment.** Until 2a adds path scopes, `Write` can still overwrite any file. So neither rule 4 nor "the CEO cannot change code" is met by 1a alone.
