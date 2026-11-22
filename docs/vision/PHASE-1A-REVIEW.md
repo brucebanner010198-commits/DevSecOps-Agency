@@ -2,40 +2,79 @@
 
 Status: **for the Chairman's prompt-diff review.** The changes are committed on the local branch `feat/phase-1a-enforced-contract`, which is not pushed or merged.
 
+## Merge condition
+
+**Phase 1a must not merge ahead of Phase 2a's write guard.** Removing Edit leaves `Write`, which replaces a whole file. Twelve agents that lost Edit are told to append to files they share with others, so they can now append only by rewriting:
+- `qa-lead` and `security-lead` add entries to `chat.jsonl`;
+- four red-team testers add to `findings.md`;
+- `code-auditor` adds a section to `threat-model.md`;
+- `panel-chair` adds rows to its rotation log and the cost CSV;
+- `dlp-scanner` and `mcp-defender` add to append-only JSONL;
+- `cao` adds correction lines;
+- `token-compactor` adds roll-ups.
+
+The guard planned as 2a's first rule: on any path the repo calls append-only, a `Write` to an existing file passes only if the new content starts with the current content, and a write outside the caller's scope is refused.
+
+**The alternative for you:** restore Edit to those twelve agents until 2a lands, accepting that they can then change what they review.
+
 ## What changes
 
-The single source for each agent's enforced fields is now `agents/role-cards.yaml`. `scripts/role_cards.py write` puts `tools`, `effort` and `maxTurns` into each agent file. `check` fails CI on drift and on rule breaches:
+The single source for each agent's enforced fields is now `agents/role-cards.yaml`. `scripts/role_cards.py write` puts `tools`, `effort` and `maxTurns` into each agent file. `check` runs in CI and fails on:
+- drift between a card and its agent file;
 - an orchestrator holding Bash;
 - web access together with a shell;
 - a CEO holding Edit or Bash;
 - an unknown tool;
+- a held grant;
+- an example left in a description;
 - a model line that differs from the card.
 
 Model lines are never written, because tier changes are the Chairman's.
 
-The work is split into commits so that each can be reviewed alone:
+Commits, each reviewable alone:
 
 1. **Removals** (52 agents). Part 14's "remove" items. `Task` is spelled `Agent`; it stays a runtime alias. `TodoWrite` is dropped, because it is not a live tool.
-2. **Additions** (11 agents). This is the one place 1a widens reach: WebSearch and WebFetch for the research and strategy specialists on Haiku, plus Grep and Glob for `panel-chair` and Write for `code-auditor`.
-3. **Limits** (93 agents). `effort` and `maxTurns` per plan Part 2B, Stage 2. The CEO is left without a limit.
-4. **Examples** moved out of the descriptions into the body, word for word.
-5. **Sidecar, lint, launcher, CI and tests.**
+2. **Like-for-like additions** (2 agents): Write for `code-auditor`, and Grep and Glob for `panel-chair`.
+3. **Web access** (7 agents). The one place 1a widens reach: WebSearch and WebFetch for the research and strategy specialists on Haiku. You can refuse this commit on its own.
+4. **Limits** (93 agents). `effort` and `maxTurns`. The mapping is my reading of plan Part 2B, Stage 2:
+   - mechanical specialists: low effort, 20 turns;
+   - judgment specialists: medium, 25. That covers the architects, the engineers, `code-auditor`, `threat-modeler`, `pen-tester`, `test-designer` and every Sonnet specialist, a list I chose;
+   - chiefs and leads: medium, 30. The plan gives executives 15, but here the chiefs both decide and run their councils;
+   - board director: high, 20;
+   - CEO: no limit.
 
-## Evidence: D3 with the CEO started as an agent, on the new grant
+   Both keys were probed live: `maxTurns: 2` stopped a Haiku agent after two calls, and Haiku accepted `effort: low`.
+5. **Examples moved** from 87 descriptions into the body, word for word. Descriptions go from about 19,250 to about 7,600 tokens, under Part 2B's 8,000 target.
+6. **Role cards, lint, launcher, CI and tests.** `scripts/agency.sh` and `agency.ps1` start a session as the CEO agent. A project `.claude/settings.json` with `{"agent": "devsecops-agency:ceo"}` does the same; this was probed, and the session got exactly the CEO's new grant.
 
-The same prompt as baseline D3 was run with `--agent devsecops-agency:ceo` and the CEO granted only Read, Grep, Glob, Agent and Write. Cost **$6.78** (Opus $2.55, Sonnet $3.90, Haiku $0.34); 33 minutes.
+## Evidence: D3 with the CEO started as an agent (D3a)
 
-- **The pipeline engaged.** The CEO dispatched 7 chiefs: `cro`, `pm-lead`, `engineering-lead` (design, then build), `security-lead` (threat model, then audit) and `qa-lead`. They dispatched 8 specialists: `tech-scout`, `spec-writer`, `system-architect`, `threat-modeler`, `frontend-dev`, `code-auditor`, `test-runner` and `a11y-auditor`. In baseline D3 the CEO dispatched only `frontend-dev`.
-- **Tests:** 114 pass when run independently (`node --test`).
-- **The CEO did not edit code.** It wrote the brief, the status, the inbox, the ADRs, the chat log and the retro.
-- **Still wrong:**
-  - The CEO wrote `red-team/findings.md` itself, which is a self-authored review.
-  - The CEO wrote into the plugin's own `LESSONS.md`.
-  - Both are outside its Part 14 write scope. Path scopes need Phase 2a hooks.
-  - No legal, audit or evaluation chief was convened, yet `legal/`, `audit/` and `eval/` files exist, written by specialists or chiefs.
+D3a ran on a scratch plugin where **only `ceo.md` changed**: Read, Grep, Glob, Agent and Write. Every chief and specialist kept its old grant, so the other removals were not tested live by D3a; the regression run tests them. D3a also changed two things at once: `--agent` and the smaller CEO grant. The pipeline engaged with both. The run does not show which one caused it. Cost **$6.78** (Opus $2.55, Sonnet $3.90, Haiku $0.34); 33 minutes.
+
+- **Dispatches:** 29 in total, counted from the stream.
+  - 11 distinct chiefs: `cro`, `pm-lead`, `engineering-lead` (×4), `security-lead` (×2), `qa-lead`, `devops-lead` (×3), `docs-lead`, `gc`, `cao`, `evaluation-lead` and `red-team-lead`.
+  - 12 distinct specialists.
+  - The built-in `web-fetch` agent, once.
+  - Baseline D3, recounted from its stream, had 1 dispatch.
+- **Tests:** 114 pass when run independently.
+- **The CEO did not edit code.** Its writes were the brief, the status, the inbox, `chat.jsonl` (4 whole-file rewrites, each keeping every earlier line), five ADRs, the retro and `red-team/findings.md`.
+- **`red-team/findings.md`:**
+  - The CEO says `red-team-lead`'s own write was rejected; the cause is unverified.
+  - The CEO then wrote a condensed version. The gate (yellow) and the counts (0 critical, 0 high, 2 medium, 3 low, 3 info) are unchanged. The detail sections are dropped: the info items, the workflow checks and the full repros.
+- **`LESSONS.md`:** the CEO tried to `Write` the plugin's own `LESSONS.md` with the text `PLACEHOLDER`. Claude Code refused it as a sensitive file. The export was unchanged before and after. The run gives no reason for the attempt.
+- **Attribution limit:** the stream does not carry nested specialists' messages. So the turn and write counts cover the CEO and the chiefs only, and a chief's writes cannot be separated from its specialists'. The regression run adds a hook that logs each call's `agent_type` and path.
+- **Denials:** the shell (9) and WebFetch (5) denials came from the run's own allowlist, not from agent grants.
+- **Turn limits:** no chief exceeded its planned `maxTurns`. The highest was `engineering-lead` at 21 of 30.
 - **Confounder:** the session still read the user-level `CLAUDE.md`. Its final message quoted the "Projects/<owner>/<repo>" rule.
+- **2a test fixture:** this stream. The four `chat.jsonl` rewrites must pass the append guard, and the findings rewrite must be refused. Part 14's CEO scope also omits `brief.md` and `_meetings/`, which the CEO wrote, so the scope list needs both.
 
-Removing Edit and Bash from the CEO did not stop it building. It made it delegate.
+## Decisions this pack needs
+
+1. Accept the stage commits, or refuse any one of them. Commit 3, web access, is the natural one to consider.
+2. Merge only after 2a's write guard, or restore Edit to the twelve appenders in the meantime.
+3. `chaos-engineer`'s Bash: Part 14 adds it, but its body forbids it.
+4. `pm-lead`'s design search now dispatches `frontend-dev`. That is a cross-council dispatch, which 2a's "own specialists" rule would refuse. Allow it as an exception, or give a product specialist a read-only shell.
+5. The limits mapping above, especially chiefs at 30 turns rather than executives at 15.
 
 ## Conflicts between Part 14 and review A's F13 (not resolved in 1a)
 
@@ -52,7 +91,7 @@ Removing Edit and Bash from the CEO did not stop it building. It made it delegat
 ## Instruction fixes made so that removals don't break agents
 
 - `engineering-lead`: the build smoke check is now run by the specialist who built it.
-- `pm-lead`: the design search script is now run by `frontend-dev`, through dispatch.
+- `pm-lead`: the design search script is now run by `frontend-dev`, through dispatch (decision 4).
 - `readme-writer`: "Use Bash + Grep" becomes "Use Grep".
 
 Stale but harmless: five reviewers' "Must not use Bash" lines still say "Read/Grep/Glob/Write/Edit cover every step".
