@@ -172,7 +172,7 @@ OUT = "outputs/devsecops-agency/tip-splitter/"
 
 
 @pytest.mark.parametrize("relpath", [
-    OUT + "chat.jsonl", OUT + "LESSONS.md", OUT + "red-team/findings.md", OUT + "history/2026-11.md",
+    OUT + "chat.jsonl", OUT + "LESSONS.md", OUT + "red-team/findings.md", OUT + "_vision/history/2026-11-22.md",
     OUT + "_sessions/ceo/s1.jsonl", OUT + "_vision/traces/2026-11/t.jsonl", OUT + "_vision/dlp/x-custom.jsonl",
     OUT + "_vision/mcp-registry/srv/hashes.jsonl", OUT + "_vision/sre/run.log",
     "_sessions/ceo/s1.jsonl", "_vision/cost/manual-billing.csv", "_vision/cross-model-panel/panel-rotation.md",
@@ -181,7 +181,7 @@ def test_append_only_globs_match_root_and_nested_layout(relpath):
     assert guard.is_append_only(relpath)
 
 
-@pytest.mark.parametrize("relpath", [OUT + "status.json", OUT + "src/app.js", OUT + "red-team/notes.md"])
+@pytest.mark.parametrize("relpath", [OUT + "status.json", OUT + "src/app.js", OUT + "red-team/notes.md", OUT + "src/history/list.js"])
 def test_ordinary_paths_are_not_append_only(relpath):
     assert not guard.is_append_only(relpath)
 
