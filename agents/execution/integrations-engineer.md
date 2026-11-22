@@ -13,6 +13,8 @@ description: |-
   </example>
 
 model: haiku
+effort: medium
+maxTurns: 25
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---

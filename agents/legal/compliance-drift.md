@@ -13,6 +13,8 @@ description: |-
   </example>
 
 model: sonnet
+effort: medium
+maxTurns: 25
 color: blue
 tools: ["Read", "Write", "Grep", "WebFetch"]
 ---

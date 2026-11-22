@@ -3,6 +3,8 @@ name: data-exfil-tester
 description: Use this agent when the Red-Team Council needs data-exfiltration tests run against a project — PII leaks, credential egress, secret disclosure, training-data regurgitation, and sensitive-context leakage via output channels. Maps findings to OWASP ASI-adjacent categories (sensitive-data disclosure, memory poisoning readback, training-data extraction).
 
 model: haiku
+effort: low
+maxTurns: 20
 color: black
 tools: ["Read", "Write", "Grep", "Glob", "Bash"]
 ---

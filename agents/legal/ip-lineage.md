@@ -13,6 +13,8 @@ description: |-
   </example>
 
 model: haiku
+effort: low
+maxTurns: 20
 color: blue
 tools: ["Read", "Write", "Grep", "WebFetch"]
 ---

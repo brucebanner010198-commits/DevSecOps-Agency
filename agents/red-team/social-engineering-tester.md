@@ -3,6 +3,8 @@ name: social-engineering-tester
 description: Use this agent when the Red-Team Council needs social-engineering, impersonation, and human-in-the-loop overload tests run against a project. The social-engineering-tester probes authority spoofing (attacker claims to be CEO / admin / support), alert fatigue, approval-bypass via flooding, and tone-based deception. Maps to OWASP ASI09 Identity Spoofing + ASI10 Overwhelming Human-in-the-Loop.
 
 model: haiku
+effort: low
+maxTurns: 20
 color: black
 tools: ["Read", "Write", "Grep", "Glob"]
 ---

@@ -13,6 +13,8 @@ description: |-
   </example>
 
 model: sonnet
+effort: medium
+maxTurns: 30
 color: magenta
 tools: ["Read", "Write", "Edit", "Grep", "Glob", "Agent"]
 ---

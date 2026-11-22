@@ -3,6 +3,8 @@ name: model-poisoning-scout
 description: Use this agent when the Red-Team Council needs memory-poisoning, context-window-poisoning, and long-horizon manipulation signals checked across a project or the workspace. The model-poisoning-scout reads `_memory/`, `_sessions/`, and project memory artifacts for contamination signals — suspicious novelty-gate survivors, anomalous patterns, stepping stones that show poisoning. Maps to OWASP ASI01 Memory Poisoning + ASI05 Cascading Hallucination.
 
 model: haiku
+effort: low
+maxTurns: 20
 color: black
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---

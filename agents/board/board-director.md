@@ -22,6 +22,8 @@ description: |-
   </example>
 
 model: opus
+effort: high
+maxTurns: 20
 color: emerald
 tools: ["Read", "Grep", "Glob", "Agent"]
 ---

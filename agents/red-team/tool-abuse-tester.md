@@ -3,6 +3,8 @@ name: tool-abuse-tester
 description: Use this agent when the Red-Team Council needs tool-abuse, permission-bypass, and tool-chaining tests run against a project's agent surface or MCP integrations. The tool-abuse-tester probes whether an agent can invoke tools it shouldn't, chain tools to exceed its authority, or escape scope via tool-output feedback. Maps findings to OWASP ASI02 (Tool Misuse) + ASI03 (Privilege Compromise) + ASI08 (Repudiation).
 
 model: haiku
+effort: low
+maxTurns: 20
 color: black
 tools: ["Read", "Write", "Grep", "Glob", "Bash"]
 ---

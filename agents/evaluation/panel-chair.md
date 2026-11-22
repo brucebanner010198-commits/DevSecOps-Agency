@@ -22,6 +22,8 @@ description: |-
   </example>
 
 model: sonnet
+effort: medium
+maxTurns: 30
 color: purple
 tools: ["Read", "Write", "Agent", "Grep", "Glob"]
 ---

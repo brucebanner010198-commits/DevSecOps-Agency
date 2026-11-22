@@ -3,6 +3,8 @@ name: supply-chain-attacker
 description: Use this agent when the Red-Team Council needs dependency / supply-chain attack simulations run against a project — package-pinning review, typosquatting, lockfile drift, transitive-dependency CVE scan, model-family swap, MCP-connector provenance. Maps to OWASP ASI-adjacent Supply Chain Vulnerabilities + ASI02 Tool Misuse (compromised tool).
 
 model: haiku
+effort: low
+maxTurns: 20
 color: black
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---
