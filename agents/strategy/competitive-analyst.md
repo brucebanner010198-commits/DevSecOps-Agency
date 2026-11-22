@@ -14,7 +14,7 @@ description: |-
 
 model: haiku
 color: purple
-tools: ["Read", "Write", "Edit", "Grep", "Glob"]
+tools: ["Read", "Write", "Edit", "Grep", "Glob", "WebSearch", "WebFetch"]
 ---
 <!-- role-card:v1 -->
 ## Role Card
