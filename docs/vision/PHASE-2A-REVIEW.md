@@ -42,13 +42,13 @@ Replay found two real bugs, both fixed before block mode:
 - **Windows case-folding** stopped `LESSONS.md` matching its glob.
 - **CRLF files** made Edit look unappliable.
 
-The replay was repeated on the final guard (`6e14040`). D3a and R3 counts are unchanged, and D3a's four `chat.jsonl` rewrites still pass. On G1's stream, with PyYAML, it shows the log-only counts the live run skipped: L1 27 and L2 3. Each L2 was counted twice, once from the stream and once from the hook log. All three are engineering-lead dispatching backend-dev or frontend-dev.
+The replay was repeated on the final guard (`6e14040`). D3a and R3 counts are unchanged, and D3a's four `chat.jsonl` rewrites still pass. On G1's stream, with PyYAML, it shows the log-only counts the live run skipped: L1 at least 27 (nested path-only calls are not scored for L1) and L2 3. Each L2 was counted twice, once from the stream and once from the hook log. All three are engineering-lead dispatching backend-dev or frontend-dev.
 
 The glob for `history/` was also anchored to `_vision/history/`. Every `history/` path the documents mean is there, and the bare glob would have made any product folder named `history/` append-only.
 
 ### G1: one D3 run in block mode
 
-The task was the D3 prompt plus "Keep every file inside the current working directory." The run used a fresh export at `7fa999c`, a cap of $7, and `loghook2` as an independent witness.
+The task was the D3 prompt plus "Keep every file inside the current working directory." The run used a fresh export at `7fa999c`, a cap of $7, and `loghook2` as an independent witness. The three later guard commits (`429486e`, `6e14040`, and the pack fixes) are covered by tests, by the replay, and by a smoke check under the Store `python3`: a refused dispatch exits 2 and its receipt carries the L0 note. They were not covered by a live run.
 
 | Criterion, written before the run | Result |
 |---|---|
@@ -85,4 +85,4 @@ Dispatches: 10 attempts, 1 refused. The CEO dispatched three chiefs (engineering
 3. **Scope rules.** Rewrite the Part 14 scope notes to the real layout so that L1 can become blocking later, or keep scope log-only.
 4. **Cross-council dispatch.** engineering-lead → frontend-dev happened in every multi-agent run, and pm-lead → frontend-dev is decision 4 in the 1a pack. Either make it a recorded exception, or move the builders into the architecture council's reach.
 5. **Coverage.** Add `threat-model.md` and the cao and token-compactor ledgers to B2, or leave those agents able to replace them.
-6. **Where products live.** B1 keeps every write inside the directory the session was launched in. Your user-level rule puts new projects under `Projects/<owner>/<repo>`, and the agency's own layout puts them under `outputs/devsecops-agency/<slug>/`. To build a product as its own repo, launch the agency in that repo's folder. Otherwise, choose a second allowed root. R3 is what the current rule prevents: the agency created `Projects/brucebanner010198-commits/tip-split` on its own.
+6. **Where products live.** B1 keeps every write inside the directory the session was launched in. Your user-level rule puts new projects under `Projects/<owner>/<repo>`, and the agency's own layout puts them under `outputs/devsecops-agency/<slug>/`. To build a product as its own repo, launch the agency in that repo's folder. Otherwise, choose a second allowed root. R3 is what the current rule prevents: the agency created `Projects/brucebanner010198-commits/tip-split` on its own. If the agency is launched inside a product repo, `.devsecops-agency/receipts.jsonl` sits there untracked and holds absolute local paths, so that repo should git-ignore `.devsecops-agency/`.
