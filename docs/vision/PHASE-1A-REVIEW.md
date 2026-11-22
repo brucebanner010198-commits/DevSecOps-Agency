@@ -160,3 +160,23 @@ Stale but harmless: five reviewers' "Must not use Bash" lines still say "Read/Gr
 | `competitive-analyst` | haiku | Read, Write, Edit, Grep, Glob | Read, Grep, Glob, WebSearch, WebFetch, Write, Edit | - | WebSearch, WebFetch | - |
 | `market-sizer` | haiku | Read, Write, Edit, Grep, Glob | Read, Grep, Glob, WebSearch, WebFetch, Write, Edit | - | WebSearch, WebFetch | - |
 | `trend-scout` | haiku | Read, Write, Edit, Grep, Glob | Read, Grep, Glob, WebSearch, WebFetch, Write, Edit | - | WebSearch, WebFetch | - |
+
+## Regression: D1 to D3 on the final 1a branch
+
+Each run used a fresh `git archive` of the branch, the CEO started as an agent, and a PreToolUse hook that logged each call's `agent_type` and path. WebSearch and WebFetch were added to the run's allowlist, so the allowlist would not hide the new research grants. Same prompts as the baseline.
+
+| Task | Cost (cap) | Wall time | Convened | Tests, run independently | Baseline 1 (no `--agent`, old grants) |
+| --- | --- | --- | --- | --- | --- |
+| D1 bug fix | $0.30 ($2) | 28 s | `backend-dev` (Haiku) | 2 of 2 pass | $0.59, the CEO fixed it itself |
+| D2 feature | $0.37 ($2.50) | 52 s | `backend-dev` (Haiku) | 5 pass; 1 fails, the old bug, left alone as out of scope, as in baseline | $0.70, the CEO did it itself |
+| D3 new app | $3.91 ($9) | 18 min | 11 chiefs (`cro`, `pm-lead`, `engineering-lead` ×3, `security-lead` ×2, `qa-lead`, `devops-lead` ×2, `docs-lead`, `gc`, `cao`, `evaluation-lead`, `red-team-lead`); specialists `frontend-dev` ×2, `ci-engineer`, `a11y-auditor` | 51 of 51 pass | $1.78, 1 specialist |
+
+What the hook log shows:
+
+- **The CEO made no Edit and no shell call in any run.** In every run its writes were its records (brief, status, inbox, chat log, ADR, retro). There was no attempt on `LESSONS.md`.
+- **Chiefs made no shell call.** The shell was used only by `frontend-dev`, `backend-dev`, `ci-engineer` and `a11y-auditor`.
+- **Fewer specialists than D3a.** `security-lead` wrote both the threat model and the security audit itself, without `threat-modeler` or `code-auditor`. So the security review was not independent of the security chief. The minimum pipeline is still advisory.
+- **D1 and D2 got no checker.** One builder and nothing else, so the CEO's skip remains. The difference is that the work is now delegated to the small model.
+- **Writes outside the project.** In D3, `frontend-dev` and `devops-lead` wrote the app into `Projects/brucebanner010198-commits/tip-split/` under the user's home folder, following the user-level `CLAUDE.md` rule that the headless session inherited. The folder had no git repo and nothing was pushed. It has been moved to the scratchpad. This is the strongest argument for 2a's write scope: today nothing stops an agent from writing anywhere the user can.
+
+Spend for this whole build step, against the $25 cap: baseline $3.87, D3a $6.78, probes $1.02 (`--agent` ×2, `maxTurns`, settings route), regression $4.58. **Total $16.25.**
