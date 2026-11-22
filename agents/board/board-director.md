@@ -23,7 +23,7 @@ description: |-
 
 model: opus
 color: emerald
-tools: ["Read", "Grep", "Glob", "Task"]
+tools: ["Read", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

@@ -23,7 +23,7 @@ description: |-
 
 model: sonnet
 color: black
-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Task", "Bash"]
+tools: ["Read", "Write", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

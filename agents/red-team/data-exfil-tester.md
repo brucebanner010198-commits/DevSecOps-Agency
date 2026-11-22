@@ -4,7 +4,7 @@ description: Use this agent when the Red-Team Council needs data-exfiltration te
 
 model: haiku
 color: black
-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
+tools: ["Read", "Write", "Grep", "Glob", "Bash"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

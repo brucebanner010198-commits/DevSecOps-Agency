@@ -4,7 +4,7 @@ description: Use this agent when the Red-Team Council needs social-engineering, 
 
 model: haiku
 color: black
-tools: ["Read", "Write", "Edit", "Grep", "Glob"]
+tools: ["Read", "Write", "Grep", "Glob"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

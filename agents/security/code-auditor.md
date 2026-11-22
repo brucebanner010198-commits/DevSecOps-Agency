@@ -14,7 +14,7 @@ description: |-
 
 model: haiku
 color: red
-tools: ["Read", "Grep", "Glob", "Bash", "Edit"]
+tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

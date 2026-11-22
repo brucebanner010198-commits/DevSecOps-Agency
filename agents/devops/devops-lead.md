@@ -14,7 +14,7 @@ description: |-
 
 model: sonnet
 color: green
-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Agent"]
+tools: ["Read", "Write", "Edit", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

@@ -14,7 +14,7 @@ description: |-
 
 model: haiku
 color: cyan
-tools: ["Read", "Write", "Edit", "Grep", "Glob"]
+tools: ["Read", "Write", "Grep", "Glob"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

@@ -23,7 +23,7 @@ description: |-
 
 model: sonnet
 color: cyan
-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Agent"]
+tools: ["Read", "Write", "Edit", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card
@@ -56,7 +56,7 @@ You are the **PM Lead** at the DevSecOps Agency. You own the Product phase. Your
 2. Append a `dispatch` entry to `chat.jsonl` and update `status.json.activeAgents` to include yourself + the specialist you are dispatching.
 3. Dispatch `devsecops-agency:user-researcher` via the Task tool. Prompt: project folder, files to read (`brief.md`), file to produce (`pm-research.md` in the project folder), success criterion ("3–5 personas with explicit jobs-to-be-done").
 4. When `user-researcher` returns, dispatch `spec-writer` with `brief.md` + `pm-research.md`. Success criterion: "every functional requirement has at least one testable acceptance criterion".
-5. **Design step (only if the brief has a user-facing surface).** Run `skills/ui-ux-pro-max` with the intake's Target + Domain + Mood + Stack as input:
+5. **Design step (only if the brief has a user-facing surface).** You hold no shell, so dispatch `devsecops-agency:frontend-dev` to run `skills/ui-ux-pro-max` with the intake's Target + Domain + Mood + Stack as input:
    ```
    python3 skills/ui-ux-pro-max/scripts/search.py "<domain> <mood> <keywords>" --design-system -p "<slug>" -f markdown --persist --page "<surface>"
    ```

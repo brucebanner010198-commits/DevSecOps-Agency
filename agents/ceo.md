@@ -23,7 +23,7 @@ description: |-
 
 model: opus
 color: purple
-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob", "Task", "TodoWrite"]
+tools: ["Read", "Write", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

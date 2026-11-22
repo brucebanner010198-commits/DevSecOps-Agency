@@ -14,7 +14,7 @@ description: |-
 
 model: sonnet
 color: blue
-tools: ["Read", "Write", "Edit", "Grep", "WebFetch", "Bash"]
+tools: ["Read", "Write", "Grep", "WebFetch"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

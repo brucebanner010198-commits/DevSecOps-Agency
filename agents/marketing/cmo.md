@@ -14,7 +14,7 @@ description: |-
 
 model: sonnet
 color: magenta
-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Task"]
+tools: ["Read", "Write", "Edit", "Grep", "Glob", "Agent"]
 ---
 <!-- role-card:v1 -->
 ## Role Card
