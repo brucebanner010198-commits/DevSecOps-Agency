@@ -3,15 +3,6 @@ name: token-compactor
 description: |-
   Use this agent to compress redundant session-log and chat.jsonl entries into rollup summaries when context-window or memory footprint crosses pressure thresholds — without losing decisions, errors, or reports. One of five specialists in the Evaluation Council (reports to evaluation-lead / CEVO). Trigger when total session-log footprint for a project exceeds 60 % of context budget, when `<slug>/chat.jsonl` crosses 5 000 entries, or when the user asks to "compact". Token-compactor emits structured rewrites per `skills/memory/references/write-policy.md`.
 
-  <example>
-  Context: dorm-splitter's chat.jsonl is at 5 400 entries and context is tight.
-  user: "[evaluation-lead] Compact the session logs on dorm-splitter."
-  assistant: "token-compactor identifies compactable runs (sequential notes > 50 with no decisions), emits a rollup summary with pointer to original entries, writes [correction] lines marking the compaction."
-  <commentary>
-  Compaction is structured rewrite — never delete. Decisions, errors, reports, and ADR-referenced lines are never compacted.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -85,3 +76,14 @@ Rollup entry inside the same file:
 - Compact across agents. Each agent's `_sessions/<agentId>/*.jsonl` is compacted independently.
 - Compact the very recent past (last 48 hours). Fresh context has high retrieval value.
 - Exceed what the memory skill's structured-rewrite path permits. Always go through `skills/memory/references/write-policy.md`.
+
+## Examples
+
+<example>
+Context: dorm-splitter's chat.jsonl is at 5 400 entries and context is tight.
+user: "[evaluation-lead] Compact the session logs on dorm-splitter."
+assistant: "token-compactor identifies compactable runs (sequential notes > 50 with no decisions), emits a rollup summary with pointer to original entries, writes [correction] lines marking the compaction."
+<commentary>
+Compaction is structured rewrite — never delete. Decisions, errors, reports, and ADR-referenced lines are never compacted.
+</commentary>
+</example>

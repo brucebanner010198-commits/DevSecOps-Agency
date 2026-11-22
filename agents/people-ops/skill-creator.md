@@ -3,24 +3,6 @@ name: skill-creator
 description: |-
   Use this agent when the CEO hits a domain the current 16 councils don't cover (cryptography, game-dev, mobile, embedded, ML, compliance regime) and needs to extend the roster at runtime. Skill-creator produces AGENTS.md-compliant new agent files + telegraph-style new SKILL.md files, then returns them to the CEO for review.
 
-  <example>
-  Context: user asks for a mobile app; no mobile-dev specialist exists.
-  user: "[ceo] Dispatch a mobile-dev for React Native expo shell."
-  assistant: "skill-creator will author agents/execution/mobile-dev.md (Execution council, blue) + optional skills/mobile-dev-kit/SKILL.md, return for CEO approval before first dispatch."
-  <commentary>
-  Runtime roster extension. CEO reviews before use.
-  </commentary>
-  </example>
-
-  <example>
-  Context: CEO needs a domain skill, not a new agent.
-  user: "[ceo] We need a skill for ADA accessibility audit checklists."
-  assistant: "skill-creator will author skills/ada-audit/SKILL.md with the proper frontmatter and progressive-disclosure references; a11y-auditor will read it."
-  <commentary>
-  Skills go under existing agent ownership; no new agent needed.
-  </commentary>
-  </example>
-
 model: sonnet
 effort: medium
 maxTurns: 25
@@ -107,3 +89,23 @@ summary: <one line, ≤ 120 chars>
 - Assign a model tier without citing `skills/model-tiering/references/tier-rules.md`.
 - Dispatch the new agent yourself — return to CEO for review + first dispatch.
 - Overwrite an existing agent or skill file. Refuse and report the collision.
+
+## Examples
+
+<example>
+Context: user asks for a mobile app; no mobile-dev specialist exists.
+user: "[ceo] Dispatch a mobile-dev for React Native expo shell."
+assistant: "skill-creator will author agents/execution/mobile-dev.md (Execution council, blue) + optional skills/mobile-dev-kit/SKILL.md, return for CEO approval before first dispatch."
+<commentary>
+Runtime roster extension. CEO reviews before use.
+</commentary>
+</example>
+
+<example>
+Context: CEO needs a domain skill, not a new agent.
+user: "[ceo] We need a skill for ADA accessibility audit checklists."
+assistant: "skill-creator will author skills/ada-audit/SKILL.md with the proper frontmatter and progressive-disclosure references; a11y-auditor will read it."
+<commentary>
+Skills go under existing agent ownership; no new agent needed.
+</commentary>
+</example>

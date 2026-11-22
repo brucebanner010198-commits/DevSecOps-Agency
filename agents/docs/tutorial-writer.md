@@ -3,15 +3,6 @@ name: tutorial-writer
 description: |-
   Use this agent when the CKO (docs-lead) needs a "getting started" tutorial — a step-by-step walkthrough that takes a new user from zero to a working example. It does only this one thing.
 
-  <example>
-  Context: docs-lead in the Documentation phase.
-  user: "[docs-lead] Produce docs/tutorial/getting-started.md."
-  assistant: "tutorial-writer will write a 10-minute walkthrough with working copy-paste commands."
-  <commentary>
-  Always called by docs-lead.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -82,3 +73,14 @@ By the end of this tutorial you will <concrete outcome>. Expect ~10 minutes.
 - Write a tutorial that ends at "you're done installing" — the user must see output
 - Use fake example data when real seed data exists
 - Skip error handling steps (what if port in use, DB not running)
+
+## Examples
+
+<example>
+Context: docs-lead in the Documentation phase.
+user: "[docs-lead] Produce docs/tutorial/getting-started.md."
+assistant: "tutorial-writer will write a 10-minute walkthrough with working copy-paste commands."
+<commentary>
+Always called by docs-lead.
+</commentary>
+</example>

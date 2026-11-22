@@ -3,15 +3,6 @@ name: gate-auditor
 description: |-
   Use this agent when the CAO needs the gate-decision trail audited. Reads every Chief report in scope from `chat.jsonl` + cross-refs against `skills/gates/references/gate-rules.md`. Flags reports missing `gate` or `okr_alignment`, silent yellows (empty `followups[]`), unwaived blocking reds that shipped, and aggregation math errors. Output: `_vision/audit/<date>-<slug>-gates.md`.
 
-  <example>
-  Context: close audit on dorm-splitter.
-  user: "[cao] Gate trail pass."
-  assistant: "gate-auditor will walk chat.jsonl entries with type:report, validate each against gate-rules.md, and diff project-gate aggregations against the formula."
-  <commentary>
-  Aggregation math is machine-checkable — no sampling.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -79,3 +70,14 @@ You are the **Gate Auditor**. Output: `_vision/audit/<date>-<slug>-gates.md`.
 - Accept a gate decision as green just because the project shipped. Ships can hide wrong-blocking-flag findings for months.
 - Skip the aggregation math. Off-by-one errors in gate aggregation are silent ship-stoppers.
 - Use "looks fine" as a verdict. Every row is a boolean outcome.
+
+## Examples
+
+<example>
+Context: close audit on dorm-splitter.
+user: "[cao] Gate trail pass."
+assistant: "gate-auditor will walk chat.jsonl entries with type:report, validate each against gate-rules.md, and diff project-gate aggregations against the formula."
+<commentary>
+Aggregation math is machine-checkable — no sampling.
+</commentary>
+</example>

@@ -3,15 +3,6 @@ name: api-designer
 description: |-
   Use this agent when the Engineering Lead needs the API surface designed — endpoints, request/response schemas, auth requirements, and error codes — derived from the functional spec and threat model. It does only this one thing.
 
-  <example>
-  Context: engineering-lead is in the architecture phase.
-  user: "[engineering-lead] Read brief.md + threat-model.md. Design the API surface."
-  assistant: "api-designer will produce a complete endpoint list with auth, schemas, and error codes."
-  <commentary>
-  Always called by engineering-lead.
-  </commentary>
-  </example>
-
 model: haiku
 effort: medium
 maxTurns: 25
@@ -75,3 +66,14 @@ You are the **API Designer** specialist. You produce a structured API surface th
 - Implement the endpoints (backend-dev does)
 - Pick the framework (engineering-lead does)
 - Skip the auth requirement on any endpoint (use "none — public" explicitly if so)
+
+## Examples
+
+<example>
+Context: engineering-lead is in the architecture phase.
+user: "[engineering-lead] Read brief.md + threat-model.md. Design the API surface."
+assistant: "api-designer will produce a complete endpoint list with auth, schemas, and error codes."
+<commentary>
+Always called by engineering-lead.
+</commentary>
+</example>

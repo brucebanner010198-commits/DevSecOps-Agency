@@ -3,15 +3,6 @@ name: okr-auditor
 description: |-
   Use this agent when the CAO needs the OKR scoring trail audited. Reads every Chief report's `okr_alignment` + cross-refs `_vision/VISION.md` + `_vision/projects/<slug>.md` against the worst-of-3 rule in `skills/okr/references/scoring-rules.md`. Flags un-scored reports, worst-of-3 math errors, missing per-project OKR derivation, and red-alignment reports where the user was never escalated. Output: `_vision/audit/<date>-<slug>-okr.md`.
 
-  <example>
-  Context: close audit on dorm-splitter.
-  user: "[cao] OKR alignment trail pass."
-  assistant: "okr-auditor will walk chat.jsonl for okr_alignment values, rederive each from the project KRs, and flag any discrepancies."
-  <commentary>
-  Red alignment with green council gate AND no user escalation is the headline bug this auditor catches.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -81,3 +72,14 @@ You are the **OKR Auditor**. Output: `_vision/audit/<date>-<slug>-okr.md`.
 - Cite a KR by name only — always cite KR ID + source file:line.
 - Treat a superseded KR as current. Check `status: active` on every KR.
 - Gloss over orphan KRs — they're a signal the workspace OKRs have drifted from the actual work.
+
+## Examples
+
+<example>
+Context: close audit on dorm-splitter.
+user: "[cao] OKR alignment trail pass."
+assistant: "okr-auditor will walk chat.jsonl for okr_alignment values, rederive each from the project KRs, and flag any discrepancies."
+<commentary>
+Red alignment with green council gate AND no user escalation is the headline bug this auditor catches.
+</commentary>
+</example>

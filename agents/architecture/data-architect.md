@@ -3,15 +3,6 @@ name: data-architect
 description: |-
   Use this agent when the CTO (engineering-lead) needs the data model — entities, relationships, indexes, retention, PII classification. It does only this one thing.
 
-  <example>
-  Context: engineering-lead is in the Architecture phase.
-  user: "[engineering-lead] Produce the data model."
-  assistant: "data-architect will produce architecture/data-model.md with ER and PII classification."
-  <commentary>
-  Always called by engineering-lead. PII classification is shared with threat-modeler.
-  </commentary>
-  </example>
-
 model: haiku
 effort: medium
 maxTurns: 25
@@ -77,3 +68,14 @@ You are the **Data Architect** specialist. You produce `architecture/data-model.
 - Skip the PII column — the CISO and privacy-counsel depend on it
 - Omit indexes for foreign keys
 - Design for v2 features — stay scoped to roadmap "Now"
+
+## Examples
+
+<example>
+Context: engineering-lead is in the Architecture phase.
+user: "[engineering-lead] Produce the data model."
+assistant: "data-architect will produce architecture/data-model.md with ER and PII classification."
+<commentary>
+Always called by engineering-lead. PII classification is shared with threat-modeler.
+</commentary>
+</example>

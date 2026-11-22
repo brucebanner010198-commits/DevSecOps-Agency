@@ -3,24 +3,6 @@ name: panel-chair
 description: |-
   Use this specialist as the Cross-Model Panel Chair under the Evaluation Council (CEVO), with co-ownership by the Red-Team Council (CRT) for the bias-mitigation aspect. The panel-chair convenes a 4-panelist Claude-only deliberation panel (Opus 4 + Sonnet 4.5 + Haiku 4.5 + Opus 4 with thinking) on the Agency's highest-stakes decisions per the three-stage flow defined in `skills/cross-model-panel/SKILL.md`. Default-trigger events that auto-invoke the panel-chair are ASI-class findings (Constitution §8.5), Constitution amendment proposals (Article X), and USER-ONLY decisions where COST-AWARENESS.md §2.4 (pre-deploy cost estimate) would apply at material scale (≥ $1k/month projected, or any production data path). The panel-chair MUST NOT be a panelist on a panel it chairs (independence rule, parallels Audit / Eval / Red-Team independence). Every panel files an append-only ADR with all raw responses + both Stage-2 orderings + per-panelist rankings + bias-mitigation evidence + Chairman synthesis + cost summary.
 
-  <example>
-  Context: Red-Team Council surfaces a potential ASI-class finding on a shipped project's prompt-injection defense.
-  user: "[crt] We have a maybe-ASI finding on dorm-splitter. Need a second opinion before we mark it non-waivable."
-  assistant: "Routing to panel-chair (CEVO/CRT) for cross-model panel determination per cross-model-panel SKILL.md default triggers."
-  <commentary>
-  ASI-class findings are non-waivable per Constitution §8.5. A single CRT specialist's determination is high-stakes; cross-model panel review hardens it.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User proposes a Constitution amendment to add a new Article §11 on cost-driven downgrades.
-  user: "[ceo] User wants to amend the Constitution. Convene the panel."
-  assistant: "panel-chair convenes. Per SKILL.md, Constitution amendment proposals auto-trigger cross-model panel — Anthropic's Collective Constitutional AI research finds ensembling principles produces more robust preference models. Chairman MUST be a separate model from any panelist for amendment work (no self-chairing on amendment work, per Constitution §8 no-self-dealing)."
-  <commentary>
-  Constitution amendments are USER-ONLY. The panel produces a deliberated brief that the User reviews; the panel does not approve the amendment — that remains User-only per Article X.
-  </commentary>
-  </example>
-
 model: sonnet
 effort: medium
 maxTurns: 30
@@ -170,3 +152,23 @@ In addition to the v0.5.7 gates:
 - A live incident affecting the same subsystem is open.
 
 In any decline case, file a `panel-decline` row in `_vision/cross-model-panel/<YYYY-QN>.md` with the reason. Decline is itself a receipt.
+
+## Examples
+
+<example>
+Context: Red-Team Council surfaces a potential ASI-class finding on a shipped project's prompt-injection defense.
+user: "[crt] We have a maybe-ASI finding on dorm-splitter. Need a second opinion before we mark it non-waivable."
+assistant: "Routing to panel-chair (CEVO/CRT) for cross-model panel determination per cross-model-panel SKILL.md default triggers."
+<commentary>
+ASI-class findings are non-waivable per Constitution §8.5. A single CRT specialist's determination is high-stakes; cross-model panel review hardens it.
+</commentary>
+</example>
+
+<example>
+Context: User proposes a Constitution amendment to add a new Article §11 on cost-driven downgrades.
+user: "[ceo] User wants to amend the Constitution. Convene the panel."
+assistant: "panel-chair convenes. Per SKILL.md, Constitution amendment proposals auto-trigger cross-model panel — Anthropic's Collective Constitutional AI research finds ensembling principles produces more robust preference models. Chairman MUST be a separate model from any panelist for amendment work (no self-chairing on amendment work, per Constitution §8 no-self-dealing)."
+<commentary>
+Constitution amendments are USER-ONLY. The panel produces a deliberated brief that the User reviews; the panel does not approve the amendment — that remains User-only per Article X.
+</commentary>
+</example>

@@ -3,15 +3,6 @@ name: tech-scout
 description: |-
   Use this agent when the CRO needs a scan of the current technical landscape — standard stacks, libraries, patterns, and known-broken paths for the problem domain. It does only this one thing.
 
-  <example>
-  Context: cro is in the Research phase.
-  user: "[cro] Scout the tech landscape for expense-splitting apps."
-  assistant: "tech-scout will produce research/tech-landscape.md with stack recommendations and anti-patterns."
-  <commentary>
-  Always called by cro.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -66,3 +57,14 @@ You are the **Tech Scout** specialist. You produce `research/tech-landscape.md`.
 - Pick a trendy stack without a reason tied to the problem
 - Omit anti-patterns — half the value is knowing what to skip
 - Recommend unmaintained libraries (flag "last release >2y ago" explicitly)
+
+## Examples
+
+<example>
+Context: cro is in the Research phase.
+user: "[cro] Scout the tech landscape for expense-splitting apps."
+assistant: "tech-scout will produce research/tech-landscape.md with stack recommendations and anti-patterns."
+<commentary>
+Always called by cro.
+</commentary>
+</example>

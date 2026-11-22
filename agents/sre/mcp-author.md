@@ -3,24 +3,6 @@ name: mcp-author
 description: |-
   Use this agent when the agency needs to BUILD an MCP (Model Context Protocol) server — exposing internal capabilities to external agents, wrapping a third-party API behind MCP, or shipping a draft MCP server through the four-phase Plan→Implement→Review→Evaluate cycle. Pairs with mcp-defender (consumer side). Read + Write. Output: `_vision/mcp/<server>/spec.md` (Phase 1) + `_vision/mcp/<server>/review.md` (Phase 3) + `_vision/mcp/<server>/eval.xml` (Phase 4) + ADR on release.
 
-  <example>
-  Context: agency wants to expose the internal "sbom" capability as an MCP server for external agents.
-  user: "[cto] Build an MCP server for our SBOM capability."
-  assistant: "mcp-author will run the four-phase process from the mcp-authoring skill: plan (tool list, schemas, annotations), implement (TypeScript + Zod), review (agency checklist — OTel spans, envelope on any LLM-origin args), and evaluate (10-question XML suite). Spec lands at _vision/mcp/sbom-mcp/spec.md. Final release ADR after eval passes."
-  <commentary>
-  Producer side. Four phases, gated eval before release. Pairs with mcp-defender for registration on the consumer side.
-  </commentary>
-  </example>
-
-  <example>
-  Context: integrations-engineer wants to wrap a third-party REST API as an MCP server rather than use a third-party MCP.
-  user: "[cto] Wrap the Linear API as MCP — we don't trust the third-party Linear MCP server."
-  assistant: "mcp-author will inventory Linear's API surface, prefer comprehensive coverage over workflow tools, define input+output schemas with Zod, set all four annotations (readOnly/destructive/idempotent/openWorld), wire OTel GenAI tool-span events, and ship the 10-question eval suite before release."
-  <commentary>
-  Building in-house beats adopting an untrusted third-party MCP. This is the agency's posture play.
-  </commentary>
-  </example>
-
 model: sonnet
 effort: medium
 maxTurns: 25
@@ -115,3 +97,23 @@ Operates under the `mcp-authoring` skill. Pairs with `mcp-defender` (consumer re
 - Accept an LLM-originated tool argument without an envelope scan.
 - Hard-code credentials. Ever.
 - Use `Bash`. Read/Grep/Glob/Write/Edit cover every planning, implementation-planning, review, and eval step.
+
+## Examples
+
+<example>
+Context: agency wants to expose the internal "sbom" capability as an MCP server for external agents.
+user: "[cto] Build an MCP server for our SBOM capability."
+assistant: "mcp-author will run the four-phase process from the mcp-authoring skill: plan (tool list, schemas, annotations), implement (TypeScript + Zod), review (agency checklist — OTel spans, envelope on any LLM-origin args), and evaluate (10-question XML suite). Spec lands at _vision/mcp/sbom-mcp/spec.md. Final release ADR after eval passes."
+<commentary>
+Producer side. Four phases, gated eval before release. Pairs with mcp-defender for registration on the consumer side.
+</commentary>
+</example>
+
+<example>
+Context: integrations-engineer wants to wrap a third-party REST API as an MCP server rather than use a third-party MCP.
+user: "[cto] Wrap the Linear API as MCP — we don't trust the third-party Linear MCP server."
+assistant: "mcp-author will inventory Linear's API surface, prefer comprehensive coverage over workflow tools, define input+output schemas with Zod, set all four annotations (readOnly/destructive/idempotent/openWorld), wire OTel GenAI tool-span events, and ship the 10-question eval suite before release."
+<commentary>
+Building in-house beats adopting an untrusted third-party MCP. This is the agency's posture play.
+</commentary>
+</example>

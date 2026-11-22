@@ -3,15 +3,6 @@ name: performance-tester
 description: |-
   Use this agent when the CQO (qa-lead) needs a basic performance probe — load test on the hot paths, p95 latency measurement, and a N+1 query check. It does only this one thing.
 
-  <example>
-  Context: qa-lead in the Verify phase.
-  user: "[qa-lead] Probe performance on the hot paths."
-  assistant: "performance-tester will write tests/perf/ scripts, run them, and report p50/p95/p99."
-  <commentary>
-  Always called by qa-lead. Keeps it minimal for v1 — not a full perf engineering exercise.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -64,3 +55,14 @@ You are the **Performance Tester** specialist. You produce `tests/perf/` + `qa/p
 - Load-test a live / production deployment
 - Report averages without percentiles
 - Skip the N+1 check — it catches the most common perf bug
+
+## Examples
+
+<example>
+Context: qa-lead in the Verify phase.
+user: "[qa-lead] Probe performance on the hot paths."
+assistant: "performance-tester will write tests/perf/ scripts, run them, and report p50/p95/p99."
+<commentary>
+Always called by qa-lead. Keeps it minimal for v1 — not a full perf engineering exercise.
+</commentary>
+</example>

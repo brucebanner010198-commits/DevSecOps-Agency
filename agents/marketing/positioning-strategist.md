@@ -3,15 +3,6 @@ name: positioning-strategist
 description: |-
   Use this agent when the CMO needs a positioning statement for a project or a narrative score on a shortlisted pipeline idea. Produces messaging canvas (audience · promise · proof · wedge · category).
 
-  <example>
-  Context: CMO in per-project Marketing phase.
-  user: "[cmo] Positioning for dorm expense splitter."
-  assistant: "positioning-strategist will produce marketing/positioning.md with wedge + elevator pitch + messaging hierarchy."
-  <commentary>
-  Always called by cmo.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -88,3 +79,14 @@ For each of the shortlisted ideas, produce:
 - Claim a category that `competitive-analyst` has already called saturated.
 - Write positioning that needs more than 30 words in the elevator pitch.
 - Skip the `Audience` section — no audience = no positioning.
+
+## Examples
+
+<example>
+Context: CMO in per-project Marketing phase.
+user: "[cmo] Positioning for dorm expense splitter."
+assistant: "positioning-strategist will produce marketing/positioning.md with wedge + elevator pitch + messaging hierarchy."
+<commentary>
+Always called by cmo.
+</commentary>
+</example>

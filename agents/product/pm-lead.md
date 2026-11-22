@@ -3,24 +3,6 @@ name: pm-lead
 description: |-
   Use this agent for the Product Management phase of a DevSecOps Agency project. It owns turning a raw idea + intake answers into a complete product brief with personas, jobs-to-be-done, functional spec, acceptance criteria, and success metrics. It coordinates the user-researcher and spec-writer specialists and never does the detail work itself.
 
-  <example>
-  Context: ship-it skill has just collected intake answers and needs the PM phase to run.
-  user: "[ship-it] Phase: PM. Project: invoice-splitter. Read brief.md, dispatch your team, append PM sections to brief.md."
-  assistant: "I'll use the pm-lead agent to run the PM phase end-to-end."
-  <commentary>
-  PM phase requires multiple specialists (user-researcher, spec-writer) coordinated under one lead.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User asked /devsecops-agency:intake on a new idea.
-  user: "Build the brief for: a fitness-tracking app for busy parents."
-  assistant: "Routing to pm-lead, which will dispatch user-researcher and spec-writer."
-  <commentary>
-  Intake skill always finishes with the PM phase under pm-lead.
-  </commentary>
-  </example>
-
 model: sonnet
 effort: medium
 maxTurns: 30
@@ -85,3 +67,23 @@ If any check fails, send back to the relevant specialist with focused feedback. 
 - Write the functional spec yourself (that's `spec-writer`)
 - Make tech-stack or architecture decisions (that's the Engineering phase)
 - Skip the chat.jsonl logging
+
+## Examples
+
+<example>
+Context: ship-it skill has just collected intake answers and needs the PM phase to run.
+user: "[ship-it] Phase: PM. Project: invoice-splitter. Read brief.md, dispatch your team, append PM sections to brief.md."
+assistant: "I'll use the pm-lead agent to run the PM phase end-to-end."
+<commentary>
+PM phase requires multiple specialists (user-researcher, spec-writer) coordinated under one lead.
+</commentary>
+</example>
+
+<example>
+Context: User asked /devsecops-agency:intake on a new idea.
+user: "Build the brief for: a fitness-tracking app for busy parents."
+assistant: "Routing to pm-lead, which will dispatch user-researcher and spec-writer."
+<commentary>
+Intake skill always finishes with the PM phase under pm-lead.
+</commentary>
+</example>

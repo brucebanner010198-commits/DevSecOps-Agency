@@ -3,15 +3,6 @@ name: compliance-officer
 description: |-
   Use this agent when the CISO (security-lead) needs a compliance posture review — what frameworks apply, what controls are in scope, what's missing — given the data and deployment geography. It does only this one thing.
 
-  <example>
-  Context: security-lead is in the Security phase.
-  user: "[security-lead] Compliance posture — project collects email + location, deploys in EU."
-  assistant: "compliance-officer will produce security/compliance.md with applicable frameworks and control gaps."
-  <commentary>
-  Always called by security-lead. Feeds gc (General Counsel) downstream.
-  </commentary>
-  </example>
-
 model: haiku
 effort: low
 maxTurns: 20
@@ -71,3 +62,14 @@ You are the **Compliance Officer** specialist. You produce `security/compliance.
 - Pretend GDPR doesn't apply if any EU resident can use the site
 - Ship a v1 that collects health or payment data without flagging the framework explicitly
 - Give formal legal advice — flag to gc
+
+## Examples
+
+<example>
+Context: security-lead is in the Security phase.
+user: "[security-lead] Compliance posture — project collects email + location, deploys in EU."
+assistant: "compliance-officer will produce security/compliance.md with applicable frameworks and control gaps."
+<commentary>
+Always called by security-lead. Feeds gc (General Counsel) downstream.
+</commentary>
+</example>

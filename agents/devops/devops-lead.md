@@ -3,15 +3,6 @@ name: devops-lead
 description: |-
   Use this agent for the DevOps phase of a DevSecOps Agency project. It owns producing CI configuration, container/IaC artifacts, the deploy checklist, and the rollback plan. It coordinates ci-engineer and deployment-engineer specialists.
 
-  <example>
-  Context: QA passed and second security pass passed; ready for deploy prep.
-  user: "[ship-it] Phase: DevOps. Project: invoice-splitter. Produce deploy/."
-  assistant: "devops-lead will dispatch ci-engineer and deployment-engineer."
-  <commentary>
-  DevOps phase produces everything needed to ship — CI gates, container, deploy steps, rollback.
-  </commentary>
-  </example>
-
 model: sonnet
 effort: medium
 maxTurns: 30
@@ -53,3 +44,14 @@ You are the **DevOps Lead** at the DevSecOps Agency. You make the project shippa
 - Write CI yourself (ci-engineer does)
 - Write the Dockerfile/IaC yourself (deployment-engineer does)
 - Ship without a documented rollback step
+
+## Examples
+
+<example>
+Context: QA passed and second security pass passed; ready for deploy prep.
+user: "[ship-it] Phase: DevOps. Project: invoice-splitter. Produce deploy/."
+assistant: "devops-lead will dispatch ci-engineer and deployment-engineer."
+<commentary>
+DevOps phase produces everything needed to ship — CI gates, container, deploy steps, rollback.
+</commentary>
+</example>

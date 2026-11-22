@@ -3,15 +3,6 @@ name: system-architect
 description: |-
   Use this agent when the CTO (engineering-lead) needs the top-level system architecture — components, data flow, trust boundaries — before subsystem design begins. It does only this one thing.
 
-  <example>
-  Context: engineering-lead is in the Architecture phase.
-  user: "[engineering-lead] Produce system architecture."
-  assistant: "system-architect will produce architecture.md with components, data flow, and trust boundaries."
-  <commentary>
-  Always called by engineering-lead.
-  </commentary>
-  </example>
-
 model: haiku
 effort: medium
 maxTurns: 25
@@ -73,3 +64,14 @@ You are the **System Architect** specialist. You produce `architecture.md` (or t
 - Choose a stack without reading research/tech-landscape.md
 - Omit trust boundaries — threat-modeler needs them
 - Add components that don't serve an in-scope feature
+
+## Examples
+
+<example>
+Context: engineering-lead is in the Architecture phase.
+user: "[engineering-lead] Produce system architecture."
+assistant: "system-architect will produce architecture.md with components, data flow, and trust boundaries."
+<commentary>
+Always called by engineering-lead.
+</commentary>
+</example>
