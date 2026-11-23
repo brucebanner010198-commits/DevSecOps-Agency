@@ -122,6 +122,25 @@ The work was reviewed four times, in this order:
    - a check of the handoff format;
    - three small pack edits.
 4. **Final review.** No changes to the guard. The advisor asked for this record, the plugin validation, and fixes to stale hashes and to the handoff format.
+5. **After the build was paused.** No further build work. The advisor asked for two checks: make this record checkable, and read how the Linux CI job will behave. Both are below.
+
+**This record is a summary, not the advisor's words.** The session transcript holds each advisor reply only in encrypted form (`advisor_redacted_result`), so the replies can't be quoted word for word. What can be checked is when each call happened. The session made 13 advisor calls, timestamps in UTC:
+
+| Date | Times |
+|---|---|
+| 2026-11-20 (R2 design review) | 00:11, 00:19 |
+| 2026-11-22 (baseline, 1a and 2a) | 06:02, 06:06, 06:17, 06:55, 06:59, 07:27, 07:38, 07:57, 08:03, 08:05 |
+| 2026-11-23 (after the pause) | 04:13 |
+
+### Linux CI: read, not run
+
+Linux CI has still not run. Instead, I read the `tests` job in `.github/workflows/ci.yml` to see what it will do with the `hooks` suite on `ubuntu-latest`:
+- It installs `pytest==9.0.1` and `pyyaml==6.0.3`, then runs `python -m pytest -q hooks` from the repo root. `hooks/` doesn't need a requirements file of its own.
+- With PyYAML installed: all 44 `hooks` tests pass locally.
+- With PyYAML hidden: all 44 still pass. The tests pass their own role cards in or replace the card loader, so they don't depend on PyYAML. The `scripts` suite needs PyYAML, and CI installs it.
+- Nothing in the tests depends on Windows. On Linux the append-only globs match case-sensitively, which is the intended behaviour there.
+
+The risk left is Linux-only behaviour that a read can't see. Only a CI run settles it.
 
 ## The reserved decisions, in the agreed 6-point format
 
