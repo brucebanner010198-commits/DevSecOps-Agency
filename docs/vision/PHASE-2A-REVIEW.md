@@ -177,9 +177,11 @@ The work was reviewed seven times, in this order:
 | 2026-11-22 (baseline, 1a and 2a) | 06:02, 06:06, 06:17, 06:55, 06:59, 07:27, 07:38, 07:57, 08:03, 08:05 |
 | 2026-11-23 (after the pause, and before the push) | 04:13, 04:18, about 10:50 |
 
-### Linux CI: read, not run
+### Linux CI
 
-Linux CI has still not run. Instead, I read the `tests` job in `.github/workflows/ci.yml` to see what it will do with the `hooks` suite on `ubuntu-latest`:
+**Linux CI passed on 2026-11-23** after the push: PR #7 (1a) run 45160218182 and PR #8 (2a) run 45160222586. Every job succeeded, including `lint` (role-card sync), `plugin` (validator pinned to Claude Code 2.1.318, which accepts `onFailure`) and `tests (hooks)`. The read below was done before the run.
+
+Before the push, I read the `tests` job in `.github/workflows/ci.yml` to see what it will do with the `hooks` suite on `ubuntu-latest`:
 - It installs `pytest==9.0.1` and `pyyaml==6.0.3`, then runs `python -m pytest -q hooks` from the repo root. `hooks/` doesn't need a requirements file of its own.
 - With PyYAML installed: all `hooks` tests pass locally (44 at the time, 45 now).
 - With PyYAML hidden: all of them still pass. The tests pass their own role cards in or replace the card loader, so they don't depend on PyYAML. The `scripts` suite needs PyYAML, and CI installs it.
