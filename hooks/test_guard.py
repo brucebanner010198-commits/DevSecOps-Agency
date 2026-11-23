@@ -214,3 +214,16 @@ def test_missing_cards_are_noted_not_silent(project, monkeypatch):
     assert guard.main() == 0
     rec = json.loads((project / ".devsecops-agency" / "receipts.jsonl").read_text().splitlines()[-1])
     assert any(r.startswith("L0") for r in rec["rules"])
+
+
+def test_scope_notes_work_without_pyyaml(project, tmp_path_factory):
+    # The guard runs under whatever python3 is on PATH (on Windows, often one without PyYAML).
+    # It reads hooks/role-cards.json, so L1 must still fire and no L0 note may appear.
+    stub = tmp_path_factory.mktemp("noyaml")
+    (stub / "yaml.py").write_text('raise ImportError("PyYAML hidden for this test")\n', encoding="utf-8")
+    env = dict(os.environ, CLAUDE_PROJECT_DIR=str(project), PYTHONPATH=str(stub))
+    d = call("Write", {"file_path": str(project / "src" / "x.js"), "content": ""}, "devsecops-agency:qa-lead")
+    p = subprocess.run([sys.executable, GUARD], input=json.dumps(d).encode(), env=env, capture_output=True)
+    assert p.returncode == 0
+    rules = json.loads((project / ".devsecops-agency" / "receipts.jsonl").read_text().splitlines()[-1])["rules"]
+    assert any(r.startswith("L1") for r in rules) and not any(r.startswith("L0") for r in rules)

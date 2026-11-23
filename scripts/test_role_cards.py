@@ -99,3 +99,26 @@ def test_bad_limits_are_errors():
 
 def test_repository_cards_are_current():
     assert rc.main(["role_cards.py", "check"]) == 0
+
+
+def test_guard_json_matches_the_yaml_cards():
+    import json
+    cards = rc.load_cards()
+    slim = json.loads(rc.GUARD_CARDS.read_text(encoding="utf-8"))["agents"]
+    assert set(slim) == set(cards)
+    for name, c in cards.items():
+        assert slim[name]["file"] == c["file"]
+        assert slim[name]["descriptive"]["write_scope_note"] == c["descriptive"].get("write_scope_note", "")
+
+
+def test_stale_guard_json_fails_check(tmp_path, monkeypatch):
+    stale = tmp_path / "role-cards.json"
+    stale.write_text('{"agents": {}}\n', encoding="utf-8")
+    monkeypatch.setattr(rc, "GUARD_CARDS", stale)
+    assert rc.main(["role_cards.py", "check"]) == 1
+
+
+def test_guard_json_is_lf_and_sorted():
+    text = rc.guard_json(rc.load_cards())
+    assert "\r" not in text and text.endswith("}\n")
+    assert rc.GUARD_CARDS.read_bytes().decode("utf-8").replace("\r\n", "\n") == text

@@ -104,11 +104,15 @@ def resulting_content(tool: str, ti: dict, current: str) -> str | None:
 
 
 def load_cards() -> dict:
+    """Role cards for L1 and L2. hooks/role-cards.json is generated from agents/role-cards.yaml
+    (scripts/role_cards.py write) so that the guard needs only the standard library; the YAML
+    is a fallback for a checkout where the JSON is missing."""
     try:
-        import yaml  # optional: L1/L2 need it, B1 to B3 do not
-    except ImportError:
-        return {}
+        return json.loads((PLUGIN_ROOT / "hooks" / "role-cards.json").read_bytes().decode("utf-8"))["agents"]
+    except Exception:
+        pass
     try:
+        import yaml
         return yaml.safe_load((PLUGIN_ROOT / "agents" / "role-cards.yaml").read_text(encoding="utf-8"))["agents"]
     except Exception:
         return {}
@@ -208,7 +212,7 @@ def main() -> int:
     cards = load_cards()
     block, note = check(d, cards)
     if not cards:
-        note.append("L0 cards: role cards unavailable (PyYAML missing or role-cards.yaml unreadable); L1 and L2 not checked")
+        note.append("L0 cards: role cards unavailable (hooks/role-cards.json and agents/role-cards.yaml unreadable); L1 and L2 not checked")
     enforce = os.environ.get("DEVSECOPS_GUARD_MODE", "block") != "log"
     decision = "deny" if block and enforce else ("would-deny" if block else "allow")
     receipt(d, block, note, decision)
