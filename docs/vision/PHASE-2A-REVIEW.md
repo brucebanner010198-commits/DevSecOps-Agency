@@ -42,13 +42,13 @@ Replay found two real bugs, both fixed before block mode:
 - **Windows case-folding** stopped `LESSONS.md` matching its glob.
 - **CRLF files** made Edit look unappliable.
 
-The replay was repeated on the final guard (`6e14040`). D3a and R3 counts are unchanged, and D3a's four `chat.jsonl` rewrites still pass. On G1's stream, with PyYAML, it shows the log-only counts the live run skipped: L1 at least 27 (nested path-only calls are not scored for L1) and L2 3. Each L2 was counted twice, once from the stream and once from the hook log. All three are engineering-lead dispatching backend-dev or frontend-dev.
+The replay was repeated on the final guard (`8cc6769`). D3a and R3 counts are unchanged, and D3a's four `chat.jsonl` rewrites still pass. On G1's stream, with PyYAML, it shows the log-only counts the live run skipped: L1 at least 27 (nested path-only calls are not scored for L1) and L2 3. Each L2 was counted twice, once from the stream and once from the hook log. All three are engineering-lead dispatching backend-dev or frontend-dev.
 
 The glob for `history/` was also anchored to `_vision/history/`. Every `history/` path the documents mean is there, and the bare glob would have made any product folder named `history/` append-only.
 
 ### G1: one D3 run in block mode
 
-The task was the D3 prompt plus "Keep every file inside the current working directory." The run used a fresh export at `7fa999c`, a cap of $7, and `loghook2` as an independent witness. The three later guard commits (`429486e`, `6e14040`, and the pack fixes) are covered by tests, by the replay, and by a smoke check under the Store `python3`: a refused dispatch exits 2 and its receipt carries the L0 note. They were not covered by a live run.
+The task was the D3 prompt plus "Keep every file inside the current working directory." The run used a fresh export at `7fa999c` (pre-push hash of `4d96916`), a cap of $7, and `loghook2` as an independent witness. The three later guard commits (`33b0a5d`, `8cc6769`, and the pack fixes) are covered by tests, by the replay, and by a smoke check under the Store `python3`: a refused dispatch exits 2 and its receipt carries the L0 note. They were not covered by a live run.
 
 | Criterion, written before the run | Result |
 |---|---|
@@ -66,9 +66,9 @@ Dispatches: 10 attempts, 1 refused. The CEO dispatched three chiefs (engineering
 
 **Caveat: two sessions shared the run directory.** The runner's shell orphaned a first launch of G1, and it ran *alongside* the real run instead of stopping. It cost $0.57. It ran as CEO, under the same guard. It made no dispatches. It wrote `brief.md`, an ADR at `G1/_decisions/` (outside the output folder), `status.json` and a two-line `chat.jsonl`. It also read the real run's ADR and receipts, then finished. The real run picked up its brief and `chat.jsonl` and carried on from them. The containment results still hold, because both sessions were guarded and both stayed in G1. The product from this run should not be compared with D3 or D3a.
 
-**Gap the run found, fixed after G1 in `646c95f` (see below):** on this machine `python3` is the Windows Store Python, which has no PyYAML. The role cards loaded as empty, so L1 and L2 were silently skipped for the whole run. Receipts now carry an L0 note when that happens (`429486e`), and since `646c95f` the guard reads a generated JSON copy of the cards, so L1 and L2 run without PyYAML (proved in G2).
+**Gap the run found, fixed after G1 in `30b9207` (see below):** on this machine `python3` is the Windows Store Python, which has no PyYAML. The role cards loaded as empty, so L1 and L2 were silently skipped for the whole run. Receipts now carry an L0 note when that happens (`33b0a5d`), and since `30b9207` the guard reads a generated JSON copy of the cards, so L1 and L2 run without PyYAML (proved in G2).
 
-### Role cards without PyYAML (`646c95f`)
+### Role cards without PyYAML (`30b9207`)
 
 `scripts/role_cards.py write` now also writes `hooks/role-cards.json`: the part of the cards the guard reads (each agent's file and scope note), as LF JSON with sorted keys. `check`, which the CI `lint` job already runs, fails if the JSON is stale. The guard reads the JSON with the standard library and falls back to the YAML. `.gitattributes` keeps the JSON LF, and this repo now git-ignores `/.devsecops-agency/`.
 
@@ -80,7 +80,7 @@ Tests: 45 in `hooks` (one new, run with PyYAML hidden) and 3 new in `scripts`; a
 
 ### G2: a block-mode run on the final guard
 
-The task was the same as G1, on a fresh export at `646c95f`, with a cap of $4 so the total could not pass $25. The hook ran under the Store `python3`. The criteria were written before the run (scratchpad `baseline/evidence/G2-criteria.md`).
+The task was the same as G1, on a fresh export at `646c95f` (the pre-push hash of `30b9207`; the rebase before the push changed only one line of the 1a pack), with a cap of $4 so the total could not pass $25. The hook ran under the Store `python3`. The criteria were written before the run (scratchpad `baseline/evidence/G2-criteria.md`).
 
 | Criterion | Result |
 |---|---|
@@ -103,7 +103,7 @@ This is the baseline finding (the CEO skips the pipeline) in a milder form. It i
 
 ### Finding: bare dispatch names left in `engineering-lead`
 
-G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name `backend-dev` and `frontend-dev` without the `devsecops-agency:` prefix. Phase W4 qualified the dispatch lines in other files but not these. The agent recovered in 4 s, but the B3 message pointed it at `cro`, which was the wrong fix. Since `d83eebd`, a bare name that matches a role card is refused with "Dispatch it as devsecops-agency:<name>" (one new test; not run live). The prompt line itself is left for your diff review (D1).
+G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name `backend-dev` and `frontend-dev` without the `devsecops-agency:` prefix. Phase W4 qualified the dispatch lines in other files but not these. The agent recovered in 4 s, but the B3 message pointed it at `cro`, which was the wrong fix. Since `7ecfc21`, a bare name that matches a role card is refused with "Dispatch it as devsecops-agency:<name>" (one new test; not run live). The prompt line itself is left for your diff review (D1).
 
 ## What 2a does not do
 
@@ -183,7 +183,7 @@ The work was reviewed seven times, in this order:
 
 Before the push, I read the `tests` job in `.github/workflows/ci.yml` to see what it will do with the `hooks` suite on `ubuntu-latest`:
 - It installs `pytest==9.0.1` and `pyyaml==6.0.3`, then runs `python -m pytest -q hooks` from the repo root. `hooks/` doesn't need a requirements file of its own.
-- With PyYAML installed: all `hooks` tests pass locally (44 at the time, 45 now).
+- With PyYAML installed: all `hooks` tests pass locally (44 at the time, 46 now).
 - With PyYAML hidden: all of them still pass. The tests pass their own role cards in or replace the card loader, so they don't depend on PyYAML. The `scripts` suite needs PyYAML, and CI installs it.
 - Nothing in the tests depends on Windows. On Linux the append-only globs match case-sensitively, which is the intended behaviour there.
 
@@ -239,12 +239,12 @@ For each decision: (1) the issue, (2) why the plan can't absorb it, (3) what was
 6. Impact: no chaos drills until then.
 
 **D6. Push, PRs and merge.**
-1. `review/design-review-1`, `feat/phase-1a-enforced-contract` and `feat/phase-2a-guard-hooks` are all local.
-2. Any push needs your approval.
+1. **Push done on 2026-11-23 at your request:** draft PRs #7 (1a) and #8 (2a, stacked), and Linux CI passed on both. `review/design-review-1` stays local. What is left is the merge.
+2. The merge needs your approval.
 3. Investigated: plugin validation passes, and the local tests pass. Linux CI has never run, and **a push alone will not run it**. `ci.yml` runs on pull requests, on pushes to `main` and on manual dispatch, and manual dispatch needs the workflow on `main`, where it is not. So the only way to run it is through PRs.
 4. Alternatives:
    - push and open **draft** PRs now: 1a into `feat/personal-ai-surface`, with 2a stacked on 1a. CI runs, and nothing merges;
    - push and open PRs only after D1;
    - or hold.
-5. **Recommendation:** push and open draft PRs now, so Linux CI runs while you review. Merge only after D1, with 1a and 2a together.
+5. **Recommendation:** merge only after D1, with 1a and 2a together (#8 into #7's branch, then #7). Done: the push and the draft PRs.
 6. Impact: CI's first run on the hooks. The branch names and commit messages become visible on GitHub.
