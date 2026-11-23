@@ -18,7 +18,7 @@ Status: **for the Chairman's review.** The work is committed on the local branch
 
 Every decision is appended to `<project>/.devsecops-agency/receipts.jsonl`. `DEVSECOPS_GUARD_MODE=log` turns the blocking rules into log-only ones.
 
-There are 44 tests (counting parametrised cases) in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 73 tests in `hooks` and `scripts` pass locally on Windows. **Linux CI has not run yet,** because nothing is pushed.
+There are 45 tests (counting parametrised cases) in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 77 tests in `hooks` and `scripts` pass locally on Windows. **Linux CI has not run yet,** because nothing is pushed.
 
 ## Evidence
 
@@ -66,12 +66,41 @@ Dispatches: 10 attempts, 1 refused. The CEO dispatched three chiefs (engineering
 
 **Caveat: two sessions shared the run directory.** The runner's shell orphaned a first launch of G1, and it ran *alongside* the real run instead of stopping. It cost $0.57. It ran as CEO, under the same guard. It made no dispatches. It wrote `brief.md`, an ADR at `G1/_decisions/` (outside the output folder), `status.json` and a two-line `chat.jsonl`. It also read the real run's ADR and receipts, then finished. The real run picked up its brief and `chat.jsonl` and carried on from them. The containment results still hold, because both sessions were guarded and both stayed in G1. The product from this run should not be compared with D3 or D3a.
 
-**Gap the run found, now visible but not fixed:** on this machine `python3` is the Windows Store Python, which has no PyYAML. The role cards loaded as empty, so L1 and L2 were silently skipped for the whole run. Receipts now carry an L0 note when that happens (`429486e`), but L1 and L2 still do not run here. CI installs PyYAML.
+**Gap the run found, fixed after G1 in `646c95f` (see below):** on this machine `python3` is the Windows Store Python, which has no PyYAML. The role cards loaded as empty, so L1 and L2 were silently skipped for the whole run. Receipts now carry an L0 note when that happens (`429486e`), and since `646c95f` the guard reads a generated JSON copy of the cards, so L1 and L2 run without PyYAML (proved in G2).
+
+### Role cards without PyYAML (`646c95f`)
+
+`scripts/role_cards.py write` now also writes `hooks/role-cards.json`: the part of the cards the guard reads (each agent's file and scope note), as LF JSON with sorted keys. `check`, which the CI `lint` job already runs, fails if the JSON is stale. The guard reads the JSON with the standard library and falls back to the YAML. `.gitattributes` keeps the JSON LF, and this repo now git-ignores `/.devsecops-agency/`.
+
+Checked under the Store `python3`, which has no PyYAML:
+- an out-of-scope `qa-lead` write gets an L1 note and no L0 note;
+- a refused dispatch still exits 2.
+
+Tests: 45 in `hooks` (one new, run with PyYAML hidden) and 3 new in `scripts`; all 77 pass. Plugin validation passes with the same README warning.
+
+### G2: a block-mode run on the final guard
+
+The task was the same as G1, on a fresh export at `646c95f`, with a cap of $4 so the total could not pass $25. The hook ran under the Store `python3`. The criteria were written before the run (scratchpad `baseline/evidence/G2-criteria.md`).
+
+| Criterion | Result |
+|---|---|
+| Completes within the cap | **Pass.** Exit 0, success, **$1.24**, 251 s |
+| Every deny is followed by recovery | **Pass.** 1 deny in 27 receipts. B3: `engineering-lead` dispatched the bare name `frontend-dev`, and re-dispatched as `devsecops-agency:frontend-dev` 4 s later |
+| Append-only files only grew | **Pass.** `chat.jsonl` went 3 → 7 lines and kept every earlier line |
+| No write outside the run directory | **Pass.** All 26 nested writes are inside G2. The 16 nested shell commands are `node --test`, `node --check`, `ls` and `cat` in the app folder. The CEO made one read-only Glob of the plugin folder |
+| No non-agency dispatch succeeded | **Pass.** None was attempted; the one deny was a bare agency name |
+| L1 and L2 run, with no L0 | **Pass.** 14 L1 notes, 2 L2 notes (engineering-lead → frontend-dev), 0 L0 notes |
+
+Dispatches: CEO → engineering-lead ×2, qa-lead, security-lead. engineering-lead → frontend-dev ×2. qa-lead → test-runner. This closes the earlier gap that the later guard commits had never run live.
+
+### Finding: chiefs reviewing without their specialist
+
+In G1 and in G2, `security-lead` dispatched no specialist. It read and grepped the code itself and wrote the threat model and the audit. Its instructions already tell it to dispatch `threat-modeler` and `code-auditor`, and say "Must not: audit code yourself". In G1 the CEO's brief asked it for "a combined design-review and post-build audit in one pass", and it followed the brief. So this is not a missing instruction, and a stronger wording of the same instruction is unlikely to change it. The fix is to enforce the pipeline (Phase 5-lite, a gate that needs the specialist's receipt). No prompt was changed. `qa-lead` did dispatch `test-runner` in both runs.
 
 ## What 2a does not do
 
 - **Shell commands are not inspected.** Any agent with Bash can write anywhere and can edit the hook itself, because the hook runs as the same OS user. Only an OS sandbox, such as WSL2 or a container (E5), contains a shell.
-- **L1 and L2 need PyYAML in the `python3` the hook runs.** The blocking rules B1 to B4 need only the standard library.
+- **The guard needs only the standard library.** L1 and L2 read `hooks/role-cards.json`, which `role_cards.py write` generates and `check` keeps current.
 - **`python3` must be on PATH.** Because the hook fails closed, a missing interpreter blocks every agency Write and dispatch. This is safe, but it breaks the run.
 - **Calls by non-agency agents pass through,** and so do calls by sessions not started as an agency agent. B3 stops agency agents from creating such calls. The `--agent devsecops-agency:ceo` launcher (1a) is what labels the main thread. A session started without it gets no `agent_type`, so the guard skips it.
 - **Scope is logged, not enforced.** The Part 14 scope notes don't match where agents really write (`brief.md`, `spec.md`, `build-report.md`, `deploy.md` and so on). L1 fired 32 times in D3a.
@@ -123,21 +152,27 @@ The work was reviewed four times, in this order:
    - three small pack edits.
 4. **Final review.** No changes to the guard. The advisor asked for this record, the plugin validation, and fixes to stale hashes and to the handoff format.
 5. **After the build was paused.** No further build work. The advisor asked for two checks: make this record checkable, and read how the Linux CI job will behave. Both are below.
+6. **On your execution mandate.** The advisor ruled on three candidates:
+   - A, a role-card copy that needs no PyYAML: do it first, prove it under the Store `python3`, and add a sync check.
+   - B, prompt fixes for chiefs that skip their specialist: read the G1 transcripts first, and edit only where a skip shows.
+   - C, one live run after A, under the $25 cap, with criteria written beforehand.
+   
+   It also asked for `.devsecops-agency/` to be git-ignored, and said to leave B2 coverage of `threat-model.md` alone. All of this is done except B, where no prompt was changed: the skip is real, but the instruction already exists (see the finding above).
 
-**This record is a summary, not the advisor's words.** The session transcript holds each advisor reply only in encrypted form (`advisor_redacted_result`), so the replies can't be quoted word for word. What can be checked is when each call happened. The session made 13 advisor calls, timestamps in UTC:
+**This record is a summary, not the advisor's words.** The session transcript holds each advisor reply only in encrypted form (`advisor_redacted_result`), so the replies can't be quoted word for word. What can be checked is when each call happened. The session made 14 advisor calls, timestamps in UTC:
 
 | Date | Times |
 |---|---|
 | 2026-11-20 (R2 design review) | 00:11, 00:19 |
 | 2026-11-22 (baseline, 1a and 2a) | 06:02, 06:06, 06:17, 06:55, 06:59, 07:27, 07:38, 07:57, 08:03, 08:05 |
-| 2026-11-23 (after the pause) | 04:13 |
+| 2026-11-23 (after the pause) | 04:13, 04:18 |
 
 ### Linux CI: read, not run
 
 Linux CI has still not run. Instead, I read the `tests` job in `.github/workflows/ci.yml` to see what it will do with the `hooks` suite on `ubuntu-latest`:
 - It installs `pytest==9.0.1` and `pyyaml==6.0.3`, then runs `python -m pytest -q hooks` from the repo root. `hooks/` doesn't need a requirements file of its own.
-- With PyYAML installed: all 44 `hooks` tests pass locally.
-- With PyYAML hidden: all 44 still pass. The tests pass their own role cards in or replace the card loader, so they don't depend on PyYAML. The `scripts` suite needs PyYAML, and CI installs it.
+- With PyYAML installed: all `hooks` tests pass locally (44 at the time, 45 now).
+- With PyYAML hidden: all of them still pass. The tests pass their own role cards in or replace the card loader, so they don't depend on PyYAML. The `scripts` suite needs PyYAML, and CI installs it.
 - Nothing in the tests depends on Windows. On Linux the append-only globs match case-sensitively, which is the intended behaviour there.
 
 The risk left is Linux-only behaviour that a read can't see. Only a CI run settles it.
