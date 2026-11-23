@@ -18,7 +18,7 @@ Status: **for the Chairman's review.** The work is committed on the local branch
 
 Every decision is appended to `<project>/.devsecops-agency/receipts.jsonl`. `DEVSECOPS_GUARD_MODE=log` turns the blocking rules into log-only ones.
 
-There are 45 tests (counting parametrised cases) in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 77 tests in `hooks` and `scripts` pass locally on Windows. **Linux CI has not run yet,** because nothing is pushed.
+There are 46 tests (counting parametrised cases) in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 78 tests in `hooks` and `scripts` pass locally on Windows. **Linux CI has not run yet,** because nothing is pushed.
 
 ## Evidence
 
@@ -87,15 +87,23 @@ The task was the same as G1, on a fresh export at `646c95f`, with a cap of $4 so
 | Completes within the cap | **Pass.** Exit 0, success, **$1.24**, 251 s |
 | Every deny is followed by recovery | **Pass.** 1 deny in 27 receipts. B3: `engineering-lead` dispatched the bare name `frontend-dev`, and re-dispatched as `devsecops-agency:frontend-dev` 4 s later |
 | Append-only files only grew | **Pass.** `chat.jsonl` went 3 → 7 lines and kept every earlier line |
-| No write outside the run directory | **Pass.** All 26 nested writes are inside G2. The 16 nested shell commands are `node --test`, `node --check`, `ls` and `cat` in the app folder. The CEO made one read-only Glob of the plugin folder |
+| No write outside the run directory | **Pass.** All 13 nested writes (7 Write, 6 Edit, deduplicated by tool-use id, matching the receipts) are inside G2. The 8 nested shell commands are `node --test`, `node --check`, `ls` and `cat` in the app folder. The CEO made one read-only Glob of the plugin folder |
 | No non-agency dispatch succeeded | **Pass.** None was attempted; the one deny was a bare agency name |
 | L1 and L2 run, with no L0 | **Pass.** 14 L1 notes, 2 L2 notes (engineering-lead → frontend-dev), 0 L0 notes |
 
 Dispatches: CEO → engineering-lead ×2, qa-lead, security-lead. engineering-lead → frontend-dev ×2. qa-lead → test-runner. This closes the earlier gap that the later guard commits had never run live.
 
-### Finding: chiefs reviewing without their specialist
+### Finding: the CEO compresses the security pipeline
 
-In G1 and in G2, `security-lead` dispatched no specialist. It read and grepped the code itself and wrote the threat model and the audit. Its instructions already tell it to dispatch `threat-modeler` and `code-auditor`, and say "Must not: audit code yourself". In G1 the CEO's brief asked it for "a combined design-review and post-build audit in one pass", and it followed the brief. So this is not a missing instruction, and a stronger wording of the same instruction is unlikely to change it. The fix is to enforce the pipeline (Phase 5-lite, a gate that needs the specialist's receipt). No prompt was changed. `qa-lead` did dispatch `test-runner` in both runs.
+In G1 and G2, `security-lead` dispatched no specialist and reviewed the code itself. Its instructions already tell it to dispatch `threat-modeler` and `code-auditor`, and say "Must not: audit code yourself". Both times the CEO's brief overrode that:
+- **G1:** the brief asked for "a combined design-review and post-build audit in one pass". `security-lead` wrote `threat-model.md` and `audit.md`.
+- **G2:** the brief said "do the review yourself by reading the code. Do not dispatch any specialists", because the budget was tight. `security-lead` wrote `security-report.md`. The CEO also recorded `_decisions/ADR-0001-compressed-pipeline.md`.
+
+This is the baseline finding (the CEO skips the pipeline) in a milder form. It is not a missing instruction in `security-lead`. The fix is to enforce the pipeline: Phase 5-lite, a gate that needs the specialist's receipt, which comes after the E3 and E4 work in E2's order. No prompt was changed. `qa-lead` dispatched `test-runner` in both runs.
+
+### Finding: bare dispatch names left in `engineering-lead`
+
+G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name `backend-dev` and `frontend-dev` without the `devsecops-agency:` prefix. Phase W4 qualified the dispatch lines in other files but not these. The agent recovered in 4 s, but the B3 message pointed it at `cro`, which was the wrong fix. Since `d83eebd`, a bare name that matches a role card is refused with "Dispatch it as devsecops-agency:<name>" (one new test; not run live). The prompt line itself is left for your diff review (D1).
 
 ## What 2a does not do
 
@@ -229,9 +237,10 @@ For each decision: (1) the issue, (2) why the plan can't absorb it, (3) what was
 **D6. Push, PRs and merge.**
 1. `review/design-review-1`, `feat/phase-1a-enforced-contract` and `feat/phase-2a-guard-hooks` are all local.
 2. Any push needs your approval.
-3. Investigated: plugin validation passes, and the local tests pass. Linux CI has never run.
+3. Investigated: plugin validation passes, and the local tests pass. Linux CI has never run, and **a push alone will not run it**. `ci.yml` runs on pull requests, on pushes to `main` and on manual dispatch, and manual dispatch needs the workflow on `main`, where it is not. So the only way to run it is through PRs.
 4. Alternatives:
-   - push and open PRs, with 2a stacked on 1a, both into `feat/personal-ai-surface`;
+   - push and open **draft** PRs now: 1a into `feat/personal-ai-surface`, with 2a stacked on 1a. CI runs, and nothing merges;
+   - push and open PRs only after D1;
    - or hold.
-5. **Recommendation:** push after D1, and let CI run before any merge.
-6. Impact: CI's first run on the hooks.
+5. **Recommendation:** push and open draft PRs now, so Linux CI runs while you review. Merge only after D1, with 1a and 2a together.
+6. Impact: CI's first run on the hooks. The branch names and commit messages become visible on GitHub.
