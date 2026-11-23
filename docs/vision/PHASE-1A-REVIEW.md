@@ -1,6 +1,6 @@
 # Phase 1a review pack: the enforced contract
 
-Status: **for the Chairman's prompt-diff review.** The changes are committed on the local branch `feat/phase-1a-enforced-contract`, which is not pushed or merged.
+Status: **for the Chairman's prompt-diff review.** The changes are on `feat/phase-1a-enforced-contract`, open as draft PR #7 into `feat/personal-ai-surface` (Linux CI passed on 2026-11-23). It is not merged, and it merges only together with Phase 2a (draft PR #8).
 
 ## Merge condition
 
