@@ -227,3 +227,9 @@ def test_scope_notes_work_without_pyyaml(project, tmp_path_factory):
     assert p.returncode == 0
     rules = json.loads((project / ".devsecops-agency" / "receipts.jsonl").read_text().splitlines()[-1])["rules"]
     assert any(r.startswith("L1") for r in rules) and not any(r.startswith("L0") for r in rules)
+
+
+def test_bare_agency_name_is_refused_with_the_qualified_form(project):
+    cards = {"frontend-dev": {"file": "agents/engineering/frontend-dev.md", "descriptive": {"write_scope_note": "src/"}}}
+    b, _ = guard.check(call("Agent", {"subagent_type": "frontend-dev"}, "devsecops-agency:engineering-lead"), cards)
+    assert len(b) == 1 and b[0].startswith("B3") and "devsecops-agency:frontend-dev" in b[0] and "cro" not in b[0]

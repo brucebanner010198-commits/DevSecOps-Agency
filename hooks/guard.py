@@ -174,13 +174,16 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
 
     if tool in DISPATCH_TOOLS:
         target = ti.get("subagent_type") or ""
-        if not target.startswith(PREFIX):
+        cards = load_cards() if cards is None else cards
+        if not target.startswith(PREFIX) and target in cards:
+            block.append(f"B3 dispatch: {target} is an agency agent, but the bare name does not resolve. "
+                         f"Dispatch it as {PREFIX}{target}.")
+        elif not target.startswith(PREFIX):
             block.append(f"B3 dispatch: {name} may dispatch only {PREFIX} agents, not {target or 'the default agent'}. "
                          f"For web research dispatch {PREFIX}cro (its researchers hold WebSearch and WebFetch); "
                          f"for other work dispatch the chief that owns it.")
         if ti.get("model"):
             block.append(f"B3 dispatch: {name} may not override the model of {target} (tier changes are the Chairman's)")
-        cards = load_cards() if cards is None else cards
         mine, theirs = council(cards.get(name)), council(cards.get(target[len(PREFIX):]))
         if name not in ("ceo", "board-director") and mine and theirs and mine != theirs:
             note.append(f"L2 own-council: {name} ({mine}) dispatched {target} ({theirs})")
