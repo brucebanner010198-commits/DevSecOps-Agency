@@ -109,7 +109,8 @@ G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name 
 
 - **Shell commands are not inspected.** Any agent with Bash can write anywhere and can edit the hook itself, because the hook runs as the same OS user. Only an OS sandbox, such as WSL2 or a container (E5), contains a shell.
 - **The guard needs only the standard library.** L1 and L2 read `hooks/role-cards.json`, which `role_cards.py write` generates and `check` keeps current.
-- **`python3` must be on PATH.** Because the hook fails closed, a missing interpreter blocks every agency Write and dispatch. This is safe, but it breaks the run.
+- **`python3` must be on PATH.** Because the hook fails closed, a missing interpreter blocks every Write, Edit, MultiEdit, NotebookEdit and dispatch in *every* session that has the plugin enabled, not only agency sessions: the hook cannot read `agent_type` if it cannot start. This is safe, but it breaks ordinary work too, so weigh it in the merge decision.
+- **Links are not resolved.** B1 compares `abspath`, not `realpath`, so a symlink or junction inside the project that points outside it gets past B1. Creating one needs a shell, which is already outside the guard.
 - **Calls by non-agency agents pass through,** and so do calls by sessions not started as an agency agent. B3 stops agency agents from creating such calls. The `--agent devsecops-agency:ceo` launcher (1a) is what labels the main thread. A session started without it gets no `agent_type`, so the guard skips it.
 - **Scope is logged, not enforced.** The Part 14 scope notes don't match where agents really write (`brief.md`, `spec.md`, `build-report.md`, `deploy.md` and so on). L1 fired 32 times in D3a.
 - **Not every file the 1a appenders share is covered.** `threat-model.md` (code-auditor adds a section) and the correction lines and roll-ups of `cao` and `token-compactor` are outside B2's list. Those agents can still replace those files.
@@ -130,7 +131,7 @@ G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name 
 
 ## Advisor reviews
 
-The work was reviewed four times, in this order:
+The work was reviewed seven times, in this order:
 
 1. **Before block mode, on the replay counts.**
    - The advisor asked for:
@@ -166,14 +167,15 @@ The work was reviewed four times, in this order:
    - C, one live run after A, under the $25 cap, with criteria written beforehand.
    
    It also asked for `.devsecops-agency/` to be git-ignored, and said to leave B2 coverage of `threat-model.md` alone. All of this is done except B, where no prompt was changed: the skip is real, but the instruction already exists (see the finding above).
+7. **Before the push** (you asked for a review, fixes, then a push). Verdict: push; nothing in the guard, the card script, `hooks.json` or `ci.yml` blocks a draft PR. Pre-push checks it asked for, all done: no attribution trailers, the noreply author on every commit, none of the private or PHI files in the diff, and no absolute local paths in the public docs (one in the 1a pack was removed). It asked for the two limits above to be recorded, the bare names to stay for D1, and the PRs to stay draft with no merge. CI pins the validator to Claude Code 2.1.318; the local validation ran on 2.1.329.
 
-**This record is a summary, not the advisor's words.** The session transcript holds each advisor reply only in encrypted form (`advisor_redacted_result`), so the replies can't be quoted word for word. What can be checked is when each call happened. The session made 14 advisor calls, timestamps in UTC:
+**This record is a summary, not the advisor's words.** The session transcript holds each advisor reply only in encrypted form (`advisor_redacted_result`), so the replies can't be quoted word for word. What can be checked is when each call happened. The session made 15 advisor calls, timestamps in UTC:
 
 | Date | Times |
 |---|---|
 | 2026-11-20 (R2 design review) | 00:11, 00:19 |
 | 2026-11-22 (baseline, 1a and 2a) | 06:02, 06:06, 06:17, 06:55, 06:59, 07:27, 07:38, 07:57, 08:03, 08:05 |
-| 2026-11-23 (after the pause) | 04:13, 04:18 |
+| 2026-11-23 (after the pause, and before the push) | 04:13, 04:18, about 10:50 |
 
 ### Linux CI: read, not run
 
