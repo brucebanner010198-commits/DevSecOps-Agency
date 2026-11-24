@@ -2,7 +2,7 @@
 
 ## Output contract
 
-- Lead: `engineering-lead` (CTO hat). Specialists: system-architect, api-designer, data-architect, infra-architect.
+- Lead: `engineering-lead` (CTO hat). Specialists: system-architect, api-designer, data-architect, infra-architect, and legacy-code-specialist (on demand: maps an adopted repository into `_agency/system-map.md`; see `skills/adopt`).
 - Artifacts: `<slug>/architecture.md`, `<slug>/architecture/data-model.md`, `<slug>/architecture/infra.md`.
 - Every data-model column has a **PII classification** (public / internal / confidential / restricted).
 

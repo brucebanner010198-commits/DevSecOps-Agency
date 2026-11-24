@@ -15,7 +15,7 @@ tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 - **Council:** `architecture`
 - **Role:** Specialist
 - **Reports to:** `engineering-lead`
-- **Team:** 3 peers: `system-architect`, `api-designer`, `infra-architect`
+- **Team:** 4 peers: `system-architect`, `api-designer`, `infra-architect`, `legacy-code-specialist`
 - **Model tier:** `haiku`
 - **Purpose:** Use this agent when the CTO (engineering-lead) needs the data model — entities, relationships, indexes, retention, PII classification.
 - **Convened by:** `engineering-lead`
