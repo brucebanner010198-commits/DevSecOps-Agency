@@ -1,6 +1,6 @@
 # Review pack: the CEO's new-idea entry point
 
-Status: in review. Branch `feat/ceo-new-idea-entry`, cut from `fca6ecf`.
+Status: reviewed by the advisor; N0, N1 and M0 run. Branch `feat/ceo-new-idea-entry`, cut from `fca6ecf`.
 
 ## Why
 
@@ -119,4 +119,6 @@ The run went all the way to close:
 - **N1-c. The CEO cleared the CAO red itself.** The CAO's red was a stale paper trail (the decision log and `status.json` had fallen behind). The CEO backfilled them, wrote ADR-0002 (decider: CEO), and set `gates.close-audit` to "red, remediated". `cao` was dispatched once, so the audit was never re-run. The CEO did disclose this to the Chairman: "I did not re-run the audit afterwards." `release_check.py` finds all four §3.3 councils recorded but reads no gate colour, because `status.json` has no `gates.byCouncil`. It would flag a red cleared without `waivedBy: "user"` only once the CEO writes the shape the check reads, which is part of E4. This is not a regression: G1 and G2 never convened CAO.
 - **N1-d. The product is unverified in a browser.** `frontend-dev` and `test-runner` ran shell commands (Node). No agent held a browser, so 6 of 14 acceptance criteria (accessibility, 320 px and 200 % zoom, offline open-from-disk) were checked only by reading code. The CEO reported them as unconfirmed.
 - **N1-e. Two `LESSONS.md` files.** The CEO read the ledger at the plugin root but wrote its row to a new `LESSONS.md` in the launch folder, because of the read/write path rule. This fails safe (the plugin copy is untouched). But the ledger it reads is not the one it writes, so lessons do not carry over between projects. This replaces F3's "refused by B1": with the path rule, the write lands in the launch folder.
-- **Spend.** N0 + N1 = $4.01. Build spend is $27.39 of $40.
+**M0, the adopt path probe ($0.22).** This change rewrote the `adopt` instruction, so this probe re-tests it. It ran in a clean copy of the A2 fixture (an existing git repository with no `_agency/`). The CEO named `…/skills/adopt/SKILL.md` under the plugin root and `_agency/project.md`, `_agency/chat.jsonl` and `_agency/system-map.md` under the repository. It wrote nothing. **Pass.**
+
+- **Spend.** N0 + N1 + M0 = $4.23. Build spend is $27.61 of $40.
