@@ -14,3 +14,6 @@ __pycache__/
 /.superpowers/
 /docs/superpowers/
 /_salvaged-from-Codex/
+
+# Phase 2a guard receipts (written by hooks/guard.py when the agency runs in this repo)
+/.devsecops-agency/

@@ -3,16 +3,9 @@ name: opportunity-ranker
 description: |-
   Use this agent when the CSO needs the candidate opportunities ranked against a shared scorecard — RICE + strategic-fit + narrative-score from CMO. Produces the final pre-meeting shortlist ranking that CEO uses to pick the top-5 for the user.
 
-  <example>
-  Context: CSO running idea pipeline, all inputs (trend, competitive, sizing, narrative) are in.
-  user: "[cso] Rank the 10 candidates, produce top-5 for the user-meeting."
-  assistant: "opportunity-ranker will emit _vision/strategy/opportunity-scorecard.md with RICE + strategic-fit + CMO-narrative merged, plus a recommended top-5."
-  <commentary>
-  Always called by cso. Final ranker — everyone else scores on one axis.
-  </commentary>
-  </example>
-
 model: haiku
+effort: low
+maxTurns: 20
 color: purple
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---
@@ -80,3 +73,14 @@ Composite = (RICE normalised to 0–5) · 0.6 + Narrative · 0.4
 - Score without all 4 upstream artifacts present. If one is missing, return a `blocked` signal to cso.
 - Let composite reveal the winner without publishing the tie-break rationale.
 - Drop a candidate below rank 10 without a reason line.
+
+## Examples
+
+<example>
+Context: CSO running idea pipeline, all inputs (trend, competitive, sizing, narrative) are in.
+user: "[cso] Rank the 10 candidates, produce top-5 for the user-meeting."
+assistant: "opportunity-ranker will emit _vision/strategy/opportunity-scorecard.md with RICE + strategic-fit + CMO-narrative merged, plus a recommended top-5."
+<commentary>
+Always called by cso. Final ranker — everyone else scores on one axis.
+</commentary>
+</example>

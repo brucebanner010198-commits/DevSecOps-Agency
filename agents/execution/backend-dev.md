@@ -3,16 +3,9 @@ name: backend-dev
 description: |-
   Use this agent when the Engineering Lead needs server-side code implemented from the architecture document — endpoints, business logic, data access, and integrations. It does only this one thing.
 
-  <example>
-  Context: engineering-lead is in the build phase.
-  user: "[engineering-lead] Implement the backend per architecture.md. Write into src/."
-  assistant: "backend-dev will scaffold the server, implement endpoints, and run a smoke check."
-  <commentary>
-  Always called by engineering-lead. May be re-dispatched in a fix loop with focused feedback.
-  </commentary>
-  </example>
-
 model: haiku
+effort: medium
+maxTurns: 25
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---
@@ -57,3 +50,14 @@ When re-dispatched with focused feedback, modify only what the feedback names. D
 - Concatenate strings into SQL
 - Implement an endpoint that isn't in the API surface
 - Leave the smoke check unrun
+
+## Examples
+
+<example>
+Context: engineering-lead is in the build phase.
+user: "[engineering-lead] Implement the backend per architecture.md. Write into src/."
+assistant: "backend-dev will scaffold the server, implement endpoints, and run a smoke check."
+<commentary>
+Always called by engineering-lead. May be re-dispatched in a fix loop with focused feedback.
+</commentary>
+</example>

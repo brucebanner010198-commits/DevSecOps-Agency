@@ -3,16 +3,9 @@ name: test-designer
 description: |-
   Use this agent when the QA Lead needs a test matrix derived from the acceptance criteria — what to test, at what level (unit/integration/e2e), and the priority order. It does only this one thing.
 
-  <example>
-  Context: qa-lead is starting the QA phase.
-  user: "[qa-lead] Read brief.md acceptance criteria. Produce a test matrix."
-  assistant: "test-designer will map every AC to one or more tests with type and priority."
-  <commentary>
-  Always called by qa-lead. Output feeds directly into test-runner.
-  </commentary>
-  </example>
-
 model: haiku
+effort: medium
+maxTurns: 25
 color: yellow
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---
@@ -61,3 +54,14 @@ You are the **Test Designer** specialist. You produce a `test-matrix.md` file in
 - Implement tests (test-runner does)
 - Skip negative tests for auth
 - Leave any AC uncovered
+
+## Examples
+
+<example>
+Context: qa-lead is starting the QA phase.
+user: "[qa-lead] Read brief.md acceptance criteria. Produce a test matrix."
+assistant: "test-designer will map every AC to one or more tests with type and priority."
+<commentary>
+Always called by qa-lead. Output feeds directly into test-runner.
+</commentary>
+</example>

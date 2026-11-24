@@ -34,6 +34,8 @@ jobs:
         run: python scripts/frontmatter.py check
       - name: plugin.json lists every agent
         run: python scripts/plugin_agents.py check
+      - name: Agent frontmatter matches its role card
+        run: python scripts/role_cards.py check
       - name: Hook configs are valid JSON
         run: for f in runtime-hooks/*/hooks.json; do jq empty "$f" || exit 1; done
       - name: Hook scripts pass shellcheck (errors)
@@ -55,7 +57,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        suite: [os/trust-spine, os/broker, os/desktop, os/voice, scripts, runtime-hooks/tests]
+        suite: [os/trust-spine, os/broker, os/desktop, os/voice, scripts, hooks, runtime-hooks/tests]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0

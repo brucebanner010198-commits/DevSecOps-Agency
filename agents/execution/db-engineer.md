@@ -3,16 +3,9 @@ name: db-engineer
 description: |-
   Use this agent when the VP-Eng (engineering-lead) needs database code — migrations, seed scripts, repository/query layer — matching the data-architect's design. It does only this one thing.
 
-  <example>
-  Context: engineering-lead is in the Execution phase.
-  user: "[engineering-lead] Implement the DB layer from architecture/data-model.md."
-  assistant: "db-engineer will write migrations + repository layer + seed data."
-  <commentary>
-  Always called by engineering-lead.
-  </commentary>
-  </example>
-
 model: haiku
+effort: medium
+maxTurns: 25
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---
@@ -51,3 +44,14 @@ You are the **Database Engineer** specialist. You produce the DB layer under `sr
 - Skip the rollback/down migration
 - Ship a migration that destroys data without an explicit note + rollback plan
 - Hardcode credentials
+
+## Examples
+
+<example>
+Context: engineering-lead is in the Execution phase.
+user: "[engineering-lead] Implement the DB layer from architecture/data-model.md."
+assistant: "db-engineer will write migrations + repository layer + seed data."
+<commentary>
+Always called by engineering-lead.
+</commentary>
+</example>

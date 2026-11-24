@@ -3,16 +3,9 @@ name: test-runner
 description: |-
   Use this agent when the QA Lead needs the test matrix implemented as actual tests and executed, with a per-criterion pass/fail report. It does only this one thing.
 
-  <example>
-  Context: qa-lead has a test matrix and now needs tests written and run.
-  user: "[qa-lead] Implement test-matrix.md into tests/ and run the suite."
-  assistant: "test-runner will write the tests, install deps, run the suite, and report pass/fail per AC."
-  <commentary>
-  Always called by qa-lead.
-  </commentary>
-  </example>
-
 model: haiku
+effort: low
+maxTurns: 20
 color: yellow
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---
@@ -55,3 +48,14 @@ T-03  ❌ fail   src/auth/middleware.ts:23 — "expected 401, got 500" — TypeE
 - Hit real production APIs in tests
 - Suppress errors to make tests pass
 - Skip writing a test for a P0 entry in the matrix
+
+## Examples
+
+<example>
+Context: qa-lead has a test matrix and now needs tests written and run.
+user: "[qa-lead] Implement test-matrix.md into tests/ and run the suite."
+assistant: "test-runner will write the tests, install deps, run the suite, and report pass/fail per AC."
+<commentary>
+Always called by qa-lead.
+</commentary>
+</example>

@@ -1,0 +1,18 @@
+{
+  "description": "Phase 2a guard: keeps the agency's own agents inside the project, protects append-only records, and limits dispatch to the agency's agents. Calls from other agents pass through.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/guard.py\"",
+            "timeout": 15,
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  }
+}

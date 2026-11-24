@@ -3,8 +3,10 @@ name: adversarial-prompter
 description: Use this agent when the Red-Team Council needs prompt-injection, jailbreak, and indirect-injection tests run against a project's LLM-facing surfaces (chatbots, RAG endpoints, agent tool prompts, system prompts). The adversarial-prompter designs attacks, attempts them, documents reproductions, and maps findings to OWASP ASI Top 10 categories (principally ASI05, ASI06, ASI07). It does not fix findings; it only proves them.
 
 model: haiku
+effort: low
+maxTurns: 20
 color: black
-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
+tools: ["Read", "Write", "Grep", "Glob", "Bash"]
 ---
 <!-- role-card:v1 -->
 ## Role Card

@@ -3,18 +3,11 @@ name: code-auditor
 description: |-
   Use this agent when the Security Lead needs a post-build audit verifying that mitigations from the threat model are actually present in the code. It does only this one thing — read code against the threat model and report mitigation status with file/line evidence.
 
-  <example>
-  Context: security-lead is running the second security pass after the build.
-  user: "[security-lead] Audit src/ against threat-model.md mitigations. Append ## Post-build audit to threat-model.md."
-  assistant: "code-auditor will verify each Critical/High mitigation in the actual code."
-  <commentary>
-  Always called by security-lead in the post-build pass.
-  </commentary>
-  </example>
-
 model: haiku
+effort: medium
+maxTurns: 25
 color: red
-tools: ["Read", "Grep", "Glob", "Bash", "Edit"]
+tools: ["Read", "Grep", "Glob", "Bash", "Write"]
 ---
 <!-- role-card:v1 -->
 ## Role Card
@@ -70,3 +63,14 @@ You are the **Code Auditor** specialist. You produce a `## Post-build audit` sec
 - Fix code yourself (engineering does, in a fix loop)
 - Mark a missing mitigation as Verified
 - Skip the SCA scan if a tool is available
+
+## Examples
+
+<example>
+Context: security-lead is running the second security pass after the build.
+user: "[security-lead] Audit src/ against threat-model.md mitigations. Append ## Post-build audit to threat-model.md."
+assistant: "code-auditor will verify each Critical/High mitigation in the actual code."
+<commentary>
+Always called by security-lead in the post-build pass.
+</commentary>
+</example>

@@ -3,16 +3,9 @@ name: frontend-dev
 description: |-
   Use this agent when the Engineering Lead needs client-side code implemented from the architecture document — UI, state management, API integration, and accessibility. It does only this one thing.
 
-  <example>
-  Context: engineering-lead is in the build phase and the architecture includes a UI.
-  user: "[engineering-lead] Implement the frontend per architecture.md. Write into src/."
-  assistant: "frontend-dev will scaffold the client and implement the screens."
-  <commentary>
-  Always called by engineering-lead. Skipped if the project has no UI (CLI/library/server-only).
-  </commentary>
-  </example>
-
 model: haiku
+effort: medium
+maxTurns: 25
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 ---
@@ -56,3 +49,14 @@ When re-dispatched with focused feedback, modify only what the feedback names.
 - Render unsanitised user input
 - Skip loading/error states
 - Leave the dev-server check unrun
+
+## Examples
+
+<example>
+Context: engineering-lead is in the build phase and the architecture includes a UI.
+user: "[engineering-lead] Implement the frontend per architecture.md. Write into src/."
+assistant: "frontend-dev will scaffold the client and implement the screens."
+<commentary>
+Always called by engineering-lead. Skipped if the project has no UI (CLI/library/server-only).
+</commentary>
+</example>

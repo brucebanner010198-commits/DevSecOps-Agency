@@ -4,6 +4,8 @@ description: |-
   Use this agent when the Red-Team Council needs to turn a remediated finding into a durable stepping stone, review a prompt diff against the archived stones, or propose a self-modifying playbook update (a patch to a skill or agent that hardens the agency against a recurrence). Playbook-author owns `_vision/playbooks/ARCHIVE.md` + `_vision/playbooks/stones/*.md`. Every stone links to an ADR and to the findings / sessions that spawned it. Maps to the DGM-style stepping-stones pattern: archive every successful adversarial defense so future iterations inherit the hardening.
 
 model: haiku
+effort: low
+maxTurns: 20
 color: black
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 ---

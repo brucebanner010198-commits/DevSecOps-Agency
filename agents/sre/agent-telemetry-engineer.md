@@ -3,25 +3,9 @@ name: agent-telemetry-engineer
 description: |-
   Use this agent when SRE council needs OTel-GenAI instrumentation wired for agent-level telemetry — trace-id propagation in dispatch envelopes, per-span attributes (gen_ai.*), prompts/completions as events (not attributes), tail-based sampling, DLP pre-filter on sensitive events, append-only trace storage. Distinct from `observability-engineer` which does app-runtime observability (/healthz, /readyz, Prometheus metrics). This role covers LLM + tool + dispatch spans. Read + Write. Output: `_vision/observability/<slug>-instrumentation.md` + configs under `_vision/observability/config/<slug>/`.
 
-  <example>
-  Context: new project kickoff; CSRE needs agent-level telemetry wired before first dispatch.
-  user: "[csre] Wire agent telemetry for multi-agent-router."
-  assistant: "agent-telemetry-engineer will declare the span tree per OTel GenAI SC, add gen_ai.* attributes for every LLM + tool call, route prompt/completion content into events pre-filtered by DLP, set sampling to 100% errors + 10% success, and write the config to _vision/observability/config/multi-agent-router/."
-  <commentary>
-  Without instrumentation the ladder is invisible. Every project gets this pass at kickoff.
-  </commentary>
-  </example>
-
-  <example>
-  Context: cache hit rate anomaly flagged by weekly FinOps report.
-  user: "[csre] Investigate cache-hit drop on rag-refactor."
-  assistant: "agent-telemetry-engineer will pull traces, compute cached_tokens vs input_tokens across the week, correlate with AGENTS.md / SKILL.md edit timestamps to find the invalidation point, and hand off to prompt-cache-tuner with a ranked hypothesis list."
-  <commentary>
-  Telemetry engineer investigates; prompt-cache-tuner remediates. Clean separation.
-  </commentary>
-  </example>
-
 model: sonnet
+effort: medium
+maxTurns: 25
 color: orange
 tools: ["Read", "Grep", "Glob", "Write", "Edit"]
 ---
@@ -90,3 +74,23 @@ Distinct from `observability-engineer`, which wires `/healthz`, `/readyz`, and a
 - Disable instrumentation on a "performance hot path." Hot paths are where it matters.
 - Share trace content cross-project. Workspace-level isolation enforced.
 - Use `Bash`. Read/Grep/Glob/Write/Edit covers every wiring task.
+
+## Examples
+
+<example>
+Context: new project kickoff; CSRE needs agent-level telemetry wired before first dispatch.
+user: "[csre] Wire agent telemetry for multi-agent-router."
+assistant: "agent-telemetry-engineer will declare the span tree per OTel GenAI SC, add gen_ai.* attributes for every LLM + tool call, route prompt/completion content into events pre-filtered by DLP, set sampling to 100% errors + 10% success, and write the config to _vision/observability/config/multi-agent-router/."
+<commentary>
+Without instrumentation the ladder is invisible. Every project gets this pass at kickoff.
+</commentary>
+</example>
+
+<example>
+Context: cache hit rate anomaly flagged by weekly FinOps report.
+user: "[csre] Investigate cache-hit drop on rag-refactor."
+assistant: "agent-telemetry-engineer will pull traces, compute cached_tokens vs input_tokens across the week, correlate with AGENTS.md / SKILL.md edit timestamps to find the invalidation point, and hand off to prompt-cache-tuner with a ranked hypothesis list."
+<commentary>
+Telemetry engineer investigates; prompt-cache-tuner remediates. Clean separation.
+</commentary>
+</example>
