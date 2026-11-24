@@ -92,6 +92,26 @@ agents:
       tier: core
       personality: Thinks in boundaries and failure modes
       write_scope_note: architecture.md
+  legacy-code-specialist:
+    file: agents/architecture/legacy-code-specialist.md
+    enforced:
+      tools:
+      - Read
+      - Write
+      - Grep
+      - Glob
+      shell: null
+      model: haiku
+      effort: medium
+      maxTurns: 25
+    held:
+      add:
+      - Bash
+      why: Part 14 grants a sandboxed shell, and no sandbox exists yet (E5)
+    descriptive:
+      tier: on-demand
+      personality: Patient reader of unfamiliar code; maps before judging
+      write_scope_note: _agency/system-map.md
   adr-auditor:
     file: agents/audit/adr-auditor.md
     enforced:

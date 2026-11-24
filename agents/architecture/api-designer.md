@@ -15,7 +15,7 @@ tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 - **Council:** `architecture`
 - **Role:** Specialist
 - **Reports to:** `engineering-lead`
-- **Team:** 3 peers: `system-architect`, `data-architect`, `infra-architect`
+- **Team:** 4 peers: `system-architect`, `data-architect`, `infra-architect`, `legacy-code-specialist`
 - **Model tier:** `haiku`
 - **Purpose:** Use this agent when the Engineering Lead needs the API surface designed — endpoints, request/response schemas, auth requirements, and error codes — derived from the functional spec and threat model.
 - **Convened by:** `engineering-lead`

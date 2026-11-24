@@ -122,3 +122,23 @@ def test_guard_json_is_lf_and_sorted():
     text = rc.guard_json(rc.load_cards())
     assert "\r" not in text and text.endswith("}\n")
     assert rc.GUARD_CARDS.read_bytes().decode("utf-8").replace("\r\n", "\n") == text
+
+
+def test_every_qualified_reference_resolves():
+    """Each `devsecops-agency:<name>` in agents/, skills/ and councils/ names a role card or a skill.
+
+    A reference to a missing agent is refused at dispatch time, so it is caught here instead.
+    Placeholders such as `devsecops-agency:<name>` are allowed."""
+    import json
+    import re
+    root = rc.ROOT
+    cards = set(json.loads((root / "hooks" / "role-cards.json").read_text(encoding="utf-8"))["agents"])
+    skills = {p.name for p in (root / "skills").iterdir() if p.is_dir()}
+    bad = []
+    for folder in ("agents", "skills", "councils"):
+        for p in (root / folder).rglob("*.md"):
+            text = p.read_bytes().decode("utf-8")
+            for m in re.finditer(r"devsecops-agency:([a-z0-9-]+)(?![a-z0-9>-])", text):
+                if m.group(1) not in cards and m.group(1) not in skills:
+                    bad.append(f"{p.relative_to(root).as_posix()}: {m.group(1)}")
+    assert not bad, bad
