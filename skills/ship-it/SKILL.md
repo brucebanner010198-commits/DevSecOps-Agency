@@ -62,37 +62,37 @@ Write the raw answers to `brief.md > ## Intake answers`. Proceed.
 
 ### Step 3 — PM phase
 
-Dispatch `devsecops-agency:pm-lead` via the Task tool with the raw idea + intake answers. The lead will internally dispatch `user-researcher` (personas, jobs-to-be-done) and `spec-writer` (functional spec, acceptance criteria, success metrics). Append the resulting **product brief** to `brief.md` and update `status.json`. Log the handoff in `chat.jsonl`.
+Dispatch `devsecops-agency:pm-lead` via the Task tool with the raw idea + intake answers. The lead will internally dispatch `devsecops-agency:user-researcher` (personas, jobs-to-be-done) and `devsecops-agency:spec-writer` (functional spec, acceptance criteria, success metrics). Append the resulting **product brief** to `brief.md` and update `status.json`. Log the handoff in `chat.jsonl`.
 
 ### Step 4 — Security phase (gate)
 
-Dispatch `security-lead` with `brief.md`. The lead dispatches `threat-modeler` (STRIDE threat model + OWASP Top 10 coverage — see `references/owasp-checklist.md`) and the output feeds `code-auditor` later. Write `threat-model.md`.
+Dispatch `devsecops-agency:security-lead` with `brief.md`. The lead dispatches `devsecops-agency:threat-modeler` (STRIDE threat model + OWASP Top 10 coverage — see `references/owasp-checklist.md`) and the output feeds `devsecops-agency:code-auditor` later. Write `threat-model.md`.
 
 **Gate check:** if any Critical/High risk has no mitigation plan, escalate via `inbox.json` — do not proceed until the human answers.
 
 ### Step 5 — Architecture phase
 
-Dispatch `engineering-lead` with `brief.md` + `threat-model.md`. The lead dispatches `api-designer` (endpoints, schemas, auth model) and finalises the architecture (tech stack, data model, module layout, deploy topology). Write `architecture.md`.
+Dispatch `devsecops-agency:engineering-lead` with `brief.md` + `threat-model.md`. The lead dispatches `devsecops-agency:api-designer` (endpoints, schemas, auth model) and finalises the architecture (tech stack, data model, module layout, deploy topology). Write `architecture.md`.
 
 ### Step 6 — Build phase
 
-`engineering-lead` dispatches `backend-dev` and `frontend-dev` in parallel based on the architecture. They write code into `src/`. Each specialist reports back to the lead, who checks the code against the architecture doc and threat-model mitigations.
+`engineering-lead` dispatches `devsecops-agency:backend-dev` and `devsecops-agency:frontend-dev` in parallel based on the architecture. They write code into `src/`. Each specialist reports back to the lead, who checks the code against the architecture doc and threat-model mitigations.
 
 ### Step 7 — QA phase
 
-Dispatch `qa-lead` with the code folder and the spec. Lead dispatches `test-designer` (derives test matrix from acceptance criteria) and `test-runner` (writes actual tests, executes them, captures failures). Write `tests/` and `qa-report.md`. If tests fail, loop back to `engineering-lead` for fixes (max 2 loops before escalating).
+Dispatch `devsecops-agency:qa-lead` with the code folder and the spec. Lead dispatches `devsecops-agency:test-designer` (derives test matrix from acceptance criteria) and `devsecops-agency:test-runner` (writes actual tests, executes them, captures failures). Write `tests/` and `qa-report.md`. If tests fail, loop back to `devsecops-agency:engineering-lead` for fixes (max 2 loops before escalating).
 
 ### Step 8 — Security second pass
 
-Dispatch `code-auditor` on the built code against the threat model. Any new Critical finding triggers a fix loop with `engineering-lead` (max 2 loops).
+Dispatch `devsecops-agency:code-auditor` on the built code against the threat model. Any new Critical finding triggers a fix loop with `devsecops-agency:engineering-lead` (max 2 loops).
 
 ### Step 9 — DevOps phase
 
-Dispatch `devops-lead`. Lead dispatches `ci-engineer` (CI workflow, linters, test gate, SCA scan) and `deployment-engineer` (Dockerfile/IaC, deploy checklist, rollback plan). Write `deploy/`.
+Dispatch `devsecops-agency:devops-lead`. Lead dispatches `devsecops-agency:ci-engineer` (CI workflow, linters, test gate, SCA scan) and `devsecops-agency:deployment-engineer` (Dockerfile/IaC, deploy checklist, rollback plan). Write `deploy/`.
 
 ### Step 10 — Docs phase
 
-Dispatch `docs-lead`. Lead dispatches `api-documenter` and `readme-writer`. Write `docs/` and a polished top-level `README.md` into the project folder.
+Dispatch `devsecops-agency:docs-lead`. Lead dispatches `devsecops-agency:api-documenter` and `devsecops-agency:readme-writer`. Write `docs/` and a polished top-level `README.md` into the project folder.
 
 ### Step 11 — GitHub push (optional)
 

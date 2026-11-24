@@ -179,7 +179,7 @@ Phase 7  Close         CEO (you)
 Before each Chief dispatch:
 - Read `councils/<council>/AGENTS.md` and paste its `## Must` / `## Must not` / `## Gate heuristic` into the Chief's dispatch context.
 - **Prepend the vision slice.** Invoke `vision-doc` with the dispatch context (Chief slug, phase, task title). It returns a 3-bullet KR slice + 0–2 non-goals selected via `vision-doc/references/cascade-rules.md`. Prepend the slice to the dispatch context verbatim.
-- **Check the roster.** If the dispatch would require a specialist not present in `status.json > team.<council>.specialists`, invoke `skill-creator` first; review + commit the new agent file; update the roster. File an ADR via `adr` for the hire.
+- **Check the roster.** If the dispatch would require a specialist not present in `status.json > team.<council>.specialists`, invoke `devsecops-agency:skill-creator` first; review + commit the new agent file; update the roster. File an ADR via `adr` for the hire.
 - **Check model tier.** Read the target agent's frontmatter `model:`. If missing or unknown, invoke `skill-creator` to fix per `skills/model-tiering/references/tier-rules.md` and log an `error` in the session log.
 - Via the `taskflow` skill, create a task row in `status.json > tasks[]` with `state: "queued"`.
 - **Allocate a worktree** (via the `worktree` skill) if this is a parallel dispatch or a fix-loop attempt ≥ 1. Look up the Chief's `writes[]` + `reads[]` in `skills/worktree/references/parallel-matrix.md`. Pass the worktree path into the dispatch context. Otherwise write to the main tree directly. Record `worktree` on the task row.

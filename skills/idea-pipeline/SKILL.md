@@ -32,7 +32,7 @@ metadata:
 
 ### Stage 1 — Ideation (divergent)
 
-- CSO dispatches `trend-scout` + `competitive-analyst` — emerging signals + moving competitors.
+- CSO dispatches `devsecops-agency:trend-scout` + `devsecops-agency:competitive-analyst` — emerging signals + moving competitors.
 - CEO + `skill-creator` (optional) surface org-level strategic bets.
 - User-suggested ideas injected here from inbox.
 - Output: raw list of ≥ 15, ≤ 40 candidates in `_vision/strategy/_pipeline/raw-<date>.md`.
@@ -48,8 +48,8 @@ metadata:
 
 ### Stage 3 — Deep ranking (ranked ≤ 10)
 
-- CSO dispatches `market-sizer` + `opportunity-ranker` — TAM/SAM/SOM + RICE scoring.
-- CMO dispatches `positioning-strategist` + `comms-writer` + `growth-analyst` in pipeline-mode — narrative + growth potential scores.
+- CSO dispatches `devsecops-agency:market-sizer` + `devsecops-agency:opportunity-ranker` — TAM/SAM/SOM + RICE scoring.
+- CMO dispatches `devsecops-agency:positioning-strategist` + `devsecops-agency:comms-writer` + `devsecops-agency:growth-analyst` in pipeline-mode — narrative + growth potential scores.
 - `opportunity-ranker` merges scores per `references/ranking-matrix.md`.
 - Output: `_vision/strategy/opportunity-scorecard.md` + `_vision/strategy/_pipeline/pipeline-readout.md`.
 

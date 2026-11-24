@@ -13,7 +13,7 @@ Two Chiefs run in parallel. Non-overlapping writes.
 | `cro`     | `research-brief.md`, `research/market.md`, `research/tech-landscape.md`, `research/prior-art.md`, `research/user-needs.md` | `brief.md` |
 | `pm-lead` | `product/strategy.md`, `product/roadmap.md`             | `brief.md`, `research/*` (read after `cro` merges — allocate `pm-lead` worktree only after `cro` merges if `pm-lead` needs research input) |
 
-Allocation note: if the user's idea doesn't require research to draft a strategy, `cro` and `pm-lead` can genuinely run in parallel. If `pm-lead` needs research output, dispatch `cro` first, merge, then `pm-lead` — no worktree needed for `pm-lead`.
+Allocation note: if the user's idea doesn't require research to draft a strategy, `cro` and `pm-lead` can genuinely run in parallel. If `pm-lead` needs research output, dispatch `devsecops-agency:cro` first, merge, then `devsecops-agency:pm-lead` — no worktree needed for `devsecops-agency:pm-lead`.
 
 ## Phase 2 — Design (sequential, no parallel)
 

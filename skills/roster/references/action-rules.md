@@ -10,7 +10,7 @@ Each row in `proposals.md` is one of five actions. Each has a hard checklist. Th
 - [ ] `skill-creator` brief attached: one paragraph persona seed, expected dispatches/quarter, tools list.
 - [ ] Redundancy scan: no existing agent within the same council covers > 60 % of proposed scope.
 - [ ] ADR trigger: "Hire — new agent".
-- [ ] Execution: CEO dispatches `skill-creator` in the same turn. New `agents/<name>.md` + optional `skills/<slug>/` land with the ADR reference in the front matter description's `<example>` block.
+- [ ] Execution: CEO dispatches `devsecops-agency:skill-creator` in the same turn. New `agents/<name>.md` + optional `skills/<slug>/` land with the ADR reference in the front matter description's `<example>` block.
 
 ## Fire
 

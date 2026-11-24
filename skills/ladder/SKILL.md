@@ -61,7 +61,7 @@ Each rung:
 - **`taskflow`** (v0.2.3) — the 2-attempt fix-loop cap becomes "Rung 1 budget exhausted → climb to Rung 2". Task stays in `blocked` state; `ladderRung` tracks the climb position.
 - **`gates`** — blocking-council reds don't mean ship-blocked forever. They mean "start the ladder". Only after Rung 6+ does ship-blocked become durable.
 - **`adr`** — every rung transition files an ADR. See extended triggers in `skills/adr/references/decision-triggers.md > Process`.
-- **`roster`** — Rung 4 dispatches through COO + `hiring-lead`. New specialist hires are the standard Rung 4 action.
+- **`roster`** — Rung 4 dispatches through COO + `devsecops-agency:hiring-lead`. New specialist hires are the standard Rung 4 action.
 - **`meeting-minutes`** — Rung 6 user-consult writes minutes (`kind: user`).
 
 ## Metrics to log

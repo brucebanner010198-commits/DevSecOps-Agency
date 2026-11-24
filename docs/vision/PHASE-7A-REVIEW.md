@@ -88,7 +88,7 @@ P6 probe ($0.18, `2695558`): the narrowed CEO line still reads the skill directl
 
 Total build spend: $20.31 + $0.45 + $0.20 + $1.45 + $0.18 = **$22.59 of $25**.
 
-**Finding beyond 7a: the CEO never held a Skill tool**, before or after 1a, and no stream from any run shows a Skill call. Every "run the `X` skill" in the CEO's instructions was unreachable. This is a possible cause of the CEO skipping the pipeline in earlier runs, not a proven one. `84bb180` told the CEO to read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` for any skill. On the advisor's review, `2695558` narrows that to `adopt` only, because the other skills have not been swept: `skills/intake/SKILL.md` step 5 still dispatches `pm-lead` bare. **Open:** sweep the skills for bare names, widen the line, and do one new-idea run. That run's spend is the Chairman's call.
+**Finding beyond 7a: the CEO never held a Skill tool**, before or after 1a, and no stream from any run shows a Skill call. Every "run the `X` skill" in the CEO's instructions was unreachable. This is a possible cause of the CEO skipping the pipeline in earlier runs, not a proven one. `84bb180` told the CEO to read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` for any skill. On the advisor's review, `2695558` narrows that to `adopt` only, because the other skills have not been swept: `skills/intake/SKILL.md` step 5 still dispatches `pm-lead` bare. The skills sweep is done in #10 (`scripts/dispatch_names.py`, checked in CI). **Still open:** widening the line beyond `adopt` waits on one new-idea run, and that run's spend is the Chairman's call.
 
 ## Open conflict: the lessons-ledger exception
 
