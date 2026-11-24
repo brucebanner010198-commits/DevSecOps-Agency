@@ -86,3 +86,20 @@ Total build spend: $20.31 + $0.45 + $0.20 + $1.45 + $0.18 = **$22.59 of $25**.
 ## Open conflict: the lessons-ledger exception
 
 Today's advisor note suggested a one-file B1 exception for the plugin-root `LESSONS.md`. The 2a pack records an earlier advisor ruling to keep that block with no exceptions. The plugin root is also the install folder, which an update replaces (the same issue as 1a conflict 6). So the exception is **not built** and stays open.
+
+## Also in this PR: an advisory pipeline report (a first 5-lite piece)
+
+`scripts/pipeline_report.py <project-dir>` reads the guard's receipts and flags each chief that wrote a file but dispatched no agent of its own council. It is read-only and log-only: it blocks nothing, so it needs no E4 decision.
+- The ceo and the board director are exempt.
+- The recorded builder exception counts `engineering-lead` and `pm-lead` dispatching the execution council as their own.
+
+Replayed on recorded runs, it flags exactly the known compressions:
+
+| Run | Flagged |
+| --- | --- |
+| G1 and G2 | `security-lead` |
+| A2 | `gc`, `devops-lead` and `pm-lead` |
+
+There are 7 tests in `scripts/test_pipeline_report.py`, which CI's `scripts` suite runs. Making it a gate, so that a phase cannot close without the specialist's receipt, is 5-lite proper and waits for E4.
+
+Phase 2b (the broker and signed receipts) was checked against the same tests and not started. It adds blocking authority and needs a signing identity, and both are reserved.
