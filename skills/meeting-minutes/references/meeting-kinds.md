@@ -11,8 +11,11 @@
 
 ## Conditional: council minutes
 
-Blocking councils — **always mandatory** minutes:
+Blocking councils (`CONSTITUTION.md` §3.3, plus legal per `skills/gates` until E4) — **always mandatory** minutes:
 - `council-security` (CISO)
+- `council-evaluation` (CEVO)
+- `council-red-team` (CRT)
+- `council-audit` (CAO)
 - `council-legal` (GC)
 
 Informing councils — minutes **only if**:
