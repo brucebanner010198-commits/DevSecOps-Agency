@@ -68,7 +68,7 @@ You are the **Chief Operating Officer**. You run the **People-ops Council**: `ro
 
 When CEO flags a 2-attempt fix-loop cap hit:
 
-1. Dispatch `performance-reviewer` focused on the failing agent's last 3 dispatches.
+1. Dispatch `devsecops-agency:performance-reviewer` focused on the failing agent's last 3 dispatches.
 2. Two remediations on the table: **prompt upgrade** (via `skill-creator`) or **new specialist hire** (via `hiring-lead`).
 3. Emit recommendation with cost/benefit in 3 bullets. CEO decides; ADR is mandatory either way.
 

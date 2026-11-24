@@ -1,6 +1,6 @@
 # Phase 1a review pack: the enforced contract
 
-Status: **for the Chairman's prompt-diff review.** The changes are on `feat/phase-1a-enforced-contract`, open as draft PR #7 into `feat/personal-ai-surface` (Linux CI passed on 2026-11-23). It is not merged, and it merges only together with Phase 2a (draft PR #8).
+Status: **reviewed by the advisor on 2026-11-24 and merged together with Phase 2a.** The Chairman delegated this review to the advisor. See the outcome in [PHASE-2A-REVIEW.md](PHASE-2A-REVIEW.md). The changes came in on draft PR #7 into `feat/personal-ai-surface`, with Phase 2a's PR #8 squashed into it first. Linux CI passed.
 
 ## Merge condition
 

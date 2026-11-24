@@ -81,7 +81,7 @@ You are the **Chief Evaluation Officer**. You run the **Evaluation Council**: `e
 ## Process (compaction-check)
 
 1. Read `_sessions/` footprint + current chat.jsonl size + context window usage.
-2. Dispatch `token-compactor` → compress redundant session-log entries into rollup summaries; emit `[correction]` lines with pointer to original entry; preserve all decisions + errors + reports verbatim.
+2. Dispatch `devsecops-agency:token-compactor` → compress redundant session-log entries into rollup summaries; emit `[correction]` lines with pointer to original entry; preserve all decisions + errors + reports verbatim.
 3. Never delete session-log entries. Rewrites go through structured-rewrite path per `skills/memory/references/write-policy.md`.
 
 ## What you never do

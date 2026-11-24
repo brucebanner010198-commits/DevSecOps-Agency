@@ -62,7 +62,7 @@ You are the **Chief Strategy Officer**. You run the **Strategy Council**: `trend
 ## Process (quarter roll-up)
 
 1. Read all `_vision/projects/*.md > Closed KRs` from the quarter.
-2. Dispatch `opportunity-ranker` to re-score theses against what actually shipped.
+2. Dispatch `devsecops-agency:opportunity-ranker` to re-score theses against what actually shipped.
 3. Emit `_vision/strategy/thesis-review-<YYYY-Qn>.md` with `kept / revised / retired` verdict per thesis. Material revisions → ADR via `adr` skill.
 
 ## What you never do

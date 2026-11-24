@@ -37,7 +37,7 @@ Always consult `${CLAUDE_PLUGIN_ROOT}/skills/ship-it/references/owasp-checklist.
 ## Pre-build pass
 
 1. Read `brief.md`.
-2. Dispatch `threat-modeler` to produce `threat-model.md` covering STRIDE + OWASP Top 10 coverage + mitigations. Success criterion: "every Critical and High risk has a named mitigation".
+2. Dispatch `devsecops-agency:threat-modeler` to produce `threat-model.md` covering STRIDE + OWASP Top 10 coverage + mitigations. Success criterion: "every Critical and High risk has a named mitigation".
 3. Review the output against the template in `owasp-checklist.md`.
 4. **Gate check**: scan for any Critical/High row with empty mitigation. If found:
    - Append an `escalate` entry to `chat.jsonl`.
@@ -49,7 +49,7 @@ Always consult `${CLAUDE_PLUGIN_ROOT}/skills/ship-it/references/owasp-checklist.
 ## Post-build pass
 
 1. Read `threat-model.md` and the project's `src/`.
-2. Dispatch `code-auditor` to produce a `## Post-build audit` section appended to `threat-model.md`. Success criterion: "every Critical/High mitigation in the threat model is verified present in the code, or marked failed".
+2. Dispatch `devsecops-agency:code-auditor` to produce a `## Post-build audit` section appended to `threat-model.md`. Success criterion: "every Critical/High mitigation in the threat model is verified present in the code, or marked failed".
 3. **Gate check**: any Critical finding triggers a fix loop with `engineering-lead` (the Managing Director will handle the loop). Highs go to `deploy/follow-ups.md`.
 4. Return a 3-bullet summary including pass/fail counts.
 

@@ -1,6 +1,6 @@
 # Phase 2a review pack: the guard hook
 
-Status: **for the Chairman's review.** The work is committed on the local branch `feat/phase-2a-guard-hooks`, which is stacked on `feat/phase-1a-enforced-contract`. Neither branch is pushed.
+Status: **reviewed and approved for merge by the advisor on 2026-11-24.** The Chairman delegated the D1 prompt-diff review to the advisor that day ("if everything looks great as per the advisor, merge it"). The work is on `feat/phase-2a-guard-hooks` (draft PR #8), stacked on `feat/phase-1a-enforced-contract` (draft PR #7). Linux CI passed on both. They merge together: #8 into the 1a branch, then #7 into `feat/personal-ai-surface`.
 
 ## What it is
 
@@ -18,7 +18,7 @@ Status: **for the Chairman's review.** The work is committed on the local branch
 
 Every decision is appended to `<project>/.devsecops-agency/receipts.jsonl`. `DEVSECOPS_GUARD_MODE=log` turns the blocking rules into log-only ones.
 
-There are 46 tests (counting parametrised cases) in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 78 tests in `hooks` and `scripts` pass locally on Windows. **Linux CI has not run yet,** because nothing is pushed.
+There are 46 tests (counting parametrised cases) in `hooks/test_guard.py`, and `hooks` has been added to the CI pytest matrix. All 78 tests in `hooks` and `scripts` pass locally on Windows, and Linux CI passed on both PRs (see Linux CI below).
 
 ## Evidence
 
@@ -103,7 +103,7 @@ This is the baseline finding (the CEO skips the pipeline) in a milder form. It i
 
 ### Finding: bare dispatch names left in `engineering-lead`
 
-G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name `backend-dev` and `frontend-dev` without the `devsecops-agency:` prefix. Phase W4 qualified the dispatch lines in other files but not these. The agent recovered in 4 s, but the B3 message pointed it at `cro`, which was the wrong fix. Since `9ae6c96`, a bare name that matches a role card is refused with "Dispatch it as devsecops-agency:<name>" (one new test; not run live). The prompt line itself is left for your diff review (D1).
+G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name `backend-dev` and `frontend-dev` without the `devsecops-agency:` prefix. Phase W4 qualified the dispatch lines in other files but not these. The agent recovered in 4 s, but the B3 message pointed it at `cro`, which was the wrong fix. Since `9ae6c96`, a bare name that matches a role card is refused with "Dispatch it as devsecops-agency:<name>" (one new test; not run live). **Fixed on 2026-11-24, after the advisor's D1 review:** every dispatch line in the 11 orchestrators that named an agency agent bare now uses the `devsecops-agency:` prefix (22 lines: `engineering-lead`, `devops-lead`, `docs-lead`, `pm-lead`, `qa-lead`, `security-lead`, `sre-lead`, `evaluation-lead`, `cmo`, `coo`, `cso`). Not run live.
 
 ## What 2a does not do
 
@@ -193,6 +193,28 @@ The risk left is Linux-only behaviour that a read can't see. Only a CI run settl
 
 For each decision: (1) the issue, (2) why the plan can't absorb it, (3) what was investigated, (4) the alternatives, (5) the recommendation, (6) the impact.
 
+**Outcome, 2026-11-24.** The Chairman delegated these reviews to the advisor and authorised the merge if the advisor found nothing wrong, and a stop only for a design change. The advisor read the agent diffs (grants, limits, moved examples, and five shell-delegation rewrites), the guard and both packs. Its verdict: merge after three small fixes, none of them a design change.
+- Bare dispatch names were qualified in 11 orchestrators.
+- Two card questions were checked:
+  - `tutorial-writer`, `deployment-engineer` and `ci-engineer` hold Bash, so the delegated steps have a shell.
+  - The CEO's `TodoWrite` was dropped because it is not a live tool (1a pack, removals stage).
+- The stale status lines in this pack were corrected.
+
+The decisions were settled as follows:
+
+| Decision | Outcome |
+| --- | --- |
+| D1 | Settled by the advisor's review |
+| D2 | Stage commits accepted, as recommended |
+| D3 (lessons-ledger path, B2 coverage of `threat-model.md` and the ledgers, scope enforcement) | Not folded in. Each changes what a file means or who may revise it, so each stays open |
+| D3, scope | Stays log-only |
+| D3, cross-council dispatch | Stays log-only |
+| D4, ADR-0008 | Stays **proposed**. Accepting it supersedes a recorded direction decision, so it stays with the Chairman |
+| D5, chaos-engineer's Bash | Stays held |
+| D6 | Merge |
+
+**Known break at merge:** B1 refuses the CEO's write to the plugin-root `LESSONS.md`. It fails safe: the row is not written, and nothing else is affected.
+
 **D1. The prompt-diff review of 1a and 2a.**
 1. The 1a agent-file changes and the 2a guard are not reviewed.
 2. Agent-file changes need your review, under the standing rule.
@@ -241,7 +263,7 @@ For each decision: (1) the issue, (2) why the plan can't absorb it, (3) what was
 **D6. Push, PRs and merge.**
 1. **Push done on 2026-11-23 at your request:** draft PRs #7 (1a) and #8 (2a, stacked), and Linux CI passed on both. `review/design-review-1` stays local. What is left is the merge. On the same day, at your request, both branches were rewritten and force-pushed to remove a local absolute path from the 1a pack's history; the final trees did not change.
 2. The merge needs your approval.
-3. Investigated: plugin validation passes, and the local tests pass. Linux CI has never run, and **a push alone will not run it**. `ci.yml` runs on pull requests, on pushes to `main` and on manual dispatch, and manual dispatch needs the workflow on `main`, where it is not. So the only way to run it is through PRs.
+3. Investigated: plugin validation passes, the local tests pass, and Linux CI passed on both PRs. Before the push, CI could not run, because **a push alone does not run it**. `ci.yml` runs on pull requests, on pushes to `main` and on manual dispatch, and manual dispatch needs the workflow on `main`, where it is not. So the only way to run it is through PRs.
 4. Alternatives:
    - push and open **draft** PRs now: 1a into `feat/personal-ai-surface`, with 2a stacked on 1a. CI runs, and nothing merges;
    - push and open PRs only after D1;

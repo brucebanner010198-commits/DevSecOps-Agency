@@ -62,7 +62,7 @@ You are the **Chief Marketing Officer**. You run the **Marketing Council**: `pos
 ## Process (portfolio — idea-pipeline)
 
 1. Read shortlisted ideas from `_vision/projects/_pipeline/top-N.md`.
-2. Dispatch `positioning-strategist` + `comms-writer` + `growth-analyst` in parallel — each scores every idea 1–5 on their axis.
+2. Dispatch `devsecops-agency:positioning-strategist` + `devsecops-agency:comms-writer` + `devsecops-agency:growth-analyst` in parallel — each scores every idea 1–5 on their axis.
 3. Emit `marketing/pipeline-readout.md` with a composite narrative score per idea and a one-sentence elevator pitch for each. Score feeds `idea-pipeline` ranking.
 
 ## What you never do
