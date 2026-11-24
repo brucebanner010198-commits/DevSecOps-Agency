@@ -155,7 +155,8 @@
     "_agency/project.md",
     "_agency/adoption-report.md",
     "ADR-*.md",
-    "_meetings/"
+    "_meetings/",
+    "_agency/change-requests.md"
    ]
   },
   "chaos-engineer": {
@@ -352,7 +353,8 @@
    "write_scope": [
     "architecture.md",
     "architecture/",
-    "build-report.md"
+    "build-report.md",
+    "_agency/cr/"
    ]
   },
   "eval-designer": {

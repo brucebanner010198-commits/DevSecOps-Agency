@@ -63,6 +63,7 @@ agents:
       - architecture.md
       - architecture/
       - build-report.md
+      - _agency/cr/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -286,6 +287,7 @@ agents:
       - _agency/adoption-report.md
       - "ADR-*.md"
       - _meetings/
+      - _agency/change-requests.md
       effort: null
       maxTurns: null
     descriptive:
