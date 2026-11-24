@@ -15,7 +15,7 @@ tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 - **Council:** `architecture`
 - **Role:** Specialist
 - **Reports to:** `engineering-lead`
-- **Team:** 3 peers: `system-architect`, `api-designer`, `data-architect`
+- **Team:** 4 peers: `system-architect`, `api-designer`, `data-architect`, `legacy-code-specialist`
 - **Model tier:** `haiku`
 - **Purpose:** Use this agent when the CTO (engineering-lead) needs the infrastructure shape — where things run, how they scale, what the dependency surface looks like — tuned to the chosen deployment target.
 - **Convened by:** `engineering-lead`

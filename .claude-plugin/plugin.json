@@ -29,6 +29,7 @@
     "./agents/architecture/data-architect.md",
     "./agents/architecture/engineering-lead.md",
     "./agents/architecture/infra-architect.md",
+    "./agents/architecture/legacy-code-specialist.md",
     "./agents/architecture/system-architect.md",
     "./agents/audit/adr-auditor.md",
     "./agents/audit/agent-governance-reviewer.md",

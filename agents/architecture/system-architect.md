@@ -15,7 +15,7 @@ tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 - **Council:** `architecture`
 - **Role:** Specialist
 - **Reports to:** `engineering-lead`
-- **Team:** 3 peers: `api-designer`, `data-architect`, `infra-architect`
+- **Team:** 4 peers: `api-designer`, `data-architect`, `infra-architect`, `legacy-code-specialist`
 - **Model tier:** `haiku`
 - **Purpose:** Use this agent when the CTO (engineering-lead) needs the top-level system architecture — components, data flow, trust boundaries — before subsystem design begins.
 - **Convened by:** `engineering-lead`

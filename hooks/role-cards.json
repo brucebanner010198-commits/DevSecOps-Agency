@@ -271,6 +271,12 @@
    },
    "file": "agents/legal/ip-lineage.md"
   },
+  "legacy-code-specialist": {
+   "descriptive": {
+    "write_scope_note": "_agency/system-map.md"
+   },
+   "file": "agents/architecture/legacy-code-specialist.md"
+  },
   "license-checker": {
    "descriptive": {
     "write_scope_note": "legal/"
