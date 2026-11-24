@@ -112,7 +112,7 @@ G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name 
 - **`python3` must be on PATH.** Because the hook fails closed, a missing interpreter blocks every Write, Edit, MultiEdit, NotebookEdit and dispatch in *every* session that has the plugin enabled, not only agency sessions: the hook cannot read `agent_type` if it cannot start. This is safe, but it breaks ordinary work too, so weigh it in the merge decision.
 - **Links are not resolved.** B1 compares `abspath`, not `realpath`, so a symlink or junction inside the project that points outside it gets past B1. Creating one needs a shell, which is already outside the guard.
 - **Calls by non-agency agents pass through,** and so do calls by sessions not started as an agency agent. B3 stops agency agents from creating such calls. The `--agent devsecops-agency:ceo` launcher (1a) is what labels the main thread. A session started without it gets no `agent_type`, so the guard skips it.
-- **Scope is logged, not enforced.** The Part 14 scope notes don't match where agents really write (`brief.md`, `spec.md`, `build-report.md`, `deploy.md` and so on). L1 fired 32 times in D3a.
+- **Scope was logged, not enforced, until B5 (2026-11-24, below).** The Part 14 scope notes didn't match where agents really write (`brief.md`, `spec.md`, `build-report.md`, `deploy.md` and so on). L1 fired 32 times in D3a.
 - **Not every file the 1a appenders share is covered.** `threat-model.md` (code-auditor adds a section) and the correction lines and roll-ups of `cao` and `token-compactor` are outside B2's list. Those agents can still replace those files.
 - **`runtime-hooks/` stays unregistered,** as before.
 
@@ -270,3 +270,21 @@ The decisions were settled as follows:
    - or hold.
 5. **Recommendation:** merge only after D1, with 1a and 2a together (#8 into #7's branch, then #7). Done: the push and the draft PRs.
 6. Impact: CI's first run on the hooks. The branch names and commit messages become visible on GitHub.
+
+## B5: binding write scope (2026-11-24)
+
+Plan Part 4 rule 3, and Phase 2's "done when" test, require an out-of-scope write to be refused. On the advisor's ruling, the Chairman's delegation of 2026-11-24 covers this, because the plan already requires it.
+
+- **The rule.** Each role card now has an enforced `write_scope` list. Write, Edit, MultiEdit and NotebookEdit must land on a path in that list, or in the shared logs `chat.jsonl`, `inbox.json` and `_sessions/`.
+  - An entry ending in `/` is a folder, and any other entry is a file name or glob. Both match at any depth, so one card covers `outputs/devsecops-agency/<slug>/`, an adopted repository's `_agency/` and a product repository's root.
+  - The refusal names the allowed paths and says to return the content, or to dispatch the owner.
+  - A card with no list falls back to L1 (log only). Every card now has one.
+- **Where the scopes come from.** The paths that runs R1 to R3, G1, G2 and A2 actually wrote, plus the output paths each agent's own instructions name. The four builders (`backend-dev`, `frontend-dev`, `db-engineer`, `integrations-engineer`) get `*`, the whole project, because an adopted repository keeps code anywhere. B1, B2 and B4 still apply to them.
+- **Checks in `role_cards.py`.** Every card needs a list, and every entry must be relative and inside the project. An agent that can dispatch may not hold `*` (Part 4 rule 5).
+- **Replay of 139 recorded writes.** Every legitimate write passes. B5 refuses only `engineering-lead`'s own application-code writes: 19 in G1 (app files, tests and QA files) and 5 in G2. Plan Part 4 rule 5 and its own instructions forbid those. D3a has no nested-call log, so it is not in the replay.
+- **Live check S1** ($0.28, $1 cap, block mode, a small feature in an existing Python repository).
+  - The CEO treated the repository as one to adopt first, as plan Part 6 requires. It wrote `_agency/project.md` and `_agency/chat.jsonl`, both in scope, and paused because the cap was too small for a full adoption.
+  - Nothing was refused, and there was no deny loop. **B5 has not yet fired in a live run.** It is proven by the replay and 25 new tests (117 in total).
+- **Limit.** Folder entries match at any depth, so `security/` also covers `src/security/x.md`. That is lenient by design, because it keeps one card valid in all three layouts.
+
+Build spend after S1: **$22.87 of $25**.
