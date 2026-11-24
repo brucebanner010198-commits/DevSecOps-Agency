@@ -1,6 +1,6 @@
 # Phase 7a review pack: adopting an existing repository
 
-Status: **built, and run live twice (A1 failed, A2 passed).** This is on `feat/phase-7-adoption`, cut from `feat/personal-ai-surface` at `140f989`.
+Status: **built, and run live twice: A1 failed, A2 passed. Reviewed by the advisor on 2026-11-24.** This is on `feat/phase-7-adoption`, cut from `feat/personal-ai-surface` at `140f989`.
 
 ## Why this is being built now
 
@@ -38,7 +38,7 @@ On re-entry, the skill compares the recorded adoption commit with the current on
 
 ## Assumptions (reversible), for review
 
-1. **Records live in `_agency/` inside the repository.** Part 6 says "one agreed folder inside the repository". B1 requires it anyway when the agency is launched in the repository. The open checklist item (Part 10, "inside or outside") is answered by Part 6 itself. The folder name is new.
+1. **Records live in `_agency/` inside the repository.** This is an assumption awaiting the Chairman. Part 6 says "one agreed folder inside the repository", and B1 requires it anyway when the agency is launched in the repository. But "inside or outside" is listed under Part 10's "Decisions only you can make", so it stays open. The folder name is new.
 2. **The specialist's sandboxed Bash is held,** as for `chaos-engineer`. Part 14 grants it, but no sandbox exists (E5). The map is made by reading.
 3. **Model tier Haiku** for the new agent, the same as the four architecture specialists. It is a new agent, so no existing tier changes. Sonnet is the alternative if maps turn out shallow.
 4. **Running the repository's tests needs the Chairman's yes** in step 1, because it executes someone else's code with no OS sandbox. Without the yes, the baseline records "not run: not authorised".
@@ -69,15 +69,19 @@ What A2 showed:
 - All 11 `_agency/` records were written. `integrity.md` shows `git status` with only `_agency/` and `.devsecops-agency/`, and HEAD unchanged.
 - No `tests/`, `deploy/`, CI or root `threat-model.md` was created.
 - The guard logged 27 decisions: all allow, none blocked. L1 logged scope notes, as expected.
-- The baseline is real: `npm test` ran, with 51 passed and 0 failed.
+- The baseline matches an independent run. `tests.md` records 51 passed and 0 failed, and `node --test` run separately in the fixture also gives 51 of 51. The run's stream does not hold the subagent's own test output, so the independent run is the check.
 
 A2's gaps:
-- **The pipeline is still compressed.** `gc`, `devops-lead` and `pm-lead` wrote their records themselves and did not dispatch `license-checker`, `deployment-engineer` or `spec-writer`. This is the same advisory-pipeline gap as G1/G2, and 5-lite (needs E4) is its fix.
-- **The dependency audit did not run.** The run harness's command allowlist refused it. That is the test harness, not the agency. The manifest has no dependencies, so the report says the audit had nothing to check and labels that as an inference.
+- **Three chiefs did their specialists' work.** `gc`, `devops-lead` and `pm-lead` wrote their records themselves. Each CEO prompt named the specialist ("Dispatch devsecops-agency:license-checker"), but it also said "Budget tight: be concise". The brief says "Do exactly the one task below", so the chiefs may have read the task as theirs.
+  - **The cause is not proven.** The candidate fix is a "Dispatch to: <specialist>" line in the brief. It is not made, because it would ship untested.
+  - Enforcing the pipeline (5-lite, needs E4) is the general fix.
+- **The dependency audit did not run.** Two compound shell commands, the audit and a `git ls-files` sweep, appear in the run's `permission_denials`. The headless run's `--allowedTools` list refused them; it does not cover `sed`, `git ls-files` or redirects. The run's log hook allowed every shell call, and the agency guard does not inspect shell. So the refusal was the test harness, not the agency. The manifest has no dependencies, so the report says the audit had nothing to check and labels that as an inference.
 
-Total build spend: $20.31 + $0.45 + $0.20 + $1.45 = **$22.41 of $25**.
+P6 probe ($0.18, `2695558`): the narrowed CEO line still reads the skill directly from the plugin path.
 
-**Finding beyond 7a: the CEO never held a Skill tool**, before or after 1a, and no stream from any run shows a Skill call. Every "run the `X` skill" in the CEO's instructions was unreachable. This is a possible cause of the CEO skipping the pipeline in earlier runs, not a proven one. `84bb180` tells the CEO to read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` instead. That is proven for `adopt` (P5, A2) but **untested on the new-idea path** (`ceo`, `intake`, `ship-it`).
+Total build spend: $20.31 + $0.45 + $0.20 + $1.45 + $0.18 = **$22.59 of $25**.
+
+**Finding beyond 7a: the CEO never held a Skill tool**, before or after 1a, and no stream from any run shows a Skill call. Every "run the `X` skill" in the CEO's instructions was unreachable. This is a possible cause of the CEO skipping the pipeline in earlier runs, not a proven one. `84bb180` told the CEO to read `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` for any skill. On the advisor's review, `2695558` narrows that to `adopt` only, because the other skills have not been swept: `skills/intake/SKILL.md` step 5 still dispatches `pm-lead` bare. **Open:** sweep the skills for bare names, widen the line, and do one new-idea run. That run's spend is the Chairman's call.
 
 ## Open conflict: the lessons-ledger exception
 
