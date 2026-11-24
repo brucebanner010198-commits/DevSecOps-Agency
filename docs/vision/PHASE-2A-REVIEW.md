@@ -310,7 +310,7 @@ Plan Part 4 rule 3, and Phase 2's "done when" test, require an out-of-scope writ
   - **The scopes were partly drawn from these same runs,** so the replay mainly shows that no recorded legitimate write is refused. The skills check is the independent part.
 - **Live check S1** ($0.28, $1 cap, block mode, a small feature in an existing Python repository).
   - The CEO treated the repository as one to adopt first, as plan Part 6 requires. It wrote `_agency/project.md` and `_agency/chat.jsonl`, both in scope, and paused because the cap was too small for a full adoption.
-  - Nothing was refused, and there was no deny loop. **B5 has not yet fired in a live run.** It is proven by the replay and 25 new tests (117 in total).
+  - Nothing was refused, and there was no deny loop.
 - **Limits.**
   - Folder entries match at any depth, so `security/` also covers `src/security/x.md`. That is lenient by design, because it keeps one card valid in all three layouts.
   - **For agents with Bash, B5 binds only the Write, Edit, MultiEdit and NotebookEdit tools.** Shell commands are not inspected (see "What 2a does not do").
@@ -321,4 +321,12 @@ Plan Part 4 rule 3, and Phase 2's "done when" test, require an out-of-scope writ
   - The receipts show nothing refused and no loop. So **B5 has still not fired in a live run**: the agent never tried an out-of-scope write.
   - The difference from G2 has two candidate causes, not proven: the CEO is not in the loop, and the prompt now has the shell-delegation lines from 1a.
 
-Build spend after S1 and E1: **$23.16 of $25**.
+- **Probe E2** ($0.22, $0.50 cap): **B5 fired live, and the agent recovered.** `gc` was started as the agent and asked to fix a license mismatch in `package.json`. Its prompt allows that; its scope does not.
+  - The guard refused the write. The refusal named `test-runner`, which owns `package.json`.
+  - `gc` dispatched `test-runner`, which made the one-line edit, and `gc` re-read the file to confirm.
+  - One deny, no loop, and only `package.json` changed.
+- **Tests:** 30 new, 122 in total.
+- **Off switch:** `DEVSECOPS_GUARD_MODE=log` turns B5, like B1 to B4, into log-only.
+- **Not yet checked:** the skills check tested only lines that name an agent. Steps the CEO carries out itself, such as "Write `status.json`", were not checked. That is safe while the CEO can load only `adopt`, and it must be done before that line is widened.
+
+Build spend after S1, E1 and E2: **$23.38 of $25**.
