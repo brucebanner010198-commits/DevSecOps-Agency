@@ -7,7 +7,7 @@ Every mutation to `agents/*.md` or a high-leverage `skills/*/SKILL.md` runs thro
 - `skill-creator` proposes a change to `agents/<name>.md`.
 - Any ADR with trigger `agents/<name>.md prompt edit` or `skills/<slug>/SKILL.md edit` is in flight.
 - `skills/roster` hire / repurpose / prompt-upgrade (the new or edited prompt is reviewed).
-- CEO dispatches red-team-lead with context "prompt-upgrade red-team".
+- CEO dispatches `devsecops-agency:red-team-lead` with context "prompt-upgrade red-team".
 
 ## Process
 

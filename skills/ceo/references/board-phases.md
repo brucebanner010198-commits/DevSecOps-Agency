@@ -48,7 +48,7 @@ The CEO runs 7 phases. Each phase has **inputs**, **Chiefs invoked**, **artifact
 - All phase-2 artifacts
 
 **Chiefs**
-- `engineering-lead` (VP-Eng second hat) — dispatches backend-dev, frontend-dev, db-engineer, integrations-engineer in parallel where safe
+- `engineering-lead` (VP-Eng second hat) — dispatches `devsecops-agency:backend-dev`, `devsecops-agency:frontend-dev`, `devsecops-agency:db-engineer`, `devsecops-agency:integrations-engineer` in parallel where safe
 
 **Artifacts**
 - `src/` — working code

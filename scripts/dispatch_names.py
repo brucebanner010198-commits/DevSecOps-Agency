@@ -5,7 +5,9 @@ A dispatch to a bare name such as `pm-lead` does not resolve at runtime and the
 Phase 2a guard (B3) refuses it; the name must be `devsecops-agency:pm-lead`.
 On any body line (frontmatter is skipped) containing the word "dispatch", a
 backtick-quoted role-card name that comes after that word is taken to be a
-dispatch target.
+dispatch target. Limit: names without backticks, and dispatches phrased
+without the word "dispatch", are not seen; a one-off grep found two such
+instructions, fixed by hand.
 
     python scripts/dispatch_names.py check   # exit 1 and list each bare target
     python scripts/dispatch_names.py write   # qualify them in place
@@ -36,7 +38,7 @@ def fix_line(line: str, cards: set[str]) -> str:
 
 
 def files() -> list[Path]:
-    return sorted(p for d in ("agents", "skills") for p in (ROOT / d).rglob("*.md"))
+    return sorted(p for d in ("agents", "skills", "councils") for p in (ROOT / d).rglob("*.md"))
 
 
 def main(argv: list[str]) -> int:
