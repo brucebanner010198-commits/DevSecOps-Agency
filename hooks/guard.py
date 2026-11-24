@@ -16,8 +16,19 @@ Blocking rules (exit 2 with a reason):
   B3 dispatch     A dispatch target must be a `devsecops-agency:` agent, and the
                   call may not override the target's model.
 
+  B5 scope        Write, Edit, MultiEdit and NotebookEdit must land on a path in the
+                  caller's role-card `write_scope` (or the shared logs every agent
+                  keeps: chat.jsonl, inbox.json, _sessions/). An entry ending in "/"
+                  is a folder; other entries are file names or globs. Both match at
+                  any depth, so `brief.md` covers outputs/devsecops-agency/<slug>/brief.md.
+                  "*" (the builders) is the whole project except the agency's records
+                  (_agency/, _vision/, _decisions/, _memory/). A refusal names the
+                  agents whose scope covers the path. A card with no write_scope falls
+                  back to L1; an agency agent with no card at all may not write.
+
 Log-only rules (recorded in the receipt, never block):
-  L1 scope        the write path is outside the caller's role-card scope note.
+  L1 scope        the write path is outside the caller's role-card scope note (only for a
+                  card with no write_scope).
   L2 own-council  a chief dispatches an agent outside its own council.
 
 Every decision is appended to <project>/.devsecops-agency/receipts.jsonl.
@@ -62,6 +73,10 @@ APPEND_ONLY = [
 APPEND_ONLY += ["*/" + g for g in APPEND_ONLY if not g.startswith("*/")]
 APPEND_ONLY = sorted(set(APPEND_ONLY))
 RECEIPTS_DIR = ".devsecops-agency"
+# Logs every agent may write, whatever its scope (chat.jsonl and _sessions/ are also append-only under B2).
+SHARED_WRITES = ["chat.jsonl", "inbox.json", "_sessions/"]
+# The agency's own records. A "*" scope (the builders) covers the whole project except these.
+RECORD_DIRS = ["_agency/", "_vision/", "_decisions/", "_memory/"]
 
 
 def _norm(p: str) -> str:
@@ -103,6 +118,23 @@ def resulting_content(tool: str, ti: dict, current: str) -> str | None:
     return out
 
 
+def in_scope(relpath: str, scope: list[str]) -> bool:
+    """True if relpath matches an entry of scope at any depth. "x/" is a folder, "*" is anything."""
+    fold = str.lower if os.name == "nt" else (lambda s: s)
+    r = fold(relpath)
+    for e in (fold(s) for s in scope):
+        if e == "*":
+            if not any(("/" + r).find("/" + d) != -1 for d in RECORD_DIRS):
+                return True
+            continue
+        if e.endswith("/"):
+            if ("/" + r).find("/" + e) != -1:
+                return True
+        elif fnmatch.fnmatchcase(r, e) or fnmatch.fnmatchcase(r, "*/" + e):
+            return True
+    return False
+
+
 def load_cards() -> dict:
     """Role cards for L1 and L2. hooks/role-cards.json is generated from agents/role-cards.yaml
     (scripts/role_cards.py write) so that the guard needs only the standard library; the YAML
@@ -113,9 +145,22 @@ def load_cards() -> dict:
         pass
     try:
         import yaml
-        return yaml.safe_load((PLUGIN_ROOT / "agents" / "role-cards.yaml").read_text(encoding="utf-8"))["agents"]
+        cards = yaml.safe_load((PLUGIN_ROOT / "agents" / "role-cards.yaml").read_text(encoding="utf-8"))["agents"]
+        # Same shape as the JSON slice: write_scope sits at the card's top level.
+        return {n: dict(c, write_scope=(c.get("enforced") or {}).get("write_scope")) for n, c in cards.items()}
     except Exception:
         return {}
+
+
+def owners(relpath: str, cards: dict) -> list[str]:
+    """Agents whose write_scope covers relpath. Named entries come first; the builders' catch-all
+    ("*") is listed only when no named entry covers the path."""
+    named = sorted(n for n, c in cards.items() if c.get("write_scope") and "*" not in c["write_scope"]
+                   and in_scope(relpath, c["write_scope"]))
+    if named:
+        return named
+    return sorted(n for n, c in cards.items() if c.get("write_scope") and "*" in c["write_scope"]
+                  and in_scope(relpath, c["write_scope"]))
 
 
 def council(card: dict | None) -> str | None:
@@ -167,7 +212,15 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
                     block.append(f"B2 append-only: {r} is append-only; the new content must start with the current content")
             cards = load_cards() if cards is None else cards
             card = cards.get(name)
-            if card:
+            scope = (card or {}).get("write_scope")
+            if cards and not card:
+                block.append(f"B5 scope: {name} has no role card, so it may not write (default deny, Part 4 rule 1)")
+            elif card and scope:
+                if not in_scope(r, scope + SHARED_WRITES):
+                    own = owners(r, cards)
+                    who = f"It belongs to {', '.join(own)}: dispatch that agent, or return the content to the agent that dispatched you." if own                         else "No agent's scope covers it: return the content to the agent that dispatched you."
+                    block.append(f"B5 scope: {name} may write only {', '.join(scope)} (plus {', '.join(SHARED_WRITES)}), not {r}. {who}")
+            elif card:
                 pre = scope_prefixes(card.get("descriptive", {}).get("write_scope_note", ""))
                 if pre and not any(r == p.rstrip("/") or r.startswith(p if p.endswith("/") else p + "/") or r.endswith("/" + p) or r == p for p in pre):
                     note.append(f"L1 scope: {r} is outside {name}'s scope note {pre}")

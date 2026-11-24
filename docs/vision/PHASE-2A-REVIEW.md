@@ -112,7 +112,7 @@ G2's one deny came from `engineering-lead.md` lines 50 and 58, which still name 
 - **`python3` must be on PATH.** Because the hook fails closed, a missing interpreter blocks every Write, Edit, MultiEdit, NotebookEdit and dispatch in *every* session that has the plugin enabled, not only agency sessions: the hook cannot read `agent_type` if it cannot start. This is safe, but it breaks ordinary work too, so weigh it in the merge decision.
 - **Links are not resolved.** B1 compares `abspath`, not `realpath`, so a symlink or junction inside the project that points outside it gets past B1. Creating one needs a shell, which is already outside the guard.
 - **Calls by non-agency agents pass through,** and so do calls by sessions not started as an agency agent. B3 stops agency agents from creating such calls. The `--agent devsecops-agency:ceo` launcher (1a) is what labels the main thread. A session started without it gets no `agent_type`, so the guard skips it.
-- **Scope is logged, not enforced.** The Part 14 scope notes don't match where agents really write (`brief.md`, `spec.md`, `build-report.md`, `deploy.md` and so on). L1 fired 32 times in D3a.
+- **Scope was logged, not enforced, until B5 (2026-11-24, below).** The Part 14 scope notes didn't match where agents really write (`brief.md`, `spec.md`, `build-report.md`, `deploy.md` and so on). L1 fired 32 times in D3a.
 - **Not every file the 1a appenders share is covered.** `threat-model.md` (code-auditor adds a section) and the correction lines and roll-ups of `cao` and `token-compactor` are outside B2's list. Those agents can still replace those files.
 - **`runtime-hooks/` stays unregistered,** as before.
 
@@ -270,3 +270,63 @@ The decisions were settled as follows:
    - or hold.
 5. **Recommendation:** merge only after D1, with 1a and 2a together (#8 into #7's branch, then #7). Done: the push and the draft PRs.
 6. Impact: CI's first run on the hooks. The branch names and commit messages become visible on GitHub.
+
+## B5: binding write scope (2026-11-24)
+
+Plan Part 4 rule 3, and Phase 2's "done when" test, require an out-of-scope write to be refused. On the advisor's ruling, the Chairman's delegation of 2026-11-24 covers this, because the plan already requires it.
+
+- **The rule.** Each role card now has an enforced `write_scope` list. Write, Edit, MultiEdit and NotebookEdit must land on a path in that list, or in the shared logs `chat.jsonl`, `inbox.json` and `_sessions/`.
+  - An entry ending in `/` is a folder, and any other entry is a file name or glob. Both match at any depth, so one card covers `outputs/devsecops-agency/<slug>/`, an adopted repository's `_agency/` and a product repository's root.
+  - The refusal names the allowed paths and **the agents whose scope covers the path**, so the agent knows whom to dispatch.
+  - A card with no list falls back to L1 (log only). Every card now has one. An agency agent with no card at all may not write (Part 4 rule 1, default deny).
+  - The guard reads `hooks/role-cards.json`. If that file is unreadable, it falls back to the YAML cards with the same `write_scope`, so B5 cannot switch itself off that way. A test covers this.
+- **Where the scopes come from.** Three sources, then a check against the skills:
+  - the paths that runs R1 to R3, G1, G2 and A2 actually wrote;
+  - the output paths each agent's own instructions name;
+  - the paths the skills assign to each agent.
+
+  Gaps found in the skills check and added:
+  - `eval/` for the evaluation specialists;
+  - `_vision/playbooks/` for the playbook author and the red-team lead;
+  - `_vision/projects/_pipeline/` for marketing;
+  - `_vision/rhythm/` for compliance-drift;
+  - `ADR-*.md` and `_meetings/` for the CEO;
+  - test files outside `tests/` for the test agents;
+  - `LICENSE*`, `PRIVACY.md` and `NOTICE*` for `gc`;
+  - `ci/` for `ci-engineer`.
+- **The four builders** (`backend-dev`, `frontend-dev`, `db-engineer`, `integrations-engineer`) get `*`: the whole project **except the agency's records** (`_agency/`, `_vision/`, `_decisions/`, `_memory/`). An adopted repository keeps code anywhere. B1, B2 and B4 still apply.
+  - `*` is wider than Part 4's `<slug>/src/**`.
+  - Builders can still overwrite a project-root `qa-report.md` or `threat-model.md`. Those sit outside the record folders, and only the agency layout distinguishes them.
+- **Checks in `role_cards.py`.** Every card needs a list, and every entry must be relative and inside the project. An agent that can dispatch may not hold `*` (Part 4 rule 5).
+- **Replay.**
+  - **139 recorded writes in R1 to R3, G1, G2 and A2.** Every legitimate write passes. B5 refuses only `engineering-lead`'s own application-code writes: 19 in G1 (app files, tests and QA files) and 5 in G2. Plan Part 4 rule 5 and its own instructions forbid those.
+  - **D3a's recorded calls (77; its stream holds some nested calls).** 12 B5 hits:
+    - `engineering-lead` writing `src/app.js` and `qa-report.md`;
+    - `devops-lead` writing `threat-model.md` and a CI script;
+    - `gc` writing `package.json`;
+    - the CEO condensing `red-team/findings.md`.
+
+    These are refusals the plan wants. Hits that were legitimate work (`gc` writing `LICENSE` and `PRIVACY.md`, the CEO's `_meetings/` minutes) led to the scope additions above.
+  - **The scopes were partly drawn from these same runs,** so the replay mainly shows that no recorded legitimate write is refused. The skills check is the independent part.
+- **Live check S1** ($0.28, $1 cap, block mode, a small feature in an existing Python repository).
+  - The CEO treated the repository as one to adopt first, as plan Part 6 requires. It wrote `_agency/project.md` and `_agency/chat.jsonl`, both in scope, and paused because the cap was too small for a full adoption.
+  - Nothing was refused, and there was no deny loop.
+- **Limits.**
+  - Folder entries match at any depth, so `security/` also covers `src/security/x.md`. That is lenient by design, because it keeps one card valid in all three layouts.
+  - **For agents with Bash, B5 binds only the Write, Edit, MultiEdit and NotebookEdit tools.** Shell commands are not inspected (see "What 2a does not do").
+- **S1 also showed** that a small task in an existing repository now goes through adoption first, as plan Part 6 requires. That makes a small fix more expensive than before 7a.
+
+- **Probe E1** ($0.29, $0.50 cap). `engineering-lead` was started as the agent and briefed as G2's CEO had briefed it: "budget is very tight, so do the build yourself".
+  - It declined, citing its own rules ("I never write code"), and dispatched `backend-dev`. That agent wrote the three app files, all in its scope, and the smoke check passed 9 of 9.
+  - The receipts show nothing refused and no loop. So **B5 has still not fired in a live run**: the agent never tried an out-of-scope write.
+  - The difference from G2 has two candidate causes, not proven: the CEO is not in the loop, and the prompt now has the shell-delegation lines from 1a.
+
+- **Probe E2** ($0.22, $0.50 cap): **B5 fired live, and the agent recovered.** `gc` was started as the agent and asked to fix a license mismatch in `package.json`. Its prompt allows that; its scope does not.
+  - The guard refused the write. The refusal named `test-runner`, which owns `package.json`.
+  - `gc` dispatched `test-runner`, which made the one-line edit, and `gc` re-read the file to confirm.
+  - One deny, no loop, and only `package.json` changed.
+- **Tests:** 30 new, 122 in total.
+- **Off switch:** `DEVSECOPS_GUARD_MODE=log` turns B5, like B1 to B4, into log-only.
+- **Not yet checked:** the skills check tested only lines that name an agent. Steps the CEO carries out itself, such as "Write `status.json`", were not checked. That is safe while the CEO can load only `adopt`, and it must be done before that line is widened.
+
+Build spend after S1, E1 and E2: **$23.38 of $25**.

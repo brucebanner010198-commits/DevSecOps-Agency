@@ -5,11 +5,11 @@ agents/role-cards.yaml is the single source for the fields Claude Code
 enforces: `tools`, `effort` and `maxTurns`. This script writes those three
 fields into each agent file's frontmatter and leaves every other byte alone.
 `model` is recorded in the cards but never written, because changing a tier
-is a Chairman-only decision. `shell` and `write_scope` are enforced by hooks
-(Phase 2a), not by Claude Code.
+is a Chairman-only decision. `shell` is a label until there is a sandbox, and
+`write_scope` is enforced by the guard hook (rule B5), not by Claude Code.
 
 `write` also writes hooks/role-cards.json, the slice of the cards the Phase 2a
-guard reads (file and scope note), so the guard needs only the standard
+guard reads (file, write_scope and scope note), so the guard needs only the standard
 library. `check` fails if that file is stale.
 
     python scripts/role_cards.py check                 # exit 1 on any drift or rule breach
@@ -48,6 +48,7 @@ def load_cards() -> dict:
 def guard_json(cards: dict) -> str:
     """The guard's slice of the cards, as LF-only JSON with sorted keys."""
     slim = {name: {"file": c["file"],
+                   "write_scope": list(c["enforced"].get("write_scope") or []),
                    "descriptive": {"write_scope_note": (c.get("descriptive") or {}).get("write_scope_note", "")}}
             for name, c in cards.items()}
     doc = {"_generated": "from agents/role-cards.yaml by scripts/role_cards.py write; do not edit", "agents": slim}
@@ -134,6 +135,15 @@ def rule_errors(name: str, card: dict) -> list[str]:
         errs.append("web access with a shell (Part 4 rule 2)")
     if name == "ceo" and ({"Edit", "Bash"} & set(tools)):
         errs.append("ceo holds Edit or Bash")
+    scope = e.get("write_scope")
+    if not isinstance(scope, list) or not scope or not all(isinstance(s, str) and s for s in scope):
+        errs.append("write_scope must be a non-empty list of paths")
+    else:
+        bad = [s for s in scope if s.startswith(("/", "\\")) or ":" in s or ".." in s.split("/")]
+        if bad:
+            errs.append(f"write_scope entries must be relative, inside the project: {bad}")
+        if "*" in scope and ({"Agent"} & set(tools)):
+            errs.append("an orchestrator may not hold write_scope * (Part 4 rule 5)")
     return errs
 
 

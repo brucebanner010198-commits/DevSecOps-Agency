@@ -218,18 +218,119 @@ def test_missing_cards_are_noted_not_silent(project, monkeypatch):
 
 def test_scope_notes_work_without_pyyaml(project, tmp_path_factory):
     # The guard runs under whatever python3 is on PATH (on Windows, often one without PyYAML).
-    # It reads hooks/role-cards.json, so L1 must still fire and no L0 note may appear.
+    # It reads hooks/role-cards.json, so the scope rule (B5) must still fire and no L0 note may appear.
     stub = tmp_path_factory.mktemp("noyaml")
     (stub / "yaml.py").write_text('raise ImportError("PyYAML hidden for this test")\n', encoding="utf-8")
     env = dict(os.environ, CLAUDE_PROJECT_DIR=str(project), PYTHONPATH=str(stub))
     d = call("Write", {"file_path": str(project / "src" / "x.js"), "content": ""}, "devsecops-agency:qa-lead")
     p = subprocess.run([sys.executable, GUARD], input=json.dumps(d).encode(), env=env, capture_output=True)
-    assert p.returncode == 0
+    assert p.returncode == 2
     rules = json.loads((project / ".devsecops-agency" / "receipts.jsonl").read_text().splitlines()[-1])["rules"]
-    assert any(r.startswith("L1") for r in rules) and not any(r.startswith("L0") for r in rules)
+    assert any(r.startswith("B5") for r in rules) and not any(r.startswith("L0") for r in rules)
 
 
 def test_bare_agency_name_is_refused_with_the_qualified_form(project):
     cards = {"frontend-dev": {"file": "agents/engineering/frontend-dev.md", "descriptive": {"write_scope_note": "src/"}}}
     b, _ = guard.check(call("Agent", {"subagent_type": "frontend-dev"}, "devsecops-agency:engineering-lead"), cards)
     assert len(b) == 1 and b[0].startswith("B3") and "devsecops-agency:frontend-dev" in b[0] and "cro" not in b[0]
+
+
+# --- B5 write scope -----------------------------------------------------------------------
+
+SCOPED = {
+    "security-lead": {"file": "agents/security/security-lead.md",
+                      "write_scope": ["security/", "threat-model.md", "_agency/baseline/*.md"]},
+    "frontend-dev": {"file": "agents/execution/frontend-dev.md", "write_scope": ["*"]},
+    "qa-lead": {"file": "agents/quality/qa-lead.md", "descriptive": {"write_scope_note": "qa/"}},
+}
+
+
+def scoped(project, agent, rel):
+    return guard.check(call("Write", {"file_path": str(project / rel), "content": ""}, "devsecops-agency:" + agent), SCOPED)
+
+
+@pytest.mark.parametrize("rel", [
+    "threat-model.md",
+    "outputs/devsecops-agency/app/threat-model.md",
+    "security/audit.md",
+    "outputs/devsecops-agency/app/security/x/y.md",
+    "_agency/baseline/threat-model.md",
+    "outputs/devsecops-agency/app/chat.jsonl",
+    "_sessions/security-lead/s1.jsonl",
+    "inbox.json",
+])
+def test_in_scope_writes_pass(project, rel):
+    assert scoped(project, "security-lead", rel)[0] == []
+
+
+@pytest.mark.parametrize("rel", [
+    "outputs/devsecops-agency/app/app/app.js",
+    "src/main.py",
+    "security.md",
+    "my-security/x.md",
+    "_agency/system-map.md",
+])
+def test_out_of_scope_writes_block_and_name_the_scope(project, rel):
+    b = scoped(project, "security-lead", rel)[0]
+    assert len(b) == 1 and b[0].startswith("B5") and "threat-model.md" in b[0]
+
+
+def test_star_scope_allows_any_project_path_but_not_outside(project, tmp_path_factory):
+    assert scoped(project, "frontend-dev", "anything/at/all.js")[0] == []
+    outside = tmp_path_factory.mktemp("elsewhere") / "x.js"
+    b, _ = guard.check(call("Write", {"file_path": str(outside), "content": ""}, "devsecops-agency:frontend-dev"), SCOPED)
+    assert any(x.startswith("B1") for x in b)
+
+
+def test_card_without_write_scope_falls_back_to_log_only(project):
+    b, n = scoped(project, "qa-lead", "src/x.js")
+    assert b == [] and any(x.startswith("L1") for x in n)
+
+
+def test_scope_applies_to_edit_too(project):
+    (project / "src").mkdir()
+    (project / "src" / "a.js").write_text("x", encoding="utf-8")
+    d = call("Edit", {"file_path": str(project / "src" / "a.js"), "old_string": "x", "new_string": "y"}, "devsecops-agency:security-lead")
+    assert any(x.startswith("B5") for x in guard.check(d, SCOPED)[0])
+
+
+def test_every_real_card_has_a_scope_and_orchestrators_cannot_write_code():
+    cards = guard.load_cards()
+    assert all(c.get("write_scope") for c in cards.values())
+    for chief in ("ceo", "engineering-lead", "security-lead", "qa-lead", "pm-lead"):
+        assert not guard.in_scope("outputs/devsecops-agency/x/src/app.js", cards[chief]["write_scope"])
+
+
+def test_star_scope_excludes_the_agencys_records(project):
+    for rel in ("_agency/baseline/tests.md", "outputs/devsecops-agency/app/_vision/x.md", "_decisions/a.md", "_memory/m.md"):
+        assert any(x.startswith("B5") for x in scoped(project, "frontend-dev", rel)[0]), rel
+    assert scoped(project, "frontend-dev", "outputs/devsecops-agency/app/src/vision.js")[0] == []
+
+
+def test_refusal_names_the_owning_agent(project):
+    b = scoped(project, "frontend-dev", "_agency/baseline/threat-model.md")[0]
+    assert "security-lead" in b[0]
+
+
+def test_agency_agent_without_a_card_may_not_write(project):
+    b, _ = guard.check(call("Write", {"file_path": str(project / "x.md"), "content": ""}, "devsecops-agency:ghost"), SCOPED)
+    assert any(x.startswith("B5") and "no role card" in x for x in b)
+
+
+def test_yaml_fallback_keeps_write_scope(monkeypatch, tmp_path):
+    # With hooks/role-cards.json unreadable, the guard must still enforce B5 from the YAML cards.
+    import shutil
+    root = tmp_path / "plug"
+    (root / "hooks").mkdir(parents=True)
+    (root / "agents").mkdir()
+    shutil.copy(Path(GUARD).parent.parent / "agents" / "role-cards.yaml", root / "agents" / "role-cards.yaml")
+    monkeypatch.setattr(guard, "PLUGIN_ROOT", root)
+    cards = guard.load_cards()
+    assert cards["security-lead"]["write_scope"] and "threat-model.md" in cards["security-lead"]["write_scope"]
+
+
+def test_refusal_for_code_names_the_builders():
+    cards = guard.load_cards()
+    b, _ = guard.check(call("Write", {"file_path": os.path.join(os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd()), "src", "app.js"), "content": ""},
+                            "devsecops-agency:engineering-lead"), cards)
+    assert len(b) == 1 and b[0].startswith("B5") and "frontend-dev" in b[0] and "backend-dev" in b[0]
