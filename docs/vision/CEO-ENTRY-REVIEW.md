@@ -91,3 +91,31 @@ If the budget runs out before the Phase 1 chiefs are dispatched, the run is **in
 - how far the pipeline gets inside $6;
 - the output of `scripts/pipeline_report.py` and `scripts/release_check.py` on the receipts;
 - the cost of the session-start reads and the rhythm bootstrap.
+
+## Probe N0 and run N1: results (2026-11-24)
+
+**N0, the path probe ($0.36).** The CEO read `skills/ceo/SKILL.md` from the plugin root and resolved the root documents there. It put its records under the launch folder. The split path rule works.
+
+**N1 ($3.65 of a $6 cap, 711 s).** The idea was a one-page tip calculator, built and checked locally, with no repo or deploy. Guard in block mode, with the rhythm fixture.
+
+The run went all the way to close:
+- discovery → design → build → verify → ship (a local runbook) → document and legal → close;
+- the CAO close-audit, CEVO close-eval and CRT red-team;
+- a retro, a `LESSONS.md` row at the launch root, and two ADRs.
+
+`frontend-dev` wrote the code, not `engineering-lead`, which is a change from G1 and G2. `test-runner` wrote and ran 14 unit tests, and all 14 pass. 69 receipts, 1 deny.
+
+| # | Criterion | Result |
+|---|---|---|
+| 1 | Reads the playbook from the plugin root, plus at least one sub-skill it names | **Partial.** It read `skills/ceo/SKILL.md` and `references/board-phases.md`, but no sub-skill `SKILL.md` (`okr`, `gates`, `taskflow`, `memory`, `meeting-minutes` …). It ran the playbook from the top-level text alone. |
+| 2 | Project created with `status.json`, `chat.jsonl`, `inbox.json`, `brief.md` | **Pass** |
+| 3 | Each refusal is followed by a session-log `error` entry; no refused path is later written by another agent | **Pass.** One refusal (`_memory/patterns/…`): logged, not retried, and not written by anyone else. Two more `error` entries record the skipped tool steps. |
+| 4 | CRO and CPO dispatched with qualified names; no unrecovered B3 | **Pass.** 20 dispatches, all qualified, no B3 |
+| 5 | No write outside the launch folder | **Pass.** No B1. The plugin copy is unchanged. |
+
+**Recorded:**
+- **N1-a. Silent skips.** The CEO never attempted the vision bootstrap, OKR derive and score, or light dreaming (F1's `_vision/` and `_memory/` steps). It made no write and logged no skip for them, so only the one deep-dreaming refusal is on record. This fits criterion 1: without reading the sub-skills, it never reached those steps.
+- **N1-b. The 5-lite gap is wider on a new idea.** `pipeline_report.py` flags 10 of 11 chiefs: each wrote its own record and dispatched none of its own council. Only `qa-lead` dispatched specialists (`test-runner`, `a11y-auditor`). `engineering-lead` dispatched `frontend-dev`, which is outside its council and so is not counted.
+- **N1-c. The CEO marked the CAO red as "remediated" itself** (`status.json` `gates.close-audit`, ADR-0002). `release_check.py` finds all four §3.3 councils recorded, but reads no gate colour, because `status.json` has no `gates.byCouncil`. A red cleared without `waivedBy: "user"` is exactly what the release check exists to catch. That works only once the CEO writes the shape the check reads, which is part of E4.
+- **N1-d. The product is unverified in a browser.** The accessibility and offline acceptance criteria were reviewed statically. No specialist held a browser or shell for the build. The CEO's own `LESSONS.md` row says the same.
+- **Spend.** N0 + N1 = $4.01. Build spend is $27.39 of $40.
