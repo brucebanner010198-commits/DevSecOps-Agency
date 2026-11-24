@@ -38,6 +38,7 @@ EFFORTS = {"low", "medium", "high", "xhigh", "max"}
 # Tools a role card may grant. Anything else is a typo or an unreviewed widening.
 KNOWN_TOOLS = {"Read", "Write", "Edit", "Grep", "Glob", "Bash", "Agent", "WebSearch", "WebFetch"}
 SHELLS = {None, "full", "sandboxed", "read-only"}
+ACTIVATION = {"core", "department", "on-demand"}  # Part 2 activation tiers ("Specialist" = on-demand)
 
 
 def load_cards() -> dict:
@@ -116,6 +117,8 @@ def rule_errors(name: str, card: dict) -> list[str]:
     e = card["enforced"]
     tools = e["tools"]
     errs = []
+    if card.get("activation") not in ACTIVATION:
+        errs.append(f"activation {card.get('activation')!r} is not one of {sorted(ACTIVATION)}")
     unknown = sorted(set(tools) - KNOWN_TOOLS)
     if unknown:
         errs.append(f"unknown tool(s) {unknown}")
