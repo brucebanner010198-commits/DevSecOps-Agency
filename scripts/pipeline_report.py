@@ -10,7 +10,12 @@ A chief is any agent whose role card grants `Agent` (it can dispatch), other
 than `ceo` and `board-director`. A chief is flagged when it wrote at least one
 file and dispatched no agent from its own council during the run. That is
 the pattern G1, G2 and adoption run A2 showed: the chief wrote its
-specialist's record itself.
+specialist's record itself. Dispatches outside the chief's council (such as
+engineering-lead to the execution builders) do not count; cross-council
+dispatch is still an open decision, and the flag line lists them.
+
+Every decision except "deny" counts, so a run in log mode (would-deny) is
+reported the same way.
 
     python scripts/pipeline_report.py <project-dir>          # print the report
     python scripts/pipeline_report.py <project-dir> --json   # machine-readable
@@ -27,9 +32,6 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 PREFIX = "devsecops-agency:"
 EXEMPT = {"ceo", "board-director"}
-# Recorded cross-council dispatches (2a pack, decision 4; 1a pack, decision 4): the builders
-# live in the execution council but work for these chiefs.
-ALSO_OWN = {"engineering-lead": {"execution"}, "pm-lead": {"execution"}}
 
 
 def load_cards() -> dict:
@@ -62,14 +64,16 @@ def report(receipts: list[dict], cards: dict) -> dict:
         if not agent.startswith(PREFIX):
             continue
         name = agent[len(PREFIX):]
-        if r.get("tool") in ("Write", "Edit", "MultiEdit", "NotebookEdit") and r.get("decision") == "allow":
+        if r.get("decision") == "deny":
+            continue
+        if r.get("tool") in ("Write", "Edit", "MultiEdit", "NotebookEdit"):
             wrote.setdefault(name, []).append(r.get("path") or "")
-        if r.get("tool") in ("Agent", "Task") and r.get("decision") == "allow":
-            dispatched.setdefault(name, []).append((r.get("target") or "")[len(PREFIX):])
+        if r.get("tool") in ("Agent", "Task"):
+            target = r.get("target") or ""
+            dispatched.setdefault(name, []).append(target[len(PREFIX):] if target.startswith(PREFIX) else target)
     flagged = []
     for name in sorted(chiefs & (set(wrote) | set(dispatched))):
-        mine = {council(cards[name])} | ALSO_OWN.get(name, set())
-        own = [t for t in dispatched.get(name, []) if t in cards and council(cards[t]) in mine]
+        own = [t for t in dispatched.get(name, []) if t in cards and council(cards[t]) == council(cards[name])]
         if wrote.get(name) and not own:
             flagged.append({"chief": name, "files": len(wrote[name]), "dispatched": dispatched.get(name, [])})
     return {

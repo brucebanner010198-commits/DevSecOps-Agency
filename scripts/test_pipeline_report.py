@@ -36,8 +36,16 @@ def test_dispatch_outside_own_council_does_not_count():
     assert flagged([d("gc", "threat-modeler"), w("gc")]) == ["gc"]
 
 
-def test_recorded_exception_for_builders():
-    assert flagged([d("engineering-lead", "frontend-dev"), w("engineering-lead", "architecture.md")]) == []
+def test_builders_outside_the_council_do_not_count():
+    assert flagged([d("engineering-lead", "frontend-dev"), w("engineering-lead", "architecture.md")]) == ["engineering-lead"]
+
+
+def test_would_deny_calls_count_and_bare_targets_are_kept():
+    rs = [{"agent": P + "qa-lead", "tool": "Agent", "target": "test-runner", "decision": "would-deny"},
+          {"agent": P + "qa-lead", "tool": "Write", "path": "qa.md", "decision": "would-deny"}]
+    rep = pr.report(rs, CARDS)
+    assert rep["chiefs_seen"] == ["qa-lead"]
+    assert rep["flagged"] == []  # the bare name still resolves to its own-council card
 
 
 def test_ceo_and_specialists_are_never_flagged():

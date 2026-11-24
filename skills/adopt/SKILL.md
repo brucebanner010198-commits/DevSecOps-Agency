@@ -25,7 +25,7 @@ All records go in one folder inside the repository: `_agency/`. The guard's own 
 | Record | Written by |
 | --- | --- |
 | `_agency/project.md` | `ceo` |
-| `_agency/chat.jsonl` | every chief (append-only) |
+| `_agency/chat.jsonl` | `ceo` (append-only) |
 | `_agency/system-map.md` | `legacy-code-specialist`, through `engineering-lead` |
 | `_agency/baseline/tests.md` | `test-runner`, through `qa-lead` |
 | `_agency/baseline/threat-model.md` | `threat-modeler`, through `security-lead` |

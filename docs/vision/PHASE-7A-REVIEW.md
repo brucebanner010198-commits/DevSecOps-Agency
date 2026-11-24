@@ -44,6 +44,13 @@ On re-entry, the skill compares the recorded adoption commit with the current on
 4. **Running the repository's tests needs the Chairman's yes** in step 1, because it executes someone else's code with no OS sandbox. Without the yes, the baseline records "not run: not authorised".
 5. **No `.gitignore` edit during adoption.** Ignoring `.devsecops-agency/` is the report's first recommended step instead, because adoption changes nothing.
 
+## Not exercised by A2
+
+- Re-entry, the adoption-commit comparison.
+- The access question in step 1: the prompt already authorised the run.
+- The not-authorised branch.
+- The refused-write fallback: no write was refused.
+
 ## Not built (later 7 work, or blocked)
 
 - Change-request classes and their gate entry points need the gates (Phase 5).
@@ -91,15 +98,23 @@ Today's advisor note suggested a one-file B1 exception for the plugin-root `LESS
 
 `scripts/pipeline_report.py <project-dir>` reads the guard's receipts and flags each chief that wrote a file but dispatched no agent of its own council. It is read-only and log-only: it blocks nothing, so it needs no E4 decision.
 - The ceo and the board director are exempt.
-- The recorded builder exception counts `engineering-lead` and `pm-lead` dispatching the execution council as their own.
+- Dispatches outside a chief's own council don't count. Cross-council dispatch is still an open decision (2a pack, D3), and the flag line lists those dispatches.
+- Every decision except `deny` counts, so a log-mode run (`would-deny`) is reported the same way.
 
-Replayed on recorded runs, it flags exactly the known compressions:
+On replay of recorded runs it flags:
 
 | Run | Flagged |
 | --- | --- |
-| G1 and G2 | `security-lead` |
-| A2 | `gc`, `devops-lead` and `pm-lead` |
+| G1 | `security-lead`, `engineering-lead` |
+| G2 | `security-lead`, `engineering-lead` |
+| A2 | `gc`, `devops-lead`, `pm-lead` |
 
-There are 7 tests in `scripts/test_pipeline_report.py`, which CI's `scripts` suite runs. Making it a gate, so that a phase cannot close without the specialist's receipt, is 5-lite proper and waits for E4.
+**New finding from the replay: `engineering-lead` wrote application code itself in G1 and G2.**
+- In G1 it edited `app/app.js`, `app/calc.js`, `app/index.html`, `app/styles.css` and `app/tests/calc.test.js`, plus QA files.
+- In G2 it wrote `app/calc.js`, `app/main.js`, `app/index.html`, `app/styles.css` and `app/calc.test.mjs`.
+- It dispatched the builders, but no architecture specialist, though its prompt says to dispatch `api-designer`.
+- Its prompt says "Write code yourself (specialists do)" under "What you never do", and plan Part 4 rule 5 says orchestrators have no write access to source code. Only prompts stand behind that today, because L1 scope is log-only (2a pack, D3).
+
+There are 8 tests in `scripts/test_pipeline_report.py`, which CI's `scripts` suite runs. Making it a gate, so that a phase cannot close without the specialist's receipt, is 5-lite proper and waits for E4.
 
 Phase 2b (the broker and signed receipts) was checked against the same tests and not started. It adds blocking authority and needs a signing identity, and both are reserved.
