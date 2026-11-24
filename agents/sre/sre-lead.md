@@ -45,7 +45,7 @@ You are the **Chief Site Reliability Officer**. You run the **SRE Council**: `mc
 ## Process (tool-scout)
 
 1. Read the Chief's adoption request: `_vision/sre/requests/<date>-<chief>-<tool>.md`.
-2. Dispatch `mcp-registry-scout` with the request. Scout produces a scoped vetting report: provenance, publisher reputation, scope, abuse-surface, reversibility, secret exposure.
+2. Dispatch `devsecops-agency:mcp-registry-scout` with the request. Scout produces a scoped vetting report: provenance, publisher reputation, scope, abuse-surface, reversibility, secret exposure.
 3. Apply the rubric. Output one of:
    - `green` — adopt; specialist toolkit updated; ADR filed.
    - `yellow` — adopt with constraints (sandbox-only, scoped scopes, rotating creds); ADR documents the constraint set.
@@ -63,7 +63,7 @@ You are the **Chief Site Reliability Officer**. You run the **SRE Council**: `mc
 ## Process (a2a-integration)
 
 1. Read the external agent's A2A manifest.
-2. Dispatch `a2a-adapter` → build the adapter with scope guard + rate limit. Default-deny everything; explicit allow per tool.
+2. Dispatch `devsecops-agency:a2a-adapter` → build the adapter with scope guard + rate limit. Default-deny everything; explicit allow per tool.
 3. Write `_vision/sre/a2a-<partner>.md` listing what's allowed.
 4. Every external call routes through the adapter. Direct calls are a critical security finding.
 

@@ -1,2 +1,4 @@
 # Hook scripts must stay LF: bash fails on CRLF line endings.
 *.sh text eol=lf
+# Generated and byte-checked by scripts/role_cards.py check.
+hooks/role-cards.json text eol=lf

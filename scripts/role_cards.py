@@ -8,6 +8,10 @@ fields into each agent file's frontmatter and leaves every other byte alone.
 is a Chairman-only decision. `shell` and `write_scope` are enforced by hooks
 (Phase 2a), not by Claude Code.
 
+`write` also writes hooks/role-cards.json, the slice of the cards the Phase 2a
+guard reads (file and scope note), so the guard needs only the standard
+library. `check` fails if that file is stale.
+
     python scripts/role_cards.py check                 # exit 1 on any drift or rule breach
     python scripts/role_cards.py write                 # write tools, effort and maxTurns
     python scripts/role_cards.py write --only remove   # only remove tools the card no longer grants
@@ -28,6 +32,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 CARDS = ROOT / "agents" / "role-cards.yaml"
+GUARD_CARDS = ROOT / "hooks" / "role-cards.json"
 FM = re.compile(r"\A---(\r?\n)(.*?)\r?\n---\r?\n", re.S)
 EFFORTS = {"low", "medium", "high", "xhigh", "max"}
 # Tools a role card may grant. Anything else is a typo or an unreviewed widening.
@@ -38,6 +43,15 @@ SHELLS = {None, "full", "sandboxed", "read-only"}
 def load_cards() -> dict:
     data = yaml.safe_load(CARDS.read_text(encoding="utf-8"))
     return data["agents"]
+
+
+def guard_json(cards: dict) -> str:
+    """The guard's slice of the cards, as LF-only JSON with sorted keys."""
+    slim = {name: {"file": c["file"],
+                   "descriptive": {"write_scope_note": (c.get("descriptive") or {}).get("write_scope_note", "")}}
+            for name, c in cards.items()}
+    doc = {"_generated": "from agents/role-cards.yaml by scripts/role_cards.py write; do not edit", "agents": slim}
+    return json.dumps(doc, indent=1, sort_keys=True, ensure_ascii=False) + "\n"
 
 
 def split(path: Path) -> tuple[str, str, str, str]:
@@ -167,6 +181,14 @@ def main(argv: list[str]) -> int:
                 problems.append(f"{rel}: frontmatter drifts from its role card")
     for rel in sorted(set(files) - seen):
         problems.append(f"{rel}: agent has no role card")
+    want_json = guard_json(cards)
+    have_json = GUARD_CARDS.read_bytes().decode("utf-8").replace("\r\n", "\n") if GUARD_CARDS.exists() else None
+    if want_json != have_json:
+        if mode == "write":
+            GUARD_CARDS.write_bytes(want_json.encode("utf-8"))
+            print(f"wrote {GUARD_CARDS.relative_to(ROOT).as_posix()}")
+        else:
+            problems.append("hooks/role-cards.json: drifts from agents/role-cards.yaml")
     if problems:
         for p in problems:
             print(p)
