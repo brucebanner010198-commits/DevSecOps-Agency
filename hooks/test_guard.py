@@ -299,3 +299,31 @@ def test_every_real_card_has_a_scope_and_orchestrators_cannot_write_code():
     assert all(c.get("write_scope") for c in cards.values())
     for chief in ("ceo", "engineering-lead", "security-lead", "qa-lead", "pm-lead"):
         assert not guard.in_scope("outputs/devsecops-agency/x/src/app.js", cards[chief]["write_scope"])
+
+
+def test_star_scope_excludes_the_agencys_records(project):
+    for rel in ("_agency/baseline/tests.md", "outputs/devsecops-agency/app/_vision/x.md", "_decisions/a.md", "_memory/m.md"):
+        assert any(x.startswith("B5") for x in scoped(project, "frontend-dev", rel)[0]), rel
+    assert scoped(project, "frontend-dev", "outputs/devsecops-agency/app/src/vision.js")[0] == []
+
+
+def test_refusal_names_the_owning_agent(project):
+    b = scoped(project, "frontend-dev", "_agency/baseline/threat-model.md")[0]
+    assert "security-lead" in b[0]
+
+
+def test_agency_agent_without_a_card_may_not_write(project):
+    b, _ = guard.check(call("Write", {"file_path": str(project / "x.md"), "content": ""}, "devsecops-agency:ghost"), SCOPED)
+    assert any(x.startswith("B5") and "no role card" in x for x in b)
+
+
+def test_yaml_fallback_keeps_write_scope(monkeypatch, tmp_path):
+    # With hooks/role-cards.json unreadable, the guard must still enforce B5 from the YAML cards.
+    import shutil
+    root = tmp_path / "plug"
+    (root / "hooks").mkdir(parents=True)
+    (root / "agents").mkdir()
+    shutil.copy(Path(GUARD).parent.parent / "agents" / "role-cards.yaml", root / "agents" / "role-cards.yaml")
+    monkeypatch.setattr(guard, "PLUGIN_ROOT", root)
+    cards = guard.load_cards()
+    assert cards["security-lead"]["write_scope"] and "threat-model.md" in cards["security-lead"]["write_scope"]

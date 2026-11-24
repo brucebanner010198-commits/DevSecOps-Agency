@@ -92,7 +92,8 @@
    },
    "file": "agents/evaluation/benchmark-runner.md",
    "write_scope": [
-    "_vision/eval/"
+    "_vision/eval/",
+    "eval/"
    ]
   },
   "board-director": {
@@ -112,7 +113,8 @@
    "write_scope": [
     "marketing/",
     "_vision/brand-guide.md",
-    "_vision/history/"
+    "_vision/history/",
+    "_vision/projects/_pipeline/"
    ]
   },
   "budget-monitor": {
@@ -122,7 +124,8 @@
    "file": "agents/evaluation/budget-monitor.md",
    "write_scope": [
     "_vision/eval/",
-    "_vision/cost/"
+    "_vision/cost/",
+    "eval/"
    ]
   },
   "cao": {
@@ -150,7 +153,9 @@
     "adr-*.md",
     "LESSONS.md",
     "_agency/project.md",
-    "_agency/adoption-report.md"
+    "_agency/adoption-report.md",
+    "ADR-*.md",
+    "_meetings/"
    ]
   },
   "chaos-engineer": {
@@ -170,7 +175,8 @@
    "file": "agents/devops/ci-engineer.md",
    "write_scope": [
     ".github/",
-    "deploy/"
+    "deploy/",
+    "ci/"
    ]
   },
   "cmo": {
@@ -179,7 +185,8 @@
    },
    "file": "agents/marketing/cmo.md",
    "write_scope": [
-    "marketing/"
+    "marketing/",
+    "_vision/projects/_pipeline/"
    ]
   },
   "code-auditor": {
@@ -199,7 +206,8 @@
    },
    "file": "agents/marketing/comms-writer.md",
    "write_scope": [
-    "marketing/"
+    "marketing/",
+    "_vision/projects/_pipeline/"
    ]
   },
   "competitive-analyst": {
@@ -218,7 +226,8 @@
    "file": "agents/legal/compliance-drift.md",
    "write_scope": [
     "legal/",
-    "_vision/legal/"
+    "_vision/legal/",
+    "_vision/rhythm/"
    ]
   },
   "compliance-officer": {
@@ -404,7 +413,10 @@
     "legal/",
     "legal-review.md",
     "_vision/legal/",
-    "_agency/baseline/licenses.md"
+    "_agency/baseline/licenses.md",
+    "LICENSE*",
+    "PRIVACY.md",
+    "NOTICE*"
    ]
   },
   "growth-analyst": {
@@ -413,7 +425,8 @@
    },
    "file": "agents/marketing/growth-analyst.md",
    "write_scope": [
-    "marketing/"
+    "marketing/",
+    "_vision/projects/_pipeline/"
    ]
   },
   "hiring-lead": {
@@ -632,7 +645,9 @@
    },
    "file": "agents/red-team/playbook-author.md",
    "write_scope": [
-    "red-team/"
+    "red-team/",
+    "_vision/playbooks/",
+    "ARCHIVE.md"
    ]
   },
   "pm-lead": {
@@ -656,7 +671,8 @@
    },
    "file": "agents/marketing/positioning-strategist.md",
    "write_scope": [
-    "marketing/"
+    "marketing/",
+    "_vision/projects/_pipeline/"
    ]
   },
   "privacy-counsel": {
@@ -720,7 +736,8 @@
     "red-team/",
     "red-team.md",
     "_vision/red-team/",
-    "_worktrees/"
+    "_worktrees/",
+    "_vision/playbooks/"
    ]
   },
   "regression-detector": {
@@ -729,7 +746,8 @@
    },
    "file": "agents/evaluation/regression-detector.md",
    "write_scope": [
-    "_vision/eval/"
+    "_vision/eval/",
+    "eval/"
    ]
   },
   "roadmap-planner": {
@@ -880,7 +898,11 @@
     "tests/",
     "test/",
     "qa/",
-    "test-matrix.md"
+    "test-matrix.md",
+    "test_*.py",
+    "*_test.py",
+    "*.test.*",
+    "*.spec.*"
    ]
   },
   "test-runner": {
@@ -896,7 +918,11 @@
     "pyproject.toml",
     "requirements*.txt",
     "_agency/baseline/tests.md",
-    "_agency/baseline/integrity.md"
+    "_agency/baseline/integrity.md",
+    "test_*.py",
+    "*_test.py",
+    "*.test.*",
+    "*.spec.*"
    ]
   },
   "threat-modeler": {
@@ -916,7 +942,8 @@
    },
    "file": "agents/evaluation/token-compactor.md",
    "write_scope": [
-    "_vision/eval/"
+    "_vision/eval/",
+    "eval/"
    ]
   },
   "tool-abuse-tester": {
