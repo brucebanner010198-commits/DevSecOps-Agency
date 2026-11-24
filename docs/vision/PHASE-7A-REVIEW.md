@@ -16,9 +16,11 @@ Plan Part 6, "Working on an existing project":
 |---|---|---|
 | 1. Receive | `skills/adopt`, CEO | Records the repository, the instruction and the adoption commit in `_agency/project.md`. Asks the Chairman for one access item, running the repository's code on this machine, in one message. |
 | 2. Map | `engineering-lead`, then `legacy-code-specialist` (new), checked by `system-architect` | `_agency/system-map.md`, with a path for every claim |
-| 3. Baseline | `qa-lead` → `test-runner` (tests run only if authorised); `security-lead` → `threat-modeler`, `sbom-slsa`, `dlp-scanner`; `gc` → `license-checker`; `devops-lead` → `deployment-engineer` | `_agency/baseline/*.md` |
+| 3. Baseline | `qa-lead` → `test-runner` (tests run only if authorised); `security-lead` → `threat-modeler`, `code-auditor` (secrets by Grep; dependency audit only if authorised); `gc` → `license-checker`; `devops-lead` → `deployment-engineer` | `_agency/baseline/*.md` |
 | 4. Reconstruct intent | `pm-lead` → `spec-writer` | `_agency/spec-as-is.md`, with unknowns listed as questions |
-| 5. Report | CEO | `_agency/adoption-report.md`; then the CEO stops for the Chairman's approval (step 6) |
+| 5. Integrity, then report | `qa-lead` → `test-runner` (`git status --porcelain`, `git rev-parse HEAD`); CEO | `_agency/baseline/integrity.md`; `_agency/adoption-report.md`, with any write outside `_agency/` reported as a breach. Then the CEO stops for the Chairman's approval (step 6) |
+
+Every dispatch starts with a word-for-word **adoption brief**: do only this one task, write only this one file, change nothing else, and pass the brief on. Without it, the five other chiefs would run their build-from-nothing processes: test design, CI and `deploy/` files, and `threat-model.md` at the root. `dlp-scanner` and `sbom-slsa` were dropped after their bodies were read. One guards outbound calls and the other attests releases; neither scans a repository. "No code changes" rests on the brief plus the step 5 check, **not on the guard**. If a specialist's write is refused (as in D3a), it returns the text and its chief writes it unchanged.
 
 On re-entry, the skill compares the recorded adoption commit with the current one and re-maps first if they differ. This is the simplest form of the plan's drift rule.
 
