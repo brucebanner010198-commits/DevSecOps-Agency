@@ -327,3 +327,10 @@ def test_yaml_fallback_keeps_write_scope(monkeypatch, tmp_path):
     monkeypatch.setattr(guard, "PLUGIN_ROOT", root)
     cards = guard.load_cards()
     assert cards["security-lead"]["write_scope"] and "threat-model.md" in cards["security-lead"]["write_scope"]
+
+
+def test_refusal_for_code_names_the_builders():
+    cards = guard.load_cards()
+    b, _ = guard.check(call("Write", {"file_path": os.path.join(os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd()), "src", "app.js"), "content": ""},
+                            "devsecops-agency:engineering-lead"), cards)
+    assert len(b) == 1 and b[0].startswith("B5") and "frontend-dev" in b[0] and "backend-dev" in b[0]

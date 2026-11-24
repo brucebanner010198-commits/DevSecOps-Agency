@@ -73,7 +73,7 @@ APPEND_ONLY = [
 APPEND_ONLY += ["*/" + g for g in APPEND_ONLY if not g.startswith("*/")]
 APPEND_ONLY = sorted(set(APPEND_ONLY))
 RECEIPTS_DIR = ".devsecops-agency"
-# Logs every agent may write, whatever its scope (each is also append-only under B2).
+# Logs every agent may write, whatever its scope (chat.jsonl and _sessions/ are also append-only under B2).
 SHARED_WRITES = ["chat.jsonl", "inbox.json", "_sessions/"]
 # The agency's own records. A "*" scope (the builders) covers the whole project except these.
 RECORD_DIRS = ["_agency/", "_vision/", "_decisions/", "_memory/"]
@@ -153,8 +153,13 @@ def load_cards() -> dict:
 
 
 def owners(relpath: str, cards: dict) -> list[str]:
-    """Agents whose write_scope covers relpath, excluding the builders' catch-all."""
-    return sorted(n for n, c in cards.items() if c.get("write_scope") and "*" not in c["write_scope"]
+    """Agents whose write_scope covers relpath. Named entries come first; the builders' catch-all
+    ("*") is listed only when no named entry covers the path."""
+    named = sorted(n for n, c in cards.items() if c.get("write_scope") and "*" not in c["write_scope"]
+                   and in_scope(relpath, c["write_scope"]))
+    if named:
+        return named
+    return sorted(n for n, c in cards.items() if c.get("write_scope") and "*" in c["write_scope"]
                   and in_scope(relpath, c["write_scope"]))
 
 
