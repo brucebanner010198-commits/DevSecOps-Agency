@@ -28,7 +28,7 @@ The direct 1:1 agency ↔ Chairman convening. Everything else is a chat message.
 | Top-5 pipeline handoff | `_vision/strategy/_pipeline/top-5.md` | `user` |
 | ETA commit for a picked idea | Scoped spec + effort estimate | `user` |
 | Pivot mid-project | Pivot rationale + options | `user` |
-| Gate-red waiver request (security/legal) | Blocking council's report | `user` |
+| Gate-red waiver request (a blocking council: security, evaluation, red-team, audit; legal per `skills/gates`) | Blocking council's report | `user` |
 | Top-5 override proposal by CEO | Alternative ranking + ADR draft | `user` |
 
 Never invoked automatically — CEO invokes on decision-readiness. If prerequisites are not met (e.g., top-5 not written), the skill refuses and returns a missing-prereq list.

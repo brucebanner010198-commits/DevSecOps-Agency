@@ -118,3 +118,25 @@ On replay of recorded runs it flags:
 There are 8 tests in `scripts/test_pipeline_report.py`, which CI's `scripts` suite runs. Making it a gate, so that a phase cannot close without the specialist's receipt, is 5-lite proper and waits for E4.
 
 Phase 2b (the broker and signed receipts) was checked against the same tests and not started. It adds blocking authority and needs a signing identity, and both are reserved.
+
+## Release check (advisory), 2026-11-24
+
+`scripts/release_check.py <launch-dir> [--project <folder>] [--since <time>]` checks a **ship**, not an adoption. For each council `CONSTITUTION.md` §3.3 makes blocking (CISO, CEVO, CRT, CAO), it reports whether the council was convened and whether it recorded a verdict.
+
+- **What counts as a verdict:** a file written by an agent of that council. The shared logs `chat.jsonl`, `inbox.json` and `_sessions/` don't count.
+- **`status.json` never stands in.** It is read from the documented shape, `gates.byCouncil` and `gates.waivers`. The CEO writes `status.json`, so a gate entry there never replaces a council's own record.
+- **A red** clears only with a waiver in `gates.waivers` marked `"waivedBy": "user"` for that council.
+
+Replay results:
+
+| Run | Result |
+| --- | --- |
+| G1, G2 | CEVO, CRT and CAO flagged: never convened |
+| R3 (positive control) | No flags: all four councils convened and recorded |
+
+Limits:
+- It is advisory and blocks nothing. Making it a gate is E4.
+- Receipts accumulate across runs in a launch folder. `--project` narrows writes by path, but dispatches carry no path, so use `--since` for those.
+- No recorded run used the documented `status.json` gate shape: G1, G2, R3 and D3a each wrote their own layout. So the gate half was tested only with fixtures.
+
+The same PR aligns `skills/gates` and four other skills (`ceo/references/version-layers.md`, `taskflow`, `user-meeting`, `meeting-minutes`) with the four §3.3 blocking councils. GC's blocking rule is left as it is, pending E4. The CEO cannot load these skills today (it holds no Skill tool and reads only `adopt`), so the edit has no runtime effect yet.
