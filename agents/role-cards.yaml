@@ -3,7 +3,9 @@
 # and `check` fails CI if they drift. `model` is recorded but never written: tier changes are Chairman-only.
 # `shell` is enforced by Phase 2a hooks, not by Claude Code. `descriptive.write_scope_note` is Part 14's
 # free-text scope; Phase 2a turns it into enforced path globs.
-# Source: alignment plan Part 14 (grants), Part 4 (board-director), Part 2B Stage 2 (limits).
+# `activation` is the Part 2 activation tier (core, department, on-demand; Part 2 calls on-demand "Specialist").
+# It is recorded and linted; nothing convenes by it yet (Phase 6b, profile-based convening, needs the Chairman).
+# Source: alignment plan Part 14 (grants and tiers), Part 4 (board-director), Part 2B Stage 2 (limits).
 version: 1
 agents:
   api-designer:
@@ -23,8 +25,8 @@ agents:
       - docs/api/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Contract-first; intolerant of ambiguity
       write_scope_note: docs/api/
   data-architect:
@@ -43,8 +45,8 @@ agents:
       - architecture/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Guards integrity; classifies every field
       write_scope_note: architecture/data-model.md
   engineering-lead:
@@ -65,8 +67,8 @@ agents:
       - build-report.md
       effort: medium
       maxTurns: 30
+    activation: core
     descriptive:
-      tier: core
       personality: Sets direction; weighs the long-term cost of every choice
       write_scope_note: architecture.md, architecture/
   infra-architect:
@@ -85,8 +87,8 @@ agents:
       - architecture/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Prefers boring, proven infrastructure
       write_scope_note: architecture/infra.md
   system-architect:
@@ -105,8 +107,8 @@ agents:
       - architecture/
       effort: medium
       maxTurns: 25
+    activation: core
     descriptive:
-      tier: core
       personality: Thinks in boundaries and failure modes
       write_scope_note: architecture.md
   legacy-code-specialist:
@@ -127,8 +129,8 @@ agents:
       add:
       - Bash
       why: Part 14 grants a sandboxed shell, and no sandbox exists yet (E5)
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Patient reader of unfamiliar code; maps before judging
       write_scope_note: _agency/system-map.md
   adr-auditor:
@@ -146,8 +148,8 @@ agents:
       - _vision/audit/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Literal; a missing record is the finding
       write_scope_note: _vision/audit/
   agent-governance-reviewer:
@@ -164,8 +166,8 @@ agents:
       - _vision/audit/
       effort: medium
       maxTurns: 25
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Reads agent files like contracts
       write_scope_note: _vision/audit/
   cao:
@@ -185,8 +187,8 @@ agents:
       - _memory/
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Assumes the record is incomplete until shown otherwise
       write_scope_note: _vision/audit/
   gate-auditor:
@@ -203,8 +205,8 @@ agents:
       - _vision/audit/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Recomputes every gate; trusts no summary
       write_scope_note: _vision/audit/
   memory-auditor:
@@ -223,8 +225,8 @@ agents:
       - _memory/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Hunts leaked secrets and uncited claims
       write_scope_note: _vision/audit/
   okr-auditor:
@@ -241,8 +243,8 @@ agents:
       - _vision/audit/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Checks promises against outcomes
       write_scope_note: _vision/audit/
   board-director:
@@ -259,8 +261,8 @@ agents:
       - _decisions/
       effort: high
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Independent; checks from the record, not the conversation
       write_scope_note: none (reads the project record)
   ceo:
@@ -288,8 +290,8 @@ agents:
       - _meetings/
       effort: null
       maxTurns: null
+    activation: core
     descriptive:
-      tier: core
       personality: Strategic and decisive; rejects unsupported claims
       write_scope_note: status.json, chat.jsonl, inbox.json, _decisions/
   ci-engineer:
@@ -310,8 +312,8 @@ agents:
       - ci/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Automates everything; trusts nothing unpinned
       write_scope_note: CI workflows
   deployment-engineer:
@@ -336,8 +338,8 @@ agents:
       - _agency/baseline/environments.md
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Cautious; rehearses the rollback first
       write_scope_note: deploy/
   devops-lead:
@@ -359,8 +361,8 @@ agents:
       - _agency/baseline/environments.md
       effort: medium
       maxTurns: 30
+    activation: core
     descriptive:
-      tier: core
       personality: Calm operator; no release without a rollback
       write_scope_note: deploy/
   observability-engineer:
@@ -379,8 +381,8 @@ agents:
       - deploy/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: If it is not measured, it is not running
       write_scope_note: deploy/observability.md
   api-documenter:
@@ -398,8 +400,8 @@ agents:
       - docs/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Precise; documents what the code does
       write_scope_note: docs/api/
   docs-lead:
@@ -420,8 +422,8 @@ agents:
       - docs-report.md
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Editor; no placeholders, no stale pages
       write_scope_note: docs/
   readme-writer:
@@ -440,8 +442,8 @@ agents:
       - docs/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Plain-spoken; writes for the first-time reader
       write_scope_note: docs/README.md
   tutorial-writer:
@@ -460,8 +462,8 @@ agents:
       - docs/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Follows its own steps before publishing
       write_scope_note: docs/tutorial/
   benchmark-runner:
@@ -480,8 +482,8 @@ agents:
       - eval/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Measures; reports variance with every number
       write_scope_note: _vision/eval/
   budget-monitor:
@@ -500,8 +502,8 @@ agents:
       - eval/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Watches burn; raises early
       write_scope_note: _vision/eval/
   eval-designer:
@@ -519,8 +521,8 @@ agents:
       - eval/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Writes the test from the promise, before results
       write_scope_note: _vision/eval/
   evaluation-lead:
@@ -540,8 +542,8 @@ agents:
       - close-eval.md
       effort: medium
       maxTurns: 30
+    activation: core
     descriptive:
-      tier: core
       personality: Judges against the original promise, not the effort
       write_scope_note: _vision/eval/
   finops-analyst:
@@ -559,8 +561,8 @@ agents:
       - _vision/finops/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Counts every token and dollar
       write_scope_note: _vision/eval/
   panel-chair:
@@ -581,8 +583,8 @@ agents:
       - _decisions/
       effort: medium
       maxTurns: 30
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Neutral chair; records dissent faithfully
       write_scope_note: _vision/eval/
   regression-detector:
@@ -600,8 +602,8 @@ agents:
       - eval/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Distrusts any improvement without a baseline
       write_scope_note: _vision/eval/
   skill-evaluator:
@@ -618,8 +620,8 @@ agents:
       - _vision/eval/
       effort: medium
       maxTurns: 25
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Scores on evidence, not polish
       write_scope_note: _vision/eval/
   token-compactor:
@@ -637,8 +639,8 @@ agents:
       - eval/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Economical; never drops a cited record
       write_scope_note: _vision/eval/
   backend-dev:
@@ -657,8 +659,8 @@ agents:
       - "*"
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Pragmatic executor; follows contracts exactly
       write_scope_note: src/ (own worktree)
   db-engineer:
@@ -677,8 +679,8 @@ agents:
       - "*"
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Careful; every migration is reversible
       write_scope_note: migrations, data layer
   frontend-dev:
@@ -697,8 +699,8 @@ agents:
       - "*"
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: User-minded; ships simple, accessible interfaces
       write_scope_note: src/ (own worktree)
   integrations-engineer:
@@ -717,8 +719,8 @@ agents:
       - "*"
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Distrusts third parties; wraps and mocks them
       write_scope_note: src/integrations/
   compliance-drift:
@@ -737,8 +739,8 @@ agents:
       - _vision/rhythm/
       effort: medium
       maxTurns: 25
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Early-warning mindset; reports small drift
       write_scope_note: legal/
   gc:
@@ -762,8 +764,8 @@ agents:
       - "NOTICE*"
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Conservative; states risk plainly
       write_scope_note: legal/
   ip-lineage:
@@ -781,8 +783,8 @@ agents:
       - _vision/legal/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Traces the origin of everything shipped
       write_scope_note: legal/
   license-checker:
@@ -801,8 +803,8 @@ agents:
       - _agency/baseline/licenses.md
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Reads the license text, not the label
       write_scope_note: legal/
   privacy-counsel:
@@ -820,8 +822,8 @@ agents:
       - PRIVACY.md
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Data-minimizer; user rights first
       write_scope_note: legal/
   brand-guardian:
@@ -842,8 +844,8 @@ agents:
       - _vision/projects/_pipeline/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Consistent; rejects off-voice copy
       write_scope_note: marketing/
   cmo:
@@ -863,8 +865,8 @@ agents:
       - _vision/projects/_pipeline/
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Positioning before any copy
       write_scope_note: marketing/
   comms-writer:
@@ -883,8 +885,8 @@ agents:
       - _vision/projects/_pipeline/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Concise; claims only what is proven
       write_scope_note: marketing/
   growth-analyst:
@@ -903,8 +905,8 @@ agents:
       - _vision/projects/_pipeline/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Numbers-first; skeptical of vanity metrics
       write_scope_note: marketing/
   positioning-strategist:
@@ -923,8 +925,8 @@ agents:
       - _vision/projects/_pipeline/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Sharp; one audience, one promise
       write_scope_note: marketing/
   coo:
@@ -943,8 +945,8 @@ agents:
       - _vision/roster/
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Fair and procedural; staffs by evidence
       write_scope_note: _vision/roster/
   hiring-lead:
@@ -962,8 +964,8 @@ agents:
       - _vision/roster/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Hires only for a defined gap
       write_scope_note: _vision/roster/
   performance-reviewer:
@@ -981,8 +983,8 @@ agents:
       - _vision/roster/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Evidence-based; no recency bias
       write_scope_note: _vision/roster/
   roster-manager:
@@ -1000,8 +1002,8 @@ agents:
       - _vision/roster/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Meticulous record keeper
       write_scope_note: _vision/roster/
   skill-creator:
@@ -1021,8 +1023,8 @@ agents:
       - councils/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Careful author; smallest grant that works
       write_scope_note: agents/, skills/ (after prompt-diff review)
   pm-lead:
@@ -1047,8 +1049,8 @@ agents:
       - _agency/spec-as-is.md
       effort: medium
       maxTurns: 30
+    activation: core
     descriptive:
-      tier: core
       personality: User-first; says no to unmeasured features
       write_scope_note: product/
   product-strategist:
@@ -1066,8 +1068,8 @@ agents:
       - product/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Seeks the wedge; cuts scope
       write_scope_note: product/strategy.md
   roadmap-planner:
@@ -1085,8 +1087,8 @@ agents:
       - product/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Sequencer; honest about trade-offs
       write_scope_note: product/roadmap.md
   spec-writer:
@@ -1107,8 +1109,8 @@ agents:
       - _agency/spec-as-is.md
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Exact; every requirement is testable
       write_scope_note: product/
   a11y-auditor:
@@ -1126,8 +1128,8 @@ agents:
       - qa/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Speaks for users who are usually forgotten
       write_scope_note: qa/a11y-report.md
   performance-tester:
@@ -1146,8 +1148,8 @@ agents:
       - tests/perf/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Measures; distrusts averages
       write_scope_note: qa/perf-report.md
   qa-lead:
@@ -1169,8 +1171,8 @@ agents:
       - _agency/baseline/integrity.md
       effort: medium
       maxTurns: 30
+    activation: core
     descriptive:
-      tier: core
       personality: Assumes defects exist; gates on evidence
       write_scope_note: qa/, qa-report.md
   test-designer:
@@ -1195,8 +1197,8 @@ agents:
       - "*.spec.*"
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Hunts edge cases
       write_scope_note: tests/
   test-runner:
@@ -1226,8 +1228,8 @@ agents:
       - "*.spec.*"
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Reports exactly what ran and what failed
       write_scope_note: tests/, qa/
   adversarial-prompter:
@@ -1245,8 +1247,8 @@ agents:
       - red-team/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Inventive attacker of prompts
       write_scope_note: red-team findings
   chaos-engineer:
@@ -1264,8 +1266,8 @@ agents:
       - _vision/chaos/
       effort: medium
       maxTurns: 25
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Breaks things on purpose, safely
       write_scope_note: red-team findings
     held:
@@ -1287,8 +1289,8 @@ agents:
       - red-team/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Thinks like a thief; synthetic data only
       write_scope_note: red-team findings
   model-poisoning-scout:
@@ -1306,8 +1308,8 @@ agents:
       - _vision/red-team/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Paranoid about tampered instructions
       write_scope_note: none (reports to lead)
   playbook-author:
@@ -1327,8 +1329,8 @@ agents:
       - ARCHIVE.md
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Turns attacks into reusable defenses
       write_scope_note: playbook
   red-team-lead:
@@ -1350,8 +1352,8 @@ agents:
       - _vision/playbooks/
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Adversarial; assumes controls can be bypassed
       write_scope_note: red-team findings
   social-engineering-tester:
@@ -1368,8 +1370,8 @@ agents:
       - red-team/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Tests whether agents can be talked into it
       write_scope_note: red-team findings
   supply-chain-attacker:
@@ -1386,8 +1388,8 @@ agents:
       - red-team/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Distrusts every dependency
       write_scope_note: none (reports to lead)
   tool-abuse-tester:
@@ -1405,8 +1407,8 @@ agents:
       - red-team/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Misuses every tool it is given
       write_scope_note: red-team findings
   cro:
@@ -1427,8 +1429,8 @@ agents:
       - research-brief.md
       effort: medium
       maxTurns: 30
+    activation: core
     descriptive:
-      tier: core
       personality: Evidence-led; gives a clear build or don't-build
       write_scope_note: research-brief.md
   literature-reviewer:
@@ -1448,8 +1450,8 @@ agents:
       - research/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Scholarly; separates findings from claims
       write_scope_note: research/prior-art.md
   market-researcher:
@@ -1469,8 +1471,8 @@ agents:
       - research/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Skeptical of hype; cites every number
       write_scope_note: research/market.md
   tech-scout:
@@ -1490,8 +1492,8 @@ agents:
       - research/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Curious; tests maturity before recommending
       write_scope_note: research/tech-landscape.md
   user-researcher:
@@ -1512,8 +1514,8 @@ agents:
       - pm-research.md
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Listens for the real problem
       write_scope_note: research/user-needs.md
   code-auditor:
@@ -1533,8 +1535,8 @@ agents:
       - _agency/baseline/security-scan.md
       effort: medium
       maxTurns: 25
+    activation: core
     descriptive:
-      tier: core
       personality: Assumes the code is vulnerable; never fixes it
       write_scope_note: security/code-audit.md
   compliance-officer:
@@ -1551,8 +1553,8 @@ agents:
       - security/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Precise about obligations
       write_scope_note: security/compliance.md
   dlp-scanner:
@@ -1570,8 +1572,8 @@ agents:
       - _vision/dlp/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Watches every outbound byte
       write_scope_note: security/
   mcp-defender:
@@ -1590,8 +1592,8 @@ agents:
       - _vision/mcp-registry/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Pins and verifies every tool
       write_scope_note: security/
   pen-tester:
@@ -1609,8 +1611,8 @@ agents:
       - security/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Persistent attacker; proves the exploit
       write_scope_note: security/pentest-report.md
   sbom-slsa:
@@ -1628,8 +1630,8 @@ agents:
       - _vision/security/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: No artifact without provenance
       write_scope_note: SBOM and provenance files
   secrets-vault:
@@ -1647,8 +1649,8 @@ agents:
       - _vision/security/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Never lets a raw secret appear
       write_scope_note: vault references
   security-lead:
@@ -1671,8 +1673,8 @@ agents:
       - _agency/baseline/security-scan.md
       effort: medium
       maxTurns: 30
+    activation: core
     descriptive:
-      tier: core
       personality: Risk-first; will not trade a Critical for a date
       write_scope_note: threat-model.md, security/
   threat-modeler:
@@ -1691,8 +1693,8 @@ agents:
       - _agency/baseline/threat-model.md
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Systematic; enumerates before judging
       write_scope_note: threat-model.md
   a2a-adapter:
@@ -1710,8 +1712,8 @@ agents:
       - _vision/sre/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Treats every external agent as untrusted
       write_scope_note: _vision/sre/
   agent-telemetry-engineer:
@@ -1731,8 +1733,8 @@ agents:
       - _vision/traces/
       effort: medium
       maxTurns: 25
+    activation: department
     descriptive:
-      tier: department
       personality: Instruments first, never speculates
       write_scope_note: _vision/sre/
   mcp-author:
@@ -1751,8 +1753,8 @@ agents:
       - mcp/
       effort: medium
       maxTurns: 25
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Minimal surface; explicit schemas
       write_scope_note: MCP server sources
   mcp-registry-scout:
@@ -1769,8 +1771,8 @@ agents:
       - _vision/sre/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Wary; verifies before adopting
       write_scope_note: _vision/sre/
   model-routing-override:
@@ -1787,8 +1789,8 @@ agents:
       - _vision/sre/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Same-tier only; documents every override
       write_scope_note: _vision/sre/
   prompt-cache-tuner:
@@ -1807,8 +1809,8 @@ agents:
       - _vision/prompt-cache/
       effort: medium
       maxTurns: 25
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Order-obsessed; measures hit rates
       write_scope_note: _vision/sre/
   sandbox-runner:
@@ -1824,8 +1826,8 @@ agents:
       - _vision/sre/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Contains everything; trusts no input
       write_scope_note: sandbox results
   sre-lead:
@@ -1844,8 +1846,8 @@ agents:
       - _vision/sre/
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Reliability-minded; default deny
       write_scope_note: _vision/sre/
   competitive-analyst:
@@ -1865,8 +1867,8 @@ agents:
       - _vision/strategy/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Fair to rivals; verifies claims
       write_scope_note: _vision/strategy/
   cso:
@@ -1885,8 +1887,8 @@ agents:
       - _vision/strategy/
       effort: medium
       maxTurns: 30
+    activation: department
     descriptive:
-      tier: department
       personality: Portfolio thinker; long horizon
       write_scope_note: _vision/strategy/
   market-sizer:
@@ -1906,8 +1908,8 @@ agents:
       - _vision/strategy/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Shows the arithmetic behind every estimate
       write_scope_note: _vision/strategy/
   opportunity-ranker:
@@ -1925,8 +1927,8 @@ agents:
       - _vision/strategy/
       effort: low
       maxTurns: 20
+    activation: department
     descriptive:
-      tier: department
       personality: Ranks by evidence; refuses half-scored lists
       write_scope_note: _vision/strategy/
   trend-scout:
@@ -1946,7 +1948,7 @@ agents:
       - _vision/strategy/
       effort: low
       maxTurns: 20
+    activation: on-demand
     descriptive:
-      tier: on-demand
       personality: Separates signal from fashion
       write_scope_note: _vision/strategy/
