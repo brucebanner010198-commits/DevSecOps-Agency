@@ -22,9 +22,10 @@ AGENT = (
 )
 
 
-def card(tools, shell=None, effort="low", turns=20, model="haiku"):
+def card(tools, shell=None, effort="low", turns=20, model="haiku", scope=("x/",)):
     return {"file": "agents/a.md", "enforced": {"tools": tools, "shell": shell, "model": model,
-                                                "effort": effort, "maxTurns": turns}}
+                                                "effort": effort, "maxTurns": turns,
+                                                "write_scope": list(scope) if scope is not None else None}}
 
 
 @pytest.fixture
@@ -142,3 +143,17 @@ def test_every_qualified_reference_resolves():
                 if m.group(1) not in cards and m.group(1) not in skills:
                     bad.append(f"{p.relative_to(root).as_posix()}: {m.group(1)}")
     assert not bad, bad
+
+
+@pytest.mark.parametrize("scope", [None, [], [""]])
+def test_write_scope_is_required(scope):
+    assert any("write_scope" in e for e in rc.rule_errors("x", card(["Read", "Write"], scope=scope)))
+
+
+@pytest.mark.parametrize("entry", ["/etc/", "C:/x", "../up/", "a/../../b"])
+def test_write_scope_must_stay_inside_the_project(entry):
+    assert any("relative" in e for e in rc.rule_errors("x", card(["Read", "Write"], scope=[entry])))
+
+
+def test_orchestrator_may_not_write_everywhere():
+    assert any("rule 5" in e for e in rc.rule_errors("x", card(["Read", "Write", "Agent"], scope=["*"])))

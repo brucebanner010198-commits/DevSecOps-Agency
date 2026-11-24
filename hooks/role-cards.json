@@ -5,571 +5,983 @@
    "descriptive": {
     "write_scope_note": "qa/a11y-report.md"
    },
-   "file": "agents/quality/a11y-auditor.md"
+   "file": "agents/quality/a11y-auditor.md",
+   "write_scope": [
+    "qa/"
+   ]
   },
   "a2a-adapter": {
    "descriptive": {
     "write_scope_note": "_vision/sre/"
    },
-   "file": "agents/sre/a2a-adapter.md"
+   "file": "agents/sre/a2a-adapter.md",
+   "write_scope": [
+    "_vision/sre/"
+   ]
   },
   "adr-auditor": {
    "descriptive": {
     "write_scope_note": "_vision/audit/"
    },
-   "file": "agents/audit/adr-auditor.md"
+   "file": "agents/audit/adr-auditor.md",
+   "write_scope": [
+    "_vision/audit/"
+   ]
   },
   "adversarial-prompter": {
    "descriptive": {
     "write_scope_note": "red-team findings"
    },
-   "file": "agents/red-team/adversarial-prompter.md"
+   "file": "agents/red-team/adversarial-prompter.md",
+   "write_scope": [
+    "red-team/"
+   ]
   },
   "agent-governance-reviewer": {
    "descriptive": {
     "write_scope_note": "_vision/audit/"
    },
-   "file": "agents/audit/agent-governance-reviewer.md"
+   "file": "agents/audit/agent-governance-reviewer.md",
+   "write_scope": [
+    "_vision/audit/"
+   ]
   },
   "agent-telemetry-engineer": {
    "descriptive": {
     "write_scope_note": "_vision/sre/"
    },
-   "file": "agents/sre/agent-telemetry-engineer.md"
+   "file": "agents/sre/agent-telemetry-engineer.md",
+   "write_scope": [
+    "_vision/sre/",
+    "_vision/observability/",
+    "_vision/traces/"
+   ]
   },
   "api-designer": {
    "descriptive": {
     "write_scope_note": "docs/api/"
    },
-   "file": "agents/architecture/api-designer.md"
+   "file": "agents/architecture/api-designer.md",
+   "write_scope": [
+    "architecture.md",
+    "architecture/",
+    "docs/api/"
+   ]
   },
   "api-documenter": {
    "descriptive": {
     "write_scope_note": "docs/api/"
    },
-   "file": "agents/docs/api-documenter.md"
+   "file": "agents/docs/api-documenter.md",
+   "write_scope": [
+    "docs/"
+   ]
   },
   "backend-dev": {
    "descriptive": {
     "write_scope_note": "src/ (own worktree)"
    },
-   "file": "agents/execution/backend-dev.md"
+   "file": "agents/execution/backend-dev.md",
+   "write_scope": [
+    "*"
+   ]
   },
   "benchmark-runner": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/benchmark-runner.md"
+   "file": "agents/evaluation/benchmark-runner.md",
+   "write_scope": [
+    "_vision/eval/",
+    "eval/"
+   ]
   },
   "board-director": {
    "descriptive": {
     "write_scope_note": "none (reads the project record)"
    },
-   "file": "agents/board/board-director.md"
+   "file": "agents/board/board-director.md",
+   "write_scope": [
+    "_decisions/"
+   ]
   },
   "brand-guardian": {
    "descriptive": {
     "write_scope_note": "marketing/"
    },
-   "file": "agents/marketing/brand-guardian.md"
+   "file": "agents/marketing/brand-guardian.md",
+   "write_scope": [
+    "marketing/",
+    "_vision/brand-guide.md",
+    "_vision/history/",
+    "_vision/projects/_pipeline/"
+   ]
   },
   "budget-monitor": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/budget-monitor.md"
+   "file": "agents/evaluation/budget-monitor.md",
+   "write_scope": [
+    "_vision/eval/",
+    "_vision/cost/",
+    "eval/"
+   ]
   },
   "cao": {
    "descriptive": {
     "write_scope_note": "_vision/audit/"
    },
-   "file": "agents/audit/cao.md"
+   "file": "agents/audit/cao.md",
+   "write_scope": [
+    "_vision/audit/",
+    "close-audit.md",
+    "_memory/"
+   ]
   },
   "ceo": {
    "descriptive": {
     "write_scope_note": "status.json, chat.jsonl, inbox.json, _decisions/"
    },
-   "file": "agents/ceo.md"
+   "file": "agents/ceo.md",
+   "write_scope": [
+    "status.json",
+    "inbox.json",
+    "brief.md",
+    "retro.md",
+    "_decisions/",
+    "adr-*.md",
+    "LESSONS.md",
+    "_agency/project.md",
+    "_agency/adoption-report.md",
+    "ADR-*.md",
+    "_meetings/"
+   ]
   },
   "chaos-engineer": {
    "descriptive": {
     "write_scope_note": "red-team findings"
    },
-   "file": "agents/red-team/chaos-engineer.md"
+   "file": "agents/red-team/chaos-engineer.md",
+   "write_scope": [
+    "red-team/",
+    "_vision/chaos/"
+   ]
   },
   "ci-engineer": {
    "descriptive": {
     "write_scope_note": "CI workflows"
    },
-   "file": "agents/devops/ci-engineer.md"
+   "file": "agents/devops/ci-engineer.md",
+   "write_scope": [
+    ".github/",
+    "deploy/",
+    "ci/"
+   ]
   },
   "cmo": {
    "descriptive": {
     "write_scope_note": "marketing/"
    },
-   "file": "agents/marketing/cmo.md"
+   "file": "agents/marketing/cmo.md",
+   "write_scope": [
+    "marketing/",
+    "_vision/projects/_pipeline/"
+   ]
   },
   "code-auditor": {
    "descriptive": {
     "write_scope_note": "security/code-audit.md"
    },
-   "file": "agents/security/code-auditor.md"
+   "file": "agents/security/code-auditor.md",
+   "write_scope": [
+    "security/",
+    "threat-model.md",
+    "_agency/baseline/security-scan.md"
+   ]
   },
   "comms-writer": {
    "descriptive": {
     "write_scope_note": "marketing/"
    },
-   "file": "agents/marketing/comms-writer.md"
+   "file": "agents/marketing/comms-writer.md",
+   "write_scope": [
+    "marketing/",
+    "_vision/projects/_pipeline/"
+   ]
   },
   "competitive-analyst": {
    "descriptive": {
     "write_scope_note": "_vision/strategy/"
    },
-   "file": "agents/strategy/competitive-analyst.md"
+   "file": "agents/strategy/competitive-analyst.md",
+   "write_scope": [
+    "_vision/strategy/"
+   ]
   },
   "compliance-drift": {
    "descriptive": {
     "write_scope_note": "legal/"
    },
-   "file": "agents/legal/compliance-drift.md"
+   "file": "agents/legal/compliance-drift.md",
+   "write_scope": [
+    "legal/",
+    "_vision/legal/",
+    "_vision/rhythm/"
+   ]
   },
   "compliance-officer": {
    "descriptive": {
     "write_scope_note": "security/compliance.md"
    },
-   "file": "agents/security/compliance-officer.md"
+   "file": "agents/security/compliance-officer.md",
+   "write_scope": [
+    "security/"
+   ]
   },
   "coo": {
    "descriptive": {
     "write_scope_note": "_vision/roster/"
    },
-   "file": "agents/people-ops/coo.md"
+   "file": "agents/people-ops/coo.md",
+   "write_scope": [
+    "_vision/roster/"
+   ]
   },
   "cro": {
    "descriptive": {
     "write_scope_note": "research-brief.md"
    },
-   "file": "agents/research/cro.md"
+   "file": "agents/research/cro.md",
+   "write_scope": [
+    "research/",
+    "research.md",
+    "research-brief.md"
+   ]
   },
   "cso": {
    "descriptive": {
     "write_scope_note": "_vision/strategy/"
    },
-   "file": "agents/strategy/cso.md"
+   "file": "agents/strategy/cso.md",
+   "write_scope": [
+    "_vision/strategy/"
+   ]
   },
   "data-architect": {
    "descriptive": {
     "write_scope_note": "architecture/data-model.md"
    },
-   "file": "agents/architecture/data-architect.md"
+   "file": "agents/architecture/data-architect.md",
+   "write_scope": [
+    "architecture.md",
+    "architecture/"
+   ]
   },
   "data-exfil-tester": {
    "descriptive": {
     "write_scope_note": "red-team findings"
    },
-   "file": "agents/red-team/data-exfil-tester.md"
+   "file": "agents/red-team/data-exfil-tester.md",
+   "write_scope": [
+    "red-team/"
+   ]
   },
   "db-engineer": {
    "descriptive": {
     "write_scope_note": "migrations, data layer"
    },
-   "file": "agents/execution/db-engineer.md"
+   "file": "agents/execution/db-engineer.md",
+   "write_scope": [
+    "*"
+   ]
   },
   "deployment-engineer": {
    "descriptive": {
     "write_scope_note": "deploy/"
    },
-   "file": "agents/devops/deployment-engineer.md"
+   "file": "agents/devops/deployment-engineer.md",
+   "write_scope": [
+    "deploy/",
+    "Dockerfile",
+    "docker-compose.yml",
+    "vercel.json",
+    "wrangler.toml",
+    "fly.toml",
+    "_agency/baseline/environments.md"
+   ]
   },
   "devops-lead": {
    "descriptive": {
     "write_scope_note": "deploy/"
    },
-   "file": "agents/devops/devops-lead.md"
+   "file": "agents/devops/devops-lead.md",
+   "write_scope": [
+    "deploy/",
+    "deploy.md",
+    ".github/",
+    "_agency/baseline/environments.md"
+   ]
   },
   "dlp-scanner": {
    "descriptive": {
     "write_scope_note": "security/"
    },
-   "file": "agents/security/dlp-scanner.md"
+   "file": "agents/security/dlp-scanner.md",
+   "write_scope": [
+    "security/",
+    "_vision/dlp/"
+   ]
   },
   "docs-lead": {
    "descriptive": {
     "write_scope_note": "docs/"
    },
-   "file": "agents/docs/docs-lead.md"
+   "file": "agents/docs/docs-lead.md",
+   "write_scope": [
+    "docs/",
+    "README.md",
+    "docs-report.md"
+   ]
   },
   "engineering-lead": {
    "descriptive": {
     "write_scope_note": "architecture.md, architecture/"
    },
-   "file": "agents/architecture/engineering-lead.md"
+   "file": "agents/architecture/engineering-lead.md",
+   "write_scope": [
+    "architecture.md",
+    "architecture/",
+    "build-report.md"
+   ]
   },
   "eval-designer": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/eval-designer.md"
+   "file": "agents/evaluation/eval-designer.md",
+   "write_scope": [
+    "_vision/eval/",
+    "eval/"
+   ]
   },
   "evaluation-lead": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/evaluation-lead.md"
+   "file": "agents/evaluation/evaluation-lead.md",
+   "write_scope": [
+    "_vision/eval/",
+    "eval/",
+    "close-eval.md"
+   ]
   },
   "finops-analyst": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/finops-analyst.md"
+   "file": "agents/evaluation/finops-analyst.md",
+   "write_scope": [
+    "_vision/eval/",
+    "_vision/finops/"
+   ]
   },
   "frontend-dev": {
    "descriptive": {
     "write_scope_note": "src/ (own worktree)"
    },
-   "file": "agents/execution/frontend-dev.md"
+   "file": "agents/execution/frontend-dev.md",
+   "write_scope": [
+    "*"
+   ]
   },
   "gate-auditor": {
    "descriptive": {
     "write_scope_note": "_vision/audit/"
    },
-   "file": "agents/audit/gate-auditor.md"
+   "file": "agents/audit/gate-auditor.md",
+   "write_scope": [
+    "_vision/audit/"
+   ]
   },
   "gc": {
    "descriptive": {
     "write_scope_note": "legal/"
    },
-   "file": "agents/legal/gc.md"
+   "file": "agents/legal/gc.md",
+   "write_scope": [
+    "legal/",
+    "legal-review.md",
+    "_vision/legal/",
+    "_agency/baseline/licenses.md",
+    "LICENSE*",
+    "PRIVACY.md",
+    "NOTICE*"
+   ]
   },
   "growth-analyst": {
    "descriptive": {
     "write_scope_note": "marketing/"
    },
-   "file": "agents/marketing/growth-analyst.md"
+   "file": "agents/marketing/growth-analyst.md",
+   "write_scope": [
+    "marketing/",
+    "_vision/projects/_pipeline/"
+   ]
   },
   "hiring-lead": {
    "descriptive": {
     "write_scope_note": "_vision/roster/"
    },
-   "file": "agents/people-ops/hiring-lead.md"
+   "file": "agents/people-ops/hiring-lead.md",
+   "write_scope": [
+    "_vision/roster/"
+   ]
   },
   "infra-architect": {
    "descriptive": {
     "write_scope_note": "architecture/infra.md"
    },
-   "file": "agents/architecture/infra-architect.md"
+   "file": "agents/architecture/infra-architect.md",
+   "write_scope": [
+    "architecture.md",
+    "architecture/"
+   ]
   },
   "integrations-engineer": {
    "descriptive": {
     "write_scope_note": "src/integrations/"
    },
-   "file": "agents/execution/integrations-engineer.md"
+   "file": "agents/execution/integrations-engineer.md",
+   "write_scope": [
+    "*"
+   ]
   },
   "ip-lineage": {
    "descriptive": {
     "write_scope_note": "legal/"
    },
-   "file": "agents/legal/ip-lineage.md"
+   "file": "agents/legal/ip-lineage.md",
+   "write_scope": [
+    "legal/",
+    "_vision/legal/"
+   ]
   },
   "legacy-code-specialist": {
    "descriptive": {
     "write_scope_note": "_agency/system-map.md"
    },
-   "file": "agents/architecture/legacy-code-specialist.md"
+   "file": "agents/architecture/legacy-code-specialist.md",
+   "write_scope": [
+    "_agency/system-map.md"
+   ]
   },
   "license-checker": {
    "descriptive": {
     "write_scope_note": "legal/"
    },
-   "file": "agents/legal/license-checker.md"
+   "file": "agents/legal/license-checker.md",
+   "write_scope": [
+    "legal/",
+    "_agency/baseline/licenses.md"
+   ]
   },
   "literature-reviewer": {
    "descriptive": {
     "write_scope_note": "research/prior-art.md"
    },
-   "file": "agents/research/literature-reviewer.md"
+   "file": "agents/research/literature-reviewer.md",
+   "write_scope": [
+    "research/"
+   ]
   },
   "market-researcher": {
    "descriptive": {
     "write_scope_note": "research/market.md"
    },
-   "file": "agents/research/market-researcher.md"
+   "file": "agents/research/market-researcher.md",
+   "write_scope": [
+    "research/"
+   ]
   },
   "market-sizer": {
    "descriptive": {
     "write_scope_note": "_vision/strategy/"
    },
-   "file": "agents/strategy/market-sizer.md"
+   "file": "agents/strategy/market-sizer.md",
+   "write_scope": [
+    "_vision/strategy/"
+   ]
   },
   "mcp-author": {
    "descriptive": {
     "write_scope_note": "MCP server sources"
    },
-   "file": "agents/sre/mcp-author.md"
+   "file": "agents/sre/mcp-author.md",
+   "write_scope": [
+    "_vision/mcp/",
+    "mcp/"
+   ]
   },
   "mcp-defender": {
    "descriptive": {
     "write_scope_note": "security/"
    },
-   "file": "agents/security/mcp-defender.md"
+   "file": "agents/security/mcp-defender.md",
+   "write_scope": [
+    "security/",
+    "_vision/audit/",
+    "_vision/mcp-registry/"
+   ]
   },
   "mcp-registry-scout": {
    "descriptive": {
     "write_scope_note": "_vision/sre/"
    },
-   "file": "agents/sre/mcp-registry-scout.md"
+   "file": "agents/sre/mcp-registry-scout.md",
+   "write_scope": [
+    "_vision/sre/"
+   ]
   },
   "memory-auditor": {
    "descriptive": {
     "write_scope_note": "_vision/audit/"
    },
-   "file": "agents/audit/memory-auditor.md"
+   "file": "agents/audit/memory-auditor.md",
+   "write_scope": [
+    "_vision/audit/",
+    "_memory/"
+   ]
   },
   "model-poisoning-scout": {
    "descriptive": {
     "write_scope_note": "none (reports to lead)"
    },
-   "file": "agents/red-team/model-poisoning-scout.md"
+   "file": "agents/red-team/model-poisoning-scout.md",
+   "write_scope": [
+    "red-team/",
+    "_vision/red-team/"
+   ]
   },
   "model-routing-override": {
    "descriptive": {
     "write_scope_note": "_vision/sre/"
    },
-   "file": "agents/sre/model-routing-override.md"
+   "file": "agents/sre/model-routing-override.md",
+   "write_scope": [
+    "_vision/sre/"
+   ]
   },
   "observability-engineer": {
    "descriptive": {
     "write_scope_note": "deploy/observability.md"
    },
-   "file": "agents/devops/observability-engineer.md"
+   "file": "agents/devops/observability-engineer.md",
+   "write_scope": [
+    "deploy/"
+   ]
   },
   "okr-auditor": {
    "descriptive": {
     "write_scope_note": "_vision/audit/"
    },
-   "file": "agents/audit/okr-auditor.md"
+   "file": "agents/audit/okr-auditor.md",
+   "write_scope": [
+    "_vision/audit/"
+   ]
   },
   "opportunity-ranker": {
    "descriptive": {
     "write_scope_note": "_vision/strategy/"
    },
-   "file": "agents/strategy/opportunity-ranker.md"
+   "file": "agents/strategy/opportunity-ranker.md",
+   "write_scope": [
+    "_vision/strategy/"
+   ]
   },
   "panel-chair": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/panel-chair.md"
+   "file": "agents/evaluation/panel-chair.md",
+   "write_scope": [
+    "_vision/eval/",
+    "_vision/cost/",
+    "_vision/cross-model-panel/",
+    "_decisions/"
+   ]
   },
   "pen-tester": {
    "descriptive": {
     "write_scope_note": "security/pentest-report.md"
    },
-   "file": "agents/security/pen-tester.md"
+   "file": "agents/security/pen-tester.md",
+   "write_scope": [
+    "security/"
+   ]
   },
   "performance-reviewer": {
    "descriptive": {
     "write_scope_note": "_vision/roster/"
    },
-   "file": "agents/people-ops/performance-reviewer.md"
+   "file": "agents/people-ops/performance-reviewer.md",
+   "write_scope": [
+    "_vision/roster/"
+   ]
   },
   "performance-tester": {
    "descriptive": {
     "write_scope_note": "qa/perf-report.md"
    },
-   "file": "agents/quality/performance-tester.md"
+   "file": "agents/quality/performance-tester.md",
+   "write_scope": [
+    "qa/",
+    "tests/perf/"
+   ]
   },
   "playbook-author": {
    "descriptive": {
     "write_scope_note": "playbook"
    },
-   "file": "agents/red-team/playbook-author.md"
+   "file": "agents/red-team/playbook-author.md",
+   "write_scope": [
+    "red-team/",
+    "_vision/playbooks/",
+    "ARCHIVE.md"
+   ]
   },
   "pm-lead": {
    "descriptive": {
     "write_scope_note": "product/"
    },
-   "file": "agents/product/pm-lead.md"
+   "file": "agents/product/pm-lead.md",
+   "write_scope": [
+    "product/",
+    "brief.md",
+    "pm-research.md",
+    "spec.md",
+    "design/",
+    "design-system/",
+    "_agency/spec-as-is.md"
+   ]
   },
   "positioning-strategist": {
    "descriptive": {
     "write_scope_note": "marketing/"
    },
-   "file": "agents/marketing/positioning-strategist.md"
+   "file": "agents/marketing/positioning-strategist.md",
+   "write_scope": [
+    "marketing/",
+    "_vision/projects/_pipeline/"
+   ]
   },
   "privacy-counsel": {
    "descriptive": {
     "write_scope_note": "legal/"
    },
-   "file": "agents/legal/privacy-counsel.md"
+   "file": "agents/legal/privacy-counsel.md",
+   "write_scope": [
+    "legal/",
+    "PRIVACY.md"
+   ]
   },
   "product-strategist": {
    "descriptive": {
     "write_scope_note": "product/strategy.md"
    },
-   "file": "agents/product/product-strategist.md"
+   "file": "agents/product/product-strategist.md",
+   "write_scope": [
+    "product/"
+   ]
   },
   "prompt-cache-tuner": {
    "descriptive": {
     "write_scope_note": "_vision/sre/"
    },
-   "file": "agents/sre/prompt-cache-tuner.md"
+   "file": "agents/sre/prompt-cache-tuner.md",
+   "write_scope": [
+    "_vision/sre/",
+    "_vision/prompt-cache/"
+   ]
   },
   "qa-lead": {
    "descriptive": {
     "write_scope_note": "qa/, qa-report.md"
    },
-   "file": "agents/quality/qa-lead.md"
+   "file": "agents/quality/qa-lead.md",
+   "write_scope": [
+    "qa/",
+    "qa-report.md",
+    "test-matrix.md",
+    "_agency/baseline/tests.md",
+    "_agency/baseline/integrity.md"
+   ]
   },
   "readme-writer": {
    "descriptive": {
     "write_scope_note": "docs/README.md"
    },
-   "file": "agents/docs/readme-writer.md"
+   "file": "agents/docs/readme-writer.md",
+   "write_scope": [
+    "README.md",
+    "docs/"
+   ]
   },
   "red-team-lead": {
    "descriptive": {
     "write_scope_note": "red-team findings"
    },
-   "file": "agents/red-team/red-team-lead.md"
+   "file": "agents/red-team/red-team-lead.md",
+   "write_scope": [
+    "red-team/",
+    "red-team.md",
+    "_vision/red-team/",
+    "_worktrees/",
+    "_vision/playbooks/"
+   ]
   },
   "regression-detector": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/regression-detector.md"
+   "file": "agents/evaluation/regression-detector.md",
+   "write_scope": [
+    "_vision/eval/",
+    "eval/"
+   ]
   },
   "roadmap-planner": {
    "descriptive": {
     "write_scope_note": "product/roadmap.md"
    },
-   "file": "agents/product/roadmap-planner.md"
+   "file": "agents/product/roadmap-planner.md",
+   "write_scope": [
+    "product/"
+   ]
   },
   "roster-manager": {
    "descriptive": {
     "write_scope_note": "_vision/roster/"
    },
-   "file": "agents/people-ops/roster-manager.md"
+   "file": "agents/people-ops/roster-manager.md",
+   "write_scope": [
+    "_vision/roster/"
+   ]
   },
   "sandbox-runner": {
    "descriptive": {
     "write_scope_note": "sandbox results"
    },
-   "file": "agents/sre/sandbox-runner.md"
+   "file": "agents/sre/sandbox-runner.md",
+   "write_scope": [
+    "_vision/sre/"
+   ]
   },
   "sbom-slsa": {
    "descriptive": {
     "write_scope_note": "SBOM and provenance files"
    },
-   "file": "agents/security/sbom-slsa.md"
+   "file": "agents/security/sbom-slsa.md",
+   "write_scope": [
+    "dist/",
+    "_vision/security/"
+   ]
   },
   "secrets-vault": {
    "descriptive": {
     "write_scope_note": "vault references"
    },
-   "file": "agents/security/secrets-vault.md"
+   "file": "agents/security/secrets-vault.md",
+   "write_scope": [
+    "security/",
+    "_vision/security/"
+   ]
   },
   "security-lead": {
    "descriptive": {
     "write_scope_note": "threat-model.md, security/"
    },
-   "file": "agents/security/security-lead.md"
+   "file": "agents/security/security-lead.md",
+   "write_scope": [
+    "security/",
+    "threat-model.md",
+    "security-report.md",
+    "security-audit.md",
+    "_agency/baseline/threat-model.md",
+    "_agency/baseline/security-scan.md"
+   ]
   },
   "skill-creator": {
    "descriptive": {
     "write_scope_note": "agents/, skills/ (after prompt-diff review)"
    },
-   "file": "agents/people-ops/skill-creator.md"
+   "file": "agents/people-ops/skill-creator.md",
+   "write_scope": [
+    "agents/",
+    "skills/",
+    "councils/"
+   ]
   },
   "skill-evaluator": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/skill-evaluator.md"
+   "file": "agents/evaluation/skill-evaluator.md",
+   "write_scope": [
+    "_vision/eval/"
+   ]
   },
   "social-engineering-tester": {
    "descriptive": {
     "write_scope_note": "red-team findings"
    },
-   "file": "agents/red-team/social-engineering-tester.md"
+   "file": "agents/red-team/social-engineering-tester.md",
+   "write_scope": [
+    "red-team/"
+   ]
   },
   "spec-writer": {
    "descriptive": {
     "write_scope_note": "product/"
    },
-   "file": "agents/product/spec-writer.md"
+   "file": "agents/product/spec-writer.md",
+   "write_scope": [
+    "product/",
+    "brief.md",
+    "spec.md",
+    "_agency/spec-as-is.md"
+   ]
   },
   "sre-lead": {
    "descriptive": {
     "write_scope_note": "_vision/sre/"
    },
-   "file": "agents/sre/sre-lead.md"
+   "file": "agents/sre/sre-lead.md",
+   "write_scope": [
+    "_vision/sre/"
+   ]
   },
   "supply-chain-attacker": {
    "descriptive": {
     "write_scope_note": "none (reports to lead)"
    },
-   "file": "agents/red-team/supply-chain-attacker.md"
+   "file": "agents/red-team/supply-chain-attacker.md",
+   "write_scope": [
+    "red-team/"
+   ]
   },
   "system-architect": {
    "descriptive": {
     "write_scope_note": "architecture.md"
    },
-   "file": "agents/architecture/system-architect.md"
+   "file": "agents/architecture/system-architect.md",
+   "write_scope": [
+    "architecture.md",
+    "architecture/"
+   ]
   },
   "tech-scout": {
    "descriptive": {
     "write_scope_note": "research/tech-landscape.md"
    },
-   "file": "agents/research/tech-scout.md"
+   "file": "agents/research/tech-scout.md",
+   "write_scope": [
+    "research/"
+   ]
   },
   "test-designer": {
    "descriptive": {
     "write_scope_note": "tests/"
    },
-   "file": "agents/quality/test-designer.md"
+   "file": "agents/quality/test-designer.md",
+   "write_scope": [
+    "tests/",
+    "test/",
+    "qa/",
+    "test-matrix.md",
+    "test_*.py",
+    "*_test.py",
+    "*.test.*",
+    "*.spec.*"
+   ]
   },
   "test-runner": {
    "descriptive": {
     "write_scope_note": "tests/, qa/"
    },
-   "file": "agents/quality/test-runner.md"
+   "file": "agents/quality/test-runner.md",
+   "write_scope": [
+    "tests/",
+    "test/",
+    "qa/",
+    "package.json",
+    "pyproject.toml",
+    "requirements*.txt",
+    "_agency/baseline/tests.md",
+    "_agency/baseline/integrity.md",
+    "test_*.py",
+    "*_test.py",
+    "*.test.*",
+    "*.spec.*"
+   ]
   },
   "threat-modeler": {
    "descriptive": {
     "write_scope_note": "threat-model.md"
    },
-   "file": "agents/security/threat-modeler.md"
+   "file": "agents/security/threat-modeler.md",
+   "write_scope": [
+    "security/",
+    "threat-model.md",
+    "_agency/baseline/threat-model.md"
+   ]
   },
   "token-compactor": {
    "descriptive": {
     "write_scope_note": "_vision/eval/"
    },
-   "file": "agents/evaluation/token-compactor.md"
+   "file": "agents/evaluation/token-compactor.md",
+   "write_scope": [
+    "_vision/eval/",
+    "eval/"
+   ]
   },
   "tool-abuse-tester": {
    "descriptive": {
     "write_scope_note": "red-team findings"
    },
-   "file": "agents/red-team/tool-abuse-tester.md"
+   "file": "agents/red-team/tool-abuse-tester.md",
+   "write_scope": [
+    "red-team/"
+   ]
   },
   "trend-scout": {
    "descriptive": {
     "write_scope_note": "_vision/strategy/"
    },
-   "file": "agents/strategy/trend-scout.md"
+   "file": "agents/strategy/trend-scout.md",
+   "write_scope": [
+    "_vision/strategy/"
+   ]
   },
   "tutorial-writer": {
    "descriptive": {
     "write_scope_note": "docs/tutorial/"
    },
-   "file": "agents/docs/tutorial-writer.md"
+   "file": "agents/docs/tutorial-writer.md",
+   "write_scope": [
+    "docs/"
+   ]
   },
   "user-researcher": {
    "descriptive": {
     "write_scope_note": "research/user-needs.md"
    },
-   "file": "agents/research/user-researcher.md"
+   "file": "agents/research/user-researcher.md",
+   "write_scope": [
+    "research/",
+    "pm-research.md"
+   ]
   }
  }
 }
