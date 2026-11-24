@@ -16,8 +16,16 @@ Blocking rules (exit 2 with a reason):
   B3 dispatch     A dispatch target must be a `devsecops-agency:` agent, and the
                   call may not override the target's model.
 
+  B5 scope        Write, Edit, MultiEdit and NotebookEdit must land on a path in the
+                  caller's role-card `write_scope` (or the shared logs every agent
+                  keeps: chat.jsonl, inbox.json, _sessions/). An entry ending in "/"
+                  is a folder; other entries are file names or globs. Both match at
+                  any depth, so `brief.md` covers outputs/devsecops-agency/<slug>/brief.md.
+                  A card with no write_scope falls back to L1.
+
 Log-only rules (recorded in the receipt, never block):
-  L1 scope        the write path is outside the caller's role-card scope note.
+  L1 scope        the write path is outside the caller's role-card scope note (only for a
+                  card with no write_scope).
   L2 own-council  a chief dispatches an agent outside its own council.
 
 Every decision is appended to <project>/.devsecops-agency/receipts.jsonl.
@@ -62,6 +70,8 @@ APPEND_ONLY = [
 APPEND_ONLY += ["*/" + g for g in APPEND_ONLY if not g.startswith("*/")]
 APPEND_ONLY = sorted(set(APPEND_ONLY))
 RECEIPTS_DIR = ".devsecops-agency"
+# Logs every agent may write, whatever its scope (each is also append-only under B2).
+SHARED_WRITES = ["chat.jsonl", "inbox.json", "_sessions/"]
 
 
 def _norm(p: str) -> str:
@@ -101,6 +111,21 @@ def resulting_content(tool: str, ti: dict, current: str) -> str | None:
             return None
         out = out.replace(old, new) if e.get("replace_all") else out.replace(old, new, 1)
     return out
+
+
+def in_scope(relpath: str, scope: list[str]) -> bool:
+    """True if relpath matches an entry of scope at any depth. "x/" is a folder, "*" is anything."""
+    fold = str.lower if os.name == "nt" else (lambda s: s)
+    r = fold(relpath)
+    for e in (fold(s) for s in scope):
+        if e == "*":
+            return True
+        if e.endswith("/"):
+            if ("/" + r).find("/" + e) != -1:
+                return True
+        elif fnmatch.fnmatchcase(r, e) or fnmatch.fnmatchcase(r, "*/" + e):
+            return True
+    return False
 
 
 def load_cards() -> dict:
@@ -167,7 +192,12 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
                     block.append(f"B2 append-only: {r} is append-only; the new content must start with the current content")
             cards = load_cards() if cards is None else cards
             card = cards.get(name)
-            if card:
+            scope = (card or {}).get("write_scope")
+            if card and scope:
+                if not in_scope(r, scope + SHARED_WRITES):
+                    block.append(f"B5 scope: {name} may write only {', '.join(scope)} (plus {', '.join(SHARED_WRITES)}), "
+                                 f"not {r}. Return the content to the agent that dispatched you, or dispatch the agent that owns {r}.")
+            elif card:
                 pre = scope_prefixes(card.get("descriptive", {}).get("write_scope_note", ""))
                 if pre and not any(r == p.rstrip("/") or r.startswith(p if p.endswith("/") else p + "/") or r.endswith("/" + p) or r == p for p in pre):
                     note.append(f"L1 scope: {r} is outside {name}'s scope note {pre}")

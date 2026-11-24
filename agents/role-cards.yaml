@@ -17,6 +17,10 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - architecture.md
+      - architecture/
+      - docs/api/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -34,6 +38,9 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - architecture.md
+      - architecture/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -52,6 +59,10 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - architecture.md
+      - architecture/
+      - build-report.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -69,6 +80,9 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - architecture.md
+      - architecture/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -86,6 +100,9 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - architecture.md
+      - architecture/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -102,6 +119,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _agency/system-map.md
       effort: medium
       maxTurns: 25
     held:
@@ -123,6 +142,8 @@ agents:
       - Bash
       shell: read-only
       model: haiku
+      write_scope:
+      - _vision/audit/
       effort: low
       maxTurns: 20
     descriptive:
@@ -139,6 +160,8 @@ agents:
       - Write
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/audit/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -156,6 +179,10 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/audit/
+      - close-audit.md
+      - _memory/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -172,6 +199,8 @@ agents:
       - Write
       shell: null
       model: haiku
+      write_scope:
+      - _vision/audit/
       effort: low
       maxTurns: 20
     descriptive:
@@ -189,6 +218,9 @@ agents:
       - Bash
       shell: read-only
       model: haiku
+      write_scope:
+      - _vision/audit/
+      - _memory/
       effort: low
       maxTurns: 20
     descriptive:
@@ -205,6 +237,8 @@ agents:
       - Write
       shell: null
       model: haiku
+      write_scope:
+      - _vision/audit/
       effort: low
       maxTurns: 20
     descriptive:
@@ -221,6 +255,8 @@ agents:
       - Agent
       shell: null
       model: opus
+      write_scope:
+      - _decisions/
       effort: high
       maxTurns: 20
     descriptive:
@@ -238,6 +274,16 @@ agents:
       - Agent
       shell: null
       model: opus
+      write_scope:
+      - status.json
+      - inbox.json
+      - brief.md
+      - retro.md
+      - _decisions/
+      - "adr-*.md"
+      - LESSONS.md
+      - _agency/project.md
+      - _agency/adoption-report.md
       effort: null
       maxTurns: null
     descriptive:
@@ -256,6 +302,9 @@ agents:
       - Glob
       shell: full
       model: haiku
+      write_scope:
+      - .github/
+      - deploy/
       effort: low
       maxTurns: 20
     descriptive:
@@ -274,6 +323,14 @@ agents:
       - Glob
       shell: full
       model: haiku
+      write_scope:
+      - deploy/
+      - Dockerfile
+      - docker-compose.yml
+      - vercel.json
+      - wrangler.toml
+      - fly.toml
+      - _agency/baseline/environments.md
       effort: low
       maxTurns: 20
     descriptive:
@@ -292,6 +349,11 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - deploy/
+      - deploy.md
+      - .github/
+      - _agency/baseline/environments.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -310,6 +372,8 @@ agents:
       - Glob
       shell: full
       model: haiku
+      write_scope:
+      - deploy/
       effort: low
       maxTurns: 20
     descriptive:
@@ -327,6 +391,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - docs/
       effort: low
       maxTurns: 20
     descriptive:
@@ -345,6 +411,10 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - docs/
+      - README.md
+      - docs-report.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -362,6 +432,9 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - README.md
+      - docs/
       effort: low
       maxTurns: 20
     descriptive:
@@ -380,6 +453,8 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - docs/
       effort: low
       maxTurns: 20
     descriptive:
@@ -397,6 +472,8 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - _vision/eval/
       effort: low
       maxTurns: 20
     descriptive:
@@ -413,6 +490,9 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _vision/eval/
+      - _vision/cost/
       effort: low
       maxTurns: 20
     descriptive:
@@ -429,6 +509,9 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _vision/eval/
+      - eval/
       effort: low
       maxTurns: 20
     descriptive:
@@ -446,6 +529,10 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/eval/
+      - eval/
+      - close-eval.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -462,6 +549,9 @@ agents:
       - Write
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/eval/
+      - _vision/finops/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -479,6 +569,11 @@ agents:
       - Glob
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/eval/
+      - _vision/cost/
+      - _vision/cross-model-panel/
+      - _decisions/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -495,6 +590,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _vision/eval/
       effort: low
       maxTurns: 20
     descriptive:
@@ -511,6 +608,8 @@ agents:
       - Write
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/eval/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -527,6 +626,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _vision/eval/
       effort: low
       maxTurns: 20
     descriptive:
@@ -545,6 +646,8 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - "*"
       effort: medium
       maxTurns: 25
     descriptive:
@@ -563,6 +666,8 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - "*"
       effort: medium
       maxTurns: 25
     descriptive:
@@ -581,6 +686,8 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - "*"
       effort: medium
       maxTurns: 25
     descriptive:
@@ -599,6 +706,8 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - "*"
       effort: medium
       maxTurns: 25
     descriptive:
@@ -615,6 +724,9 @@ agents:
       - WebFetch
       shell: null
       model: sonnet
+      write_scope:
+      - legal/
+      - _vision/legal/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -632,6 +744,11 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - legal/
+      - legal-review.md
+      - _vision/legal/
+      - _agency/baseline/licenses.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -648,6 +765,9 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - legal/
+      - _vision/legal/
       effort: low
       maxTurns: 20
     descriptive:
@@ -665,6 +785,9 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - legal/
+      - _agency/baseline/licenses.md
       effort: low
       maxTurns: 20
     descriptive:
@@ -681,6 +804,9 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - legal/
+      - PRIVACY.md
       effort: low
       maxTurns: 20
     descriptive:
@@ -698,6 +824,10 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - marketing/
+      - _vision/brand-guide.md
+      - _vision/history/
       effort: low
       maxTurns: 20
     descriptive:
@@ -716,6 +846,8 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - marketing/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -733,6 +865,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - marketing/
       effort: low
       maxTurns: 20
     descriptive:
@@ -750,6 +884,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - marketing/
       effort: low
       maxTurns: 20
     descriptive:
@@ -767,6 +903,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - marketing/
       effort: low
       maxTurns: 20
     descriptive:
@@ -785,6 +923,8 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/roster/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -802,6 +942,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _vision/roster/
       effort: low
       maxTurns: 20
     descriptive:
@@ -819,6 +961,8 @@ agents:
       - Edit
       shell: null
       model: haiku
+      write_scope:
+      - _vision/roster/
       effort: low
       maxTurns: 20
     descriptive:
@@ -836,6 +980,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _vision/roster/
       effort: low
       maxTurns: 20
     descriptive:
@@ -853,6 +999,10 @@ agents:
       - Glob
       shell: null
       model: sonnet
+      write_scope:
+      - agents/
+      - skills/
+      - councils/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -871,6 +1021,14 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - product/
+      - brief.md
+      - pm-research.md
+      - spec.md
+      - design/
+      - design-system/
+      - _agency/spec-as-is.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -888,6 +1046,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - product/
       effort: low
       maxTurns: 20
     descriptive:
@@ -905,6 +1065,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - product/
       effort: low
       maxTurns: 20
     descriptive:
@@ -922,6 +1084,11 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - product/
+      - brief.md
+      - spec.md
+      - _agency/spec-as-is.md
       effort: low
       maxTurns: 20
     descriptive:
@@ -939,6 +1106,8 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - qa/
       effort: low
       maxTurns: 20
     descriptive:
@@ -956,6 +1125,9 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - qa/
+      - tests/perf/
       effort: low
       maxTurns: 20
     descriptive:
@@ -973,6 +1145,12 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - qa/
+      - qa-report.md
+      - test-matrix.md
+      - _agency/baseline/tests.md
+      - _agency/baseline/integrity.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -990,6 +1168,11 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - tests/
+      - test/
+      - qa/
+      - test-matrix.md
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1008,6 +1191,15 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - tests/
+      - test/
+      - qa/
+      - package.json
+      - pyproject.toml
+      - "requirements*.txt"
+      - _agency/baseline/tests.md
+      - _agency/baseline/integrity.md
       effort: low
       maxTurns: 20
     descriptive:
@@ -1025,6 +1217,8 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - red-team/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1041,6 +1235,9 @@ agents:
       - Write
       shell: null
       model: sonnet
+      write_scope:
+      - red-team/
+      - _vision/chaos/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1062,6 +1259,8 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - red-team/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1078,6 +1277,9 @@ agents:
       - Bash
       shell: read-only
       model: haiku
+      write_scope:
+      - red-team/
+      - _vision/red-team/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1095,6 +1297,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - red-team/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1112,6 +1316,11 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - red-team/
+      - red-team.md
+      - _vision/red-team/
+      - _worktrees/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -1128,6 +1337,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - red-team/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1144,6 +1355,8 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - red-team/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1161,6 +1374,8 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - red-team/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1179,6 +1394,10 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - research/
+      - research.md
+      - research-brief.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -1198,6 +1417,8 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - research/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1217,6 +1438,8 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - research/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1236,6 +1459,8 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - research/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1255,6 +1480,9 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - research/
+      - pm-research.md
       effort: low
       maxTurns: 20
     descriptive:
@@ -1272,6 +1500,10 @@ agents:
       - Write
       shell: sandboxed
       model: haiku
+      write_scope:
+      - security/
+      - threat-model.md
+      - _agency/baseline/security-scan.md
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1288,6 +1520,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - security/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1304,6 +1538,9 @@ agents:
       - Write
       shell: null
       model: sonnet
+      write_scope:
+      - security/
+      - _vision/dlp/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1320,6 +1557,10 @@ agents:
       - Write
       shell: null
       model: sonnet
+      write_scope:
+      - security/
+      - _vision/audit/
+      - _vision/mcp-registry/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1337,6 +1578,8 @@ agents:
       - Glob
       shell: sandboxed
       model: haiku
+      write_scope:
+      - security/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1353,6 +1596,9 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - dist/
+      - _vision/security/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1369,6 +1615,9 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - security/
+      - _vision/security/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1386,6 +1635,13 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - security/
+      - threat-model.md
+      - security-report.md
+      - security-audit.md
+      - _agency/baseline/threat-model.md
+      - _agency/baseline/security-scan.md
       effort: medium
       maxTurns: 30
     descriptive:
@@ -1402,6 +1658,10 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - security/
+      - threat-model.md
+      - _agency/baseline/threat-model.md
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1419,6 +1679,8 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - _vision/sre/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1436,6 +1698,10 @@ agents:
       - Edit
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/sre/
+      - _vision/observability/
+      - _vision/traces/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1453,6 +1719,9 @@ agents:
       - Edit
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/mcp/
+      - mcp/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1469,6 +1738,8 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - _vision/sre/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1485,6 +1756,8 @@ agents:
       - Grep
       shell: null
       model: haiku
+      write_scope:
+      - _vision/sre/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1502,6 +1775,9 @@ agents:
       - Edit
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/sre/
+      - _vision/prompt-cache/
       effort: medium
       maxTurns: 25
     descriptive:
@@ -1517,6 +1793,8 @@ agents:
       - Bash
       shell: sandboxed
       model: haiku
+      write_scope:
+      - _vision/sre/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1535,6 +1813,8 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/sre/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -1554,6 +1834,8 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - _vision/strategy/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1572,6 +1854,8 @@ agents:
       - Agent
       shell: null
       model: sonnet
+      write_scope:
+      - _vision/strategy/
       effort: medium
       maxTurns: 30
     descriptive:
@@ -1591,6 +1875,8 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - _vision/strategy/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1608,6 +1894,8 @@ agents:
       - Glob
       shell: null
       model: haiku
+      write_scope:
+      - _vision/strategy/
       effort: low
       maxTurns: 20
     descriptive:
@@ -1627,6 +1915,8 @@ agents:
       - WebFetch
       shell: null
       model: haiku
+      write_scope:
+      - _vision/strategy/
       effort: low
       maxTurns: 20
     descriptive:
