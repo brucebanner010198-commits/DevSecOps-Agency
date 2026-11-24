@@ -31,7 +31,7 @@ _vision/roster/
 ## Process
 
 1. **CEO convenes COO.** Roster is a People-ops output. CEO is the only user voice; COO is the only agent voice on roster changes.
-2. **COO dispatches three specialists in parallel** (no ordering dependency): `roster-manager` → census, `performance-reviewer` → performance, `hiring-lead` → proposals.
+2. **COO dispatches three specialists in parallel** (no ordering dependency): `devsecops-agency:roster-manager` → census, `devsecops-agency:performance-reviewer` → performance, `devsecops-agency:hiring-lead` → proposals.
 3. **COO synthesises `coo-brief.md`** with the standard 4-section shape: census delta, capacity, performance flags, recommendations.
 4. **CEO accepts each recommendation explicitly.** Every accepted recommendation is an ADR in the same CEO turn — never deferred. See `skills/adr/references/decision-triggers.md > People-ops`.
 5. **`skill-creator` executes.** Hires and repurposes go through `skill-creator`. Fires file an archive redirect; the agent file moves to `_vision/roster/_archive/<name>.md`.

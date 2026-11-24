@@ -13,7 +13,7 @@ Capacity is a read-only signal skill. It does not mutate the roster; it tells `r
 
 - Roster checkpoint (every run) — supplies the `Utilization` column in `census.md`.
 - Idea-pipeline pre-flight — does the agency have capacity to run multiple top-5 candidates in parallel? If not, CEO must sequence.
-- User asks "can we take on another project" — CEO dispatches COO dispatches `roster-manager` which reads capacity.
+- User asks "can we take on another project" — CEO dispatches COO dispatches `devsecops-agency:roster-manager` which reads capacity.
 - On any Chief reporting `gate: yellow` with reason "too many parallel dispatches" — reactive.
 
 ## Capacity bands

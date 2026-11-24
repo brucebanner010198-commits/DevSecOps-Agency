@@ -32,7 +32,7 @@ _vision/eval/
 
 ## Process (close-eval)
 
-1. **Convene.** CEO dispatches `evaluation-lead` with the slug, the project's OKR path, and the `budget` block from `_vision/projects/<slug>.md`.
+1. **Convene.** CEO dispatches `devsecops-agency:evaluation-lead` with the slug, the project's OKR path, and the `budget` block from `_vision/projects/<slug>.md`.
 2. **Parallel specialist fan-out** (CEVO invokes):
    - `eval-designer` → `<slug>/eval/eval-set.md` (≥ 1 item / PKR, pass/fail ground-truth).
    - `benchmark-runner` → `<slug>/eval/results.md` (mechanical scoring).
@@ -45,7 +45,7 @@ _vision/eval/
 
 ## Process (portfolio-regression sweep)
 
-1. At quarter roll-up, CEO dispatches `evaluation-lead` portfolio-wide.
+1. At quarter roll-up, CEO dispatches `devsecops-agency:evaluation-lead` portfolio-wide.
 2. `benchmark-runner` re-runs `regression-baseline.md`'s canonical eval set against every closed project's shipped artifacts this quarter.
 3. `regression-detector` aggregates and diffs vs prior quarter.
 4. CEVO writes `_vision/eval/<date>-portfolio-regression.md`.
@@ -53,14 +53,14 @@ _vision/eval/
 
 ## Process (benchmark-sweep)
 
-1. Before any plugin `v-bump`, CEO dispatches `evaluation-lead` with a v-bump scope.
+1. Before any plugin `v-bump`, CEO dispatches `devsecops-agency:evaluation-lead` with a v-bump scope.
 2. `benchmark-runner` runs the standard harness (SWE-bench-lite equivalent + any custom harness declared in `_vision/eval/harness.md`).
 3. Regression vs prior version's sweep → CEVO red if any regression > 5 pp.
 4. Gate must land green or yellow before the plugin version is cut.
 
 ## Process (compaction-check)
 
-1. On any indication of context-window pressure (session-log > 60 % of budget, `chat.jsonl` > 5 000 entries, memory footprint flag), CEO dispatches `evaluation-lead`.
+1. On any indication of context-window pressure (session-log > 60 % of budget, `chat.jsonl` > 5 000 entries, memory footprint flag), CEO dispatches `devsecops-agency:evaluation-lead`.
 2. `token-compactor` emits structured rewrites per `skills/memory/references/write-policy.md`. Decisions, errors, reports, ADR-referenced lines, rung transitions, meeting lines — never compactable.
 3. Report bytes-before → bytes-after to CEVO; flag compactions < 10 % savings for skip.
 

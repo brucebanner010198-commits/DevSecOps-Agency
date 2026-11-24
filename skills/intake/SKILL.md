@@ -21,7 +21,7 @@ A lightweight alternative to the full `ship-it` pipeline. Run intake and the PM 
 2. Create the project folder at `outputs/devsecops-agency/<slug>/` if it does not exist.
 3. Initialise `status.json` (phase = `pm`), `chat.jsonl`, `inbox.json`.
 4. Run the intake Q&A batch (same as `ship-it`'s Step 2).
-5. Dispatch `pm-lead` with the raw idea + intake answers.
+5. Dispatch `devsecops-agency:pm-lead` with the raw idea + intake answers.
 6. Write `brief.md`.
 7. Call the `command-center` skill to open the live artifact at `status.phase = "pm-delivered"`.
 8. Tell the user the brief is ready and offer: continue with `/devsecops-agency:ship-it` (it will pick up the existing project folder and skip intake), or stop here.

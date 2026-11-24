@@ -44,7 +44,7 @@ _vision/red-team/
 
 ## Process (pre-release red-team)
 
-1. **Convene.** CEO dispatches `red-team-lead` with slug + threat-model path + applicable stepping-stones.
+1. **Convene.** CEO dispatches `devsecops-agency:red-team-lead` with slug + threat-model path + applicable stepping-stones.
 2. **CRT reads the surface.** `<slug>/security/threat-model.md`, `<slug>/brief.md > ## Intake`, `<slug>/architecture.md`, applicable stones from `_vision/playbooks/ARCHIVE.md`.
 3. **CRT selects ASI categories.** Every applicable category gets at least one test; inapplicable are marked `n/a` with justification.
 4. **Parallel specialist fan-out** via `skills/worktree`:
@@ -63,7 +63,7 @@ _vision/red-team/
 ## Process (prompt-upgrade red-team)
 
 1. Triggered when `skill-creator` proposes a change to `agents/*.md` or a high-leverage `skills/*/SKILL.md`.
-2. CRT dispatches `playbook-author` (diff review) + `adversarial-prompter` (attack the new prompt directly).
+2. CRT dispatches `devsecops-agency:playbook-author` (diff review) + `devsecops-agency:adversarial-prompter` (attack the new prompt directly).
 3. Playbook-author grepps `_vision/playbooks/ARCHIVE.md` for stones tagged with the file being edited. Verifies the diff does not reintroduce a defended pattern. Reject = ADR + rollback.
 4. Adversarial-prompter runs the attack catalog against the new prompt in isolation.
 5. Return gate. Any red blocks the prompt change from landing.

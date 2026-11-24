@@ -49,7 +49,7 @@ Per `KEEPER-TEST.md > ## Inputs to the review`:
 
 1. **Check trigger.** Confirm one of the 4 triggers fired. Log the trigger in the session log.
 2. **Enumerate roster.** Read `_vision/roster/roster.md` (maintained by `roster-manager`) — or `status.json > team` if roster.md is empty. **Skip reserved names** per `KEEPER-TEST.md > ## Reserved agents` (16 chiefs + skill-creator).
-3. **Dispatch `performance-reviewer`.** One dispatch per agent under review. Each returns a green / yellow / red per the 4 axes in `KEEPER-TEST.md > ## Scoring axes`.
+3. **Dispatch `devsecops-agency:performance-reviewer`.** One dispatch per agent under review. Each returns a green / yellow / red per the 4 axes in `KEEPER-TEST.md > ## Scoring axes`.
 4. **Aggregate.** Write `_vision/roster/performance-<YYYY-MM-DD>.md` with one row per agent: overall rating + per-axis.
 5. **Hand off to `hiring-lead`.** The Keep / Upgrade / Fire-or-Repurpose actions get concrete proposals from `hiring-lead`.
 6. **For every proposed action, the COO:**
