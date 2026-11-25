@@ -66,6 +66,7 @@ APPEND_ONLY = [
     "_vision/cost/manual-billing.csv",
     "_vision/cross-model-panel/panel-rotation.md",
     "_vision/history/*",
+    "_memory/patterns/*",
     "red-team/findings.md",
 ]
 # The same files under a project output folder (outputs/devsecops-agency/<slug>/...).
