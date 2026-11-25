@@ -176,12 +176,17 @@ OUT = "outputs/devsecops-agency/tip-splitter/"
     OUT + "_sessions/ceo/s1.jsonl", OUT + "_vision/traces/2026-11/t.jsonl", OUT + "_vision/dlp/x-custom.jsonl",
     OUT + "_vision/mcp-registry/srv/hashes.jsonl", OUT + "_vision/sre/run.log",
     "_sessions/ceo/s1.jsonl", "_vision/cost/manual-billing.csv", "_vision/cross-model-panel/panel-rotation.md",
+    "outputs/devsecops-agency/_memory/patterns/tip-splitter.md", "_memory/patterns/a.md",
 ])
 def test_append_only_globs_match_root_and_nested_layout(relpath):
     assert guard.is_append_only(relpath)
 
 
-@pytest.mark.parametrize("relpath", [OUT + "status.json", OUT + "src/app.js", OUT + "red-team/notes.md", OUT + "src/history/list.js"])
+# memory/<date>.md is newest-at-top and MEMORY.md takes bullets under its sections, so neither is an
+# end-append; they stay outside B2 until the Chairman decides how to enforce "never overwrite a line".
+@pytest.mark.parametrize("relpath", [OUT + "status.json", OUT + "src/app.js", OUT + "red-team/notes.md", OUT + "src/history/list.js",
+                                     "outputs/devsecops-agency/_memory/MEMORY.md", "outputs/devsecops-agency/_memory/index.json",
+                                     "outputs/devsecops-agency/_memory/memory/2026-11-25.md"])
 def test_ordinary_paths_are_not_append_only(relpath):
     assert not guard.is_append_only(relpath)
 
