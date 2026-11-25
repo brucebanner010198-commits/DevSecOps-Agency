@@ -65,10 +65,12 @@ The sweep script is kept outside the repo. It feeds each path to `guard.check()`
   - or move these records to a named owner, such as a Chief of Staff (Part 2A).
 
   Either one changes the grant matrix, so it is a design decision. Until then, these steps are skipped and logged.
+
+  **Decided (Chairman, 2026-11-25): the CEO.** The five paths in the first option are now in the CEO's `write_scope`. The auditors keep their own records: the CEO still has no write to `_vision/audit/`, `eval/`, `cost/`, `traces/` or any other `_vision/` path. A re-run of the $0 sweep allows every vision, memory, OKR and rhythm step. The remaining refusals are the plugin-root `LESSONS.md` (F3) and `_worktrees/` (F4). `brand-guardian` still shares `_vision/history/`, `compliance-drift` still shares `_vision/rhythm/`, and `cao` and `memory-auditor` still share `_memory/`.
 - **F2. Three steps need tools the CEO does not hold:** `command-center` (an artifact), `notify` (push) and intake's AskUserQuestion. Granting them is a Part 4 grant decision.
 - **F3. The lessons ledger.** With the plugin-root `LESSONS.md`, the write is refused (B1), which was already open after Phase 2a. With the read/write path rule, it lands in the launch folder instead (N1-e). Where the cross-project ledger lives is a design decision.
 - **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree.
-- **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision.
+- **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision. **Resolved with F1:** `_vision/rhythm/` is in the CEO's scope.
 
 ## Live run N1 (cap $6 of the remaining $16.62)
 

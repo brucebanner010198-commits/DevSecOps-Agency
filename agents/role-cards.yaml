@@ -288,6 +288,11 @@ agents:
       - _agency/adoption-report.md
       - "ADR-*.md"
       - _meetings/
+      - _vision/VISION.md
+      - _vision/projects/
+      - _vision/history/
+      - _vision/rhythm/
+      - _memory/
       effort: null
       maxTurns: null
     activation: core

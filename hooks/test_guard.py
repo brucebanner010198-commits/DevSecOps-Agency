@@ -334,3 +334,20 @@ def test_refusal_for_code_names_the_builders():
     b, _ = guard.check(call("Write", {"file_path": os.path.join(os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd()), "src", "app.js"), "content": ""},
                             "devsecops-agency:engineering-lead"), cards)
     assert len(b) == 1 and b[0].startswith("B5") and "frontend-dev" in b[0] and "backend-dev" in b[0]
+
+
+@pytest.mark.parametrize("rel", [
+    "_vision/VISION.md", "_vision/projects/app.md", "_vision/history/2026-11-25.md",
+    "_vision/rhythm/state.json", "_vision/rhythm/heartbeat-2026-11-25.md",
+    "_memory/MEMORY.md", "_memory/memory/2026-11-25.md", "_memory/patterns/app.md", "_memory/index.json",
+])
+def test_ceo_owns_its_vision_and_memory_records(rel):
+    scope = guard.load_cards()["ceo"]["write_scope"]
+    assert guard.in_scope(rel, scope) and guard.in_scope("outputs/devsecops-agency/" + rel, scope), rel
+
+
+@pytest.mark.parametrize("rel", [
+    "_vision/audit/x.md", "_vision/eval/x.md", "_vision/cost/x.md", "_vision/traces/t.jsonl", "_vision/notes.md",
+])
+def test_ceo_does_not_get_the_other_vision_records(rel):
+    assert not guard.in_scope(rel, guard.load_cards()["ceo"]["write_scope"]), rel
