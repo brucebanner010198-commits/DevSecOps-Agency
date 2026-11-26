@@ -206,3 +206,9 @@ The run went end to end and closed **blocked**. Verification could not execute t
 - **Budget confound.** The CEO wrote "Chairman's session budget (USD 5 total)" into `brief.md` and told chiefs to run lean. My prompt never stated a budget, and the stream shows no source before the CEO's own first mention, so the figure presumably reached it from the run's `--max-budget-usd`. Until that is separated out, N1-a and N1-b cannot be told apart from the cap, so no prompt is edited for them.
 - **Fixture error (mine).** The seeded `state.json` carried the UTC date, 2026-11-26. The CEO took it to be the future, so it neither trusted nor rewrote it, and logged an error. So F5, a live rhythm write, is still unproven.
 - **Spend.** Build spend is $35.21 of $40, including the draft reviews below ($0.69).
+
+### Default 5, completed after N4
+
+N3 had passed only because its prompt pointed at the logging step. N4 showed that in a full run the CEO never opens `skills/session-log`. So the `skills/ceo` session-open step (step 8) now states the entry's fields and the `ts: null` rule itself. It restates the `session-log` rule that CRT approved in round 2, so it gets no new review.
+
+**Probe N5 ($0.45, cap $0.50).** The prompt never mentioned the log. All three entries have `ts: null` and the full field set. **Pass.** Build spend is $35.66 of $40.
