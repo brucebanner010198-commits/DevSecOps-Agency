@@ -90,7 +90,7 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 +checks needs an amendment. A release without a passing check is a §11.3 CAO red.
 +
 +CAO's `gate-auditor` runs the check, and the script itself writes the result, with its
-+`gate:` line, to `_vision/audit/<date>-<slug>-release-gate.md`, separate from the verdict
++`gate:` line, to `_vision/audit/<slug>-release-gate.md`, separate from the verdict
 +files the check reads. The CEO never runs the check for its own release.
 +
 +The check does not yet cover informing councils fully: their reds are read from
@@ -545,7 +545,7 @@ Each has a recommended option. None is decided here.
 | # | Round-2 question | Decision, as applied |
 |---|---|---|
 | 1 | What is a release? | Any deploy outside the Agency's own machine, staging included. A rollback to a build that passed reuses its gate record, with a receipt |
-| 2 | Who runs `--gate`? | CAO's `gate-auditor` runs it, and the script writes `_vision/audit/<date>-<slug>-release-gate.md` (`--record`). Not CI, which cannot see the receipts. Never the CEO. This departs from the recommended option; see round 3 |
+| 2 | Who runs `--gate`? | CAO's `gate-auditor` runs it, and the script writes `_vision/audit/<slug>-release-gate.md` (`--record`). Not CI, which cannot see the receipts. Never the CEO. This departs from the recommended option; see round 3 |
 | 3 | Correcting `acceptance.md` | Only by a `user-decision` ADR (`decision: acceptance-correction`) before any verdict. The script counts "written once" from it, with a test |
 | 4 | Informing councils | §8.6 says plainly that they are not fully covered; their verdict files need a later amendment |
 
@@ -757,3 +757,23 @@ I would approve once item 1 is fixed or disclosed as a residual the Chairman acc
 **Q2 departs from the recommended option, for the Chairman to confirm.** The recommendation put the result in `close-audit.md` and had CI run the check. As applied:
 - the result goes to a separate record, because `close-audit.md` is one of the files the check reads;
 - CI does not run it, because CI cannot see the git-ignored receipts.
+
+#### After round 3 (not reviewed)
+
+The three reject verdicts also carried non-blocking points. These are applied:
+- a waiver must have `status: accepted` (CAO);
+- credential, API-key, token, password and private-key classes are never waivable, as well as secret and ASI classes (CISO);
+- a mandated rollback also appends to the mandate's receipts (CAO).
+
+A $0 run of the gate auditor's exact command found two faults, both fixed with tests:
+- the script imported PyYAML, which the system Python lacks, so the check could not run. It now uses only the standard library;
+- the record path relied on a date the agents cannot read. The script now writes a fixed `<slug>-release-gate.md`, which carries the UTC time, and appends to a history file.
+
+These residuals are now disclosed:
+- the rollback exemption is procedural: no script mode checks that the named build passed;
+- the gate auditor still holds Write on `_vision/audit/`, so "never type the result" is a prompt rule;
+- CRT's contract gives each finding its ASI category as its class, so every CRT red is unwaivable. That matches §8.4 but is stricter than `skills/waivers`;
+- §8.4 names no reviewer for an informing-council waiver;
+- ADR-0010 mentions §2.6 releases, but it reads on its own if ADR-0009 is not approved.
+
+The fixed command was then run with the system Python on a copy of run N4's launch folder. It ran, wrote `outputs/devsecops-agency/_vision/audit/tip-calculator-release-gate.md` with `gate: red` and the time, and appended the history line. It failed for the expected reason: N4's records predate the verdict contract.

@@ -122,7 +122,7 @@ def gflags(tmp_path, proj, receipts, since=SINCE):
 
 def waiver(tmp_path, name="ADR-0100-waiver-grant-x.md", **kw):
     fm = dict(kind="waiver-grant", approver="user", project="app", council="security", finding="sec-7",
-              **{"class": "xss"}, approved="2026-11-25", expires="2026-12-31")
+              **{"class": "xss"}, status="accepted", approved="2026-11-25", expires="2026-12-31")
     fm.update(kw)
     d = tmp_path / "outputs" / "devsecops-agency" / "_decisions"
     d.mkdir(parents=True, exist_ok=True)
@@ -188,6 +188,7 @@ def test_gate_red_with_no_findings_listed_fails(tmp_path):
 
 @pytest.mark.parametrize("bad", [dict(approver="ceo"), dict(expires="2026-11-01"), dict(project="other"),
                                  dict(expires="never"), dict(expires="2999-01-01"), dict(approved="x"),
+                                 dict(status="proposed"), {"class": "hardcoded-credential"}, {"class": "api-key"},
                                  dict(council="audit"), dict(finding="sec-77"), {"class": ""},
                                  {"class": "raw-secret"}, {"class": "ASI-03"}])
 def test_gate_rejects_an_invalid_waiver(tmp_path, bad):
@@ -307,9 +308,15 @@ def test_gate_record_is_written_by_the_script(tmp_path):
     (tmp_path / ".devsecops-agency").mkdir()
     proj, rs = gate_setup(tmp_path)
     (tmp_path / ".devsecops-agency" / "receipts.jsonl").write_text("\n".join(json.dumps(r) for r in rs), encoding="utf-8")
-    rec = tmp_path / "outputs" / "devsecops-agency" / "_vision" / "audit" / "gate.md"
-    args = ["x", str(tmp_path), "--gate", "--project", "outputs/devsecops-agency/app", "--since", SINCE, "--record", str(rec)]
-    assert rc.main(args) == 0 and rec.read_text(encoding="utf-8").startswith("gate: green")
+    audit = tmp_path / "outputs" / "devsecops-agency" / "_vision" / "audit"
+    args = ["x", str(tmp_path), "--gate", "--project", "outputs/devsecops-agency/app", "--since", SINCE, "--record"]
+    assert rc.main(args) == 0 and (audit / "app-release-gate.md").read_text(encoding="utf-8").startswith("gate: green")
     (proj / "close-eval.md").write_text("gate: green\n", encoding="utf-8")
-    assert rc.main(args) == 1 and rec.read_text(encoding="utf-8").startswith("gate: red")
+    assert rc.main(args) == 1 and (audit / "app-release-gate.md").read_text(encoding="utf-8").startswith("gate: red")
+    hist = (audit / "app-release-gate-history.jsonl").read_text(encoding="utf-8").splitlines()
+    assert [json.loads(x)["gate"] for x in hist] == ["green", "red"]
+
+
+def test_release_check_needs_no_yaml():
+    assert "import yaml" not in Path(rc.__file__).read_text(encoding="utf-8")
 

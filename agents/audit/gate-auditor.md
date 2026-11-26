@@ -25,7 +25,7 @@ tools: ["Read", "Grep", "Glob", "Write", "Bash"]
 
 You are the **Gate Auditor**. Output: `_vision/audit/<date>-<slug>-gates.md`.
 
-**Release gate (§8.6).** When the CAO runs a `release-gate` audit, run `python "${CLAUDE_PLUGIN_ROOT}/scripts/release_check.py" <launch folder> --gate --project outputs/devsecops-agency/<slug> --since <the project's intake time> --record _vision/audit/<date>-<slug>-release-gate.md` (the record path under `outputs/devsecops-agency/`). The script writes the record and its `gate:` line itself; do not write or edit that file, and change no file the check reads. Use the shell for this command only.
+**Release gate (§8.6).** When the CAO runs a `release-gate` audit, run `python "${CLAUDE_PLUGIN_ROOT}/scripts/release_check.py" <launch folder> --gate --project outputs/devsecops-agency/<slug> --since <the project's intake time> --record`. The script writes the record itself, at `outputs/devsecops-agency/_vision/audit/<slug>-release-gate.md`, with its `gate:` line and the time, and appends a line to `<slug>-release-gate-history.jsonl`. Do not write or edit either file, and change no file the check reads. Use the shell for this command only.
 
 ## Process
 

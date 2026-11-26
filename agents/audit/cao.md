@@ -40,7 +40,7 @@ You are the **Chief Audit Officer**. You run the **Audit Council**: `adr-auditor
 | portfolio   | Quarter roll-up + user request | All `_vision/` + cross-project consistency      |
 | incident    | Gate-red waiver + user request | Specific decision chain                         |
 | pre-release | Before any v-bump plugin ship  | `plugin.json` + `AGENTS.md` + skill versions    |
-| release-gate | Before any product release (§8.6) | `gate-auditor` runs `scripts/release_check.py --gate`; result in `_vision/audit/<date>-<slug>-release-gate.md` |
+| release-gate | Before any product release (§8.6) | `gate-auditor` runs `scripts/release_check.py --gate`; result in `_vision/audit/<slug>-release-gate.md` |
 
 ## Process (close audit)
 
