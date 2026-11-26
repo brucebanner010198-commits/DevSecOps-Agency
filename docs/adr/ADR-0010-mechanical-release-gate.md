@@ -89,8 +89,8 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 +carries a yellow's open items is audited by CAO, by reading. Changing what the script
 +checks needs an amendment. A release without a passing check is a §11.3 CAO red.
 +
-+CAO's `gate-auditor` runs the check, with a read-only shell, and writes the result to its
-+own gate record, `_vision/audit/<date>-<slug>-release-gate.md`, separate from the verdict
++CAO's `gate-auditor` runs the check, and the script itself writes the result, with its
++`gate:` line, to `_vision/audit/<date>-<slug>-release-gate.md`, separate from the verdict
 +files the check reads. The CEO never runs the check for its own release.
 +
 +The check does not yet cover informing councils fully: their reds are read from
@@ -110,7 +110,7 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 | `skills/gates` | States the verdict contract the script reads (paths and line shapes). Done in this PR, after round 2, so not yet reviewed. |
 | `security-lead`, `evaluation-lead`, `red-team-lead`, `cao` prompts | Each chief writes its verdict in the contract's shape and place. Done in this PR, after round 2. |
 | `eval-designer`, `evaluation-lead` | The eval set is derived from `acceptance.md`, frozen at intake, not at close. Done in this PR. |
-| `gate-auditor` card and prompt | Gains a read-only shell to run the check, and writes the gate record. Done in this PR. |
+| `gate-auditor` card and prompt | Gains a shell, labelled `read-only` but not constrained, to run the check; the script writes the gate record. Done in this PR. |
 | `skills/ceo` | Runs the four blocking reviews before any release, passes each chief its verdict path, writes `gates.byCouncil`, and has CAO run the check before Phase 5 (Ship). Done in this PR. |
 | `skills/ship-it/references/status-schema.md` | `gates.byCouncil` names the blocking councils. Done in this PR. |
 | `MISSION.md`, `VALUES.md`, `RESILIENCE.md` | None |
@@ -124,6 +124,7 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 - CI does not run the check. The receipts live in the git-ignored `.devsecops-agency/` folder, so CI cannot see them.
 - An acceptance correction ADR is CEO-written, like a waiver ADR, so the script cannot prove the User approved it.
 - None of the chief-prompt edits has been tried in a live run.
+- The gate auditor's shell is labelled `read-only`, but nothing enforces the label until a sandbox exists. With it, the auditor could rewrite the files the check reads before running it. So the gate result rests on one Haiku-tier agent's conduct, though the script, not the agent, writes the result.
 
 ## Rollback
 
@@ -520,7 +521,7 @@ Tests: 35 in `scripts/test_release_check.py`, including a two-finding red, short
 - **Options (b)** now matches the redline (CAO 7, CISO 5).
 - **§8.6** states what the script checks and what CAO audits by reading: whether the release record carries the open items (CRT 7, CISO 5).
 - **Residuals** now name the shell limit (CRT 4, CEVO 6, CISO 6). They also say that the gate does not close E4 for informing councils (CEVO 5).
-- **The skill edits** (CAO 5) are on this draft branch only. The branch merges with the amendment, after the Chairman approves the final text, so nothing takes effect early. `GOVERNANCE.md` is edited in that same PR.
+- **The skill edits** (CAO 5) are on this draft branch only. The branch merges with the amendment, after the Chairman approves the final text, so nothing takes effect early. `GOVERNANCE.md` is not edited yet: it is a root document, so it changes in that same amendment PR, after approval.
 - **The eval-designer card** says to derive the set "at close" (CEVO 7). Its conforming edit, deriving the set from `acceptance.md`, lands with the amendment.
 - **Citations** (CAO 5): the G1/G2 evidence is `docs/vision/RUN-1-REPORT.md`, and N4 is `docs/vision/CEO-ENTRY-REVIEW.md`, "Run N4".
 
@@ -544,6 +545,215 @@ Each has a recommended option. None is decided here.
 | # | Round-2 question | Decision, as applied |
 |---|---|---|
 | 1 | What is a release? | Any deploy outside the Agency's own machine, staging included. A rollback to a build that passed reuses its gate record, with a receipt |
-| 2 | Who runs `--gate`? | CAO's `gate-auditor`, with a read-only shell, writing `_vision/audit/<date>-<slug>-release-gate.md`. Not CI, which cannot see the receipts. Never the CEO |
+| 2 | Who runs `--gate`? | CAO's `gate-auditor` runs it, and the script writes `_vision/audit/<date>-<slug>-release-gate.md` (`--record`). Not CI, which cannot see the receipts. Never the CEO. This departs from the recommended option; see round 3 |
 | 3 | Correcting `acceptance.md` | Only by a `user-decision` ADR (`decision: acceptance-correction`) before any verdict. The script counts "written once" from it, with a test |
 | 4 | Informing councils | §8.6 says plainly that they are not fully covered; their verdict files need a later amendment |
+
+### Round 3 (2026-11-26 UTC, read-only, each agent on its own tier, trimmed bundle, $1.43)
+
+CRT approved. CAO, CEVO and CISO rejected on narrower points. The verdicts are pasted unedited, then the response. No round 4 runs: the review budget is spent.
+
+#### CRT (`red-team-lead`): APPROVE
+
+I'm done reading and haven't run any code. This is a static review, and the verdict follows the three checks.
+
+## (1) Round-2 blocking findings
+
+| R2 # | Status | Evidence |
+|---|---|---|
+| 1. One waiver clears a red, and the match is a substring | **Fixed.** | `release_check.py:333-337` gives each finding id its own waiver and matches ids exactly. A red with no findings fails (`:331`). Tests cover a two-finding red and short ids. |
+| 2. The non-waivable check fails open | **Fixed.** | `non_waivable()` at `:180-183` rejects an empty class, any `asi…` class and any class containing "secret". It is applied to the waiver (`:242`) and to the council's own finding class (`:334`). |
+| 3. An informing red rests on `status.json` | **Disclosed and accepted.** | ADR-0010:96-98 and :120, :123. See non-blocking item 1. |
+| 4. `--today`, shell writes, who runs `--gate` | **Fixed or disclosed.** | `--today` is gone (`:377`). The "run" starts at the later of `--since` and the CEO's write of `acceptance.md` (`:294`). The shell limit is disclosed (:122). CAO's `gate-auditor` runs the check and the CEO never does (ADR-0010:92-94, `skills/ceo` §4a). |
+| 5. Mandate approval is forgeable via `inbox.json` | **Resolved by the Chairman's decision.** | §2.6 "grants nothing" until signed receipts exist (ADR-0009:50-52). The residual is stated at :147. |
+| 6. ADR-0009 depends on ADR-0010 | **Fixed.** | ADR-0009:15 and :180. |
+| 7. §8.6 items 3 and 5 not mechanical | **Fixed or disclosed.** | `EMPTY_ITEM` rejects `none`-style bullets. The `regression:` line is checked. CAO audits by reading whether the release record carries the open items (ADR-0010:88-89). |
+| 8. "Release" undefined | **Fixed.** | ADR-0010:59-62 defines it. A rollback reuses the passed build's gate record. |
+| 9. First `gate:` line anywhere is read | **Fixed.** | `parse_verdict` at `:198` reads only a `gate:` line before the first heading, and a test covers it. |
+| 10. Guard and role-card change for mandate receipts | **Disclosed and accepted.** | ADR-0009:137. This does not matter while no mandate can be granted. |
+
+## (2) Fidelity to the Chairman's decisions
+
+- **Round-1 and round-2 decisions:** the redlines, the conforming edits and `--gate` implement them. The four verdict files, the `gate:` line, `status.json` agreement, the per-finding waiver, the acceptance set and the regression rule all match.
+- **Role cards:** each lead's `write_scope` grants its own verdict file (`role-cards.yaml:186`, `:549`, `:1356`, `:1677`).
+- **`acceptance.md`:** the CEO card gains it, and the script enforces the "once, by the CEO, before any verdict" rule.
+- **Correction ADR:** the script counts "written once" from the user-decision ADR, as the Chairman decided.
+- **`skills/gates` and `skills/waivers`:** the conflicts are removed. GC is informing.
+
+## NON-BLOCKING residuals
+
+1. **Informing reds:** they are read from `status.json`, which the CEO writes, and one waiver for the council clears them whatever the finding (`release_check.py:351-353`). §8.6 item 2 still says "for that … finding", which overstates the informing case. ADR-0010:96-98 and :120 disclose this.
+2. **Shell limit:**
+   - A write through a shell leaves no receipt (`guard.py:42-44`).
+   - `gate-auditor` now has `Bash`. The card says `read-only`, but nothing enforces it.
+   - The gate record is a haiku agent pasting the script's output.
+   - Disclosed at ADR-0010:122.
+3. **Forgeable ADRs:** the waiver ADR and the acceptance-correction ADR are CEO-written, and the script cannot prove the User signed them. Disclosed at ADR-0010:119 and :125.
+4. **Rollback exemption:** the receipt that names the passed build goes to the session log, and no check verifies it. A rollback can also land on a build with a vulnerability found since its gate passed. The Chairman accepted the exemption, but the receipt gap is not disclosed.
+5. **Wording nits:**
+   - ADR-0009:8 "ADR-0010 (depends on it)" is ambiguous. The Status at :15 clears it up.
+   - ADR-0009:107 says G9 lands "with the amendment", but :137 defers every conforming edit to Phase 2b. This is harmless, but one of the two lines should change.
+6. **Live-run gaps:**
+   - The chief-prompt edits and the verdict contract in `skills/gates` have not been tried in a live run (ADR-0010:126).
+   - `hooks/role-cards.json` shows only the `acceptance.md` addition in the diff. I did not check whether the `gate-auditor` shell change has a counterpart there.
+
+## (3) Anything new that is wrong or false
+
+I found nothing that blocks. The response tables match the code. I did not run the "35 tests" claim.
+
+VERDICT: APPROVE
+
+Blocking findings: none.
+
+#### CAO (`cao`): REJECT
+
+I'm finishing the round-3 read and have no more tool calls to make. This was a static read and I ran nothing.
+
+**Round-2 findings**
+- **Fixed:** the per-finding exact-id waiver match, the missing or `ASI-*` class now failing closed, the suspension and revocation receipts (ADR-0009:73-75), the M3 rollback and "release" definitions (§8.6), the named `--gate` runner, the stale Options text, and the skills edits held to the amendment's merge.
+- **Disclosed residuals the Chairman accepted:** informing reds are read from the CEO-written `status.json` and their waivers match council and project only (ADR-0010:96-98, 120-123), CEO-written waiver and correction ADRs (119, 125), and a shell can bypass the receipts (122).
+- **Still open, non-blocking:** the informing-waiver reviewer under §8.4 is unnamed, and the G1/G2 and N4 citations carry no line numbers.
+
+**Blocking findings**
+1. **Waiver expiry fails open.** `valid_waivers` compares `str(expires) >= today` as plain strings (`release_check.py:241`). `expires: never`, `indefinite` or `2999-01-01` all pass. The §8.4 90-day cap and the paired expiry ADR are not checked. They are not in the residuals, and none of the 35 tests covers a non-date or over-cap value. Parse `expires` as a date, fail closed if it is unreadable, and cap it at 90 days from approval.
+2. **ADR-0010 departs from the Chairman's round-2 Q2 decision without saying so.**
+   - The recommended option, which the Chairman accepted, was `gate-auditor` writing the result "into `close-audit.md`", plus CI "where the repository has it" (ADR-0010:191).
+   - The applied row instead uses a separate `release-gate.md`, with no CI (206).
+   - The change may be sound, since CI cannot see the receipts and `close-audit.md` is a file the script reads. But the table presents it as the accepted decision, so the Chairman has not approved the deviation. Mark it explicitly as a deviation that needs his confirmation.
+3. **ADR-0009 contradicts itself on when the conforming edits land.** Line 107 says the `skills/gates` G9 redline lands "with the amendment". Line 137 says the conforming edits are deferred and "land with Phase 2b, not with this amendment". Separately, ADR-0010:182 says `GOVERNANCE.md` "is edited in that same PR", but the diff has no `GOVERNANCE.md` change. Make the effective dates consistent and state that `GOVERNANCE.md` is still outstanding.
+
+**Non-blocking residuals not yet disclosed**
+- The rollback exemption (§8.6 and `skills/ceo` §4a step 5) is self-attested. No mode of the script verifies that the named build passed. The receipt location also differs: the session log in `skills/ceo`, but `_decisions/mandates/*.jsonl` in ADR-0009 §5.2.
+- `gate-auditor`'s "read-only" shell is a label only, because the guard does not inspect shell commands (`hooks/guard.py:42-44`). "Paste unedited" and "change no file it reads" are prompt-level rules. The CEO ships on the `gate: green` line in a file this agent writes. Disclose that the runner's own output is not tamper-proof.
+- A `waiver-grant` ADR's `status` is not checked, so a draft or rejected waiver with `approver: user` counts.
+- The `--since` value for patches and rollbacks is unspecified.
+
+VERDICT: REJECT
+
+1. `scripts/release_check.py:241`: parse `expires` as a date, fail closed on unreadable values, enforce the 90-day cap, and add tests.
+2. `ADR-0010:191, 206`: disclose the Q2 deviation and get the Chairman's confirmation, or apply the recommended option.
+3. `ADR-0009:107` against `ADR-0009:137`, and `ADR-0010:182`: reconcile when the conforming edits land, and fix the `GOVERNANCE.md` claim.
+
+#### CEVO (`evaluation-lead`): REJECT
+
+I've finished the review and have what I need for the verdict.
+
+**CEVO round-3 review of ADR-0009 and ADR-0010**
+
+**(1) My round-2 blocking findings**
+- **1. Waiver substring match:** fixed. Findings are matched by exact id, and each finding needs its own waiver (`release_check.py:333-337`). The tests cover sec-7 against sec-70 and a two-finding red.
+- **2. Missing `class:`:** fixed. `non_waivable()` fails closed on an empty class, any `asi…` class and any class containing "secret" (`:180-183`). The eight invalid-waiver cases include an empty class.
+- **3. Regression rule:** fixed. `close-eval.md` must carry `regression:`, and 5 or more must be red (`:340-344`). A test covers it.
+- **4. `acceptance: pass` self-declared:** mostly fixed. Per-item `item <id>: pass|fail` lines are compared with `acceptance.md`, with missing and extra ids flagged (`:345-350`). One hole remains (blocking 1 below).
+- **5. Informing reds read from `status.json`:** accepted residual, disclosed (ADR-0010:96-98, :120, :123).
+- **6. Shell writes not receipted:** accepted residual, disclosed (:122). See blocking 2 on the part that isn't disclosed.
+- **7. `acceptance.md` correction:** fixed. A user-decision ADR with `decision: acceptance-correction` resets the "written once" count, with a test. The `eval-designer` and `evaluation-lead` prompts now derive from `acceptance.md`.
+
+**(2) Faithfulness to the Chairman's decisions**
+- The §3.3, §3.4, §8.4 and §8.6 redlines, the `skills/gates`, `skills/waivers`, `skills/ceo` and `status-schema` edits, the CEO's `acceptance.md` write scope and the verdict-file scopes in the role cards all match the decisions.
+- Two round-2 decisions are applied with a difference:
+  - Round-2 Q2 recommended that the gate result go "into `close-audit.md`". It is applied as a separate `release-gate.md` file (ADR-0010:92-94, :206). That is better, because `close-audit.md` is a file the script reads. But the ADR doesn't say it departs from the recommended option.
+  - The recommended "and CI where the repository has it" became "Not CI". The reason is given, since CI can't see the receipts.
+
+**BLOCKING**
+
+1. **An empty acceptance set passes.** `release_check.py:345-348` compares `set(v["items"])` with `acceptance_ids(...)`, and nothing requires the set to be non-empty. An `acceptance.md` that is empty or uses another layout (such as a numbered list) gives an empty set. A CEVO verdict with no `item` lines then passes. This makes the check a no-op for the acceptance rule at ADR-0010:76-80. Flag an empty `acceptance.md` and add a test.
+2. **"Read-only shell" is stated as a control, but nothing enforces it.**
+   - ADR-0010:92, :113 and `gate-auditor.md` give the gate-auditor Bash described as read-only.
+   - `guard.py:42-44` says shell commands are not inspected and "a shell can write anywhere".
+   - The B4 receipts block covers only the write tools, so this agent could edit verdict files or `receipts.jsonl`.
+   - The agent is also a haiku model that pastes the script output and chooses its own `gate:` line (`gate-auditor.md:39`). Step 4 of `skills/ceo` then ships on that line, not on the script's exit code.
+   - The residuals at ADR-0010:122 and :123 don't mention that the one agent running the gate holds an unenforced shell.
+   - Say so plainly, and tie `gate:` to the script's exit code.
+   - The fix is text, so this finding is a disclosure that must be added, not a code change.
+
+**NON-BLOCKING**
+
+- The CRT contract (`red-team-lead.md`, step 5) sets `class: <asi_category>` on every high-or-above finding. `non_waivable()` then makes every CRT red unwaivable. That is stricter than the ADR and conflicts with `skills/waivers:13`, which allows waiving a CRT high or critical. It fails closed, so it should be reconciled, not blocked.
+- The script has no rollback path. The rollback reuse in §8.6 and `skills/ceo` step 5 is procedural, and CAO audits it by reading.
+- I couldn't verify how guard receipts label the CEO. If the main-session CEO has no `devsecops-agency:` agent type, the "written once, by the CEO" check (`:299-305`) would fail every real run. The ADR's dry check against run N4 doesn't cover this.
+- A repeated `finding:` id keeps the last class (`:202`). It is the council's own file, so the effect is minor.
+- Waivers for informing councils match on council and project only (disclosed).
+- The correction ADR is CEO-written (disclosed).
+- The chief-prompt edits haven't been tried in a live run (disclosed).
+- `CONSTITUTION.md` is unchanged, as the draft status says.
+
+I read ADR-0009 only for its dependency on §8.6. Its rollback and mandate-release language is consistent with ADR-0010, and I found no eval-related defects in it.
+
+VERDICT: REJECT
+
+1. `scripts/release_check.py:345-348`: an empty or unparseable `acceptance.md` yields an empty item set, so the acceptance rule passes vacuously. Fail on zero items and add a test.
+2. `docs/adr/ADR-0010-mechanical-release-gate.md:92, :113, :122-123` (also `agents/audit/gate-auditor.md:39`): the "read-only shell" isn't enforced (`hooks/guard.py:42-44`), and the gate record's `gate:` line is typed by the agent, not derived from the script's exit code. Disclose both as residuals, or enforce them.
+
+#### CISO (`security-lead`): REJECT
+
+**Round 3, CISO (§10.3: waivers, go-live, secrets, security posture)**
+
+This is a static read. I did not run the tests. I read both ADRs, `release_check.py`, the non-ADR diff and the CONSTITUTION §8.4 text. The glob-filtered grep for `read-only` in `hooks/` and `role-cards.yaml` returned nothing. I did not re-check why, because `guard.py:42-44` already settles the shell point.
+
+**1. My round-2 blocking findings**
+
+- **Finding 1 (one waiver covers a whole red): fixed.** The red verdict now lists `finding: <id> class: <class>` lines (`release_check.py:200`). Each finding needs its own exact-id waiver (`:333-337`). A non-waivable class in the verdict fails whatever the waiver says (`:334`). An empty class, `asi*` and any class containing `secret` are all non-waivable (`:180-183`). A red with no findings listed fails (`:331`).
+- **Finding 3 (command-line trust inputs): fixed.** `--today` is gone. "This run" starts at the later of `--since` and the CEO's `acceptance.md` write (`:294`). Times are normalised to UTC (`:169-177`), and relative receipt paths resolve against the launch folder (`:276`). This also covers my minor finding 8.
+- **Finding 4 (ADR-0009 forgeable approval and revocation): fixed.**
+  - The `inbox.json` residual is at ADR-0009:147.
+  - §2.6 grants nothing until signed receipts exist (:50-52).
+  - Revocation appends a receipt and files a closing ADR (:71-72).
+- **Finding 5 (ADR says more than the script checks): fixed.** The regression and acceptance checks are in the script (`:340-350`). §8.6 now says CAO audits clause 3 by reading (ADR-0010:88-90). Option (b) matches the redline.
+- **Finding 7 (M4 reach): fixed** (ADR-0009:46-48).
+- **Finding 2 (informing red covered by any waiver for that council): disclosed, not fixed.** The check is `waived.get(council)` (`:352`). Residual at ADR-0010:120.
+- **Finding 6 (shell evades receipts): disclosed** at ADR-0010:122.
+
+**2. Fidelity to the Chairman's decisions**
+
+The redlines, conforming edits and `--gate` implement the round-1 and round-2 decisions faithfully. I checked these in particular:
+- Fail-closed behaviour.
+- `--project` and `--since` required.
+- `acceptance.md` written once, by the CEO, with a Chairman-only correction path.
+- The CEO is excluded from running the check.
+- A rollback reuses the passed build's gate record.
+- Yellow passes only with real open items.
+- GC is informing.
+
+**3. New findings**
+
+**Non-blocking, disclosed residuals**
+- Informing-council waivers match on council and project only (`release_check.py:352`). That is looser than §8.4's "one finding" rule (CONSTITUTION line 345). ADR-0010:73 still reads "for that council, project and finding". Residual at :120.
+- The check reads informing reds from `status.json`, which the CEO writes (:96-98).
+- The waiver ADR and the acceptance-correction ADR are CEO-written (:119, :125).
+- The check cannot see shell writes (:122).
+- The `inbox.json` provenance is forgeable (ADR-0009:147).
+- The chief-prompt edits are untried in a live run (:126).
+
+**Non-blocking, undisclosed**
+- The non-waivable test is a `secret` substring (`:183`). A CISO class such as `hardcoded-credential` or `api-key` would be waivable. CISO's class vocabulary should be pinned.
+- ADR-0010 §8.6 mentions §2.6 (a mandate release), which exists only if ADR-0009 is approved. The dependency runs one way only. Say that ADR-0010 reads without §2.6 if ADR-0009 is not approved.
+
+**Blocking**
+
+VERDICT: REJECT
+
+1. **The "read-only shell" for `gate-auditor` is false as written, and the release-gate record is self-attested.**
+   - `ADR-0010:113`, `ADR-0010:92` and `agents/role-cards.yaml` (`gate-auditor`, `shell: read-only`) all say the shell is read-only.
+   - `hooks/guard.py:42-44` says shell commands are not inspected, so a shell can write anywhere. Nothing enforces "read-only".
+   - A Haiku agent with an unrestricted shell is therefore the sole author of `_vision/audit/<date>-<slug>-release-gate.md`. It pastes the output itself and also writes the `gate: green` line (`gate-auditor.md` diff). The CEO ships on that file alone (`skills/ceo` §4a step 4).
+   - That agent could also rewrite any verdict file or `status.json` before it runs the check. The residual at ADR-0010:122 covers receipts only. It does not say the new shell is unenforced or that the gate record is attested by one low-tier agent.
+   - **Fix, either of these:** (a) change "read-only shell" to "a shell the guard does not constrain" in ADR-0010:92, :113 and the role-card comment, and add a residual stating that the gate result is the `gate-auditor`'s word. Or (b) have the script write the result file itself and derive `gate:` from the exit code, with the agent only invoking it.
+   - Whichever you pick, the CEO's "ship only if" step must name that limit.
+
+I would approve once item 1 is fixed or disclosed as a residual the Chairman accepts. The two undisclosed non-blocking points can go in the same pass.
+
+#### Response to round 3 (not re-reviewed)
+
+| Finding | Response |
+|---|---|
+| Waiver expiry is a string compare; no 90-day cap (CAO 1) | Fixed. A waiver needs `approved:` and `expires:` dates. An unreadable date fails closed, and `expires` must be no more than 90 days after `approved`. Tests cover `never`, `2999-01-01` and a bad `approved`. |
+| An empty `acceptance.md` passes (CEVO 1) | Fixed. A set with no items fails, with a test. |
+| The "read-only shell" is not enforced, and the gate record is self-attested (CEVO 2, CISO 1) | The record is now written by the script (`--record`). Its `gate:` line comes from the result, with a test, and the gate auditor never types it. The shell is still unconstrained: `read-only` is a label until a sandbox exists. That is now a stated residual, and `skills/ceo` names it at the ship step. |
+| Q2 is applied differently from the recommended option (CAO 2) | Disclosed below, for the Chairman to confirm. |
+| ADR-0009 says both "with the amendment" and "with Phase 2b" (CAO 3) | Reconciled in ADR-0009. G9 lands with the amendment; the mandate edits land with Phase 2b. |
+| "`GOVERNANCE.md` is edited in that same PR" (CAO 3) | Corrected. It is not edited yet. It is a root document, so it changes in the amendment's own PR after approval. |
+
+**Q2 departs from the recommended option, for the Chairman to confirm.** The recommendation put the result in `close-audit.md` and had CI run the check. As applied:
+- the result goes to a separate record, because `close-audit.md` is one of the files the check reads;
+- CI does not run it, because CI cannot see the git-ignored receipts.

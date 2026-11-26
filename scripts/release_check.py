@@ -38,7 +38,9 @@ binding. It needs --project and --since, fails closed, and exits 1 on any flag.
     It passes only if every finding has its own valid waiver and none is of a
     non-waivable class (CONSTITUTION §8.4). A valid waiver is a waiver-grant ADR
     in _decisions/ with approver: user, this project, council and finding id
-    (an exact match), a waivable class, and an expiry not yet passed (today, UTC);
+    (an exact match), a waivable class, an approved: date, and an expires: date
+    not yet passed (today, UTC) and no more than 90 days after approval
+    (CONSTITUTION §8.4). An unreadable date fails closed;
   - a yellow verdict lists at least one real item under "## Open items";
   - CEVO's verdict carries "regression: <max points>" and one
     "item <id>: pass|fail" line for each acceptance.md item, and no others. A
@@ -52,7 +54,10 @@ CEO-written, so only signed receipts (Phase 2b) would prove the User signed it.
 Phase colours (byPhase) are derived from the councils' and are not checked.
 
     python scripts/release_check.py <launch-dir> [--project <folder>] [--since <ISO time>] [--json]
-    python scripts/release_check.py <launch-dir> --gate --project <folder> --since <ISO time>
+    python scripts/release_check.py <launch-dir> --gate --project <folder> --since <ISO time> [--record <file>]
+
+--record writes the gate record itself: a "gate: green" or "gate: red" line taken
+from the result, then every flag. The agent that runs the check never types it.
 """
 from __future__ import annotations
 
@@ -229,6 +234,18 @@ def frontmatter(text: str) -> dict:
     return fm if isinstance(fm, dict) else {}
 
 
+def day(value) -> datetime.date | None:
+    """A YAML date or an ISO date string; None if unreadable (so the caller fails closed)."""
+    if isinstance(value, datetime.datetime):
+        return value.date()
+    if isinstance(value, datetime.date):
+        return value
+    try:
+        return datetime.date.fromisoformat(str(value).strip()[:10])
+    except ValueError:
+        return None
+
+
 def valid_waivers(dirs: list[Path], project: str, today: str) -> dict[str, set[str]]:
     """council -> finding ids with a live, user-approved, waivable waiver-grant ADR for this project."""
     out: dict[str, set[str]] = {}
@@ -238,10 +255,15 @@ def valid_waivers(dirs: list[Path], project: str, today: str) -> dict[str, set[s
             finding = str(fm.get("finding") or "").strip()
             if (fm.get("kind") == "waiver-grant" and fm.get("approver") == "user"
                     and str(fm.get("project")) == project and fm.get("council") and finding
-                    and str(fm.get("expires") or "") >= today
+                    and live(fm.get("approved"), fm.get("expires"), today)
                     and not non_waivable(str(fm.get("class") or ""))):
                 out.setdefault(str(fm["council"]), set()).add(finding)
     return out
+
+
+def live(approved, expires, today: str) -> bool:
+    a, e, t = day(approved), day(expires), day(today)
+    return bool(a and e and t) and a <= t <= e and (e - a).days <= 90
 
 
 def acceptance_corrected_at(dirs: list[Path], project: str) -> str:
@@ -343,6 +365,8 @@ def gate_report(receipts: list[dict], councils: dict[str, str], project: Path, s
             elif v["regression"] >= 5 and v["gate"] != "red":
                 flags.append(f"CEVO (evaluation) regression of {v['regression']:g} points must be red")
             want = acceptance_ids(acc_text or "")
+            if not want:
+                flags.append("acceptance.md lists no items in the form \"- <id>: <text>\"")
             if set(v["items"]) != want:
                 flags.append("CEVO (evaluation) acceptance items do not match acceptance.md"
                              f" (missing {sorted(want - set(v['items']))}, extra {sorted(set(v['items']) - want)})")
@@ -383,6 +407,12 @@ def main(argv: list[str]) -> int:
             print("FAIL", f)
         if not rep["flags"]:
             print("release gate passes")
+        record = arg(argv, "--record")
+        if record:
+            body = f"gate: {'red' if rep['flags'] else 'green'}\n\n# Release gate, {today}\n\n"
+            body += "".join(f"- FAIL {f}\n" for f in rep["flags"]) or "- release gate passes\n"
+            Path(record).parent.mkdir(parents=True, exist_ok=True)
+            Path(record).write_text(body, encoding="utf-8")
         return 1 if rep["flags"] else 0
     rep = report(read_jsonl(path), load_councils(), read_gates(proj_path),
                  str(proj_path) if proj_path else None, arg(argv, "--since"))

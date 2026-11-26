@@ -213,7 +213,7 @@ Every fix-loop dispatch must include specific `corrections[]` that cite Must/Mus
 1. Dispatch the four blocking reviews, each told its verdict path and the shape in `skills/gates > Release-gate verdict contract`: CISO's post-build pass (`security-report.md`), CEVO's close-eval (`close-eval.md`), CRT's pre-release red-team (`red-team.md`) and CAO's close audit (`close-audit.md`).
 2. Write each council's colour, from its verdict, to `status.json > gates.byCouncil`.
 3. Dispatch `devsecops-agency:cao` for a `release-gate` audit. The audit council's gate auditor runs the check. Never run it yourself.
-4. Ship only if `_vision/audit/<date>-<slug>-release-gate.md` says `gate: green`. Otherwise the project is blocked: file it in `inbox.json` for the Chairman.
+4. Ship only if `_vision/audit/<date>-<slug>-release-gate.md`, written by the script, says `gate: green`. Otherwise the project is blocked: file it in `inbox.json` for the Chairman. The record is only as trustworthy as the gate auditor's shell, which nothing yet constrains (draft ADR-0010, residuals).
 5. A rollback to a build whose gate passed reuses that record: append a receipt naming it to the session log.
 
 ### 5. Close-out

@@ -104,7 +104,7 @@ Amend the clauses that conflict with standing consent: the §2.2 preamble, §2.3
 +- `_decisions/mandates/*.jsonl` (standing-mandate receipts, §2.6)
 ```
 
-Conforming redline to `skills/gates`, landing with the amendment:
+Conforming redline to `skills/gates`, landing with the amendment. G9 does not depend on a mandate, so unlike the edits below it is not deferred:
 
 ```diff
 @@ ## Who can block ship
@@ -134,7 +134,7 @@ Conforming redline to `skills/gates`, landing with the amendment:
 | `MISSION.md` | None. The Chairman experience contract gains fewer interrupts. |
 | `VALUES.md`, `RESILIENCE.md` | None |
 
-These conforming edits are deferred. Under §2.6, no mandate can be granted before signed receipts exist, so they land with Phase 2b, not with this amendment.
+Apart from G9, these conforming edits are deferred. Under §2.6, no mandate can be granted before signed receipts exist, so they land with Phase 2b, not with this amendment. `GOVERNANCE.md` is a root document, so its row changes only then, under the approved amendment.
 
 ## What it also needs (not part of the amendment)
 
@@ -541,3 +541,7 @@ Each has a recommended option. None is decided here.
 | 1 | Grant mandates before signed receipts? | No. §2.6 is in force but grants nothing until Phase 2b's signer exists |
 | 2 | How far does M4 reach? | A verified patch to the named target only. No protected-branch push or merge, no registry publish. In the redline |
 | 3 | Does a rollback need a fresh gate? | No. It reuses the passed build's gate record, with a receipt (ADR-0010 §8.6) |
+
+### Round 3 (2026-11-26 UTC)
+
+Reviewed together with ADR-0010; the verdicts are pasted there. CRT approved. CAO's one ADR-0009 point, the contradiction on when the conforming edits land, is fixed above. Nothing in round 3 blocked §2.6 itself.
