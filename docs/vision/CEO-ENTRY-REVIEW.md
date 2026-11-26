@@ -165,3 +165,50 @@ Covers the `agents/ceo.md` edits from #15, #18 and #19. The review of #15 and #1
 - Both rounds are recorded verbatim in `docs/adr/ADR-0011-workspace-lessons-and-memory-index.md`.
 - Stone matching (prompt-diff step 3) was not run. The repository holds no `_vision/playbooks/ARCHIVE.md` and no stones, so no stone covers `agents/ceo.md`.
 - **Spend.** L1 + both review rounds + S2 = $1.25. Build spend is $30.15 of $40.
+
+## Live run N4: N1 repeated on the final base (cap $5)
+
+Same idea, prompt and fixture as N1, on `4f0d1c2` (after #17 to #20). This is not the 6b reference run or V14.
+
+**Pass criteria, written before the run:**
+1. Every workspace record is under `outputs/devsecops-agency/`. Nothing is written at the launch folder's top level except the guard's `.devsecops-agency/` receipts.
+2. Vision bootstrap, OKR scoring and light dreaming are each attempted or logged as skipped. None is skipped silently.
+3. The CEO clears no blocking-council red itself. A red is fixed in a fix loop and re-verified by the council, or filed in `inbox.json` with the project blocked.
+4. If the run reaches close, the ledger row is in `outputs/devsecops-agency/LESSONS.md`, and the plugin copy's `LESSONS.md` is unchanged.
+5. Session-log `ts` values are `null` unless read from a tool.
+6. No B2 refusal of a legitimate memory write.
+
+**Recorded, not pass or fail:**
+- specialist dispatches per chief (N1-b);
+- how far the run gets.
+
+If N1's red recurs and the run ends blocked before close, that is a pass for criterion 3. The close path is then covered by a close-only probe (cap $1), with no rerun.
+
+### N4 results ($4.37)
+
+The run went end to end and closed **blocked**. Verification could not execute the tests, and the CEO filed that in `inbox.json` instead of claiming a pass. Every test agent was refused the shell by **my run settings**, not by the agency. `test-runner` and `frontend-dev` ran `cd "<folder>" && node --test …` (hook log), and the harness allow-list does not match that compound form. The guard refused no shell call. So the blocked close is partly a harness artifact, and no shell grant is asked for. **My re-run of the three test files gives 43 passed, 0 failed.** CAO was yellow, CEVO yellow and CRT green, and no blocking red was raised.
+
+| # | Criterion | Result |
+|---|---|---|
+| 1 | Records under `outputs/devsecops-agency/` | **Pass.** Nothing at the top level except `.devsecops-agency/` receipts |
+| 2 | Vision, OKR, light dreaming attempted or logged | **Partial.** `VISION.md` and `_vision/projects/tip-calculator.md` were written, and every report carries `okr_alignment`. Light dreaming wrote no `memory/<date>.md` and logged no skip. Deep dreaming wrote `patterns/tip-calculator.md` |
+| 3 | No blocking red cleared by the CEO | **Pass.** None was raised; the stop rule sent the unverified tests to the Chairman |
+| 4 | Ledger row in the workspace file, plugin copy unchanged | **Pass** |
+| 5 | Session-log `ts` is `null` unless read from a tool | **Fail.** All 10 entries carry invented times (`2026-11-25T00:00:01Z` onward), while the receipts show 2026-11-26 01:55 UTC onward. The CEO read only the `ceo` and `rhythm` skills, never `session-log`, so the `null` rule did not reach it (as in N1-a). |
+| 6 | No B2 refusal of a legitimate memory write | **Pass.** Six refusals, all B5: four engineering-lead writes of app code, devops-lead `ops/local-run.md` and red-team-lead `redteam/pre-release.md` |
+
+**Recorded:**
+- **Specialist dispatches (N1-b).** CRO 1, CPO 1, CQO 2 and engineering-lead 1 per build round. Security, docs, devops, GC, CAO, CEVO and CRT had none.
+  - For seven of the 14 chief dispatches, the CEO's prompt said not to dispatch specialists, for budget.
+  - Engineering-lead first tried to write the app itself and was refused (B5), then dispatched `frontend-dev`.
+- **The CRO's refusal came from Claude Code, not the guard.** The CRO's Write of `research/findings.md` (in its scope) was refused by the platform: "Subagents should return findings as text, not write report files." So no guard receipt exists. This affects every chief that writes its own report file.
+- **Card mismatches came from the CEO's prompts.** The CEO named `ops/local-run.md` for devops-lead and `redteam/pre-release.md` for red-team-lead. Neither matches those agents' scopes (`deploy/`, `red-team/`), and both were refused (B5). No scope is changed here.
+- **Budget confound.** The CEO wrote "Chairman's session budget (USD 5 total)" into `brief.md` and told chiefs to run lean. My prompt never stated a budget, and the stream shows no source before the CEO's own first mention, so the figure presumably reached it from the run's `--max-budget-usd`. Until that is separated out, N1-a and N1-b cannot be told apart from the cap, so no prompt is edited for them.
+- **Fixture error (mine).** The seeded `state.json` carried the UTC date, 2026-11-26. The CEO took it to be the future, so it neither trusted nor rewrote it, and logged an error. So F5, a live rhythm write, is still unproven.
+- **Spend.** Build spend is $35.21 of $40, including the draft reviews below ($0.69).
+
+### Default 5, completed after N4
+
+N3 had passed only because its prompt pointed at the logging step. N4 showed that in a full run the CEO never opens `skills/session-log`. So the `skills/ceo` session-open step (step 8) now states the entry's fields and the `ts: null` rule itself. It restates the `session-log` rule that CRT approved in round 2, so it gets no new review.
+
+**Probe N5 ($0.45, cap $0.50).** The prompt never mentioned the log. All three entries have `ts: null` and the full field set. **Pass.** Build spend is $35.66 of $40.
