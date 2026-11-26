@@ -51,7 +51,7 @@ Dispatch `devsecops-agency:engineering-lead`:
 Run the agency's pipeline from the class's entry point to the end, as for new work:
 - each phase's chief, gates and fix-loop rules apply;
 - work lands on a branch;
-- no push to a protected branch without the Chairman.
+- no push, merge or publish without the Chairman (CONSTITUTION §2.2 clause 7).
 
 **The adoption baseline must hold.** A change that breaks a test which passed in `_agency/baseline/tests.md` is a red.
 
