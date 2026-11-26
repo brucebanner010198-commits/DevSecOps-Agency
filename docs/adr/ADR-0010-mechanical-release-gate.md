@@ -95,6 +95,8 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 | `skills/waivers` | Covers an informing red at release. Done in this PR. |
 | `skills/ceo` | Intake writes `acceptance.md` once; the CEO's card gains `acceptance.md`. Done in this PR. |
 | `scripts/release_check.py` | Gains `--gate`, as above, with tests. Advisory mode is unchanged. Done in this PR. |
+| `skills/gates` | States the verdict contract the script reads (paths and line shapes). Done in this PR, after round 2, so not yet reviewed. |
+| `security-lead`, `evaluation-lead`, `red-team-lead`, `cao` prompts; `skills/ship-it/references/status-schema.md` | Not done. Each chief must write its verdict in the contract's shape and place, and `status.json` must carry `gates.byCouncil`. Land with the amendment. |
 | `MISSION.md`, `VALUES.md`, `RESILIENCE.md` | None |
 
 **Residuals.**
@@ -511,3 +513,7 @@ Each has a recommended option. None is decided here.
 2. **Who runs `--gate`?** (CRT 4, CAO 6.) *Recommended:* CAO's `gate-auditor`, which writes the result into `close-audit.md`, and CI where the repository has it. The CEO never runs it for its own release.
 3. **Can `acceptance.md` be corrected?** (CEVO 7.) *Recommended:* only by the Chairman. A correction is a new `acceptance.md` filed with a `user-decision` ADR before any verdict, and the gate's "written once" rule counts from that ADR.
 4. **Informing councils.** (CRT 3, CEVO 5, CISO 2.) *Recommended:* say plainly that the gate does not close E4 for informing councils, because their reds are read from `status.json`. Give CQO and GC their own verdict files in a later amendment.
+
+#### Dry check against a real run (after round 2, $0)
+
+`--gate` was run against the records of run N4 (tip calculator). It failed with six flags: no `acceptance.md`, and no verdict file for any of the four blocking councils. The councils had written their verdicts elsewhere: CEVO `eval/close-eval.md`, CRT `red-team/pre-release.md`, CISO `security/code-audit.md`, and CAO under `_vision/audit/`. `status.json` kept its gates flat, with no `byCouncil` key. So no real run can pass the gate until the four chiefs' prompts and the status schema follow the contract now stated in `skills/gates`. Those edits are listed above.

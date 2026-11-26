@@ -42,6 +42,18 @@ Every other council produces gates that **inform** the ship decision but do not 
 
 Blocking-council overrides require the user in `inbox.json`. The CEO cannot waive a red from CISO, CEVO, CRT or CAO, or an informing red at release, alone; §3.3 clears it only by a fix and a re-run, or a user-signed waiver under `skills/waivers`.
 
+## Release-gate verdict contract (draft ADR-0010, not yet reviewed)
+
+`scripts/release_check.py --gate` reads these exact shapes. A council that writes anything else fails the gate.
+
+- **Where:** each blocking council writes its verdict in the project folder root: CISO `security-report.md`, CEVO `close-eval.md`, CRT `red-team.md`, CAO `close-audit.md`. The council lead writes it last; a specialist's report elsewhere is not the verdict.
+- **First line, before any heading:** `gate: green`, `gate: yellow` or `gate: red`. A blocking council never writes `n/a`.
+- **A red** lists each finding on its own line: `finding: <id> class: <class>`.
+- **A yellow** lists its open items under `## Open items`, one bullet each.
+- **CEVO** also writes `regression: <largest drop, in points>` and one `item <id>: pass` or `item <id>: fail` line per item in `acceptance.md`.
+- **`acceptance.md`**, written once by the CEO at intake, has one `- <id>: <text>` line per item.
+- **`status.json > gates.byCouncil`** carries every council's colour, keyed `security`, `evaluation`, `red-team`, `audit` and the informing councils' names.
+
 ## Gate emission contract
 
 Every Chief report writes one gate entry to `chat.jsonl`:
