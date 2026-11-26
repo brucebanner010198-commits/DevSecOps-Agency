@@ -407,3 +407,11 @@ def test_adoption_session_log_is_allowed_and_append_only(project):
     rel = "_agency/_sessions/ceo/s1.jsonl"
     assert guard.is_append_only(rel)
     assert guard.check(call("Write", {"file_path": str(project / rel), "content": "{}\n"}), guard.load_cards())[0] == []
+
+
+def test_lines_kept_ignores_line_endings(project):
+    f = project / MEM / "MEMORY.md"
+    f.parent.mkdir(parents=True)
+    f.write_bytes(MEMORY_MD.replace("\n", "\r\n").encode("utf-8"))
+    new = MEMORY_MD.replace("- r1\n", "- r1\n- r2\n")
+    assert blocks(call("Write", {"file_path": str(f), "content": new})) == []
