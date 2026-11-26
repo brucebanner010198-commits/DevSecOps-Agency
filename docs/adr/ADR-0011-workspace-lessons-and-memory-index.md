@@ -1,7 +1,7 @@
 ---
 adr: 0011
 title: The lessons ledger is a workspace record, and the memory index may be rewritten
-status: proposed (Chairman-approved 2026-11-25; §10.3 review roll in progress)
+status: accepted
 date: 2026-11-25
 deciders: user (Chairman)
 kind: constitution-amend
@@ -12,9 +12,9 @@ related: docs/vision/CEO-ENTRY-REVIEW.md (F3, N1-e, Chairman's defaults 1 and 3)
 
 ## Status
 
-**Proposed, Chairman-approved.** The Chairman's approval came first, and the §10.3 reviews came after it. The status becomes `accepted` only when both the CAO and CRT reviews below are APPROVE.
+**Accepted.** The Chairman's approval came first, and the §10.3 reviews came after it. CAO and CRT both approved in round 2, below, so the status is `accepted`.
 
-**Approval (§10.4), 2026-11-25, in the chat interface.** The two defaults were put to the Chairman as written below, in a list of seven:
+**Approval (§10.4), 2026-11-25, in the chat interface.** The session that recorded it had no clock tool, so only the date is recorded, not the time. The two defaults were put to the Chairman as written below, in a list of seven:
 
 > 1. **Lessons ledger.** Root `AGENTS.md` puts it in the plugin's own folder. Claude Code's docs say a plugin gets a new folder on every update and not to store data there. Default: keep it at `outputs/devsecops-agency/LESSONS.md` in each workspace. That needs a root-document amendment.
 >
@@ -159,3 +159,77 @@ Strengthening: the plugin-root ledger becomes read-only, and the ledger stays ap
 | "Lines kept" may relax an existing rule (CRT A4) | `APPEND_ONLY` never held `MEMORY.md` or `memory/*` (`hooks/guard.py` at `1c5ac82`, line 69 has only `_memory/patterns/*`). Before PR #19, a full rewrite of either passed, so the mode tightens. An undecodable current file is now refused in both B2 branches. |
 | Adoption session-log path unconfirmed (CRT A5) | `test_adoption_session_log_is_allowed_and_append_only` in `hooks/test_guard.py`. |
 | Diffs 1 and 2 merged without a §5.3 review (CRT A6, CAO) | True. This round is that review, after the fact. |
+
+### Round 2, CRT (`red-team-lead`): APPROVE (verdict A, prompt-diff; verdict B, this amendment)
+
+**VERDICT A (CONSTITUTION §5.3, `agents/ceo.md` since PR #15 and PR #19): APPROVE**
+
+I did not run `adversarial-prompter`, because I can't dispatch it. `skills/red-team/references/prompt-diff-review.md` isn't in the review folder, so I used §5.3 and my own checklist. This review is also after the merge.
+
+- **The skip rules no longer weaken a gate.** `ceo.md:33-34` still say to skip a refused step or a missing tool. `ceo.md:35` now carves out the §3.3 gate verdict, the §5.8 lessons row and the ADR for a material decision. For those the CEO stops, files it in `inbox.json` and reports blocked. `ceo.md:36` stops a recorded default from standing in for a USER-ONLY action (§2.2). This closes my round-1 objections A1 and A2.
+- **Intake is kept** (A3). The `ceo` skill holds it, which I take from the ADR's cited "playbook section 2, line 148". I did not open `skills/ceo/SKILL.md`.
+- **The new `lines kept` rule tightens the guard.** `APPEND_ONLY` (`guard.py:64-77`) has only `_memory/patterns/*`. So `MEMORY.md` and `memory/*` were unguarded before. Now `guard.py:264-273` refuses a changed, removed or reordered line, and also a file that isn't UTF-8. My A4 concern is resolved. Inserting lines anywhere is still a poisoning surface, but it is narrower than before. `keeps_lines` (`guard.py:117-123`) is a correct ordered-subsequence check.
+- **The adopt session-log path is covered** (A5). `_agency/_sessions/*` matches `_sessions/*` (`guard.py:67, 80`), and `test_adoption_session_log_is_allowed_and_append_only` tests it.
+- **No Never or append-only rule is removed.** Residual, non-blocking: the carve-out names only three step classes. Other mandatory steps, such as a §5.3 review, still fall under "skip and continue".
+
+**VERDICT B (CONSTITUTION §10.3, ADR-0011): APPROVE**
+
+The amendment weakens no gate:
+- `LESSONS.md` stays append-only (§5.2 line 223; `guard.py:66` also matches `*/LESSONS.md`).
+- The §5.8 duty is met by the workspace ledger.
+- `index.json` goes from unguarded to guarded (`guard.py:274-282`).
+
+My round-1 objections:
+- **B1, `knobHistory` prose-only: resolved.** The guard now checks it (`guard.py:132-147`), and there are tests. One residual: a current file that isn't JSON sets `before=[]` (`guard.py:136-145`), so corruption could reset the history. This is low severity.
+- **B2, deleted ledger looks like a first run: resolved.** The exemption lasts only while no retro minutes exist. Side effect: if the ledger write is refused after the retro is written, every later session aborts. That fails closed, so it isn't a weakening.
+- **B3, duplicate-slug and carry-over checks: resolved.** Both read both ledgers (`lessons-ledger` step 4, `carry-over-check.md`).
+- **B4, empty review roll: resolved.** The roll holds round 1, and the status is `proposed` (ADR line 4). My verdict will make it complete.
+- **B5, consent: mostly resolved.** The defaults are quoted verbatim. §10.4 wants an approval timestamp, and the ADR records only a date. That is a paperwork gap to fix.
+
+On the CAO's `memory-auditor` objection: `memory-auditor.md:30` never listed `index.json`, so the response holds.
+
+### Round 2, CAO (`cao`): APPROVE
+
+**Verdict: APPROVE.** This is the CAO's §10.3 integrity and independence review of ADR-0011. I'm approving after reading the files in B-after against the ADR.
+
+**§10.2 completeness.** All six elements are present in `ADR-0011…md`:
+- Clause: Decision, lines 38–46.
+- Redline: lines 48–62.
+- Rationale: Context, lines 25–36.
+- Effect on other root documents: lines 66–71.
+- Rollback: lines 73–75.
+- Review roll: lines 77–161. It now holds both round-1 reviews and a response table.
+
+The status at line 4 is `proposed`, and line 15 makes `accepted` conditional on both approvals. That fixes my round-1 objection that the status was premature. The CHANGELOG (`B-after/CHANGELOG.md:7`) and the Constitution amendment record (`CONSTITUTION.md:610`) both say the verdicts are "in the ADR". That is true once these verdicts are appended.
+
+**Redline against the files.** It matches:
+- The §5.2 line in the ADR (line 53) equals `CONSTITUTION.md:215`.
+- The two AGENTS.md lines (ADR lines 60–61) equal `AGENTS.md:20–21`.
+- The skill edits match the ADR's list: `skills/ceo/SKILL.md:78,131,217`, `skills/lessons-ledger/SKILL.md:37,44,45`, `skills/rca/SKILL.md:168`, `skills/retrospective/SKILL.md:73`, `skills/retrospective/references/carry-over-check.md:12` and `skills/lessons-ledger/references/append-contract.md:13`.
+
+**Independence.** No auditor loses it.
+- Auditors are still read-only, and the CAO's scope is unchanged.
+- `agents/audit/memory-auditor.md:30` lists only `MEMORY.md`, `memory/<date>.md`, `patterns/*` and `_sessions`. It never covered `index.json`, so the exemption removes nothing from its audit.
+
+**My round-1 objections.**
+1. Empty review roll: resolved (lines 77–161).
+2. False statement in the Constitution record: resolved. It is true once the verdicts are appended.
+3. Premature `accepted` status: resolved (lines 4 and 15).
+4. How `knobHistory` is audited and what the guard does with `index.json`: resolved.
+   - `hooks/guard.py:274–282` enforces a prefix-kept check, and `keeps_knob_history` is at `guard.py:132`.
+   - `APPEND_ONLY` (`guard.py:75`) holds only `_memory/patterns/*`, so there is no conflict with the §5.2 amendment.
+   - The tests are at `test_guard.py:428` onward.
+5. Which ledger the duplicate-slug check reads: resolved. It reads both (`append-contract.md:13`, `lessons-ledger/SKILL.md:44`).
+
+**Non-blocking residuals, none of which are reds:**
+- `retrospective/SKILL.md:38,65`, `ceo/SKILL.md:76` and `append-contract.md:83` still say plain "LESSONS.md" or "in full". `AGENTS.md:20` governs and resolves them, but a taskflow tidy is warranted.
+- After the fact, nothing audits `index.json`. Only the guard enforces `knobHistory` before the write. I suggest `memory-auditor` adds `index.json` to its scope.
+- The "no closed project" test depends on retro minutes existing. That is acceptable, because `_meetings` is a record directory.
+
+### Residuals carried forward (non-blocking)
+
+- A current `index.json` that is not JSON is treated as having no `knobHistory`, so a corrupted file could reset it.
+- The CEO's carve-out names three step classes; other mandatory steps, such as a §5.3 review, still fall under "skip and continue".
+- `memory-auditor` does not audit `index.json` after the fact; only the guard checks it before the write.
+- A few skill lines still say plain "`LESSONS.md`" (`retrospective/SKILL.md:38,65`, `ceo/SKILL.md:76`, `append-contract.md:83`); `AGENTS.md:20` governs them.
+- `adversarial-prompter` (prompt-diff step 5) was not run, because the reviews were read-only with no dispatch.
