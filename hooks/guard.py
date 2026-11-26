@@ -231,7 +231,9 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
                 except Exception:
                     current = None
                 new = None if current is None else resulting_content(tool, ti, current)
-                if current is not None and (new is None or not _lf(new).startswith(_lf(current))):
+                if current is None:
+                    block.append(f"B2 append-only: {r} is append-only, and its current content cannot be read as UTF-8, so the write is refused")
+                elif new is None or not _lf(new).startswith(_lf(current)):
                     block.append(f"B2 append-only: {r} is append-only; the new content must start with the current content")
             elif is_lines_kept(r) and os.path.exists(path):
                 try:
@@ -239,7 +241,9 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
                 except Exception:
                     current = None
                 new = None if current is None else resulting_content(tool, ti, current)
-                if current is not None and (new is None or not keeps_lines(current, new)):
+                if current is None:
+                    block.append(f"B2 lines kept: {r}'s current content cannot be read as UTF-8, so the write is refused")
+                elif new is None or not keeps_lines(current, new):
                     block.append(f"B2 lines kept: {r} may take new lines anywhere, but every existing line must stay, unchanged and in order")
             cards = load_cards() if cards is None else cards
             card = cards.get(name)

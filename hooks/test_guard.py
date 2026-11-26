@@ -415,3 +415,11 @@ def test_lines_kept_ignores_line_endings(project):
     f.write_bytes(MEMORY_MD.replace("\n", "\r\n").encode("utf-8"))
     new = MEMORY_MD.replace("- r1\n", "- r1\n- r2\n")
     assert blocks(call("Write", {"file_path": str(f), "content": new})) == []
+
+
+@pytest.mark.parametrize("rel", ["chat.jsonl", "outputs/devsecops-agency/_memory/MEMORY.md"])
+def test_b2_refuses_when_the_current_file_is_not_utf8(project, rel):
+    f = project / rel
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_bytes(b"\xff\xfe old\n")
+    assert any(b.startswith("B2") for b in blocks(call("Write", {"file_path": str(f), "content": "new\n"})))
