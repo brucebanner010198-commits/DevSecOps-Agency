@@ -40,6 +40,8 @@ rg --no-filename --no-heading -N '' "$OUT/_sessions/ceo/" | \
 
 ### All entries (every agent) for a project, time-ordered
 
+`ts` may be `null` (see `SKILL.md`). For exact order across agents, join on the guard's receipts (`.devsecops-agency/receipts.jsonl`), whose `ts` the hook stamps.
+
 ```
 rg --no-filename --no-heading -N '' "$OUT/_sessions/" | \
   jq -c --arg slug "invoice-splitter" 'select(.projectSlug==$slug) | {ts, agentId, type, note}' | \

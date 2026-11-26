@@ -22,8 +22,8 @@ AGENT = (
 )
 
 
-def card(tools, shell=None, effort="low", turns=20, model="haiku", scope=("x/",)):
-    return {"file": "agents/a.md", "enforced": {"tools": tools, "shell": shell, "model": model,
+def card(tools, shell=None, effort="low", turns=20, model="haiku", scope=("x/",), activation="department"):
+    return {"file": "agents/a.md", "activation": activation, "enforced": {"tools": tools, "shell": shell, "model": model,
                                                 "effort": effort, "maxTurns": turns,
                                                 "write_scope": list(scope) if scope is not None else None}}
 
@@ -157,3 +157,13 @@ def test_write_scope_must_stay_inside_the_project(entry):
 
 def test_orchestrator_may_not_write_everywhere():
     assert any("rule 5" in e for e in rc.rule_errors("x", card(["Read", "Write", "Agent"], scope=["*"])))
+
+
+@pytest.mark.parametrize("value", [None, "specialist", "Core"])
+def test_activation_must_be_a_part2_tier(value):
+    assert any("activation" in e for e in rc.rule_errors("a", card(["Read"], activation=value)))
+
+
+def test_every_card_has_an_activation_tier():
+    cards = rc.load_cards()
+    assert {c["activation"] for c in cards.values()} <= rc.ACTIVATION

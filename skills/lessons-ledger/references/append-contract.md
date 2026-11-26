@@ -10,7 +10,7 @@ Append-only write semantics for `LESSONS.md`. Hard rules from `VALUES.md §4`.
 
 ## Slug collision
 
-If the slug already has a row in `LESSONS.md`:
+If the slug already has a row in either ledger (the plugin-root `LESSONS.md` or the workspace ledger `outputs/devsecops-agency/LESSONS.md`, ADR-0011):
 
 1. **Check whether the existing row's `outcome` is terminal.**
    - `shipped`, `blocked`, `parked-rung-7` → terminal.

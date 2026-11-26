@@ -152,7 +152,7 @@ Waves 3–7 extend: people-ops + audit (Wave 3, shipped), never-give-up ladder (
 ## v0.2.3 — gates + taskflow
 
 - **Gates vocabulary**: `green · yellow · red · n/a`. Nothing else.
-- **Blocking councils**: security (CISO) + legal (GC). Their reds block ship unless user waives via `inbox.json`.
+- **Blocking councils**: CISO, CEVO, CRT and CAO (`CONSTITUTION.md` §3.3). `skills/gates` also treats legal (GC) as blocking until the Chairman decides (E4). Their reds block ship unless the user waives via `inbox.json`.
 - **Informing councils** aggregate into the project gate; CEO may waive after consent.
 - **`yellow` requires non-empty `followups[]`.** No silent yellows.
 - **Aggregation**: blocking red unwaived → red; any red → red; any yellow → yellow; else green. `n/a` skipped.
