@@ -153,3 +153,14 @@ The Chairman accepted the recommended default for each open item. What landed wh
 **Probe N3 ($0.35, cap $0.50)** opened a session log only. The entry's `ts` is `null`, and the guard's receipt for the write carries `2026-11-26T01:30:06Z`. **Pass.** Build spend is $28.90 of $40.
 
 For item 5, a PreToolUse hook could rewrite the logged time. A second-hand reading of the hooks documentation says a rewritten input goes with `allow` (which skips the permission prompt) or with `ask`, and it could not confirm the case with no decision. Rather than risk changing how permissions behave, the guard does not rewrite tool input. Row 5 covers the session log only: `chat.jsonl` entries still carry times the agents write, and the readers that use time windows (`keeper-test`, `finops`, `capacity`, `rhythm`) are unchecked.
+
+## Prompt-diff review (CONSTITUTION §5.3), 2026-11-25
+
+Covers the `agents/ceo.md` edits from #15, #18 and #19. The review of #15 and #18 happened after they landed.
+
+- **Round 1 (CRT, from the diffs alone): REJECT.** The skip rules had no carve-out for mandatory steps or USER-ONLY actions.
+- **Fixes in #19.** A step a root document makes mandatory (a §3.3 gate verdict, the §5.8 lessons row, the ADR for a material decision) is never skipped; the CEO stops, files it in `inbox.json` and reports blocked. A recorded default never stands in for a USER-ONLY action (§2.2). The guard also refuses an append-only file it cannot decode.
+- **Probe S2 ($0.18, cap $0.50):** a refused lessons row blocks the close, a blocking red waits for the Chairman, and a routine refusal is logged and skipped. **Pass.**
+- **Round 2 (CRT, full files): APPROVE (verdict A).** `adversarial-prompter` was not run, because the review was read-only with no dispatch. Residual: the carve-out names three step classes, so other mandatory steps still fall under "skip and continue".
+- Both rounds are recorded verbatim in `docs/adr/ADR-0011-workspace-lessons-and-memory-index.md`.
+- **Spend.** L1 + both review rounds + S2 = $1.25. Build spend is $30.15 of $40.
