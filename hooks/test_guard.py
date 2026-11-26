@@ -360,6 +360,16 @@ def test_ceo_does_not_get_the_other_vision_records(rel):
 
 
 
+@pytest.mark.parametrize("rel", [
+    "app/_worktrees/cto-0/worktree.json", "app/_worktrees/engineering-lead-1/src/worktree.json",
+    "app/_worktrees/red-team-fuzzer-1/worktree.json", "app/_worktrees/_merged/cto-0-x/worktree.json",
+    "app/_worktrees/cto-0/architecture.md", "app/_worktrees/engineering-lead-1/src/app.js",
+])
+def test_ceo_has_no_worktree_grant(rel):
+    scope = guard.load_cards()["ceo"]["write_scope"]
+    assert not guard.in_scope(rel, scope) and not guard.in_scope("outputs/devsecops-agency/" + rel, scope), rel
+
+
 MEM = "outputs/devsecops-agency/_memory/"
 MEMORY_MD = "# Memory\n\n## Recurring risks\n- r1\n\n## Proven stacks\n- s1\n"
 
