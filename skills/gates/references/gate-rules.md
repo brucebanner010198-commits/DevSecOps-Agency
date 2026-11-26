@@ -28,6 +28,32 @@ This file is the reference the CEO consults when a Chief report is ambiguous. If
 | MPL/LGPL dependency with documented dynamic-linking caveat          | low      | yellow|
 | License text not checked (package name ≠ verdict)                   | high     | red   |
 
+### Evaluation (CEVO) — blocking (CONSTITUTION §3.3)
+
+| Trigger                                                             | Severity | Gate  |
+| ------------------------------------------------------------------- | -------- | ----- |
+| Regression of 5 percentage points or more against baseline          | critical | red   |
+| Skill eval below its threshold                                      | high     | red   |
+| Variance σ/μ above 0.15                                             | high     | red   |
+
+### Red team (CRT) — blocking (CONSTITUTION §3.3)
+
+| Trigger                                                             | Severity | Gate  |
+| ------------------------------------------------------------------- | -------- | ----- |
+| ASI-class finding                                                   | critical | red   |
+| Self-red-team independence breach (§3.5)                            | critical | red   |
+| Unpinned-hash adoption                                              | high     | red   |
+
+### Audit (CAO) — blocking (CONSTITUTION §3.3)
+
+| Trigger                                                             | Severity | Gate  |
+| ------------------------------------------------------------------- | -------- | ----- |
+| Append-only violation                                               | critical | red   |
+| Missing ADR for a material decision                                 | high     | red   |
+| Non-goal drift without an ADR                                       | high     | red   |
+
+GC stays listed as blocking in this skill. The Constitution lists Legal as informing, and whether it blocks is the Chairman's call (E4).
+
 ## Informing councils
 
 ### Research (CRO) — informing

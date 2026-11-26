@@ -29,7 +29,7 @@ Reference for each of the six states. If a task is in a state but the invariants
 **Exits:**
 - → `done` if gate is `green` or `yellow`.
 - → `needs-decision` if gate is `red` from a non-blocking council.
-- → `blocked` if gate is `red` from a blocking council (security, legal).
+- → `blocked` if gate is `red` from a blocking council (security, evaluation, red-team, audit per `CONSTITUTION.md` §3.3; legal too, per `skills/gates`, until E4).
 - → `cancelled` if the CEO kills the task (user change of scope).
 
 ## needs-decision

@@ -29,14 +29,18 @@ No other values. If you catch yourself wanting "orange" or "light-red", pick one
 
 ## Who can block ship
 
-Two councils are **blocking**. A `red` from either stops the ship regardless of any other signal:
+`CONSTITUTION.md` §3.3 names four **blocking** councils. A `red` from any of them stops the ship regardless of any other signal:
 
-- **CISO** (security council) — any Critical or High STRIDE/OWASP item without a mitigation plan.
-- **GC** (legal council) — any GPL/AGPL dependency in a closed-source ship, or missing `PRIVACY.md` when PII is in the data model.
+- **CISO** (`security-lead`) — Critical or High without mitigation, raw secrets, wildcard allowlists, missing SBOM + SLSA.
+- **CEVO** (`evaluation-lead`) — a regression of 5 percentage points or more against baseline, a skill eval below threshold, or variance σ/μ above 0.15.
+- **CRT** (`red-team-lead`) — an ASI-class finding, a self-red-team independence breach, or an unpinned-hash adoption.
+- **CAO** (`cao`) — an append-only violation, a missing ADR for a material decision, or non-goal drift without an ADR.
+
+This skill also treats **GC** (legal council) as blocking: any GPL/AGPL dependency in a closed-source ship, or a missing `PRIVACY.md` when PII is in the data model. The Constitution lists Legal as informing (§3.4). Whether Legal blocks is reserved for the Chairman (design review 1, E4), so GC's rule here is unchanged until then.
 
 Every other council produces gates that **inform** the ship decision but do not unilaterally block it. Their reds still aggregate into the project gate (see below), but the CEO can override with an explicit `waiver` entry in `chat.jsonl` if the user accepts the risk.
 
-Blocking-council overrides require the user in `inbox.json` — the CEO cannot waive a CISO or GC red alone.
+Blocking-council overrides require the user in `inbox.json`. The CEO cannot waive a red from CISO, CEVO, CRT, CAO or GC alone; §3.3 clears it only by a fix and a re-run, or a user-signed waiver under `skills/waivers`.
 
 ## Gate emission contract
 

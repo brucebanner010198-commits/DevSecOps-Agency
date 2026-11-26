@@ -156,7 +156,12 @@
     "_agency/adoption-report.md",
     "ADR-*.md",
     "_meetings/",
-    "_agency/change-requests.md"
+    "_agency/change-requests.md",
+    "_vision/VISION.md",
+    "_vision/projects/",
+    "_vision/history/",
+    "_vision/rhythm/",
+    "_memory/"
    ]
   },
   "chaos-engineer": {

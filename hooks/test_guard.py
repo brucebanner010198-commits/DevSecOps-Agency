@@ -176,12 +176,17 @@ OUT = "outputs/devsecops-agency/tip-splitter/"
     OUT + "_sessions/ceo/s1.jsonl", OUT + "_vision/traces/2026-11/t.jsonl", OUT + "_vision/dlp/x-custom.jsonl",
     OUT + "_vision/mcp-registry/srv/hashes.jsonl", OUT + "_vision/sre/run.log",
     "_sessions/ceo/s1.jsonl", "_vision/cost/manual-billing.csv", "_vision/cross-model-panel/panel-rotation.md",
+    "outputs/devsecops-agency/_memory/patterns/tip-splitter.md", "_memory/patterns/a.md",
 ])
 def test_append_only_globs_match_root_and_nested_layout(relpath):
     assert guard.is_append_only(relpath)
 
 
-@pytest.mark.parametrize("relpath", [OUT + "status.json", OUT + "src/app.js", OUT + "red-team/notes.md", OUT + "src/history/list.js"])
+# memory/<date>.md is newest-at-top and MEMORY.md takes bullets under its sections, so neither is an
+# end-append; B2's lines-kept mode covers them instead (below). index.json is rewritten as a structure.
+@pytest.mark.parametrize("relpath", [OUT + "status.json", OUT + "src/app.js", OUT + "red-team/notes.md", OUT + "src/history/list.js",
+                                     "outputs/devsecops-agency/_memory/MEMORY.md", "outputs/devsecops-agency/_memory/index.json",
+                                     "outputs/devsecops-agency/_memory/memory/2026-11-25.md"])
 def test_ordinary_paths_are_not_append_only(relpath):
     assert not guard.is_append_only(relpath)
 
@@ -334,3 +339,123 @@ def test_refusal_for_code_names_the_builders():
     b, _ = guard.check(call("Write", {"file_path": os.path.join(os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd()), "src", "app.js"), "content": ""},
                             "devsecops-agency:engineering-lead"), cards)
     assert len(b) == 1 and b[0].startswith("B5") and "frontend-dev" in b[0] and "backend-dev" in b[0]
+
+
+@pytest.mark.parametrize("rel", [
+    "_vision/VISION.md", "_vision/projects/app.md", "_vision/history/2026-11-25.md",
+    "_vision/rhythm/state.json", "_vision/rhythm/heartbeat-2026-11-25.md",
+    "_memory/MEMORY.md", "_memory/memory/2026-11-25.md", "_memory/patterns/app.md", "_memory/index.json",
+])
+def test_ceo_owns_its_vision_and_memory_records(rel):
+    scope = guard.load_cards()["ceo"]["write_scope"]
+    assert guard.in_scope(rel, scope) and guard.in_scope("outputs/devsecops-agency/" + rel, scope), rel
+
+
+@pytest.mark.parametrize("rel", [
+    "_vision/audit/x.md", "_vision/eval/x.md", "_vision/cost/x.md", "_vision/traces/t.jsonl", "_vision/notes.md",
+])
+def test_ceo_does_not_get_the_other_vision_records(rel):
+    assert not guard.in_scope(rel, guard.load_cards()["ceo"]["write_scope"]), rel
+
+
+
+
+MEM = "outputs/devsecops-agency/_memory/"
+MEMORY_MD = "# Memory\n\n## Recurring risks\n- r1\n\n## Proven stacks\n- s1\n"
+
+
+@pytest.mark.parametrize("rel", [MEM + "MEMORY.md", MEM + "memory/2026-11-25.md", "_memory/MEMORY.md"])
+def test_memory_files_keep_their_lines(rel):
+    assert guard.is_lines_kept(rel) and not guard.is_append_only(rel)
+
+
+@pytest.mark.parametrize("new", [
+    "# Memory\n\n## Recurring risks\n- r1\n- r2\n\n## Proven stacks\n- s1\n",   # insert under a section
+    "## 2026-11-25\n- new\n\n" + MEMORY_MD,                                     # prepend (newest-at-top)
+    MEMORY_MD + "- s2\n",                                                       # append
+    MEMORY_MD.rstrip("\n") + "\n- s2",                                          # append, no final newline
+])
+def test_lines_kept_allows_new_lines_anywhere(project, new):
+    f = project / MEM / "MEMORY.md"
+    f.parent.mkdir(parents=True)
+    f.write_text(MEMORY_MD, encoding="utf-8")
+    assert blocks(call("Write", {"file_path": str(f), "content": new})) == []
+
+
+@pytest.mark.parametrize("new", [
+    MEMORY_MD.replace("- r1", "- r1 (edited)"),                                 # changed line
+    MEMORY_MD.replace("- r1\n", ""),                                            # deleted line
+    "# Memory\n\n## Proven stacks\n- s1\n\n## Recurring risks\n- r1\n",          # reordered
+])
+def test_lines_kept_refuses_changed_removed_or_reordered_lines(project, new):
+    f = project / MEM / "MEMORY.md"
+    f.parent.mkdir(parents=True)
+    f.write_text(MEMORY_MD, encoding="utf-8")
+    assert any(b.startswith("B2 lines kept") for b in blocks(call("Write", {"file_path": str(f), "content": new})))
+
+
+def test_lines_kept_checks_edits_too(project):
+    f = project / MEM / "memory" / "2026-11-25.md"
+    f.parent.mkdir(parents=True)
+    f.write_text("- a\n- b\n", encoding="utf-8")
+    ok = call("Edit", {"file_path": str(f), "old_string": "- a\n", "new_string": "- a\n- a2\n"})
+    bad = call("Edit", {"file_path": str(f), "old_string": "- b", "new_string": "- B"})
+    assert blocks(ok) == [] and any(b.startswith("B2 lines kept") for b in blocks(bad))
+
+
+def test_adoption_session_log_is_allowed_and_append_only(project):
+    rel = "_agency/_sessions/ceo/s1.jsonl"
+    assert guard.is_append_only(rel)
+    assert guard.check(call("Write", {"file_path": str(project / rel), "content": "{}\n"}), guard.load_cards())[0] == []
+
+
+def test_lines_kept_ignores_line_endings(project):
+    f = project / MEM / "MEMORY.md"
+    f.parent.mkdir(parents=True)
+    f.write_bytes(MEMORY_MD.replace("\n", "\r\n").encode("utf-8"))
+    new = MEMORY_MD.replace("- r1\n", "- r1\n- r2\n")
+    assert blocks(call("Write", {"file_path": str(f), "content": new})) == []
+
+
+@pytest.mark.parametrize("rel", ["chat.jsonl", "outputs/devsecops-agency/_memory/MEMORY.md"])
+def test_b2_refuses_when_the_current_file_is_not_utf8(project, rel):
+    f = project / rel
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_bytes(b"\xff\xfe old\n")
+    assert any(b.startswith("B2") for b in blocks(call("Write", {"file_path": str(f), "content": "new\n"})))
+
+
+IDX = {"lastRem": None, "xref": {"a": "LESSONS.md > a"}, "knobHistory": [{"knob": "dedupe", "to": 0.85}]}
+
+
+def _index(project, data):
+    f = project / MEM / "index.json"
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(json.dumps(data), encoding="utf-8")
+    return f
+
+
+@pytest.mark.parametrize("new", [
+    dict(IDX, lastRem="2026-11-25T00:00:00Z", xref={}),                                     # structure rewritten
+    dict(IDX, knobHistory=IDX["knobHistory"] + [{"knob": "dedupe", "to": 0.9}]),             # knob appended
+])
+def test_memory_index_may_be_rewritten_but_keeps_knob_history(project, new):
+    f = _index(project, IDX)
+    assert blocks(call("Write", {"file_path": str(f), "content": json.dumps(new)})) == []
+
+
+@pytest.mark.parametrize("new", [
+    json.dumps(dict(IDX, knobHistory=[])),                                                    # history dropped
+    json.dumps(dict(IDX, knobHistory=[{"knob": "dedupe", "to": 0.5}])),                      # history edited
+    json.dumps({k: v for k, v in IDX.items() if k != "knobHistory"}),                         # key removed
+    "not json",
+])
+def test_memory_index_refuses_a_lost_or_edited_knob_history(project, new):
+    f = _index(project, IDX)
+    assert any(b.startswith("B2 knob history") for b in blocks(call("Write", {"file_path": str(f), "content": new})))
+
+
+def test_memory_index_first_write_passes(project):
+    f = project / MEM / "index.json"
+    assert blocks(call("Write", {"file_path": str(f), "content": json.dumps(IDX)})) == []
+    assert guard.is_memory_index("_memory/index.json") and not guard.is_append_only(MEM + "index.json")

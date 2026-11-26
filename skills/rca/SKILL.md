@@ -165,7 +165,7 @@ Produce `_meetings/rca-<slug>-<date>.md` with these sections:
 
 ### Step 10 — Produce the LESSONS row
 
-Append one row to [`LESSONS.md`](../../LESSONS.md) citing the RCA file and the lessons from §11.
+Append one row to the workspace ledger `outputs/devsecops-agency/LESSONS.md` (ADR-0011; schema in [`LESSONS.md`](../../LESSONS.md)) citing the RCA file and the lessons from §11.
 
 ### Step 11 — Escalate if systemic
 

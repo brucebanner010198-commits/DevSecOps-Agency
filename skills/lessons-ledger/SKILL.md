@@ -34,15 +34,15 @@ Read `references/row-schema.md` for the exact field rules. Read `references/appe
 
 ## Output
 
-A new H3 block appended to `LESSONS.md`. Schema in `references/row-schema.md`; exact table layout mirrors the one in `LESSONS.md > ## Row schema`.
+A new H3 block appended to the workspace ledger, `outputs/devsecops-agency/LESSONS.md`, created on the first close. The plugin-root `LESSONS.md` is the schema and seed: read it, never write it (ADR-0011). Schema in `references/row-schema.md`; exact table layout mirrors the one in `LESSONS.md > ## Row schema`.
 
 ## Process
 
 1. **Verify preconditions.** `retrospective` has landed (the retro file exists and contains all 10 sections). CAO close-audit has landed. If either is missing, abort and log `blocked — pending <which>`.
 2. **Read inputs.** Every file above, in order.
 3. **Compute fields.** See `references/row-schema.md > ## Field derivation`.
-4. **Check append contract.** See `references/append-contract.md`. Reject if slug already has a ledger row (corrections = new row, not edit).
-5. **Write the row.** Append-only `Write` with the previous file contents followed by the new H3 block. Never call `Edit` on `LESSONS.md` — append-only (`VALUES.md §4`).
+4. **Check append contract.** See `references/append-contract.md`. Reject if slug already has a ledger row in either ledger, the plugin-root `LESSONS.md` or the workspace ledger (corrections = new row, not edit).
+5. **Write the row.** Append-only `Write` to the workspace ledger with its previous contents (none on the first close) followed by the new H3 block. Never call `Edit` on `LESSONS.md` — append-only (`VALUES.md §4`).
 6. **Sort on write.** New row goes at the bottom; rows remain sorted by `closedAt` ascending. Sort on every write to enforce — the sort is a no-op if the new row is the most recent.
 7. **File ADR.** `_decisions/ADR-NNNN-lessons-<slug>.md` kind `lessons-append`. Cites the new row's section heading.
 8. **Update `_memory/index.json`.** Add a cross-ref pointer from `patterns/<slug>.md` → `LESSONS.md > <slug>-<date>`.
