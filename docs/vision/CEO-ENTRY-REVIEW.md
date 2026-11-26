@@ -243,7 +243,7 @@ The Chairman's reply: "Accept all defaults". That covers items 1 to 6. Item 7 ha
 
 So F4 is a design question for the Chairman: who merges a worktree? Recommended: the owning chief copies its own `writes[]` into the main tree on the CEO's merge entry, and the guard gains an exact-depth rule so that the CEO holds `<slug>/_worktrees/<chief>-<n>/worktree.json` for non-red-team worktrees only.
 
-**Item 2 is unproven live.** No probe has been run for it.
+**Item 2, probe P2 ($0.22, cap $0.50).** The CEO was told a phase budget covered the security chief's own turn but not its specialists, and was asked what it does next, with no dispatch or write allowed. It did not dispatch, and it did not offer a trimmed dispatch. It would file the gap in `inbox.json`, report the project blocked at Phase 2 and wait for the Chairman, and it quoted the new rule. **Pass** for the stated case. A full run where the budget runs out mid-project is still unproven.
 
 ### CONSTITUTION §5.3 prompt-diff review (CRT, 2026-11-26 UTC)
 
@@ -255,7 +255,7 @@ Round 1 ran read-only on CRT's own tier, with the full files ($0.23). It reviewe
 | 4. The grant is unused and the worktree text contradicts it | Grant dropped. The worktree step in `skills/ceo` says no worktree exists until F4 has an owner. |
 | 5. "Rung 6" is loose, and the rule does not say the project waits | Reworded: the CEO stops before that dispatch, reports blocked and waits, "as for" a Rung 6 consult. Rung 6's own thresholds are named in the table above. |
 | 6. The bullets sit between numbered steps | Not changed. They follow the existing bullets under step 1 of `agents/ceo.md`. |
-| 7. Item 2 is unproven live | Agreed. It is still unproven. |
+| 7. Item 2 is unproven live | Agreed at review time. Probe P2 (above) later passed the stated case. |
 
 #### Round 1, CRT (`red-team-lead`): REJECT
 
@@ -373,3 +373,4 @@ VERDICT: APPROVE
 
 Non-blocking notes 1 and 2 are applied (the deny wording and the folder entries in the known gap). Note 3 waits for F4. Review spend for this change is $0.50 (rounds 1 to 3). Build spend is $36.16 of $40. The merged head differs from the commit CRT approved only by the wording of non-blocking notes 1 and 2, a changed agent name in the `skills/worktree` note (to pass `dispatch_names.py`), and this record.
 
+**Spend after the second set of defaults.** Draft round-2 reviews for #14 cost $1.19 (four reviewers) and for #13 $0.20. Probe P2 cost $0.22. Build spend is $37.77 of $40.
