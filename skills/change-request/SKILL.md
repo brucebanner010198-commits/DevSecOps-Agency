@@ -73,7 +73,7 @@ In the same change, update, each through its chief:
 ## 5. Close
 
 Append a row for `CR-<n>` to `_agency/change-requests.md`:
-- `done` only if no gate is red and the three review records exist: `CR-<n>-class-audit.md`, `CR-<n>-baseline.md` and, for a dependency change, `CR-<n>-security.md`. Link the branch, the tests and the gate results.
+- `done` only if no gate is red and the three review records exist. Waiting for the class audit here is the same as waiting for CAO's close audit at any project close; it is not a delivery step, and CAO still decides nothing about the work. The records are `CR-<n>-class-audit.md`, `CR-<n>-baseline.md` and, for a dependency change, `CR-<n>-security.md`. Link the branch, the tests and the gate results.
 - Otherwise `blocked`, with the reason and the red gate.
 
 Report to the Chairman in three lines.
