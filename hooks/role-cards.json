@@ -160,7 +160,8 @@
     "_vision/projects/",
     "_vision/history/",
     "_vision/rhythm/",
-    "_memory/"
+    "_memory/",
+    "_worktrees/*/worktree.json"
    ]
   },
   "chaos-engineer": {

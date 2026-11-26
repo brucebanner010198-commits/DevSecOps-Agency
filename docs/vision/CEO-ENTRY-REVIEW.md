@@ -21,7 +21,7 @@ This change widens the same fix to every skill. It also routes a new idea to the
 **Why not dispatch the owner the guard names.** For the CEO's record writes, the owner `guard.owners()` returns is the wrong role:
 - for `_memory/`, it is `memory-auditor` or `cao`, so an auditor would write what it audits;
 - for `_vision/rhythm/`, it is `compliance-drift`;
-- for `_worktrees/`, it is `red-team-lead`.
+- for `_worktrees/`, it is `red-team-lead` (the CEO now holds `_worktrees/*/worktree.json`; see "Chairman's second set of defaults").
 
 Routing these writes to those agents would break separation of duties. So the step is skipped and recorded, and the conflict goes to the Chairman (finding F1).
 
@@ -45,7 +45,7 @@ Each write the playbook gives the CEO was run through `hooks/guard.py` `check()`
 | 1.9 live view | command-center | a Cowork artifact | **tool not held** | |
 | 2 intake | ceo | AskUserQuestion | **tool not held** | |
 | 3 task row | taskflow | `<slug>/status.json` | allowed | |
-| 3 worktree | worktree | `<slug>/_worktrees/<chief>-<n>/worktree.json` | **B5** | red-team-lead |
+| 3 worktree | worktree | `<slug>/_worktrees/<chief>-<n>/worktree.json` | **B5**, allowed since the second set of defaults | red-team-lead |
 | 3.1 OKR score | okr | `_vision/projects/<slug>.md` | **B5** | none |
 | 3.9 light dreaming | memory | `_memory/memory/<date>.md` | **B5** | cao, memory-auditor |
 | 3.11 notify | notify | desktop push | **tool not held** | |
@@ -70,7 +70,7 @@ The sweep script is kept outside the repo. It feeds each path to `guard.check()`
 - **F2. Three steps need tools the CEO does not hold:** `command-center` (an artifact), `notify` (push) and intake's AskUserQuestion. Granting them is a Part 4 grant decision.
   **Decided (Chairman, 2026-11-25, default accepted): not granted.** The CEO keeps skipping these steps, uses what the Chairman's message says, and records its defaults in `brief.md`, as `ceo.md` already says.
 - **F3. The lessons ledger.** With the plugin-root `LESSONS.md`, the write is refused (B1), which was already open after Phase 2a. With the read/write path rule, it lands in the launch folder instead (N1-e). Where the cross-project ledger lives is a design decision.
-- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree.
+- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree. *Partly closed by the second set of defaults (below): the CEO may write `worktree.json`, but the merge still has no owner.*
 - **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision. **Unblocked with F1, at the guard only; not run live:** `_vision/rhythm/` is in the CEO's scope, and a rewrite of an existing `state.json` passes.
 
 ## Live run N1 (cap $6 of the remaining $16.62)
@@ -203,7 +203,7 @@ The run went end to end and closed **blocked**. Verification could not execute t
   - Engineering-lead first tried to write the app itself and was refused (B5), then dispatched `frontend-dev`.
 - **The CRO's refusal came from Claude Code, not the guard.** The CRO's Write of `research/findings.md` (in its scope) was refused by the platform: "Subagents should return findings as text, not write report files." So no guard receipt exists. This affects every chief that writes its own report file.
 - **Card mismatches came from the CEO's prompts.** The CEO named `ops/local-run.md` for devops-lead and `redteam/pre-release.md` for red-team-lead. Neither matches those agents' scopes (`deploy/`, `red-team/`), and both were refused (B5). No scope is changed here.
-- **Budget confound.** The CEO wrote "Chairman's session budget (USD 5 total)" into `brief.md` and told chiefs to run lean. My prompt never stated a budget, and the stream shows no source before the CEO's own first mention, so the figure presumably reached it from the run's `--max-budget-usd`. Until that is separated out, N1-a and N1-b cannot be told apart from the cap, so no prompt is edited for them.
+- **Budget confound.** The CEO wrote "Chairman's session budget (USD 5 total)" into `brief.md` and told chiefs to run lean. My prompt never stated a budget, and the stream shows no source before the CEO's own first mention, so the figure presumably reached it from the run's `--max-budget-usd`. Until that is separated out, N1-a and N1-b cannot be told apart from the cap, so no prompt was edited for them in N4. The Chairman's second set of defaults (below) later settled N1-b by rule.
 - **Fixture error (mine).** The seeded `state.json` carried the UTC date, 2026-11-26. The CEO took it to be the future, so it neither trusted nor rewrote it, and logged an error. So F5, a live rhythm write, is still unproven.
 - **Spend.** Build spend is $35.21 of $40, including the draft reviews below ($0.69).
 
@@ -212,3 +212,31 @@ The run went end to end and closed **blocked**. Verification could not execute t
 N3 had passed only because its prompt pointed at the logging step. N4 showed that in a full run the CEO never opens `skills/session-log`. So the `skills/ceo` session-open step (step 8) now states the entry's fields and the `ts: null` rule itself. It restates the `session-log` rule that CRT approved in round 2, so it gets no new review.
 
 **Probe N5 ($0.45, cap $0.50).** The prompt never mentioned the log. All three entries have `ts: null` and the full field set. **Pass.** Build spend is $35.66 of $40.
+
+## Chairman's second set of defaults (2026-11-26)
+
+**Approval (§10.4), in the chat interface.** After N4, the open items were put to the Chairman as written below:
+
+> 1. Keep the three additions the reviewers forced.
+> 2. Don't let the CEO tell a chief to skip its specialists to save money; it reports to you instead.
+> 3. Give the CEO the parallel work-copy folder (`_worktrees/`).
+> 4. Add a browser-test specialist with the Phase 3 roles.
+> 5. Accept the recommended options in drafts #13 and #14, then run their second review.
+> 6. Fund the full reference run at about $10 once #14 settles.
+> 7. No default for these: the signing identity for Phase 2b and the accounts for the live-URL thin slice.
+
+The Chairman's reply: "Accept all defaults". That covers items 1 to 6. Item 7 has no default and stays open.
+
+| # | Item | What landed | Where |
+|---|---|---|---|
+| 1 | The three forced additions | Kept as merged: the closed-project ledger abort, the guard's `knobHistory` check, the CEO's stop at mandatory steps | ADR-0011, `hooks/guard.py`, `agents/ceo.md` |
+| 2 | Trimming a council for budget (N1-b) | The CEO never tells a chief to skip its specialists, run lean or cut its council. If the budget cannot cover a council, it files the item in `inbox.json` and reports to the Chairman (Rung 6, `skills/budget`). No root document allows trimming: `RESILIENCE.md`'s budget-degraded mode tightens only the fix-loop cap. | `agents/ceo.md`, `skills/ceo/SKILL.md` (dispatch step) |
+| 3 | `_worktrees/` (F4) | The CEO holds `_worktrees/*/worktree.json`, not the whole folder. `in_scope` matches a folder entry at any depth, so `_worktrees/` would also have covered every chief's artifacts, code and red-team content inside a worktree. Guard tests cover both sides. | `agents/role-cards.yaml`, `hooks/test_guard.py` |
+| 4 | Browser-test specialist (N1-d) | Recorded only. It is built with the Phase 3 roles. Until then, browser checks are recorded as "not run". | No change |
+| 5 | Drafts #13 and #14 | Revised to the accepted options; round 2 below | Draft PRs |
+| 6 | Reference run (6b) | Funded at about $10, to run once the Chairman approves #14's final text | Not run |
+
+**Residual for item 3.** The grant covers allocation and status updates only. The `worktree` skill's merge copies the chief's `writes[]` into the main tree and moves the folder to `_worktrees/_merged/`. The CEO holds neither write and has no shell (F2, not granted). So the CEO still does not allocate a worktree: `agents/ceo.md` says to write to the main tree with `worktree: null` until the merge has an owner. F4 stays partly open, as a design question for the Chairman.
+
+**Item 2 is unproven live.** No probe has been run for it.
+
