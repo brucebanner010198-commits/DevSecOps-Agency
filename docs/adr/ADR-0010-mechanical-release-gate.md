@@ -56,8 +56,11 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 @@ Article VIII — Governance
 +### §8.6 Release gate
 +
-+Every release falls under this section, including a release within a standing mandate
-+(§2.6). A release passes only when, for the release candidate:
++A release is any deploy of a build to a target outside the Agency's own machine, including
++a staging deploy and a release within a standing mandate (§2.6). Every release falls under
++this section, and each needs a fresh check, except a rollback to a build whose check
++passed: a rollback reuses that build's gate record and appends a receipt that names it.
++A release passes only when, for the release candidate:
 +
 +1. each §3.3 blocking council has written its own verdict file in the project folder
 +   (CISO `security-report.md`, CEVO `close-eval.md`, CRT `red-team.md`, CAO
@@ -73,7 +76,8 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 +4. acceptance is part of CEVO's verdict. The acceptance set is derived from the User's
 +   original request and the project OKRs at intake, and written to `acceptance.md`
 +   exactly once, by the CEO, before any verdict. No evaluation-council agent writes it
-+   (§3.5). A failed item is a CEVO red;
++   (§3.5). Only the User can correct it, by a `user-decision` ADR filed before any
++   verdict; "exactly once" then counts from that ADR. A failed item is a CEVO red;
 +5. a regression of 5 percentage points or more is always red, never yellow.
 +
 +The check is mechanical: `scripts/release_check.py --gate` computes items 1, 2, 4 and 5,
@@ -84,6 +88,14 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 +gate, and the check requires `--project` and `--since`. Whether the release record
 +carries a yellow's open items is audited by CAO, by reading. Changing what the script
 +checks needs an amendment. A release without a passing check is a §11.3 CAO red.
++
++CAO's `gate-auditor` runs the check, with a read-only shell, and writes the result to its
++own gate record, `_vision/audit/<date>-<slug>-release-gate.md`, separate from the verdict
++files the check reads. The CEO never runs the check for its own release.
++
++The check does not yet cover informing councils fully: their reds are read from
++`status.json`, which the CEO writes, so a quality or legal red recorded as green passes.
++Giving those councils their own verdict files needs a later amendment.
 ```
 
 ## Effect on other root documents and skills (§10.2)
@@ -96,7 +108,11 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 | `skills/ceo` | Intake writes `acceptance.md` once; the CEO's card gains `acceptance.md`. Done in this PR. |
 | `scripts/release_check.py` | Gains `--gate`, as above, with tests. Advisory mode is unchanged. Done in this PR. |
 | `skills/gates` | States the verdict contract the script reads (paths and line shapes). Done in this PR, after round 2, so not yet reviewed. |
-| `security-lead`, `evaluation-lead`, `red-team-lead`, `cao` prompts; `skills/ship-it/references/status-schema.md` | Not done. Each chief must write its verdict in the contract's shape and place, and `status.json` must carry `gates.byCouncil`. Land with the amendment. |
+| `security-lead`, `evaluation-lead`, `red-team-lead`, `cao` prompts | Each chief writes its verdict in the contract's shape and place. Done in this PR, after round 2. |
+| `eval-designer`, `evaluation-lead` | The eval set is derived from `acceptance.md`, frozen at intake, not at close. Done in this PR. |
+| `gate-auditor` card and prompt | Gains a read-only shell to run the check, and writes the gate record. Done in this PR. |
+| `skills/ceo` | Runs the four blocking reviews before any release, passes each chief its verdict path, writes `gates.byCouncil`, and has CAO run the check before Phase 5 (Ship). Done in this PR. |
+| `skills/ship-it/references/status-schema.md` | `gates.byCouncil` names the blocking councils. Done in this PR. |
 | `MISSION.md`, `VALUES.md`, `RESILIENCE.md` | None |
 
 **Residuals.**
@@ -104,7 +120,10 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 - An informing council has no named verdict file, so its red is read from `status.json`, which the CEO writes, and its waiver is matched on council and project only.
 - Phase colours (`byPhase`) are derived from the councils' gates and are not checked separately.
 - The receipts come from the guard hook, which sees only the file-write tools. An agent with a shell could rewrite a verdict after the council's receipted write, and the script would not see it.
-- So the gate does not close E4 for informing councils: a CQO or GC red recorded as green in `status.json` passes. Round-2 question 4 below proposes their own verdict files.
+- So the gate does not close E4 for informing councils: a CQO or GC red recorded as green in `status.json` passes. §8.6 now says so; their own verdict files need a later amendment.
+- CI does not run the check. The receipts live in the git-ignored `.devsecops-agency/` folder, so CI cannot see them.
+- An acceptance correction ADR is CEO-written, like a waiver ADR, so the script cannot prove the User approved it.
+- None of the chief-prompt edits has been tried in a live run.
 
 ## Rollback
 
@@ -517,3 +536,14 @@ Each has a recommended option. None is decided here.
 #### Dry check against a real run (after round 2, $0)
 
 `--gate` was run against the records of run N4 (tip calculator). It failed with six flags: no `acceptance.md`, and no verdict file for any of the four blocking councils. The councils had written their verdicts elsewhere: CEVO `eval/close-eval.md`, CRT `red-team/pre-release.md`, CISO `security/code-audit.md`, and CAO under `_vision/audit/`. `status.json` kept its gates flat, with no `byCouncil` key. So no real run can pass the gate until the four chiefs' prompts and the status schema follow the contract now stated in `skills/gates`. Those edits are listed above.
+
+## Chairman's decisions on the round-2 questions (2026-11-26 UTC)
+
+**In the chat interface,** the Chairman was asked "Accept the recommended option for each round-2 question?" and replied "Accept all". So each round-2 question below takes its recommended option, applied in this ADR and branch. This is not approval of the amendment (§10.4); the Chairman approves the final text after round 3.
+
+| # | Round-2 question | Decision, as applied |
+|---|---|---|
+| 1 | What is a release? | Any deploy outside the Agency's own machine, staging included. A rollback to a build that passed reuses its gate record, with a receipt |
+| 2 | Who runs `--gate`? | CAO's `gate-auditor`, with a read-only shell, writing `_vision/audit/<date>-<slug>-release-gate.md`. Not CI, which cannot see the receipts. Never the CEO |
+| 3 | Correcting `acceptance.md` | Only by a `user-decision` ADR (`decision: acceptance-correction`) before any verdict. The script counts "written once" from it, with a test |
+| 4 | Informing councils | §8.6 says plainly that they are not fully covered; their verdict files need a later amendment |

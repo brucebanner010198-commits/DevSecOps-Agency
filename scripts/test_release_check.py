@@ -275,3 +275,23 @@ def test_gate_mode_needs_project_and_since_and_exits_non_zero(tmp_path, capsys):
     assert rc.main(args) == 0
     (proj / "close-eval.md").write_text("gate: green\n", encoding="utf-8")
     assert rc.main(args) == 1 and "no regression: line" in capsys.readouterr().out
+
+
+def correction(tmp_path, **kw):
+    fm = dict(kind="user-decision", approver="user", project="app", decision="acceptance-correction",
+              approved="2026-11-24T09:15:00Z")
+    fm.update(kw)
+    d = tmp_path / "outputs" / "devsecops-agency" / "_decisions"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "ADR-0200-acceptance-correction.md").write_text("---\n" + "".join(f"{k}: {v}\n" for k, v in fm.items()) + "---\n", encoding="utf-8")
+
+
+def test_gate_acceptance_correction_needs_the_chairman(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    rs = rs + [w("ceo", str(proj / "acceptance.md"), ts="2026-11-24T09:30:00Z")]
+    assert any("written 2 times" in x for x in gflags(tmp_path, proj, rs))
+    correction(tmp_path, approver="ceo")
+    assert any("written 2 times" in x for x in gflags(tmp_path, proj, rs))
+    correction(tmp_path)
+    assert gflags(tmp_path, proj, rs) == []
+

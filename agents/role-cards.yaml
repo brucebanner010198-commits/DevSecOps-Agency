@@ -199,7 +199,8 @@ agents:
       - Grep
       - Glob
       - Write
-      shell: null
+      - Bash
+      shell: read-only
       model: haiku
       write_scope:
       - _vision/audit/

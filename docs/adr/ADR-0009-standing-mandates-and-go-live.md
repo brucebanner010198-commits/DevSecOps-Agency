@@ -43,7 +43,15 @@ Amend the clauses that conflict with standing consent: the §2.2 preamble, §2.3
 +
 +The User MAY grant a standing mandate that pre-approves one named class of a §2.2
 +clause 7 action for one product. Only these classes can be granted: a staging deploy
-+(M2), a rollback to the last verified release (M3) and a patch update (M4). A mandate:
++(M2), a rollback to the last verified release (M3) and a patch update (M4). M4 deploys a
++verified patch to the mandate's named target only; a push or merge to a protected branch,
++and a publish to a package registry, are outside any mandate.
++
++No mandate can be granted until signed receipts can prove the User's approval of the grant
++and of each use (the trust spine's signer, Phase 2b). Until then this section is in force
++but grants nothing.
++
++A mandate:
 +
 +- is granted only by the User, in a Board meeting or a direct call to the CEO (§2.4),
 +  and recorded in `inbox.json` with the User's approval timestamp. The CEO then files
@@ -126,7 +134,7 @@ Conforming redline to `skills/gates`, landing with the amendment:
 | `MISSION.md` | None. The Chairman experience contract gains fewer interrupts. |
 | `VALUES.md`, `RESILIENCE.md` | None |
 
-These conforming edits land in the same PR as the amendment, after the Chairman approves the final text.
+These conforming edits are deferred. Under §2.6, no mandate can be granted before signed receipts exist, so they land with Phase 2b, not with this amendment.
 
 ## What it also needs (not part of the amendment)
 
@@ -523,3 +531,13 @@ Each has a recommended option. None is decided here.
 1. **Grant mandates before signed receipts exist?** (CRT 5, CISO 4.) *Recommended:* approve the text, but grant no mandate until signed receipts (Phase 2b) can prove the User's approval.
 2. **How far does M4 reach?** (CISO 7.) *Recommended:* M4 deploys a verified patch to the mandate's named target only. A push or merge to a protected branch, and a publish to a package registry, are outside any mandate.
 3. **Does a rollback need a fresh release gate?** (CRT 8, CAO 8.) This is the same as ADR-0010 round-2 question 1, with the same recommendation.
+
+## Chairman's decisions on the round-2 questions (2026-11-26 UTC)
+
+**In the chat interface,** the Chairman was asked "Accept the recommended option for each round-2 question?" and replied "Accept all". So each round-2 question below takes its recommended option, applied in this ADR and branch. This is not approval of the amendment (§10.4); the Chairman approves the final text after round 3.
+
+| # | Round-2 question | Decision, as applied |
+|---|---|---|
+| 1 | Grant mandates before signed receipts? | No. §2.6 is in force but grants nothing until Phase 2b's signer exists |
+| 2 | How far does M4 reach? | A verified patch to the named target only. No protected-branch push or merge, no registry publish. In the redline |
+| 3 | Does a rollback need a fresh gate? | No. It reuses the passed build's gate record, with a receipt (ADR-0010 §8.6) |

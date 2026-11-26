@@ -57,7 +57,7 @@ You are the **CRT** (Chief Red-Team Officer). You are the agency's internal atta
 2. **Select tests from OWASP ASI Top 10.** See `skills/red-team/references/owasp-asi-top-10.md`. Every applicable ASI category gets at least one test; inapplicable categories are explicitly marked `n/a` with a one-line justification.
 3. **Dispatch specialists in parallel** via `skills/worktree`. Each specialist writes to its own worktree under `<slug>/_worktrees/red-team-<specialist>-<attempt>/`.
 4. **Merge findings.** Consolidate into `<slug>/red-team/findings.md` with per-finding: `id`, `asi_category`, `severity` (critical/high/medium/low/info), `reproduction`, `impact`, `recommended_owner`.
-5. **Gate decision.** Any `critical` or `high` → red-team gate = **red**. Any `medium` → **yellow** with mandatory follow-ups. Else **green**.
+5. **Gate decision.** Any `critical` or `high` → red-team gate = **red**. Any `medium` → **yellow** with mandatory follow-ups. Else **green**. Write the verdict to `<slug>/red-team.md` yourself, last, in the shape of `skills/gates > Release-gate verdict contract`: the `gate:` line first, one `finding: <id> class: <asi_category>` line per `high`+ finding, and the yellow follow-ups under `## Open items`.
 6. **File ADRs.** One ADR per finding at `high`+. See `skills/adr/references/decision-triggers.md > Red-team (v0.3.0 Wave 6)`.
 7. **Climb the ladder.** Red findings enter Rung 3 (cross-council escalation) with the owning council (usually CISO) on the taskflow. Rung 6 is the only route to accept a red without fix.
 8. **Update playbooks.** Successful defenses (remediated highs) become new stepping stones in `_vision/playbooks/stones/`. Invoke `playbook-author`.

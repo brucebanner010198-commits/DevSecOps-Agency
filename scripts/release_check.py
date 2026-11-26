@@ -26,7 +26,10 @@ binding. It needs --project and --since, fails closed, and exits 1 on any flag.
 "This run" starts at the later of --since and the CEO's write of acceptance.md.
   - status.json must exist and parse;
   - acceptance.md (the set frozen at intake, one "- <id>: <text>" line per
-    item) must exist, written exactly once, by the CEO, before any verdict;
+    item) must exist, written exactly once, by the CEO, before any verdict.
+    Only the Chairman can correct it: a user-decision ADR in _decisions/ with
+    approver: user, this project, decision: acceptance-correction and an
+    approved: time. "Written once" then counts from the latest such ADR;
   - each blocking council's own verdict file (VERDICT_FILES) must exist in the
     project folder, be last written by an agent of that council in this run,
     and carry a "gate: <green|yellow|red>" line, the first such line at the top
@@ -241,6 +244,18 @@ def valid_waivers(dirs: list[Path], project: str, today: str) -> dict[str, set[s
     return out
 
 
+def acceptance_corrected_at(dirs: list[Path], project: str) -> str:
+    """The latest approved time of a user-approved acceptance correction for this project, or ""."""
+    best = ""
+    for d in dirs:
+        for f in sorted(d.glob("ADR-*.md")) if d.is_dir() else []:
+            fm = frontmatter(read_text(f) or "")
+            if (fm.get("kind") == "user-decision" and fm.get("approver") == "user"
+                    and str(fm.get("project")) == project and fm.get("decision") == "acceptance-correction"):
+                best = max(best, ts(fm.get("approved")))
+    return best
+
+
 def gate_report(receipts: list[dict], councils: dict[str, str], project: Path, since: str,
                 decision_dirs: list[Path], today: str, base: Path | None = None) -> dict:
     flags = []
@@ -273,7 +288,8 @@ def gate_report(receipts: list[dict], councils: dict[str, str], project: Path, s
         a = r.get("agent") or ""
         return a[len(PREFIX):] if a.startswith(PREFIX) else a
 
-    acc = writes_to("acceptance.md")
+    corrected = acceptance_corrected_at(decision_dirs, project.name)
+    acc = [r for r in writes_to("acceptance.md") if ts(r.get("ts")) >= corrected]
     acc_text = read_text(project / "acceptance.md")
     start = max(ts(since), ts(acc[0].get("ts")) if acc else "")
     if not ts(since):
@@ -281,7 +297,8 @@ def gate_report(receipts: list[dict], councils: dict[str, str], project: Path, s
     if acc_text is None:
         flags.append("acceptance.md (the set frozen at intake) is missing")
     if len(acc) != 1:
-        flags.append(f"acceptance.md was written {len(acc)} times; it is written once, at intake")
+        flags.append(f"acceptance.md was written {len(acc)} times; it is written once, at intake"
+                     + (" (counted from the Chairman's correction)" if corrected else ""))
     if any(council_of(r) == "evaluation" for r in acc):
         flags.append("acceptance.md was written by the evaluation council (CONSTITUTION §3.5)")
     if any(agent_of(r) != "ceo" for r in acc):
