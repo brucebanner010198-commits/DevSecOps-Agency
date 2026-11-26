@@ -46,7 +46,7 @@ Append the instruction as `CR-<n>`, with:
 
 If two classes fit, take the one that enters earlier.
 
-**Classification check.** Dispatch `devsecops-agency:cao` to check the class against the Chairman's words, before any work starts. Output: `_agency/cr/CR-<n>-class-audit.md`. A disagreement goes to the Chairman, and the change request waits.
+**Classification audit.** The CEO decides the class. Before any work starts, dispatch `devsecops-agency:cao` to audit that decision against the Chairman's words; CAO does not choose the class (CONSTITUTION §3.5). Output: `_agency/cr/CR-<n>-class-audit.md`. If the audit finds the class wrong, the item goes to the Chairman and the change request waits.
 
 **Dependency changes.** Every dependency change, in any class, is reviewed by `devsecops-agency:security-lead` before it lands. Output: `_agency/cr/CR-<n>-security.md`. This holds even though the class enters at Build (G5).
 
