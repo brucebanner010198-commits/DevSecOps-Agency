@@ -182,7 +182,8 @@ Before each Chief dispatch:
 - **Check the roster.** If the dispatch would require a specialist not present in `status.json > team.<council>.specialists`, invoke `devsecops-agency:skill-creator` first; review + commit the new agent file; update the roster. File an ADR via `adr` for the hire.
 - **Check model tier.** Read the target agent's frontmatter `model:`. If missing or unknown, invoke `skill-creator` to fix per `skills/model-tiering/references/tier-rules.md` and log an `error` in the session log.
 - Via the `taskflow` skill, create a task row in `status.json > tasks[]` with `state: "queued"`.
-- **Allocate a worktree** (via the `worktree` skill) if this is a parallel dispatch or a fix-loop attempt ≥ 1. Look up the Chief's `writes[]` + `reads[]` in `skills/worktree/references/parallel-matrix.md`. Pass the worktree path into the dispatch context. Otherwise write to the main tree directly. Record `worktree` on the task row.
+- **Convene the whole council.** Never tell a Chief to skip its specialists, run lean or cut its council to save money. If the budget cannot cover a council, stop before that dispatch, file it in `inbox.json`, report the project as blocked and wait for the Chairman (as for Rung 6, `skills/budget`).
+- **Allocate a worktree** (via the `worktree` skill) if this is a parallel dispatch or a fix-loop attempt ≥ 1. *Not yet:* the CEO holds no `_worktrees/` entry and cannot do the merge's main-tree copy, so write to the main tree and record `worktree: null` until the merge has an owner (finding F4, `docs/vision/CEO-ENTRY-REVIEW.md`). The worktree checks below then find no worktree. Look up the Chief's `writes[]` + `reads[]` in `skills/worktree/references/parallel-matrix.md`. Pass the worktree path into the dispatch context. Otherwise write to the main tree directly. Record `worktree` on the task row.
 - Write a `dispatch` entry to `_sessions/ceo/<sessionId>.jsonl` AND mirror it to `_sessions/<chief>/<chiefSessionId>.jsonl` (allocate the Chief's sessionId on first dispatch to them for this project). Transition the task to `in-progress`.
 
 After each Chief reports:
@@ -199,7 +200,7 @@ After each Chief reports:
 11. If escalating to user: add item to `inbox.json`, transition task to `blocked`, **invoke the `notify` skill with `event: "task-blocked"`**, and stop phase progression. If the escalation involves `okr_alignment: red` acceptance, the next user meeting files an ADR.
 12. **If an executive session was convened** (CEO + ≥ 2 Chiefs simultaneously — phase transitions, pre-Ship session, close): invoke `meeting-minutes` with kind `exec` before the next phase starts.
 
-**Before advancing a phase:** invoke the `taskflow` skill's handoff invariants — all tasks for the completed phase must be `done` or `cancelled`, no `needs-decision` remaining, phase gate is `green` or `yellow`, **and no `_worktrees/*/worktree.json` has `status: "open"` for this phase**.
+**Before advancing a phase:** invoke the `taskflow` skill's handoff invariants — all tasks for the completed phase must be `done` or `cancelled`, no `needs-decision` remaining, phase gate is `green` or `yellow`, **and no `_worktrees/*/worktree.json` has `status: "open"` for this phase**. Until F4 has an owner, the CEO allocates none, so only a red-team worktree can be open. If one is, do not close it yourself: file it in `inbox.json` and report the phase as blocked.
 
 ### 4. Fix loops
 
