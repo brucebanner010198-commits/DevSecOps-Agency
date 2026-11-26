@@ -68,6 +68,7 @@ The sweep script is kept outside the repo. It feeds each path to `guard.check()`
 
   **Decided (Chairman, 2026-11-25): the CEO.** The five paths in the first option are now in the CEO's `write_scope`. The auditors keep their own records: the CEO still has no write to `_vision/audit/`, `eval/`, `cost/`, `traces/` or any other `_vision/` path. A re-run of the $0 sweep allows every vision, memory, OKR and rhythm step, and rewriting an existing `state.json`, `index.json`, `MEMORY.md` or `projects/<slug>.md` passes too. A rewrite of `MEMORY.md` passing is a gap, not a pass: root `AGENTS.md > ## Writing` forbids overwriting a line in it. Probe N2 (below, under N1-f) later wrote `VISION.md`, the history entry and `MEMORY.md` live with no refusal. Rhythm, OKR, dreaming and every rewrite are still proven at the guard only; N1-a showed the CEO did not attempt most of these steps. One gap predates this change: CONSTITUTION §5.2 makes `_memory/**` append-only, but the guard's B2 list did not include it. `_memory/patterns/*` is now in B2, because the `memory` skill writes those files newest-at-bottom. The rest stays open for the Chairman: `memory/<date>.md` is newest-at-top and `MEMORY.md` takes bullets under its sections, so neither is an end-append, and `index.json` is rewritten as a structure. The remaining refusals are the plugin-root `LESSONS.md` (F3) and `_worktrees/` (F4). `brand-guardian` still shares `_vision/history/`, `compliance-drift` still shares `_vision/rhythm/`, and `cao` and `memory-auditor` still share `_memory/`.
 - **F2. Three steps need tools the CEO does not hold:** `command-center` (an artifact), `notify` (push) and intake's AskUserQuestion. Granting them is a Part 4 grant decision.
+  **Decided (Chairman, 2026-11-25, default accepted): not granted.** The CEO keeps skipping these steps, uses what the Chairman's message says, and records its defaults in `brief.md`, as `ceo.md` already says.
 - **F3. The lessons ledger.** With the plugin-root `LESSONS.md`, the write is refused (B1), which was already open after Phase 2a. With the read/write path rule, it lands in the launch folder instead (N1-e). Where the cross-project ledger lives is a design decision.
 - **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree.
 - **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision. **Unblocked with F1, at the guard only; not run live:** `_vision/rhythm/` is in the CEO's scope, and a rewrite of an existing `state.json` passes.
@@ -124,11 +125,42 @@ The run went all the way to close:
 - **N1-f. The workspace records landed at the launch root, not under `outputs/devsecops-agency/`.** The skills put `_vision/`, `_decisions/`, `_meetings/`, `_sessions/` and `_memory/` under `outputs/devsecops-agency/` (`vision-doc`, `adr`, `meeting-minutes`), and so does the sweep table. N1 wrote them, and `LESSONS.md`, at the launch root; N0 resolved them the same way. Only the project folder went under `outputs/devsecops-agency/<slug>/`. The record-path bullet in `ceo.md` lists `_vision/` and `_sessions/` beside `outputs/devsecops-agency/…`, which may have contributed. It is left unchanged here, because reworded text would merge untested. The plan fixes where an adopted repository's records go (Part 6, `_agency/`), but not where the workspace records of a new idea go. That question joins F3 for the Chairman.
 
   **Fixed (2026-11-25).** Root `AGENTS.md > ## Architecture` already settles this: durable state is `outputs/devsecops-agency/{_memory/, _sessions/, _vision/, _decisions/, _meetings/, _workers/}`. So this was a prompt bug, not an owner question. The record-path bullet in `ceo.md` now puts every workspace record inside `outputs/devsecops-agency/`, with project records in `<slug>/` and adoption records in `_agency/`. **Probe N2 ($0.46, cap $1)** ran the session-start steps with the rhythm fixture seeded. The session log, `MEMORY.md`, `VISION.md` and the vision history entry all landed under `outputs/devsecops-agency/`, with nothing at the launch root and no refusal. N2 did not reach the lessons write, so where `LESSONS.md` now lands is untested; it stays with F3.
-  - **N2-a. Invented timestamps.** The session-log entries carry `00:00:00Z`, `00:00:05Z` and `00:00:10Z`, but the guard's receipts show the writes at 07:09 UTC. The CEO has no clock tool, so it made the times up.
+  - **N2-a. Invented timestamps.** The session-log entries carry `00:00:00Z`, `00:00:05Z` and `00:00:10Z`, but the guard's receipts show the writes at 07:09 UTC. The CEO has no clock tool, so it made the times up. **Fixed later (item 5 below).**
   - **M1, the adopt path re-probe ($0.22, cap $0.50).** The reworded bullet also governs adoption, so M0 was re-run on the new text in a clean copy of the same fixture. The CEO named the `adopt` skill under the plugin root and put `project.md`, `chat.jsonl` and `system-map.md` in `_agency/`, with nothing in `outputs/devsecops-agency/`. It wrote nothing. **Pass.**
-  - **M1-a. The CEO's session log sits outside `_agency/` during adoption.** Asked where a refusal's `error` entry would go, the CEO named `outputs/devsecops-agency/_sessions/ceo/<sessionId>.jsonl`. The adopt skill's step 5 counts any new path outside `_agency/` and `.devsecops-agency/` as a breach. The old text left the session log in the launch folder, outside `_agency/` too, so this gap predates the fix. It is recorded, not reworded again.
+  - **M1-a. The CEO's session log sits outside `_agency/` during adoption.** Asked where a refusal's `error` entry would go, the CEO named `outputs/devsecops-agency/_sessions/ceo/<sessionId>.jsonl`. The adopt skill's step 5 counts any new path outside `_agency/` and `.devsecops-agency/` as a breach. The old text left the session log in the launch folder, outside `_agency/` too, so this gap predates the fix. It is recorded, not reworded again. **Fixed later (item 4 below; probe M2).**
   - **Spend.** N2 + M1 = $0.68. Build spend is $28.29 of $40.
 
 **M0, the adopt path probe ($0.22).** This change rewrote the `adopt` instruction, so this probe re-tests it. It ran in a clean copy of the A2 fixture (an existing git repository with no `_agency/`). The CEO named `…/skills/adopt/SKILL.md` under the plugin root and `_agency/project.md`, `_agency/chat.jsonl` and `_agency/system-map.md` under the repository. It wrote nothing. **Pass.**
 
 - **Spend.** N0 + N1 + M0 = $4.23. Build spend is $27.61 of $40.
+
+## Chairman's defaults (2026-11-25)
+
+The Chairman accepted the recommended default for each open item. What landed where:
+
+| # | Item | Default | Where |
+|---|---|---|---|
+| 1 | Lessons ledger (F3, N1-e) | One ledger per workspace at `outputs/devsecops-agency/LESSONS.md` | Amendment ADR-0011 |
+| 2 | `MEMORY.md`, `memory/<date>.md` | Guard mode B2 "lines kept": every existing line stays, in order | `hooks/guard.py` |
+| 3 | `_memory/index.json` | Structured-rewrite exemption from §5.2 | Amendment ADR-0011 |
+| 4 | Session log during adoption (M1-a) | `_agency/_sessions/ceo/<sessionId>.jsonl` | `ceo.md`, `adopt` |
+| 5 | Invented timestamps (N2-a) | The guard's receipt is the time of record; an agent with no clock writes `ts: null` | `session-log` |
+| 6 | Convening profiles | None yet: every chief is convened, as `ceo.md` says, until the Chairman defines profiles | No change |
+| 7 | Tools the CEO lacks (F2) | Not granted | No change |
+
+**Probe M2 ($0.26, cap $0.50)** re-ran M1 on the new text. The CEO put `project.md`, `chat.jsonl` and its session log in `_agency/`, including where a refusal's `error` entry goes, and wrote nothing. **Pass.** Build spend is $28.55 of $40.
+
+**Probe N3 ($0.35, cap $0.50)** opened a session log only. The entry's `ts` is `null`, and the guard's receipt for the write carries `2026-11-26T01:30:06Z`. **Pass.** Build spend is $28.90 of $40.
+
+For item 5, a PreToolUse hook could rewrite the logged time. A second-hand reading of the hooks documentation says a rewritten input goes with `allow` (which skips the permission prompt) or with `ask`, and it could not confirm the case with no decision. Rather than risk changing how permissions behave, the guard does not rewrite tool input. Row 5 covers the session log only: `chat.jsonl` entries still carry times the agents write, and the readers that use time windows (`keeper-test`, `finops`, `capacity`, `rhythm`) are unchecked.
+
+## Prompt-diff review (CONSTITUTION §5.3), 2026-11-25
+
+Covers the `agents/ceo.md` edits from #15, #18 and #19. The review of #15 and #18 happened after they landed.
+
+- **Round 1 (CRT, from the diffs alone): REJECT.** The skip rules had no carve-out for mandatory steps or USER-ONLY actions.
+- **Fixes in #19.** A step a root document makes mandatory (a §3.3 gate verdict, the §5.8 lessons row, the ADR for a material decision) is never skipped; the CEO stops, files it in `inbox.json` and reports blocked. A recorded default never stands in for a USER-ONLY action (§2.2). The guard also refuses an append-only file it cannot decode.
+- **Probe S2 ($0.18, cap $0.50):** a refused lessons row blocks the close, a blocking red waits for the Chairman, and a routine refusal is logged and skipped. **Pass.**
+- **Round 2 (CRT, full files): APPROVE (verdict A).** `adversarial-prompter` was not run, because the review was read-only with no dispatch. Residual: the carve-out names three step classes, so other mandatory steps still fall under "skip and continue".
+- Both rounds are recorded verbatim in `docs/adr/ADR-0011-workspace-lessons-and-memory-index.md`.
+- **Spend.** L1 + both review rounds + S2 = $1.25. Build spend is $30.15 of $40.
