@@ -46,7 +46,7 @@ Append the instruction as `CR-<n>`, with:
 
 If two classes fit, take the one that enters earlier.
 
-**Classification audit.** The CEO decides the class. `devsecops-agency:cao` audits that decision against the Chairman's words, off the delivery path: the work does not wait for it, and CAO does not choose the class (CONSTITUTION §3.5). Output: `_agency/cr/CR-<n>-class-audit.md`. If the audit finds the class wrong, CAO files it in `inbox.json` for the Chairman.
+**Classification audit.** The CEO decides the class, then dispatches `devsecops-agency:cao`, which audits that decision against the Chairman's words, off the delivery path: the work does not wait for it, and CAO does not choose the class (CONSTITUTION §3.5). Output: `_agency/cr/CR-<n>-class-audit.md`. If the audit finds the class wrong, CAO files it in `inbox.json` for the Chairman.
 
 **Dependency changes.** Every dependency change, in any class, is reviewed by `devsecops-agency:security-lead` before it lands. Output: `_agency/cr/CR-<n>-security.md`. This holds even though the class enters at Build (G5).
 
@@ -73,7 +73,7 @@ In the same change, update, each through its chief:
 ## 5. Close
 
 Append a row for `CR-<n>` to `_agency/change-requests.md`:
-- `done` only if no gate is red and the three review records exist. Waiting for the class audit here is the same as waiting for CAO's close audit at any project close; it is not a delivery step, and CAO still decides nothing about the work. The records are `CR-<n>-class-audit.md`, `CR-<n>-baseline.md` and, for a dependency change, `CR-<n>-security.md`. Link the branch, the tests and the gate results.
+- `done` only if no gate is red, no wrong-class finding is still open, and the review records exist. Waiting for the class audit here is the same as waiting for CAO's close audit at any project close; it is not a delivery step, and CAO still decides nothing about the work. The records are `CR-<n>-class-audit.md` and `CR-<n>-baseline.md`, plus `CR-<n>-security.md` for a dependency change. Link the branch, the tests and the gate results.
 - Otherwise `blocked`, with the reason and the red gate.
 
 Report to the Chairman in three lines.
