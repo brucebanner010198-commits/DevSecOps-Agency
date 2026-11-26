@@ -12,7 +12,7 @@ metadata:
 
 # worktree — isolated scratch dirs for parallel + fix-loop dispatches
 
-> **Suspended for the CEO (finding F4, `docs/vision/CEO-ENTRY-REVIEW.md`).** The CEO holds no `_worktrees/` entry and cannot do the merge's main-tree copy, so it allocates and merges no worktree until the Chairman names a merge owner. Parallel dispatches write to the main tree. `red-team-lead` still uses its own worktrees.
+> **Suspended for the CEO (finding F4, `docs/vision/CEO-ENTRY-REVIEW.md`).** The CEO holds no `_worktrees/` entry and cannot do the merge's main-tree copy, so it allocates and merges no worktree until the Chairman names a merge owner. Parallel dispatches write to the main tree. The red-team lead still uses its own worktrees.
 
 A worktree is a subdirectory under `<slug>/_worktrees/<chief>-<attempt>/` where a Chief writes its artifacts in isolation. On a green/yellow report the CEO merges the worktree into the main project tree; on a red report the worktree stays in place so attempt N+1 can diff against it.
 
