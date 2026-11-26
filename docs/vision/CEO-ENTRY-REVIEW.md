@@ -68,6 +68,7 @@ The sweep script is kept outside the repo. It feeds each path to `guard.check()`
 
   **Decided (Chairman, 2026-11-25): the CEO.** The five paths in the first option are now in the CEO's `write_scope`. The auditors keep their own records: the CEO still has no write to `_vision/audit/`, `eval/`, `cost/`, `traces/` or any other `_vision/` path. A re-run of the $0 sweep allows every vision, memory, OKR and rhythm step, and rewriting an existing `state.json`, `index.json`, `MEMORY.md` or `projects/<slug>.md` passes too. A rewrite of `MEMORY.md` passing is a gap, not a pass: root `AGENTS.md > ## Writing` forbids overwriting a line in it. Probe N2 (below, under N1-f) later wrote `VISION.md`, the history entry and `MEMORY.md` live with no refusal. Rhythm, OKR, dreaming and every rewrite are still proven at the guard only; N1-a showed the CEO did not attempt most of these steps. One gap predates this change: CONSTITUTION §5.2 makes `_memory/**` append-only, but the guard's B2 list did not include it. `_memory/patterns/*` is now in B2, because the `memory` skill writes those files newest-at-bottom. The rest stays open for the Chairman: `memory/<date>.md` is newest-at-top and `MEMORY.md` takes bullets under its sections, so neither is an end-append, and `index.json` is rewritten as a structure. The remaining refusals are the plugin-root `LESSONS.md` (F3) and `_worktrees/` (F4). `brand-guardian` still shares `_vision/history/`, `compliance-drift` still shares `_vision/rhythm/`, and `cao` and `memory-auditor` still share `_memory/`.
 - **F2. Three steps need tools the CEO does not hold:** `command-center` (an artifact), `notify` (push) and intake's AskUserQuestion. Granting them is a Part 4 grant decision.
+  **Decided (Chairman, 2026-11-25, default accepted): not granted.** The CEO keeps skipping these steps, uses what the Chairman's message says, and records its defaults in `brief.md`, as `ceo.md` already says.
 - **F3. The lessons ledger.** With the plugin-root `LESSONS.md`, the write is refused (B1), which was already open after Phase 2a. With the read/write path rule, it lands in the launch folder instead (N1-e). Where the cross-project ledger lives is a design decision.
 - **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree.
 - **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision. **Unblocked with F1, at the guard only; not run live:** `_vision/rhythm/` is in the CEO's scope, and a rewrite of an existing `state.json` passes.
@@ -132,3 +133,19 @@ The run went all the way to close:
 **M0, the adopt path probe ($0.22).** This change rewrote the `adopt` instruction, so this probe re-tests it. It ran in a clean copy of the A2 fixture (an existing git repository with no `_agency/`). The CEO named `…/skills/adopt/SKILL.md` under the plugin root and `_agency/project.md`, `_agency/chat.jsonl` and `_agency/system-map.md` under the repository. It wrote nothing. **Pass.**
 
 - **Spend.** N0 + N1 + M0 = $4.23. Build spend is $27.61 of $40.
+
+## Chairman's defaults (2026-11-25)
+
+The Chairman accepted the recommended default for each open item. What landed where:
+
+| # | Item | Default | Where |
+|---|---|---|---|
+| 1 | Lessons ledger (F3, N1-e) | One ledger per workspace at `outputs/devsecops-agency/LESSONS.md` | Amendment ADR-0011 |
+| 2 | `MEMORY.md`, `memory/<date>.md` | Guard mode B2 "lines kept": every existing line stays, in order | `hooks/guard.py` |
+| 3 | `_memory/index.json` | Structured-rewrite exemption from §5.2 | Amendment ADR-0011 |
+| 4 | Session log during adoption (M1-a) | `_agency/_sessions/ceo/<sessionId>.jsonl` | `ceo.md`, `adopt` |
+| 5 | Invented timestamps (N2-a) | The guard's receipt is the time of record; an agent with no clock writes `ts: null` | `session-log` |
+| 6 | Convening profiles | None yet: every chief is convened, as `ceo.md` says, until the Chairman defines profiles | No change |
+| 7 | Tools the CEO lacks (F2) | Not granted | No change |
+
+For item 5, a PreToolUse hook could rewrite the logged time. The hooks documentation says a rewritten input goes with an `allow` that skips the permission prompt, and does not say whether it works without one. So the guard does not rewrite tool input.

@@ -183,7 +183,7 @@ def test_append_only_globs_match_root_and_nested_layout(relpath):
 
 
 # memory/<date>.md is newest-at-top and MEMORY.md takes bullets under its sections, so neither is an
-# end-append; they stay outside B2 until the Chairman decides how to enforce "never overwrite a line".
+# end-append; B2's lines-kept mode covers them instead (below). index.json is rewritten as a structure.
 @pytest.mark.parametrize("relpath", [OUT + "status.json", OUT + "src/app.js", OUT + "red-team/notes.md", OUT + "src/history/list.js",
                                      "outputs/devsecops-agency/_memory/MEMORY.md", "outputs/devsecops-agency/_memory/index.json",
                                      "outputs/devsecops-agency/_memory/memory/2026-11-25.md"])
@@ -356,3 +356,54 @@ def test_ceo_owns_its_vision_and_memory_records(rel):
 ])
 def test_ceo_does_not_get_the_other_vision_records(rel):
     assert not guard.in_scope(rel, guard.load_cards()["ceo"]["write_scope"]), rel
+
+
+
+
+MEM = "outputs/devsecops-agency/_memory/"
+MEMORY_MD = "# Memory\n\n## Recurring risks\n- r1\n\n## Proven stacks\n- s1\n"
+
+
+@pytest.mark.parametrize("rel", [MEM + "MEMORY.md", MEM + "memory/2026-11-25.md", "_memory/MEMORY.md"])
+def test_memory_files_keep_their_lines(rel):
+    assert guard.is_lines_kept(rel) and not guard.is_append_only(rel)
+
+
+@pytest.mark.parametrize("new", [
+    "# Memory\n\n## Recurring risks\n- r1\n- r2\n\n## Proven stacks\n- s1\n",   # insert under a section
+    "## 2026-11-25\n- new\n\n" + MEMORY_MD,                                     # prepend (newest-at-top)
+    MEMORY_MD + "- s2\n",                                                       # append
+    MEMORY_MD.rstrip("\n") + "\n- s2",                                          # append, no final newline
+])
+def test_lines_kept_allows_new_lines_anywhere(project, new):
+    f = project / MEM / "MEMORY.md"
+    f.parent.mkdir(parents=True)
+    f.write_text(MEMORY_MD, encoding="utf-8")
+    assert blocks(call("Write", {"file_path": str(f), "content": new})) == []
+
+
+@pytest.mark.parametrize("new", [
+    MEMORY_MD.replace("- r1", "- r1 (edited)"),                                 # changed line
+    MEMORY_MD.replace("- r1\n", ""),                                            # deleted line
+    "# Memory\n\n## Proven stacks\n- s1\n\n## Recurring risks\n- r1\n",          # reordered
+])
+def test_lines_kept_refuses_changed_removed_or_reordered_lines(project, new):
+    f = project / MEM / "MEMORY.md"
+    f.parent.mkdir(parents=True)
+    f.write_text(MEMORY_MD, encoding="utf-8")
+    assert any(b.startswith("B2 lines kept") for b in blocks(call("Write", {"file_path": str(f), "content": new})))
+
+
+def test_lines_kept_checks_edits_too(project):
+    f = project / MEM / "memory" / "2026-11-25.md"
+    f.parent.mkdir(parents=True)
+    f.write_text("- a\n- b\n", encoding="utf-8")
+    ok = call("Edit", {"file_path": str(f), "old_string": "- a\n", "new_string": "- a\n- a2\n"})
+    bad = call("Edit", {"file_path": str(f), "old_string": "- b", "new_string": "- B"})
+    assert blocks(ok) == [] and any(b.startswith("B2 lines kept") for b in blocks(bad))
+
+
+def test_adoption_session_log_is_allowed_and_append_only(project):
+    rel = "_agency/_sessions/ceo/s1.jsonl"
+    assert guard.is_append_only(rel)
+    assert guard.check(call("Write", {"file_path": str(project / rel), "content": "{}\n"}), guard.load_cards())[0] == []

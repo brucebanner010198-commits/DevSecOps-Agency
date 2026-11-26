@@ -11,6 +11,10 @@ Blocking rules (exit 2 with a reason):
   B2 append-only  On paths the repo's own documents call append-only, the
                   resulting file must start with the current file, byte for
                   byte (line endings normalised).
+  B2 lines kept   On memory files that take new lines anywhere (MEMORY.md takes
+                  bullets under its sections; memory/<date>.md is newest-at-top),
+                  every existing line must still be there, in order. Lines may be
+                  inserted, never changed, removed or reordered.
   B4 receipts     Agents may not write the guard's own receipts folder
                   (.devsecops-agency/); only the hook appends there.
   B3 dispatch     A dispatch target must be a `devsecops-agency:` agent, and the
@@ -73,6 +77,10 @@ APPEND_ONLY = [
 # fnmatch's * also matches "/", so "*/" covers any depth.
 APPEND_ONLY += ["*/" + g for g in APPEND_ONLY if not g.startswith("*/")]
 APPEND_ONLY = sorted(set(APPEND_ONLY))
+# Root AGENTS.md (## Writing): never overwrite an existing line in these. The memory skill inserts
+# bullets under MEMORY.md's sections and keeps memory/<date>.md newest-at-top, so they are not end-appends.
+LINES_KEPT = ["_memory/MEMORY.md", "_memory/memory/*"]
+LINES_KEPT = sorted(set(LINES_KEPT + ["*/" + g for g in LINES_KEPT]))
 RECEIPTS_DIR = ".devsecops-agency"
 # Logs every agent may write, whatever its scope (chat.jsonl and _sessions/ are also append-only under B2).
 SHARED_WRITES = ["chat.jsonl", "inbox.json", "_sessions/"]
@@ -97,6 +105,20 @@ def is_append_only(relpath: str) -> bool:
     # rel() case-folds on Windows (normcase), so fold the globs the same way there.
     fold = str.lower if os.name == "nt" else (lambda s: s)
     return any(fnmatch.fnmatchcase(fold(relpath), fold(g)) for g in APPEND_ONLY)
+
+
+def is_lines_kept(relpath: str) -> bool:
+    fold = str.lower if os.name == "nt" else (lambda s: s)
+    return any(fnmatch.fnmatchcase(fold(relpath), fold(g)) for g in LINES_KEPT)
+
+
+def keeps_lines(current: str, new: str) -> bool:
+    """True if every line of current appears in new, in the same order."""
+    old = _lf(current).split("\n")
+    if old and old[-1] == "":
+        old.pop()  # a final newline is not a line of its own
+    it = iter(_lf(new).split("\n"))
+    return all(any(line == n for n in it) for line in old)
 
 
 def _lf(s: str) -> str:
@@ -211,6 +233,14 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
                 new = None if current is None else resulting_content(tool, ti, current)
                 if current is not None and (new is None or not _lf(new).startswith(_lf(current))):
                     block.append(f"B2 append-only: {r} is append-only; the new content must start with the current content")
+            elif is_lines_kept(r) and os.path.exists(path):
+                try:
+                    current = Path(path).read_bytes().decode("utf-8")
+                except Exception:
+                    current = None
+                new = None if current is None else resulting_content(tool, ti, current)
+                if current is not None and (new is None or not keeps_lines(current, new)):
+                    block.append(f"B2 lines kept: {r} may take new lines anywhere, but every existing line must stay, unchanged and in order")
             cards = load_cards() if cards is None else cards
             card = cards.get(name)
             scope = (card or {}).get("write_scope")

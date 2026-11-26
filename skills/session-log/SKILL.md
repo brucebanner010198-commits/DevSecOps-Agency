@@ -52,7 +52,7 @@ One JSON object per line:
 ```
 
 Fields:
-- `ts` — ISO 8601 with seconds.
+- `ts` — ISO 8601 with seconds, only if you read the time from a tool result. An agent with no clock writes `null`, and never makes a time up. The time of record is the guard's receipt for the same write (`.devsecops-agency/receipts.jsonl`, field `ts`), which the hook stamps; where the two differ, the receipt wins. Entries in one file are in time order by position.
 - `type` — limited vocabulary: `dispatch` (Chief dispatches specialist), `report` (specialist reports back), `handoff` (artifact crosses council boundaries), `note` (in-flight observation worth keeping), `error` (dispatch or tool failure).
 - `gate` — only meaningful on `report` entries; otherwise `n/a`.
 - `tokens` — optional, fill when known; empty object otherwise.
