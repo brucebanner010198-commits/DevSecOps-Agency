@@ -148,4 +148,6 @@ The Chairman accepted the recommended default for each open item. What landed wh
 | 6 | Convening profiles | None yet: every chief is convened, as `ceo.md` says, until the Chairman defines profiles | No change |
 | 7 | Tools the CEO lacks (F2) | Not granted | No change |
 
+**Probe M2 ($0.26, cap $0.50)** re-ran M1 on the new text. The CEO put `project.md`, `chat.jsonl` and its session log in `_agency/`, including where a refusal's `error` entry goes, and wrote nothing. **Pass.** Build spend is $28.55 of $40.
+
 For item 5, a PreToolUse hook could rewrite the logged time. The hooks documentation says a rewritten input goes with an `allow` that skips the permission prompt, and does not say whether it works without one. So the guard does not rewrite tool input.
