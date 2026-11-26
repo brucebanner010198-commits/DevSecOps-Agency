@@ -365,7 +365,7 @@ def test_ceo_does_not_get_the_other_vision_records(rel):
     "app/_worktrees/red-team-fuzzer-1/worktree.json", "app/_worktrees/_merged/cto-0-x/worktree.json",
     "app/_worktrees/cto-0/architecture.md", "app/_worktrees/engineering-lead-1/src/app.js",
 ])
-def test_ceo_writes_nothing_under_worktrees(rel):
+def test_ceo_has_no_worktree_grant(rel):
     scope = guard.load_cards()["ceo"]["write_scope"]
     assert not guard.in_scope(rel, scope) and not guard.in_scope("outputs/devsecops-agency/" + rel, scope), rel
 
