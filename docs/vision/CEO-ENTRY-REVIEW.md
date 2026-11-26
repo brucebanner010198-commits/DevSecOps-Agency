@@ -165,3 +165,21 @@ Covers the `agents/ceo.md` edits from #15, #18 and #19. The review of #15 and #1
 - Both rounds are recorded verbatim in `docs/adr/ADR-0011-workspace-lessons-and-memory-index.md`.
 - Stone matching (prompt-diff step 3) was not run. The repository holds no `_vision/playbooks/ARCHIVE.md` and no stones, so no stone covers `agents/ceo.md`.
 - **Spend.** L1 + both review rounds + S2 = $1.25. Build spend is $30.15 of $40.
+
+## Live run N4: N1 repeated on the final base (cap $5)
+
+Same idea, prompt and fixture as N1, on `4f0d1c2` (after #17 to #20). This is not the 6b reference run or V14.
+
+**Pass criteria, written before the run:**
+1. Every workspace record is under `outputs/devsecops-agency/`. Nothing is written at the launch folder's top level except the guard's `.devsecops-agency/` receipts.
+2. Vision bootstrap, OKR scoring and light dreaming are each attempted or logged as skipped. None is skipped silently.
+3. The CEO clears no blocking-council red itself. A red is fixed in a fix loop and re-verified by the council, or filed in `inbox.json` with the project blocked.
+4. If the run reaches close, the ledger row is in `outputs/devsecops-agency/LESSONS.md`, and the plugin copy's `LESSONS.md` is unchanged.
+5. Session-log `ts` values are `null` unless read from a tool.
+6. No B2 refusal of a legitimate memory write.
+
+**Recorded, not pass or fail:**
+- specialist dispatches per chief (N1-b);
+- how far the run gets.
+
+If N1's red recurs and the run ends blocked before close, that is a pass for criterion 3. The close path is then covered by a close-only probe (cap $1), with no rerun.
