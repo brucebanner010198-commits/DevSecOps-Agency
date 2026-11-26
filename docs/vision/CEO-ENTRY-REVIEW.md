@@ -150,4 +150,6 @@ The Chairman accepted the recommended default for each open item. What landed wh
 
 **Probe M2 ($0.26, cap $0.50)** re-ran M1 on the new text. The CEO put `project.md`, `chat.jsonl` and its session log in `_agency/`, including where a refusal's `error` entry goes, and wrote nothing. **Pass.** Build spend is $28.55 of $40.
 
+**Probe N3 ($0.35, cap $0.50)** opened a session log only. The entry's `ts` is `null`, and the guard's receipt for the write carries `2026-11-26T01:30:06Z`. **Pass.** Build spend is $28.90 of $40.
+
 For item 5, a PreToolUse hook could rewrite the logged time. A second-hand reading of the hooks documentation says a rewritten input goes with `allow` (which skips the permission prompt) or with `ask`, and it could not confirm the case with no decision. Rather than risk changing how permissions behave, the guard does not rewrite tool input. Row 5 covers the session log only: `chat.jsonl` entries still carry times the agents write, and the readers that use time windows (`keeper-test`, `finops`, `capacity`, `rhythm`) are unchecked.
