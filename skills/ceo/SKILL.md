@@ -75,7 +75,7 @@ One root ledger persists cross-project learning:
 
 - **[`LESSONS.md`](../../LESSONS.md)** — one append-only row per project close. The CEO invokes `skills/lessons-ledger` after `skills/retrospective` to land the row.
 
-**Session-start invariant:** before derived any project slug, the CEO reads `MISSION.md` + `VALUES.md` + the latest 5 rows of `LESSONS.md`. Missing any of the three = abort session and file ADR `kind: identity-missing`.
+**Session-start invariant:** before derived any project slug, the CEO reads `MISSION.md` + `VALUES.md` + the latest 5 rows of `LESSONS.md`. Missing any of the three plugin-root files = abort session and file ADR `kind: identity-missing`. A missing workspace ledger is not an abort (ADR-0011).
 
 ## Rhythm + Career (v0.3.9)
 
@@ -128,7 +128,7 @@ Constitution structure:
 ### 0. Session start
 
 1. Read [`CONSTITUTION.md`](../../CONSTITUTION.md) FIRST — the supreme document. Must exist or the session aborts with ADR `kind: constitution-missing`. Then read [`MISSION.md`](../../MISSION.md) and [`VALUES.md`](../../VALUES.md) — both must exist or the session aborts with ADR `kind: identity-missing`. Then skim [`GOVERNANCE.md`](../../GOVERNANCE.md) + [`RESILIENCE.md`](../../RESILIENCE.md) top sections (decision matrix row for whatever kind of work is incoming; degraded-mode list).
-2. Read the latest 5 rows of [`LESSONS.md`](../../LESSONS.md) for cross-project adjacency. If the user's idea keyword-matches a prior row, note it in the session log.
+2. Read the latest 5 rows of the ledger for cross-project adjacency: the plugin-root [`LESSONS.md`](../../LESSONS.md), then the workspace ledger `outputs/devsecops-agency/LESSONS.md` if it exists (ADR-0011). If the user's idea keyword-matches a prior row, note it in the session log.
 3. **Run the rhythm heartbeat.** Invoke `skills/rhythm/SKILL.md`. It compares `_vision/rhythm/state.json` against today and runs any due heartbeat in order (daily → weekly → monthly → quarterly). Bootstrap on first run. If a missed quarterly is blocking new-project acceptance, surface this to the user in plain text before moving to step 4 and do not proceed until they ack or explicitly override via an ADR.
 4. Check the mission's non-goals against the user's idea. If the idea is in a non-goal area, raise via `user-meeting` before proceeding — the user must consent to an out-of-scope project and file an ADR.
 5. Open the CEO session log via `skills/session-log` (allocate `sessionId`, write `"session opened"` note).
@@ -214,7 +214,7 @@ When all phases complete:
 2. **Close project OKRs.** Invoke the `okr` skill: write the `## Closed` block in `_vision/projects/<slug>.md` with final per-PKR scores. If this close spans a quarter boundary, run `okr.rollup` as well.
 3. **Deep dreaming.** Invoke the `memory` skill with tier=`deep`: consolidate the project into `_memory/patterns/<slug>.md` with the five required sections (What shipped / What worked / What was gated / Recurring risks / Reusable decisions). Run the novelty gate before writing — if ≥ 4 of 5 sections are duplicates of an existing `patterns/*.md`, abort the write and log `"skipped — overlaps patterns/<prior>.md"`. Update `_memory/index.json`.
 4. **Run the retrospective.** Invoke `skills/retrospective/SKILL.md` (kind `project-close`). Attendees: ceo, cao, cevo, crt. Preconditions: CAO close-audit + CEVO close-eval + CRT pre-release red-team all landed. Output: `_meetings/<slug>-retro-<YYYY-MM-DD>.md` with all 10 sections. The retro's carry-over check runs Jaccard against the last 3 ledger rows; a hard carry-over files ADR `kind: repeat-lesson` and flips to CAO red.
-5. **Append the lessons-ledger row.** Invoke `skills/lessons-ledger/SKILL.md`. Reads the retro minutes + `status.json` + `_vision/projects/<slug>.md` + ADR list; appends one H3 block to [`LESSONS.md`](../../LESSONS.md) per `skills/lessons-ledger/references/row-schema.md`; files `ADR-NNNN-lessons-<slug>.md`. **Mandatory per `MISSION.md > North stars § 5`** — no row = the agency did not learn.
+5. **Append the lessons-ledger row.** Invoke `skills/lessons-ledger/SKILL.md`. Reads the retro minutes + `status.json` + `_vision/projects/<slug>.md` + ADR list; appends one H3 block to the workspace ledger `outputs/devsecops-agency/LESSONS.md` (created on the first close; never the plugin-root file, ADR-0011) per `skills/lessons-ledger/references/row-schema.md`; files `ADR-NNNN-lessons-<slug>.md`. **Mandatory per `MISSION.md > North stars § 5`** — no row = the agency did not learn.
 6. **Close the session.** Write a `note` entry to `_sessions/ceo/<sessionId>.jsonl`: `"session closed, shipped"` or `"session closed, blocked"`. Refresh `_sessions/sessions.json`.
 7. Refresh command-center.
 8. Invoke the GitHub push flow (if connector is present) or point the user to the local folder.

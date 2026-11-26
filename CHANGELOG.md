@@ -2,6 +2,13 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.7.1 — Workspace lessons ledger and memory index (2026-11-25)
+
+Patch release under CONSTITUTION §10.5 for `docs/adr/ADR-0011-workspace-lessons-and-memory-index.md` (`kind: constitution-amend`, Chairman-approved 2026-11-25).
+
+- **Lessons ledger.** Rows are written to the workspace ledger `outputs/devsecops-agency/LESSONS.md`. The plugin-root `LESSONS.md` is the schema and seed, read and never written. A missing workspace ledger is not an `identity-missing` abort. `AGENTS.md`, `skills/ceo`, `skills/lessons-ledger` and `skills/rca` updated.
+- **Memory index.** CONSTITUTION §5.2 exempts `_memory/index.json`, which is rewritten as a structure; its `knobHistory[]` stays append-only.
+
 ## v0.7.0 — Chairman → Board of Directors → CEO re-architecture (2026-07-07)
 
 Full re-architecture of the human-facing org model to match the real-world corporate structure `VISION.md`/`MISSION.md` had described since v0.6.x but never implemented: `Chairman of the Board (the User) → Board of Directors → CEO → 16 Chiefs → specialists → workers`. User-directed this session (`docs/adr/ADR-0005-chairman-board-model.md`, `kind: constitution-amend`).
