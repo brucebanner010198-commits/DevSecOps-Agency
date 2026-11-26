@@ -21,7 +21,7 @@ This change widens the same fix to every skill. It also routes a new idea to the
 **Why not dispatch the owner the guard names.** For the CEO's record writes, the owner `guard.owners()` returns is the wrong role:
 - for `_memory/`, it is `memory-auditor` or `cao`, so an auditor would write what it audits;
 - for `_vision/rhythm/`, it is `compliance-drift`;
-- for `_worktrees/`, it is `red-team-lead` (the CEO now holds `_worktrees/*/worktree.json`; see "Chairman's second set of defaults").
+- for `_worktrees/`, it is `red-team-lead`.
 
 Routing these writes to those agents would break separation of duties. So the step is skipped and recorded, and the conflict goes to the Chairman (finding F1).
 
@@ -45,7 +45,7 @@ Each write the playbook gives the CEO was run through `hooks/guard.py` `check()`
 | 1.9 live view | command-center | a Cowork artifact | **tool not held** | |
 | 2 intake | ceo | AskUserQuestion | **tool not held** | |
 | 3 task row | taskflow | `<slug>/status.json` | allowed | |
-| 3 worktree | worktree | `<slug>/_worktrees/<chief>-<n>/worktree.json` | **B5**, allowed since the second set of defaults | red-team-lead |
+| 3 worktree | worktree | `<slug>/_worktrees/<chief>-<n>/worktree.json` | **B5** | red-team-lead |
 | 3.1 OKR score | okr | `_vision/projects/<slug>.md` | **B5** | none |
 | 3.9 light dreaming | memory | `_memory/memory/<date>.md` | **B5** | cao, memory-auditor |
 | 3.11 notify | notify | desktop push | **tool not held** | |
@@ -70,7 +70,7 @@ The sweep script is kept outside the repo. It feeds each path to `guard.check()`
 - **F2. Three steps need tools the CEO does not hold:** `command-center` (an artifact), `notify` (push) and intake's AskUserQuestion. Granting them is a Part 4 grant decision.
   **Decided (Chairman, 2026-11-25, default accepted): not granted.** The CEO keeps skipping these steps, uses what the Chairman's message says, and records its defaults in `brief.md`, as `ceo.md` already says.
 - **F3. The lessons ledger.** With the plugin-root `LESSONS.md`, the write is refused (B1), which was already open after Phase 2a. With the read/write path rule, it lands in the launch folder instead (N1-e). Where the cross-project ledger lives is a design decision.
-- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree. *Partly closed by the second set of defaults (below): the CEO may write `worktree.json`, but the merge still has no owner.*
+- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree. *Still open: the grant the Chairman approved was not made, because the merge has no owner (see "Chairman's second set of defaults").*
 - **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision. **Unblocked with F1, at the guard only; not run live:** `_vision/rhythm/` is in the CEO's scope, and a rewrite of an existing `state.json` passes.
 
 ## Live run N1 (cap $6 of the remaining $16.62)
@@ -230,13 +230,71 @@ The Chairman's reply: "Accept all defaults". That covers items 1 to 6. Item 7 ha
 | # | Item | What landed | Where |
 |---|---|---|---|
 | 1 | The three forced additions | Kept as merged: the closed-project ledger abort, the guard's `knobHistory` check, the CEO's stop at mandatory steps | ADR-0011, `hooks/guard.py`, `agents/ceo.md` |
-| 2 | Trimming a council for budget (N1-b) | The CEO never tells a chief to skip its specialists, run lean or cut its council. If the budget cannot cover a council, it files the item in `inbox.json` and reports to the Chairman (Rung 6, `skills/budget`). No root document allows trimming: `RESILIENCE.md`'s budget-degraded mode tightens only the fix-loop cap. | `agents/ceo.md`, `skills/ceo/SKILL.md` (dispatch step) |
-| 3 | `_worktrees/` (F4) | The CEO holds `_worktrees/*/worktree.json`, not the whole folder. `in_scope` matches a folder entry at any depth, so `_worktrees/` would also have covered every chief's artifacts, code and red-team content inside a worktree. Guard tests cover both sides. | `agents/role-cards.yaml`, `hooks/test_guard.py` |
+| 2 | Trimming a council for budget (N1-b) | The CEO never tells a chief to skip its specialists, run lean or cut its council. If the budget cannot cover a council, it stops before that dispatch, files the item in `inbox.json`, reports the project as blocked and waits for the Chairman, as for a Rung 6 consult (`skills/budget`, whose own trigger is a burn over 110 % or a forecast over 150 %). No root document allows trimming: `RESILIENCE.md`'s budget-degraded mode tightens only the fix-loop cap. | `agents/ceo.md`, `skills/ceo/SKILL.md` (dispatch step) |
+| 3 | `_worktrees/` (F4) | **Not granted.** CRT rejected the grant in its §5.3 review (below). The CEO is told not to allocate a worktree, and a test confirms it writes nothing under `_worktrees/`. | `agents/ceo.md`, `skills/ceo/SKILL.md`, `hooks/test_guard.py` |
 | 4 | Browser-test specialist (N1-d) | Recorded only. It is built with the Phase 3 roles. Until then, browser checks are recorded as "not run". | No change |
 | 5 | Drafts #13 and #14 | Revised to the accepted options; round 2 below | Draft PRs |
 | 6 | Reference run (6b) | Funded at about $10, to run once the Chairman approves #14's final text | Not run |
 
-**Residual for item 3.** The grant covers allocation and status updates only. The `worktree` skill's merge copies the chief's `writes[]` into the main tree and moves the folder to `_worktrees/_merged/`. The CEO holds neither write and has no shell (F2, not granted). So the CEO still does not allocate a worktree: `agents/ceo.md` says to write to the main tree with `worktree: null` until the merge has an owner. F4 stays partly open, as a design question for the Chairman.
+**Why item 3 was not granted.** A $0 sweep of the `worktree` skill found that the grant would not deliver parallel work. The merge copies the chief's `writes[]` into the main tree and moves the folder to `_worktrees/_merged/`. The CEO holds neither write and has no shell (F2, not granted). CRT's §5.3 review then rejected even a narrowed grant, `_worktrees/*/worktree.json`, on three grounds:
+- `fnmatch`'s `*` matches `/`, so the pattern covers any file named `worktree.json` at any depth, including inside a chief's code and under `_merged/`;
+- it lets the CEO rewrite a red-team worktree's control file (`status`, `writes[]`), against red-team independence (`red-team-lead.md:70`, CONSTITUTION §3.5);
+- the same change tells the CEO not to use it, so it is privilege without use.
+
+So F4 is a design question for the Chairman: who merges a worktree? Recommended: the owning chief copies its own `writes[]` into the main tree on the CEO's merge entry, and the guard gains an exact-depth rule so that the CEO holds `<slug>/_worktrees/<chief>-<n>/worktree.json` for non-red-team worktrees only.
 
 **Item 2 is unproven live.** No probe has been run for it.
 
+### CONSTITUTION §5.3 prompt-diff review (CRT, 2026-11-26)
+
+Round 1 ran read-only on CRT's own tier, with the full files ($0.23). It reviewed the first version of this change, which granted `_worktrees/*/worktree.json`.
+
+| CRT finding | Response |
+|---|---|
+| 1–3. The pattern reaches any depth, the tests miss it, and it lets the CEO edit red-team control files | Grant dropped. The test now checks that the CEO writes nothing under `_worktrees/`, including the deep, `_merged/` and red-team cases CRT named. |
+| 4. The grant is unused and the worktree text contradicts it | Grant dropped. The worktree step in `skills/ceo` says no worktree exists until F4 has an owner. |
+| 5. "Rung 6" is loose, and the rule does not say the project waits | Reworded: the CEO stops before that dispatch, reports blocked and waits, "as for" a Rung 6 consult. Rung 6's own thresholds are named in the table above. |
+| 6. The bullets sit between numbered steps | Not changed. They follow the existing bullets under step 1 of `agents/ceo.md`. |
+| 7. Item 2 is unproven live | Agreed. It is still unproven. |
+
+#### Round 1, CRT (`red-team-lead`): REJECT
+
+No root document conflicts with the council rule, but the new scope entry is wider than the change says it is. The tests don't cover that gap.
+
+VERDICT: REJECT
+
+1. **The scope entry is wider than stated** (`agents/role-cards.yaml:296`, `hooks/role-cards.json` +163). `hooks/guard.py:182` matches an entry with `fnmatch` on `r` and on `"*/" + e`. The `*` in `_worktrees/*/worktree.json` also matches `/`.
+   - So the CEO can write any file named `worktree.json` at any depth under any `_worktrees/`. Examples are `app/_worktrees/engineering-lead-1/src/worktree.json`, `.../red-team/worktree.json` and `_worktrees/_merged/<id>/worktree.json`.
+   - That reaches a chief's code and red-team folders and the audit archive. It also reaches any project source file that happens to be named `worktree.json`.
+   - `agents/ceo.md:39` and `docs/vision/CEO-ENTRY-REVIEW.md:234` say the CEO "writes only `worktree.json`", and the review file says the entry avoids covering code and red-team content. Both overstate what the pattern enforces.
+   - Fix: there is no glob that matches one level only. Either add an exact-depth rule in `in_scope`, or drop the entry until the worktree has an owner.
+
+2. **The tests miss the abuse the diff itself notes** (`hooks/test_guard.py:363-376`). `fnmatch` `*` matching `/` is the very reason the entry was narrowed, yet no test covers it.
+   - The negative cases are all non-`worktree.json` names (`architecture.md`, `app.js`, `findings.md`). No case is `.../src/worktree.json`, `.../red-team/worktree.json` or `_merged/x/worktree.json`.
+   - Those three would pass `in_scope`, so the test name `does_not_write_worktree_contents` is unproven.
+   - `src/app.js` and `app/src/app.js` are trivial negatives, because they never hit the `_worktrees` pattern.
+   - Only the first positive case is also checked under the `outputs/devsecops-agency/` prefix.
+   - The review file's claim "Guard tests cover both sides" (`CEO-ENTRY-REVIEW.md:234`) is therefore overstated.
+
+3. **Red-team independence and §3.5 separation are weakened.** The CEO can now rewrite the `worktree.json` of any `red-team-*` worktree. That file sets `writes[]` and `status` (`skills/worktree/SKILL.md:49-72`), and the merge step trusts it.
+   - The CEO could set `status: discarded`, or change `writes[]`, on a red-team worktree. That is a delivery-path actor editing the control file of an independent council.
+   - It conflicts with `agents/red-team/red-team-lead.md:70`, which limits red-team worktrees to red-team's own writes. It also cuts against the §3.5 and §3.3 spirit, since a red-team worktree's red could be quietly closed.
+   - A prompt line saying "never red-team content" is not enforcement, and the guard cannot enforce it.
+   - The diff does not exclude `_worktrees/red-team-*/`, which would be easy to do.
+
+4. **Contradictory text on worktrees.** `agents/ceo.md:39` and `skills/ceo/SKILL.md:186` tell the CEO not to allocate worktrees. The grant exists for allocation and status updates (`CEO-ENTRY-REVIEW.md:239`), so it is unused.
+   - `skills/ceo/SKILL.md:192` still instructs "Merge or discard the worktree (if any)".
+   - `skills/ceo/SKILL.md:57` and `:203` still require no open worktrees before a phase advances.
+   - `skills/worktree/SKILL.md:77` and `:85-92` still say the CEO allocates and merges.
+   - `agents/red-team/red-team-lead.md:58` has red-team specialists "dispatch via `skills/worktree`", so red-team worktrees will exist. The CEO text says it cannot merge them, and no document names who does.
+   - A scope grant that the same change says to leave unused is unneeded privilege. It is also inconsistent with the Chairman's request, which the review file itself says was only partly closed (F4).
+
+5. **The council rule does not weaken any root rule, but part of it is inaccurate.**
+   - `agents/ceo.md:38` and `skills/ceo/SKILL.md:185` do not conflict with `RESILIENCE.md:35` or `CONSTITUTION.md §7.3`. Budget-degraded mode only tightens the fix-loop cap, so the claim at `CEO-ENTRY-REVIEW.md:233` holds.
+   - "The Rung 6 consult" is a loose fit. `skills/budget/SKILL.md:58-59` and `:93` trigger Rung 6 on a burn above 110% or a forecast above 150%.
+   - A council that merely "cannot be covered" below those thresholds has no defined rung. The rule is sound, but its stated trigger should name those thresholds.
+   - Also, the CEO files to `inbox.json` and "reports to the Chairman" without saying the project then waits. The CEO's stop-at-mandatory-step wording at `ceo.md:35` is the natural model to reuse.
+
+6. **Formatting.** The new bullets at `agents/ceo.md:38-39` sit between numbered steps 2 and 3, unindented, so they read as top-level list items rather than sub-bullets of step 2. This is minor.
+
+7. **"Item 2 is unproven live"** (`CEO-ENTRY-REVIEW.md:241`) is honest. No probe shows the CEO stops telling chiefs to run lean, and the review file says so itself.
