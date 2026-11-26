@@ -35,9 +35,14 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 ## Redline (§10.2), option (b)
 
 ```diff
+@@ §3.3 Blocking councils (strict veto)
+-- **CEVO** (evaluation-lead) — ≥ 5 percentage-point regression vs. baseline, skill-eval below threshold, variance σ/μ > 0.15.
++- **CEVO** (evaluation-lead) — ≥ 5 percentage-point regression vs. baseline, skill-eval below threshold, variance σ/μ > 0.15, or a failed item of the project's acceptance set (§8.6).
+```
+
+```diff
 @@ §3.4 Informing-only councils
--Every council not in §3.3 is informing-only. Informing chiefs raise ADRs, publish reports, contribute to gates — but they do NOT veto ship on their own authority.
-+Every council not in §3.3 is informing-only. Informing chiefs raise ADRs, publish reports, contribute to gates — but they do NOT veto ship on their own authority.
+ Every council not in §3.3 is informing-only. Informing chiefs raise ADRs, publish reports, contribute to gates — but they do NOT veto ship on their own authority.
 +At the release gate (§8.6), an informing red can be waived only by the User; the CEO MAY NOT waive it.
 ```
 
@@ -45,29 +50,46 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 @@ Article VIII — Governance
 +### §8.6 Release gate
 +
-+A release passes only when, for the release candidate:
++Every release falls under this section, including a release within a standing mandate
++(§2.6). A release passes only when, for the release candidate:
 +
-+1. each phase gate is `green` or `n/a` as recorded by its own verifier, or carries a User-signed waiver;
-+   a §8.4 non-waivable finding (ASI-class or a raw secret) can never be waived here;
-+2. each §3.3 blocking council has recorded its own verdict (a council record, not the CEO's status
-+   entry), and none is `red` without a User-signed waiver;
-+3. acceptance against the original requirements is part of CEVO's verdict, so an acceptance failure is a
-+   CEVO red.
++1. each §3.3 blocking council has written its own verdict file in the project folder
++   (CISO `security-report.md`, CEVO `close-eval.md`, CRT `red-team.md`, CAO
++   `close-audit.md`) during this run, with a `gate:` line. A verdict that disagrees with
++   `status.json` fails the gate;
++2. no verdict is `red`, unless a valid waiver covers it: a `waiver-grant` ADR (§8.4)
++   approved by the User, for that council and project, not yet expired. A §8.4
++   non-waivable finding (ASI-class or a raw secret) is never waived here;
++3. a `yellow` verdict lists its open items, and the release record carries them;
++4. acceptance is part of CEVO's verdict. The acceptance set is derived from the User's
++   original request and the project OKRs at intake, written once to `acceptance.md`,
++   and never rewritten. No evaluation-council agent writes it (§3.5). A failed item is a
++   CEVO red;
++5. a regression of 5 percentage points or more is always red, never yellow.
 +
-+The check is mechanical: `scripts/release_check.py` (or its successor) computes it from the receipts,
-+and a release without a passing check is a §11.3 CAO red.
++The check is mechanical: `scripts/release_check.py --gate` computes it from the receipts
++and the project records. It fails closed: a missing or unreadable `status.json`, a missing
++verdict or any flag fails the gate, and the check requires `--project` and `--since`.
++Changing what it checks needs an amendment. A release without a passing check is a §11.3
++CAO red.
 ```
 
-## Effect on other root documents (§10.2)
+## Effect on other root documents and skills (§10.2)
 
 | Document | Effect |
 | --- | --- |
 | `GOVERNANCE.md` | The waiver row for informing reds changes its approver from CEO to User, at release. |
+| `skills/gates` | GC stays informing, as §3.4 lists it; its rule is no longer called blocking. The CEO can no longer override an informing red at release. Done in this PR. |
+| `skills/waivers` | Covers an informing red at release. Done in this PR. |
+| `skills/ceo` | Intake writes `acceptance.md` once; the CEO's card gains `acceptance.md`. Done in this PR. |
+| `scripts/release_check.py` | Gains `--gate`, as above, with tests. Advisory mode is unchanged. Done in this PR. |
 | `MISSION.md`, `VALUES.md`, `RESILIENCE.md` | None |
+
+**Residual.** The waiver ADR is written by the CEO, so the script cannot prove the User signed it. Signed receipts (Phase 2b) would; they wait for the Chairman's choice of a signing identity.
 
 ## Rollback
 
-Remove §8.6 and the added §3.4 sentence by a second amendment. The advisory script stays.
+Remove §8.6, the added §3.3 trigger and the added §3.4 sentence by a second amendment, and revert the conforming edits. Advisory mode of the script stays.
 
 ## Review roll (§10.3)
 
@@ -77,25 +99,23 @@ CAO and CRT (mandatory), CEVO (this touches eval and acceptance), and CISO (this
 
 Run N4 (2026-11-26, `docs/vision/CEO-ENTRY-REVIEW.md`) went end to end on a tip calculator. CEVO gave yellow with none of the three project goals proven, and no rule stopped a yellow close. The CEO closed it "blocked" only because the tests had not run.
 
-## Open questions for the Chairman (from round 1)
+## Chairman's decisions on the round-1 questions (2026-11-26 UTC)
 
-Each has a recommended option. None is decided here. `scripts/release_check.py` is unchanged.
+**In the chat interface,** the Chairman was asked to "Accept the recommended options in drafts #13 and #14, then run their second review", and replied "Accept all defaults". So the recommended option of each round-1 question is now the decision, and the redline above carries it.
 
-1. **Where does a verdict's colour come from?** The script reads the CEO-written `status.json`, and counts any write by a council agent as its verdict. *Recommended:* each council's own verdict file at a named path, with a `gate:` line. A mismatch with `status.json` fails the check.
-2. **Does the check fail closed, and is it a gate?** *Recommended:*
-   - exit non-zero on any flag;
-   - treat a missing or corrupt `status.json` as a fail;
-   - make `--project` and `--since` mandatory in gate mode.
-3. **What is a valid waiver?** *Recommended:* a live `waiver-grant` ADR for that finding and project, not yet expired, and never for a §8.4 non-waivable class.
-4. **Acceptance under CEVO.** *Recommended:*
-   - amend §3.3's CEVO triggers so a failed acceptance item is a red;
-   - derive the acceptance set from the original brief and OKRs at intake;
-   - freeze the set, and keep CEVO from writing it (§3.5).
-5. **Does yellow pass?** *Recommended:* a regression over 5 percentage points is always red. A yellow release passes only with its open items listed in the release record.
-6. **"Or its successor."** *Recommended:* name the script, and require an amendment to change what it checks.
-7. **Conforming edits.** `skills/gates:41` and `skills/waivers:15` still let the CEO waive an informing red. *Recommended:* change both in the same PR as the amendment.
-8. **Does GC block?** *Recommended:* keep the Constitution's informing GC. Fix `skills/gates`, which treats GC as blocking.
-9. **Do mandated releases (ADR-0009, M2 to M4) fall under §8.6?** *Recommended:* yes, always.
+This is not approval of the amendment (§10.4). The Chairman approves the final text after the second review.
+
+| # | Round-1 question | Decision |
+|---|---|---|
+| 1 | Where does a verdict's colour come from? | Each council's own verdict file, with a `gate:` line, written by that council in this run. A mismatch with `status.json` fails |
+| 2 | Fail closed, and is it a gate? | Yes: `--gate` exits non-zero on any flag, a missing or corrupt `status.json` fails, and `--project` and `--since` are required |
+| 3 | What is a valid waiver? | A live `waiver-grant` ADR approved by the User for that council and project, never for a §8.4 non-waivable class |
+| 4 | Acceptance under CEVO | §3.3's CEVO triggers gain a failed acceptance item. The set is written once at intake to `acceptance.md` and never by the evaluation council |
+| 5 | Does yellow pass? | Only with its open items listed. A regression of 5 points or more is always red |
+| 6 | "Or its successor" | Removed. The script is named, and changing what it checks needs an amendment |
+| 7 | Conforming edits | `skills/gates` and `skills/waivers` changed in this PR |
+| 8 | Does GC block? | No. GC stays informing; `skills/gates` is fixed |
+| 9 | Mandated releases | Always under §8.6 |
 
 ### Round 1 (2026-11-26, read-only, each agent on its own tier, full files)
 

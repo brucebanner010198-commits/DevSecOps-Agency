@@ -156,7 +156,7 @@ Questions worth asking:
 - Timeline urgency (affects scope cut)
 - Any reference product that captures the feel
 
-Write answers to `brief.md > ## Intake`. Proceed.
+Write answers to `brief.md > ## Intake`. Then write `acceptance.md` once: the acceptance items taken from the Chairman's original request and the project OKRs. It is frozen. Never rewrite it, and never let the evaluation council write it (CONSTITUTION §3.5); CEVO judges the release against it (§8.6). Proceed.
 
 ### 3. Executive sessions (phases)
 

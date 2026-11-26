@@ -12,7 +12,7 @@ metadata:
 - A blocking-council red (CISO / CEVO / CRT / CAO) stands on a ship-path artifact and council-lead judges that the underlying fix would slip the project past an acceptable window.
 - A red-team `high` or `critical` finding on a live artifact where rollback is more dangerous than the finding (rare; requires CRT + CEO agreement).
 - An eval regression > 5 pp where the regression is known-expected (e.g., quarterly baseline shift) — waiver here amounts to a baseline ADR, but still files via this skill.
-- NOT triggered for informing-only chiefs. Informing chiefs don't gate; their concerns become ADRs, not waivers.
+- An informing-council red that stands at release (§8.6). Before release, an informing chief's concern becomes an ADR, not a waiver; at release, only the User can waive it, through this flow.
 
 ## Inputs
 

@@ -76,3 +76,113 @@ def test_main_reads_receipts_and_the_projects_status(tmp_path, capsys):
     assert rc.main(["x", str(tmp_path), "--project", "outputs/devsecops-agency/app"]) == 0
     out = capsys.readouterr().out
     assert "FLAG CAO (audit) is red with no user-signed waiver" in out and "CEVO" not in out.split("FLAG", 1)[1]
+
+
+# --- gate mode (draft ADR-0010, CONSTITUTION §8.6) ----------------------------------------
+
+LEADS = {"security": "security-lead", "evaluation": "evaluation-lead", "red-team": "red-team-lead", "audit": "cao"}
+SINCE = "2026-11-24T00:00:00Z"
+
+
+def gate_setup(tmp_path, colours=None, acceptance="pass", extra=""):
+    colours = colours or {c: "green" for c in LEADS}
+    proj = tmp_path / "outputs" / "devsecops-agency" / "app"
+    proj.mkdir(parents=True)
+    (proj / "status.json").write_text(json.dumps({"gates": {"byCouncil": dict(colours)}}), encoding="utf-8")
+    (proj / "acceptance.md").write_text("- a1\n", encoding="utf-8")
+    receipts = [w("ceo", str(proj / "acceptance.md"))]
+    for c, lead in LEADS.items():
+        body = f"gate: {colours[c]}\n" + ("acceptance: " + acceptance + "\n" if c == "evaluation" else "") + extra
+        (proj / rc.VERDICT_FILES[c]).write_text(body, encoding="utf-8")
+        receipts.append(w(lead, str(proj / rc.VERDICT_FILES[c])))
+    return proj, receipts
+
+
+def gflags(tmp_path, proj, receipts, today="2026-11-26"):
+    dirs = [tmp_path / "outputs" / "devsecops-agency" / "_decisions"]
+    return rc.gate_report(receipts, COUNCILS, proj, SINCE, dirs, today)["flags"]
+
+
+def waiver(tmp_path, **kw):
+    fm = dict(kind="waiver-grant", approver="user", project="app", council="security", expires="2026-12-31", **{})
+    fm.update(kw)
+    d = tmp_path / "outputs" / "devsecops-agency" / "_decisions"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "ADR-0100-waiver-grant-x.md").write_text("---\n" + "".join(f"{k}: {v}\n" for k, v in fm.items()) + "---\n", encoding="utf-8")
+
+
+def test_gate_passes_with_every_verdict_green(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    assert gflags(tmp_path, proj, rs) == []
+
+
+def test_gate_fails_closed_without_status_json(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    (proj / "status.json").write_text("{not json", encoding="utf-8")
+    assert any("status.json is missing" in f for f in gflags(tmp_path, proj, rs))
+
+
+def test_gate_needs_the_councils_own_verdict_file(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    (proj / "red-team.md").unlink()
+    rs = [r for r in rs if not r["path"].endswith("close-audit.md")] + [w("ceo", str(proj / "close-audit.md"))]
+    f = gflags(tmp_path, proj, rs)
+    assert any("CRT (red-team) has no verdict file" in x for x in f)
+    assert any("CAO (audit) did not write close-audit.md" in x for x in f)
+
+
+def test_gate_flags_a_status_json_mismatch(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    (proj / "status.json").write_text(json.dumps({"gates": {"byCouncil": {c: "green" for c in LEADS} | {"audit": "yellow"}}}), encoding="utf-8")
+    assert any("status.json says yellow, its verdict says green" in x for x in gflags(tmp_path, proj, rs))
+
+
+def test_gate_red_needs_a_valid_waiver_adr(tmp_path):
+    proj, rs = gate_setup(tmp_path, colours={"security": "red", "evaluation": "green", "red-team": "green", "audit": "green"})
+    assert any("no valid waiver-grant ADR" in x for x in gflags(tmp_path, proj, rs))
+    waiver(tmp_path, approver="ceo")
+    assert any("no valid waiver-grant ADR" in x for x in gflags(tmp_path, proj, rs))
+    waiver(tmp_path, expires="2026-11-01")
+    assert any("no valid waiver-grant ADR" in x for x in gflags(tmp_path, proj, rs))
+    waiver(tmp_path, **{"class": "raw-secret"})
+    assert any("no valid waiver-grant ADR" in x for x in gflags(tmp_path, proj, rs))
+    waiver(tmp_path)
+    assert gflags(tmp_path, proj, rs) == []
+
+
+def test_gate_yellow_needs_open_items(tmp_path):
+    proj, rs = gate_setup(tmp_path, colours={"security": "green", "evaluation": "green", "red-team": "yellow", "audit": "green"})
+    assert any("yellow with no open items" in x for x in gflags(tmp_path, proj, rs))
+    (proj / "red-team.md").write_text("gate: yellow\n\n## Open items\n- rate limit untested\n", encoding="utf-8")
+    assert gflags(tmp_path, proj, rs) == []
+
+
+def test_gate_failed_acceptance_must_be_a_cevo_red(tmp_path):
+    proj, rs = gate_setup(tmp_path, acceptance="fail")
+    assert any("acceptance failed but its gate is not red" in x for x in gflags(tmp_path, proj, rs))
+
+
+def test_gate_acceptance_set_is_frozen_and_not_cevos(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    rs = rs + [w("eval-designer", str(proj / "acceptance.md"))]
+    f = gflags(tmp_path, proj, rs)
+    assert any("written 2 times" in x for x in f) and any("evaluation council" in x for x in f)
+
+
+def test_gate_ignores_verdicts_written_before_since(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    rs = [dict(r, ts="2026-01-01T00:00:00Z") if r["path"].endswith("security-report.md") else r for r in rs]
+    assert any("CISO (security) did not write security-report.md" in x for x in gflags(tmp_path, proj, rs))
+
+
+def test_gate_mode_needs_project_and_since_and_exits_non_zero(tmp_path, capsys):
+    (tmp_path / ".devsecops-agency").mkdir()
+    (tmp_path / ".devsecops-agency" / "receipts.jsonl").write_text("", encoding="utf-8")
+    assert rc.main(["x", str(tmp_path), "--gate", "--project", "outputs/devsecops-agency/app"]) == 2
+    proj, rs = gate_setup(tmp_path)
+    (tmp_path / ".devsecops-agency" / "receipts.jsonl").write_text("\n".join(json.dumps(r) for r in rs), encoding="utf-8")
+    args = ["x", str(tmp_path), "--gate", "--project", "outputs/devsecops-agency/app", "--since", SINCE, "--today", "2026-11-26"]
+    assert rc.main(args) == 0
+    (proj / "close-eval.md").write_text("gate: green\n", encoding="utf-8")
+    assert rc.main(args) == 1 and "no acceptance: line" in capsys.readouterr().out
+
