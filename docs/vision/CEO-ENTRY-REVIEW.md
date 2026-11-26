@@ -183,3 +183,24 @@ Same idea, prompt and fixture as N1, on `4f0d1c2` (after #17 to #20). This is no
 - how far the run gets.
 
 If N1's red recurs and the run ends blocked before close, that is a pass for criterion 3. The close path is then covered by a close-only probe (cap $1), with no rerun.
+
+### N4 results ($4.37)
+
+The run went end to end and closed **blocked**. Verification could not execute the tests, because no agent held a shell. The CEO filed that in `inbox.json` instead of claiming a pass. CAO was yellow, CEVO yellow and CRT green, and no blocking red was raised.
+
+| # | Criterion | Result |
+|---|---|---|
+| 1 | Records under `outputs/devsecops-agency/` | **Pass.** Nothing at the top level except `.devsecops-agency/` receipts |
+| 2 | Vision, OKR, light dreaming attempted or logged | **Partial.** `VISION.md` and `_vision/projects/tip-calculator.md` were written, and every report carries `okr_alignment`. Light dreaming wrote no `memory/<date>.md` and logged no skip. Deep dreaming wrote `patterns/tip-calculator.md` |
+| 3 | No blocking red cleared by the CEO | **Pass.** None was raised; the stop rule sent the unverified tests to the Chairman |
+| 4 | Ledger row in the workspace file, plugin copy unchanged | **Pass** |
+| 5 | Session-log `ts` is `null` unless read from a tool | **Fail.** All 10 entries carry invented times (`2026-11-25T00:00:01Z` onward), while the receipts show 2026-11-26 01:55 UTC onward. The CEO read only the `ceo` and `rhythm` skills, never `session-log`, so the `null` rule did not reach it (as in N1-a). |
+| 6 | No B2 refusal of a legitimate memory write | **Pass.** Six refusals, all B5: four engineering-lead writes of app code, devops-lead `ops/local-run.md` and red-team-lead `redteam/pre-release.md` |
+
+**Recorded:**
+- **Specialist dispatches (N1-b).** CRO 1, CPO 1, CQO 2 and engineering-lead 1 per build round. Security, docs, devops, GC, CAO, CEVO and CRT had none.
+  - For seven of the 14 chief dispatches, the CEO's prompt said not to dispatch specialists, for budget.
+  - Engineering-lead first tried to write the app itself and was refused (B5), then dispatched `frontend-dev`.
+- **An unverified claim.** The CEO reported a CRO refusal of `research/findings.md`, but no such receipt exists.
+- **Fixture error (mine).** The seeded `state.json` carried the UTC date, 2026-11-26. The CEO took it to be the future, so it neither trusted nor rewrote it, and logged an error.
+- **Spend.** Build spend is $35.21 of $40, including the draft reviews below ($0.69).
