@@ -74,6 +74,7 @@ APPEND_ONLY = [
     "_vision/history/*",
     "_memory/patterns/*",
     "red-team/findings.md",
+    "_agency/change-requests.md",
 ]
 # The same files under a project output folder (outputs/devsecops-agency/<slug>/...).
 # fnmatch's * also matches "/", so "*/" covers any depth.

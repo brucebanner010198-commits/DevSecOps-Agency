@@ -17,9 +17,15 @@ metadata:
 
 Use only after `adopt` has finished and the Chairman approved the adoption report. Records live in `_agency/`, as in `adopt`.
 
+## 0. Precondition: commit drift
+
+Run `adopt`'s re-entry check first (`skills/adopt/SKILL.md > ## Re-entry`). If the repository changed outside the agency since the recorded commit, re-map the changed files and record the new commit before this change request goes any further.
+
 ## 1. Record
 
-Append the instruction to `_agency/change-requests.md` as `CR-<n>`, with:
+`_agency/change-requests.md` is append-only (the guard enforces it). Every update is a new row; no row is edited in place.
+
+Append the instruction as `CR-<n>`, with:
 - the Chairman's words, verbatim;
 - the date;
 - the class from step 2;
@@ -40,6 +46,10 @@ Append the instruction to `_agency/change-requests.md` as `CR-<n>`, with:
 
 If two classes fit, take the one that enters earlier.
 
+**Classification check.** Dispatch `devsecops-agency:cao` to check the class against the Chairman's words, before any work starts. Output: `_agency/cr/CR-<n>-class-audit.md`. A disagreement goes to the Chairman, and the change request waits.
+
+**Dependency changes.** Every dependency change, in any class, is reviewed by `devsecops-agency:security-lead` before it lands. Output: `_agency/cr/CR-<n>-security.md`. This holds even though the class enters at Build (G5).
+
 ## 3. Impact analysis (every class except "investigate")
 
 Dispatch `devsecops-agency:engineering-lead`:
@@ -53,13 +63,17 @@ Run the agency's pipeline from the class's entry point to the end, as for new wo
 - work lands on a branch;
 - no push, merge or publish without the Chairman (CONSTITUTION §2.2 clause 7).
 
-**The adoption baseline must hold.** A change that breaks a test which passed in `_agency/baseline/tests.md` is a red.
+**The adoption baseline must hold.** `devsecops-agency:evaluation-lead` (CEVO) owns the check, through `regression-detector`. It compares the change against every adoption baseline: `_agency/baseline/tests.md`, `security-scan.md`, `licenses.md` and `integrity.md`. Output: `_agency/cr/CR-<n>-baseline.md`. Anything that was passing and now fails is a CEVO red (CONSTITUTION §3.3).
 
-In the same change, update:
-- `_agency/spec-as-is.md`;
-- `_agency/system-map.md`;
-- the repository's user documentation.
+In the same change, update, each through its chief:
+- `_agency/spec-as-is.md`, by `spec-writer` (through `pm-lead`);
+- `_agency/system-map.md`, by `legacy-code-specialist` (through `architecture-lead`);
+- the repository's user documentation, by `docs-lead`.
 
 ## 5. Close
 
-Mark `CR-<n>` `done` (or `blocked`, with the reason) in `_agency/change-requests.md`, and link the branch, the tests and the gate results. Report to the Chairman in three lines.
+Append a row for `CR-<n>` to `_agency/change-requests.md`:
+- `done` only if no gate is red. Link the branch, the tests and the gate results.
+- Otherwise `blocked`, with the reason and the red gate.
+
+Report to the Chairman in three lines.
