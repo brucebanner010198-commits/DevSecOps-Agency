@@ -142,7 +142,7 @@ Constitution structure:
 5. **Pull prior learnings.** Invoke the `memory` skill read path: read `_memory/MEMORY.md`, `rg` project patterns by idea keywords, inject a `## Prior learnings` section into `brief.md` (≤ 6 bullets, each citing its source file). If no `_memory/` exists yet, create it with an empty `MEMORY.md` and skip injection.
 6. **Bootstrap vision (first-run only).** If `_vision/VISION.md` does not exist, invoke the `vision-doc` skill's bootstrap flow — provisional mission, empty OKRs, `history/<today>.md` seeded. Never prompt the user for OKRs at bootstrap; OKRs wait for the first top-5 user meeting.
 7. **Derive project OKRs.** If the user has already picked this idea from a top-5 meeting, invoke the `okr` skill's derive flow to write `_vision/projects/<slug>.md`. File an ADR via `adr` for the derivation. If this project predates the top-5 pipeline (pre-Wave 2), skip and proceed.
-8. **Open the session.** Invoke the `session-log` skill: allocate a `sessionId` for this project and write a `note` entry to `_sessions/ceo/<sessionId>.jsonl` with `"session opened"`.
+8. **Open the session.** Invoke the `session-log` skill: allocate a `sessionId` for this project and write a `note` entry to `_sessions/ceo/<sessionId>.jsonl` with `"session opened"`. Every entry has the fields `ts`, `agentId`, `sessionId`, `projectSlug`, `phase`, `type`, `from`, `to`, `artifact`, `gate`, `tokens` and `note` (`skills/session-log/SKILL.md`). `ts` is `null` unless you read the time from a tool result; never make a time up. The guard's receipt for each write carries the real time.
 9. Invoke the `command-center` skill to open the live view.
 
 ### 2. Intake
