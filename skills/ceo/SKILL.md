@@ -75,7 +75,7 @@ One root ledger persists cross-project learning:
 
 - **[`LESSONS.md`](../../LESSONS.md)** — one append-only row per project close. The CEO invokes `skills/lessons-ledger` after `skills/retrospective` to land the row.
 
-**Session-start invariant:** before derived any project slug, the CEO reads `MISSION.md` + `VALUES.md` + the latest 5 rows of `LESSONS.md`. Missing any of the three plugin-root files = abort session and file ADR `kind: identity-missing`. A missing workspace ledger is not an abort (ADR-0011).
+**Session-start invariant:** before derived any project slug, the CEO reads `MISSION.md` + `VALUES.md` + the latest 5 rows of `LESSONS.md`. Missing any of the three plugin-root files = abort session and file ADR `kind: identity-missing`. A missing workspace ledger is not an abort while no project has closed, meaning no `outputs/devsecops-agency/_meetings/*-retro-*.md` exists; after that it is an `identity-missing` abort too (ADR-0011).
 
 ## Rhythm + Career (v0.3.9)
 

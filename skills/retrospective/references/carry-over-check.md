@@ -9,7 +9,7 @@ The detector that catches "we wrote this down last time and did it again anyway.
 ## Input
 
 - Current project retro draft, section `## What we'd change`.
-- Last 3 rows of `LESSONS.md`, field `what we'd change`.
+- Last 3 rows of `LESSONS.md`, field `what we'd change`. Read the plugin-root rows, then the workspace ledger's (`outputs/devsecops-agency/LESSONS.md`, ADR-0011), and take the last 3.
 
 Read order: current retro line vs. each prior-3 row's change bullets. N × M comparisons, where N = current bullets (≤ 3) and M = prior-3 change bullets (≤ 9 total).
 
