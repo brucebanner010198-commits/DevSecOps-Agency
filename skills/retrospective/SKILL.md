@@ -70,7 +70,7 @@ Anyone listed as required who is unavailable produces a **skip note** in the min
 1. **Verify preconditions.** CAO close-audit, CEVO close-eval, and CRT pre-release red-team must all have landed. If any is missing, abort and log `blocked — pending <which>`.
 2. **Gather evidence.** Read every input file. Build a citation-keyed outline.
 3. **Write the minutes.** One section at a time. Every factual claim carries `file:line` per `AGENTS.md > ## Start`.
-4. **Carry-over check.** Read prior 3 `LESSONS.md` rows. If any "what we'd change" row repeats verbatim or by paraphrase, emit the carry-over flag and file ADR `kind: repeat-lesson`.
+4. **Carry-over check.** Read prior 3 `LESSONS.md` rows, across the plugin-root and workspace ledgers (ADR-0011). If any "what we'd change" row repeats verbatim or by paraphrase, emit the carry-over flag and file ADR `kind: repeat-lesson`.
 5. **Pair every follow-up with a task ID.** Invoke `taskflow` to create rows under the relevant phase for each action item.
 6. **Hand off to `lessons-ledger`.** The retro's `## Lessons`, `## Reusable decisions`, and `## What we'd change` sections feed directly into the ledger row.
 7. **Notify.** If the retro produced a CAO red via carry-over flag, invoke `notify` with `event: "gate-red"`.

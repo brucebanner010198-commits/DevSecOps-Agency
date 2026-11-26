@@ -163,4 +163,5 @@ Covers the `agents/ceo.md` edits from #15, #18 and #19. The review of #15 and #1
 - **Probe S2 ($0.18, cap $0.50):** a refused lessons row blocks the close, a blocking red waits for the Chairman, and a routine refusal is logged and skipped. **Pass.**
 - **Round 2 (CRT, full files): APPROVE (verdict A).** `adversarial-prompter` was not run, because the review was read-only with no dispatch. Residual: the carve-out names three step classes, so other mandatory steps still fall under "skip and continue".
 - Both rounds are recorded verbatim in `docs/adr/ADR-0011-workspace-lessons-and-memory-index.md`.
+- Stone matching (prompt-diff step 3) was not run. The repository holds no `_vision/playbooks/ARCHIVE.md` and no stones, so no stone covers `agents/ceo.md`.
 - **Spend.** L1 + both review rounds + S2 = $1.25. Build spend is $30.15 of $40.

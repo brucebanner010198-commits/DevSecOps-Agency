@@ -15,6 +15,8 @@ Blocking rules (exit 2 with a reason):
                   bullets under its sections; memory/<date>.md is newest-at-top),
                   every existing line must still be there, in order. Lines may be
                   inserted, never changed, removed or reordered.
+  B2 knob history _memory/index.json may be rewritten as a structure (ADR-0011), but
+                  its existing knobHistory entries must stay, unchanged and in order.
   B4 receipts     Agents may not write the guard's own receipts folder
                   (.devsecops-agency/); only the hook appends there.
   B3 dispatch     A dispatch target must be a `devsecops-agency:` agent, and the
@@ -119,6 +121,30 @@ def keeps_lines(current: str, new: str) -> bool:
         old.pop()  # a final newline is not a line of its own
     it = iter(_lf(new).split("\n"))
     return all(any(line == n for n in it) for line in old)
+
+
+def is_memory_index(relpath: str) -> bool:
+    fold = str.lower if os.name == "nt" else (lambda s: s)
+    r = fold(relpath)
+    return r == "_memory/index.json" or r.endswith("/_memory/index.json")
+
+
+def keeps_knob_history(current: str, new: str) -> bool:
+    """ADR-0011: _memory/index.json may be rewritten, but knobHistory is append-only.
+    A current file that is not JSON (or not an object) has nothing to keep; a new one must parse."""
+    try:
+        old = json.loads(current)
+    except Exception:
+        old = None
+    try:
+        nxt = json.loads(new)
+    except Exception:
+        return False
+    if not isinstance(nxt, dict):
+        return False
+    before = old.get("knobHistory", []) if isinstance(old, dict) else []
+    after = nxt.get("knobHistory", [])
+    return isinstance(after, list) and after[:len(before)] == before
 
 
 def _lf(s: str) -> str:
@@ -245,6 +271,15 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
                     block.append(f"B2 lines kept: {r}'s current content cannot be read as UTF-8, so the write is refused")
                 elif new is None or not keeps_lines(current, new):
                     block.append(f"B2 lines kept: {r} may take new lines anywhere, but every existing line must stay, unchanged and in order")
+            elif is_memory_index(r) and os.path.exists(path):
+                try:
+                    current = Path(path).read_bytes().decode("utf-8")
+                except Exception:
+                    current = None
+                new = None if current is None else resulting_content(tool, ti, current)
+                if current is None or new is None or not keeps_knob_history(current, new):
+                    block.append(f"B2 knob history: {r} may be rewritten (ADR-0011), but its knobHistory entries "
+                                 "must stay, unchanged and in order, at the start of the new knobHistory")
             cards = load_cards() if cards is None else cards
             card = cards.get(name)
             scope = (card or {}).get("write_scope")

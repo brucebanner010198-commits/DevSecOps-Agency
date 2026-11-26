@@ -1,6 +1,6 @@
 {
   "name": "devsecops-agency",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A fully autonomous AI software-development company in a Claude Code plugin. Chairman → Board of Directors → CEO governance model: you are the Chairman of the Board, chairing the Board of Directors (the only group meeting you attend) or calling the CEO directly; the CEO runs 16 councils with blocking and informing chiefs; specialists may spawn workers in parallel. Research-first, security-second, receipts-always. STRIDE + OWASP Top 10 + OWASP ASI Top 10 baseline; SBOM + SLSA per shipped artifact; 8 runtime hooks; 12 Trust commitments; ratified Constitution; cross-model deliberation panel for the highest-stakes decisions. See CHANGELOG.md for full version history.",
   "author": {
     "name": "Chairman",

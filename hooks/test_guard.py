@@ -423,3 +423,39 @@ def test_b2_refuses_when_the_current_file_is_not_utf8(project, rel):
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_bytes(b"\xff\xfe old\n")
     assert any(b.startswith("B2") for b in blocks(call("Write", {"file_path": str(f), "content": "new\n"})))
+
+
+IDX = {"lastRem": None, "xref": {"a": "LESSONS.md > a"}, "knobHistory": [{"knob": "dedupe", "to": 0.85}]}
+
+
+def _index(project, data):
+    f = project / MEM / "index.json"
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(json.dumps(data), encoding="utf-8")
+    return f
+
+
+@pytest.mark.parametrize("new", [
+    dict(IDX, lastRem="2026-11-25T00:00:00Z", xref={}),                                     # structure rewritten
+    dict(IDX, knobHistory=IDX["knobHistory"] + [{"knob": "dedupe", "to": 0.9}]),             # knob appended
+])
+def test_memory_index_may_be_rewritten_but_keeps_knob_history(project, new):
+    f = _index(project, IDX)
+    assert blocks(call("Write", {"file_path": str(f), "content": json.dumps(new)})) == []
+
+
+@pytest.mark.parametrize("new", [
+    json.dumps(dict(IDX, knobHistory=[])),                                                    # history dropped
+    json.dumps(dict(IDX, knobHistory=[{"knob": "dedupe", "to": 0.5}])),                      # history edited
+    json.dumps({k: v for k, v in IDX.items() if k != "knobHistory"}),                         # key removed
+    "not json",
+])
+def test_memory_index_refuses_a_lost_or_edited_knob_history(project, new):
+    f = _index(project, IDX)
+    assert any(b.startswith("B2 knob history") for b in blocks(call("Write", {"file_path": str(f), "content": new})))
+
+
+def test_memory_index_first_write_passes(project):
+    f = project / MEM / "index.json"
+    assert blocks(call("Write", {"file_path": str(f), "content": json.dumps(IDX)})) == []
+    assert guard.is_memory_index("_memory/index.json") and not guard.is_append_only(MEM + "index.json")
