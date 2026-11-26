@@ -14,7 +14,7 @@ related: docs/vision/CEO-ENTRY-REVIEW.md (F3, N1-e, Chairman's defaults 1 and 3)
 
 **Accepted.** The Chairman's approval came first, and the §10.3 reviews came after it. CAO and CRT both approved in round 2, below, so the status is `accepted`.
 
-**Approval (§10.4), 2026-11-25, in the chat interface.** The session that recorded it had no clock tool, so only the date is recorded, not the time. The two defaults were put to the Chairman as written below, in a list of seven:
+**Approval (§10.4), in the chat interface, at 2026-11-26T01:21:05Z** (the evening of 2026-11-25 in the Chairman's local time, UTC−5). The time is the session transcript's timestamp for the reply. The two defaults were put to the Chairman as written below, in a list of seven:
 
 > 1. **Lessons ledger.** Root `AGENTS.md` puts it in the plugin's own folder. Claude Code's docs say a plugin gets a new folder on every update and not to store data there. Default: keep it at `outputs/devsecops-agency/LESSONS.md` in each workspace. That needs a root-document amendment.
 >
@@ -233,3 +233,4 @@ The status at line 4 is `proposed`, and line 15 makes `accepted` conditional on 
 - `memory-auditor` does not audit `index.json` after the fact; only the guard checks it before the write.
 - A few skill lines still say plain "`LESSONS.md`" (`retrospective/SKILL.md:38,65`, `ceo/SKILL.md:76`, `append-contract.md:83`); `AGENTS.md:20` governs them.
 - `adversarial-prompter` (prompt-diff step 5) was not run, because the reviews were read-only with no dispatch.
+- Stone matching (prompt-diff step 3) was not run either. The repository holds no `_vision/playbooks/ARCHIVE.md` and no stones, so no stone names `agents/ceo.md`.
