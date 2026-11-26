@@ -25,15 +25,21 @@ Gate mode (--gate) is the check draft ADR-0010 (CONSTITUTION §8.6) would make
 binding. It needs --project and --since, fails closed, and exits 1 on any flag:
   - status.json must exist and parse;
   - each blocking council's own verdict file (VERDICT_FILES) must exist in the
-    project folder, be written by an agent of that council after --since, and
-    carry a "gate: <green|yellow|red|n/a>" line that matches status.json;
+    project folder; the last allowed write to it must be by an agent of that
+    council, after --since; and it must carry a "gate: <green|yellow|red>" line
+    that matches status.json. A blocking council never returns n/a: every
+    release needs its verdict (CONSTITUTION §3.3);
   - a red passes only with a valid waiver: a waiver-grant ADR in _decisions/
-    with approver: user, this project and council, an expiry not yet passed,
+    with approver: user, this project and council, a finding id (which, for a
+    blocking council, appears in its verdict file), an expiry not yet passed,
     and a class that is not non-waivable (CONSTITUTION §8.4);
+  - an informing council's red in status.json > gates.byCouncil needs a valid
+    waiver too (§3.4, §8.6). Phase colours (byPhase) are derived from the
+    councils' and are not checked separately;
   - a yellow passes only with a non-empty "## Open items" list in its verdict;
   - CEVO's verdict carries "acceptance: pass|fail"; a fail must be red;
-  - acceptance.md (the set frozen at intake) must exist, written once, by no
-    evaluation-council agent (CONSTITUTION §3.5).
+  - acceptance.md (the set frozen at intake) must exist, written exactly once,
+    by the CEO, before any verdict file was written (CONSTITUTION §3.5).
 The waiver ADR is still CEO-written; only signed receipts (Phase 2b) would
 prove the User signed it.
 
@@ -59,7 +65,7 @@ LOGS = ("chat.jsonl", "inbox.json")
 # Each blocking council's own verdict file, in the project folder (a path its role card already grants).
 VERDICT_FILES = {"security": "security-report.md", "evaluation": "close-eval.md",
                  "red-team": "red-team.md", "audit": "close-audit.md"}
-COLOURS = ("green", "yellow", "red", "n/a")
+COLOURS = ("green", "yellow", "red")
 NON_WAIVABLE = ("asi", "asi-class", "raw-secret")
 
 
@@ -182,17 +188,18 @@ def frontmatter(text: str) -> dict:
     return fm if isinstance(fm, dict) else {}
 
 
-def valid_waivers(dirs: list[Path], project: str, today: str) -> set[str]:
-    """Councils with a live, user-approved waiver-grant ADR for this project."""
-    out = set()
+def valid_waivers(dirs: list[Path], project: str, today: str) -> dict[str, set[str]]:
+    """council -> finding ids with a live, user-approved waiver-grant ADR for this project."""
+    out: dict[str, set[str]] = {}
     for d in dirs:
         for f in sorted(d.glob("ADR-*.md")) if d.is_dir() else []:
             fm = frontmatter(read_text(f) or "")
+            finding = str(fm.get("finding") or "").strip()
             if (fm.get("kind") == "waiver-grant" and fm.get("approver") == "user"
-                    and str(fm.get("project")) == project and fm.get("council") in BLOCKING
+                    and str(fm.get("project")) == project and fm.get("council") and finding
                     and str(fm.get("expires") or "") >= today
                     and str(fm.get("class") or "").lower() not in NON_WAIVABLE):
-                out.add(fm["council"])
+                out.setdefault(str(fm["council"]), set()).add(finding)
     return out
 
 
@@ -220,26 +227,35 @@ def gate_report(receipts: list[dict], councils: dict[str, str], project: Path, s
         a = r.get("agent") or ""
         return councils.get(a[len(PREFIX):]) if a.startswith(PREFIX) else None
 
+    def agent_of(r: dict) -> str:
+        a = r.get("agent") or ""
+        return a[len(PREFIX):] if a.startswith(PREFIX) else a
+
+    first_verdict = min((r.get("ts") or "" for c in BLOCKING for r in writes_to(VERDICT_FILES[c])), default="")
+
     rows = []
     for council, title in BLOCKING.items():
         name = VERDICT_FILES[council]
         text = read_text(project / name)
         v = parse_verdict(text) if text is not None else {"gate": None, "acceptance": None, "open": []}
-        own = [r for r in writes_to(name) if council_of(r) == council and (r.get("ts") or "") >= since]
+        ws = sorted(writes_to(name), key=lambda r: r.get("ts") or "")
+        last = ws[-1] if ws else None
+        own = bool(last) and council_of(last) == council and (last.get("ts") or "") >= since
+        waived_here = any(fid in (text or "") for fid in waived.get(council, ()))
         rows.append({"council": council, "title": title, "file": name, "gate": v["gate"],
-                     "written_by_council": bool(own), "waiver": council in waived})
+                     "written_by_council": own, "waiver": waived_here})
         if text is None:
             flags.append(f"{title} ({council}) has no verdict file {name}")
             continue
         if not own:
-            flags.append(f"{title} ({council}) did not write {name} in this run")
+            flags.append(f"{title} ({council}) was not the last to write {name} in this run")
         if v["gate"] not in COLOURS:
-            flags.append(f"{title} ({council}) {name} has no gate: line")
+            flags.append(f"{title} ({council}) {name} has no valid gate: line (green, yellow or red)")
         sj = colour(by_council.get(council))
         if sj != v["gate"]:
             flags.append(f"{title} ({council}) status.json says {sj or '-'}, its verdict says {v['gate'] or '-'}")
-        if v["gate"] == "red" and council not in waived:
-            flags.append(f"{title} ({council}) is red with no valid waiver-grant ADR")
+        if v["gate"] == "red" and not waived_here:
+            flags.append(f"{title} ({council}) is red with no valid waiver-grant ADR for a finding in {name}")
         if v["gate"] == "yellow" and not v["open"]:
             flags.append(f"{title} ({council}) is yellow with no open items listed")
         if council == "evaluation":
@@ -247,13 +263,20 @@ def gate_report(receipts: list[dict], councils: dict[str, str], project: Path, s
                 flags.append("CEVO (evaluation) verdict has no acceptance: line")
             elif v["acceptance"] == "fail" and v["gate"] != "red":
                 flags.append("CEVO (evaluation) acceptance failed but its gate is not red")
+    for council, value in sorted(by_council.items()):
+        if council not in BLOCKING and colour(value) == "red" and not waived.get(council):
+            flags.append(f"informing council {council} is red with no valid waiver-grant ADR (§3.4, §8.6)")
     acc = writes_to("acceptance.md")
     if read_text(project / "acceptance.md") is None:
         flags.append("acceptance.md (the set frozen at intake) is missing")
-    if len(acc) > 1:
-        flags.append(f"acceptance.md was written {len(acc)} times; it is frozen at intake")
+    if len(acc) != 1:
+        flags.append(f"acceptance.md was written {len(acc)} times; it is written once, at intake")
     if any(council_of(r) == "evaluation" for r in acc):
         flags.append("acceptance.md was written by the evaluation council (CONSTITUTION §3.5)")
+    if any(agent_of(r) != "ceo" for r in acc):
+        flags.append("acceptance.md was written by an agent other than the CEO")
+    if acc and first_verdict and min(r.get("ts") or "" for r in acc) > first_verdict:
+        flags.append("acceptance.md was written after a verdict")
     return {"councils": rows, "flags": flags}
 
 

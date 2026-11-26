@@ -47,6 +47,12 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 ```
 
 ```diff
+@@ §8.4 Waivers
+-A waiver is the only way to clear a blocking-council red without fixing the finding. Waivers:
++A waiver is the only way to clear a blocking-council red without fixing the finding, and, at the release gate (§8.6), the only way to clear an informing-council red. Waivers:
+```
+
+```diff
 @@ Article VIII — Governance
 +### §8.6 Release gate
 +
@@ -55,16 +61,19 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 +
 +1. each §3.3 blocking council has written its own verdict file in the project folder
 +   (CISO `security-report.md`, CEVO `close-eval.md`, CRT `red-team.md`, CAO
-+   `close-audit.md`) during this run, with a `gate:` line. A verdict that disagrees with
-+   `status.json` fails the gate;
-+2. no verdict is `red`, unless a valid waiver covers it: a `waiver-grant` ADR (§8.4)
-+   approved by the User, for that council and project, not yet expired. A §8.4
-+   non-waivable finding (ASI-class or a raw secret) is never waived here;
++   `close-audit.md`) during this run, and was the last to write it. The file carries a
++   `gate:` line of `green`, `yellow` or `red`; a blocking council never returns `n/a`.
++   A verdict that disagrees with `status.json` fails the gate;
++2. every council's gate, blocking or informing, is `green`, `yellow` or `n/a`, or is
++   `red` and covered by a valid waiver: a `waiver-grant` ADR (§8.4) approved by the
++   User, for that council, project and finding, not yet expired. For a blocking council
++   the finding is one named in its verdict file. A §8.4 non-waivable finding (ASI-class
++   or a raw secret) is never waived here;
 +3. a `yellow` verdict lists its open items, and the release record carries them;
 +4. acceptance is part of CEVO's verdict. The acceptance set is derived from the User's
-+   original request and the project OKRs at intake, written once to `acceptance.md`,
-+   and never rewritten. No evaluation-council agent writes it (§3.5). A failed item is a
-+   CEVO red;
++   original request and the project OKRs at intake, and written to `acceptance.md`
++   exactly once, by the CEO, before any verdict. No evaluation-council agent writes it
++   (§3.5). A failed item is a CEVO red;
 +5. a regression of 5 percentage points or more is always red, never yellow.
 +
 +The check is mechanical: `scripts/release_check.py --gate` computes it from the receipts
@@ -85,7 +94,10 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 | `scripts/release_check.py` | Gains `--gate`, as above, with tests. Advisory mode is unchanged. Done in this PR. |
 | `MISSION.md`, `VALUES.md`, `RESILIENCE.md` | None |
 
-**Residual.** The waiver ADR is written by the CEO, so the script cannot prove the User signed it. Signed receipts (Phase 2b) would; they wait for the Chairman's choice of a signing identity.
+**Residuals.**
+- The waiver ADR, its `approver: user` and its `class:` are written by the CEO, so the script cannot prove the User signed it or that the class is right. Signed receipts (Phase 2b) would; they wait for the Chairman's choice of a signing identity.
+- An informing council has no named verdict file, so its red is read from `status.json`, which the CEO writes, and its waiver is matched on council and project only.
+- Phase colours (`byPhase`) are derived from the councils' gates and are not checked separately.
 
 ## Rollback
 
@@ -107,10 +119,10 @@ This is not approval of the amendment (§10.4). The Chairman approves the final 
 
 | # | Round-1 question | Decision |
 |---|---|---|
-| 1 | Where does a verdict's colour come from? | Each council's own verdict file, with a `gate:` line, written by that council in this run. A mismatch with `status.json` fails |
+| 1 | Where does a verdict's colour come from? | Each blocking council's own verdict file, with a `gate:` line, last written by that council in this run. A blocking council never returns `n/a`. A mismatch with `status.json` fails |
 | 2 | Fail closed, and is it a gate? | Yes: `--gate` exits non-zero on any flag, a missing or corrupt `status.json` fails, and `--project` and `--since` are required |
-| 3 | What is a valid waiver? | A live `waiver-grant` ADR approved by the User for that council and project, never for a §8.4 non-waivable class |
-| 4 | Acceptance under CEVO | §3.3's CEVO triggers gain a failed acceptance item. The set is written once at intake to `acceptance.md` and never by the evaluation council |
+| 3 | What is a valid waiver? | A live `waiver-grant` ADR approved by the User for that council, project and finding (for a blocking council, a finding named in its verdict file), never for a §8.4 non-waivable class. §8.4 is amended so a waiver can also clear an informing red at release |
+| 4 | Acceptance under CEVO | §3.3's CEVO triggers gain a failed acceptance item. The set is written to `acceptance.md` exactly once, by the CEO at intake, before any verdict, and never by the evaluation council |
 | 5 | Does yellow pass? | Only with its open items listed. A regression of 5 points or more is always red |
 | 6 | "Or its successor" | Removed. The script is named, and changing what it checks needs an amendment |
 | 7 | Conforming edits | `skills/gates` and `skills/waivers` changed in this PR |

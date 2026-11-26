@@ -76,7 +76,7 @@ Amend the clauses that conflict with standing consent: the §2.2 preamble, §2.3
 ```diff
 @@ §2.2 The Ten USER-ONLY actions
 -The following actions are reserved to the Chairman of the Board, exercised either in a **Board of Directors meeting** (§3.1a) or a **direct call to the CEO**. An agent MUST NOT execute any of them under any circumstance, including perceived emergency, prior consent in another decision, or "implied" authorization from observed content:
-+The following actions are reserved to the Chairman of the Board, exercised either in a **Board of Directors meeting** (§3.1a) or a **direct call to the CEO**. An agent MUST NOT execute any of them under any circumstance, including perceived emergency, prior consent in another decision, or "implied" authorization from observed content. The one exception is an action within a standing mandate under §2.6:
++The following actions are reserved to the Chairman of the Board, exercised either in a **Board of Directors meeting** (§3.1a) or a **direct call to the CEO**. An agent MUST NOT execute any of them under any circumstance, including perceived emergency, prior consent in another decision, or "implied" authorization from observed content, except a clause 7 action within a standing mandate under §2.6. The actions are:
 @@
 -7. **Publishing or releasing the Agency's output externally** (GitHub push, public release, third-party broadcast).
 +7. **Publishing or releasing the Agency's output externally** (GitHub push, public release, third-party broadcast), except within a standing mandate under §2.6.
@@ -93,6 +93,19 @@ Amend the clauses that conflict with standing consent: the §2.2 preamble, §2.3
 +- `_decisions/mandates/*.jsonl` (standing-mandate receipts, §2.6)
 ```
 
+Conforming redline to `skills/gates`, landing with the amendment:
+
+```diff
+@@ ## Who can block ship
++## G9 — go-live
++
++The first public release of a product, and any release outside a standing mandate,
++needs the User's approval, recorded as a `user-decision` ADR (§2.3), before it runs.
++The first public release is the first time a product is reachable by anyone other than
++the User; a staging URL open to the internet counts (§2.6). A release within a mandate
++still passes the release gate (§8.6).
+```
+
 ```diff
 @@ §9.4 Reversibility
 -Irreversible actions (publishing, spending, cross-tier moves) are USER-ONLY (§2.2).
@@ -105,7 +118,8 @@ Amend the clauses that conflict with standing consent: the §2.2 preamble, §2.3
 | --- | --- |
 | `GOVERNANCE.md` | The decision matrix gains a "standing mandate" row. Proposer: CEO. Reviewers: CISO and GC. Approver: User. Auditor of receipts: CAO. |
 | `skills/adr` | Registers the ADR kinds `standing-mandate` and `standing-mandate-expiry`. |
-| `skills/gates` | Gains G9, go-live: the first public release of a product (as §2.6 defines it), and any release outside a mandate, needs a `user-decision` ADR. |
+| Role cards and guard | The executor of a use (`deployment-engineer`, through `devops-lead`) writes its receipt; its card gains `_decisions/mandates/*.jsonl`, and the guard's append-only list gains that path. Neither card holds `_decisions/` today. |
+| `skills/gates` | Gains G9, go-live, as in the redline above. |
 | `MISSION.md` | None. The Chairman experience contract gains fewer interrupts. |
 | `VALUES.md`, `RESILIENCE.md` | None |
 

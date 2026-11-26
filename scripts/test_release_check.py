@@ -90,7 +90,7 @@ def gate_setup(tmp_path, colours=None, acceptance="pass", extra=""):
     proj.mkdir(parents=True)
     (proj / "status.json").write_text(json.dumps({"gates": {"byCouncil": dict(colours)}}), encoding="utf-8")
     (proj / "acceptance.md").write_text("- a1\n", encoding="utf-8")
-    receipts = [w("ceo", str(proj / "acceptance.md"))]
+    receipts = [w("ceo", str(proj / "acceptance.md"), ts="2026-11-24T09:00:00Z")]
     for c, lead in LEADS.items():
         body = f"gate: {colours[c]}\n" + ("acceptance: " + acceptance + "\n" if c == "evaluation" else "") + extra
         (proj / rc.VERDICT_FILES[c]).write_text(body, encoding="utf-8")
@@ -104,7 +104,7 @@ def gflags(tmp_path, proj, receipts, today="2026-11-26"):
 
 
 def waiver(tmp_path, **kw):
-    fm = dict(kind="waiver-grant", approver="user", project="app", council="security", expires="2026-12-31", **{})
+    fm = dict(kind="waiver-grant", approver="user", project="app", council="security", finding="sec-7", expires="2026-12-31")
     fm.update(kw)
     d = tmp_path / "outputs" / "devsecops-agency" / "_decisions"
     d.mkdir(parents=True, exist_ok=True)
@@ -125,10 +125,10 @@ def test_gate_fails_closed_without_status_json(tmp_path):
 def test_gate_needs_the_councils_own_verdict_file(tmp_path):
     proj, rs = gate_setup(tmp_path)
     (proj / "red-team.md").unlink()
-    rs = [r for r in rs if not r["path"].endswith("close-audit.md")] + [w("ceo", str(proj / "close-audit.md"))]
+    rs = rs + [w("frontend-dev", str(proj / "close-audit.md"), ts="2026-11-24T11:00:00Z")]
     f = gflags(tmp_path, proj, rs)
     assert any("CRT (red-team) has no verdict file" in x for x in f)
-    assert any("CAO (audit) did not write close-audit.md" in x for x in f)
+    assert any("CAO (audit) was not the last to write close-audit.md" in x for x in f)
 
 
 def test_gate_flags_a_status_json_mismatch(tmp_path):
@@ -138,7 +138,10 @@ def test_gate_flags_a_status_json_mismatch(tmp_path):
 
 
 def test_gate_red_needs_a_valid_waiver_adr(tmp_path):
-    proj, rs = gate_setup(tmp_path, colours={"security": "red", "evaluation": "green", "red-team": "green", "audit": "green"})
+    proj, rs = gate_setup(tmp_path, colours={"security": "red", "evaluation": "green", "red-team": "green", "audit": "green"},
+                          extra="finding sec-7: XSS in export\n")
+    assert any("no valid waiver-grant ADR" in x for x in gflags(tmp_path, proj, rs))
+    waiver(tmp_path, finding="sec-9")
     assert any("no valid waiver-grant ADR" in x for x in gflags(tmp_path, proj, rs))
     waiver(tmp_path, approver="ceo")
     assert any("no valid waiver-grant ADR" in x for x in gflags(tmp_path, proj, rs))
@@ -167,12 +170,34 @@ def test_gate_acceptance_set_is_frozen_and_not_cevos(tmp_path):
     rs = rs + [w("eval-designer", str(proj / "acceptance.md"))]
     f = gflags(tmp_path, proj, rs)
     assert any("written 2 times" in x for x in f) and any("evaluation council" in x for x in f)
+    assert any("other than the CEO" in x for x in f)
+
+
+def test_gate_acceptance_must_precede_the_verdicts(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    rs = [dict(r, ts="2026-11-25T00:00:00Z") if r["path"].endswith("acceptance.md") else r for r in rs]
+    assert any("written after a verdict" in x for x in gflags(tmp_path, proj, rs))
+
+
+def test_gate_blocking_council_cannot_return_n_a(tmp_path):
+    proj, rs = gate_setup(tmp_path, colours={"security": "n/a", "evaluation": "green", "red-team": "green", "audit": "green"})
+    assert any("CISO (security) security-report.md has no valid gate: line" in x for x in gflags(tmp_path, proj, rs))
+
+
+def test_gate_informing_red_needs_a_user_waiver(tmp_path):
+    proj, rs = gate_setup(tmp_path)
+    st = json.loads((proj / "status.json").read_text(encoding="utf-8"))
+    st["gates"]["byCouncil"]["quality"] = "red"
+    (proj / "status.json").write_text(json.dumps(st), encoding="utf-8")
+    assert any("informing council quality is red" in x for x in gflags(tmp_path, proj, rs))
+    waiver(tmp_path, council="quality", finding="qa-3")
+    assert gflags(tmp_path, proj, rs) == []
 
 
 def test_gate_ignores_verdicts_written_before_since(tmp_path):
     proj, rs = gate_setup(tmp_path)
     rs = [dict(r, ts="2026-01-01T00:00:00Z") if r["path"].endswith("security-report.md") else r for r in rs]
-    assert any("CISO (security) did not write security-report.md" in x for x in gflags(tmp_path, proj, rs))
+    assert any("CISO (security) was not the last to write security-report.md" in x for x in gflags(tmp_path, proj, rs))
 
 
 def test_gate_mode_needs_project_and_since_and_exits_non_zero(tmp_path, capsys):
