@@ -514,3 +514,5 @@ Before it, four probes (about $0.02, charged to the reference run's $10) checked
 
 **Date labels corrected.** The records of the round-4 funding and the F4 answer say "2026-11-26 UTC". Both answers came at 2026-11-27T01:47:13Z, and the #14 approval at 2026-11-27T02:53:54Z. The labels give the Chairman's local date (UTC−5), not the UTC date.
 
+
+**Review.** CRT §5.3 prompt-diff review, read-only, $0.06: APPROVE. CRT found nothing blocking. Its one note: any stray `- x:` bullet in `acceptance.md` counts as an item, which was already the case. Build spend is $40.72 of $41.10.
