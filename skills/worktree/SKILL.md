@@ -16,7 +16,7 @@ metadata:
 
 A worktree is a subdirectory under `<slug>/_worktrees/<chief>-<attempt>/` where a Chief writes its artifacts in isolation. On a green/yellow report the owning Chief copies the worktree into the main project tree, on the CEO's dispatch; on a red report the worktree stays in place so attempt N+1 can diff against it.
 
-This skill is the openclaw-inspired analog of `git worktree add`. There is no git involved — just a disciplined convention that makes parallel work atomic and fix-loops diffable.
+This skill is the openclaw-inspired analog of `git worktree add`. There is no git involved — just a disciplined convention that keeps parallel work apart, checks it before it lands and makes fix-loops diffable.
 
 ## When to allocate a worktree
 
@@ -43,8 +43,7 @@ outputs/devsecops-agency/<slug>/
 │   ├── security-lead-1/    # fix-loop attempt 1 after security-lead attempt 0 red
 │   │   ├── worktree.json
 │   │   └── threat-model.md
-│   └── _merged/            # archive of worktrees that merged cleanly
-│       └── cro-0-<mergeTs>/
+│   └── ...                 # merged and discarded worktrees stay here, with their status set
 └── ...                     # the main project tree (merge target)
 ```
 
@@ -108,7 +107,7 @@ On a `green` or `yellow` report. Steps 1 to 3 are the CEO's, by reading; step 4 
 
 ### 3. Discard
 
-On a `red` report that's being superseded by a fix-loop (not cancelled), the previous worktree stays `open` for diff purposes, and a **new** worktree is allocated for attempt N+1. When the fix-loop's new worktree merges, the old `red` worktree's `status` flips to `discarded` and it's moved to `_worktrees/_discarded/<id>-<ts>/`.
+On a `red` report that's being superseded by a fix-loop (not cancelled), the previous worktree stays `open` for diff purposes, and a **new** worktree is allocated for attempt N+1. When the fix-loop's new worktree merges, the old `red` worktree's `status` flips to `discarded`. The folder stays in place.
 
 On a cancelled task, discard immediately. Discarding sets `status: "discarded"` in `worktree.json`; the folder stays in place.
 

@@ -409,6 +409,18 @@ def test_ceo_writes_nothing_else_under_worktrees(project, rel):
     assert len(b) == 1 and b[0].startswith("B6"), (rel, b)
 
 
+@pytest.mark.parametrize("rel", [
+    "outputs/devsecops-agency/app/_worktrees./red-team-lead-0/status.json",
+    "outputs/devsecops-agency/app/_worktrees /red-team-lead-0/status.json",
+    "outputs/devsecops-agency/app/_WORKT~1/red-team-lead-0/status.json",
+    "outputs/devsecops-agency/app/_worktrees/cro-²/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/cro-٣/worktree.json",
+])
+def test_ceo_cannot_step_around_b6(project, rel):
+    b = ceo_write(project, rel)
+    assert len(b) == 1 and b[0].startswith("B6"), (rel, b)
+
+
 def test_worktree_rule_leaves_the_chiefs_alone(project):
     # A chief still writes its own artifacts inside its worktree, as before.
     d = call("Write", {"file_path": str(project / "outputs/devsecops-agency/app/_worktrees/cro-0/research-brief.md"),
@@ -547,3 +559,24 @@ def test_change_request_reviewers_write_their_own_record(agent, rel):
     assert guard.in_scope(rel, cards[agent]["write_scope"])
     assert not guard.in_scope(rel, cards["engineering-lead"]["write_scope"])
     assert guard.in_scope("_agency/cr/CR-1-impact.md", cards["engineering-lead"]["write_scope"])
+
+
+def test_every_worktree_chief_holds_its_matrix_paths():
+    # Each allowed chief must hold, in the main tree, every path its parallel-matrix rows merge,
+    # except engineering-lead's Build row, which is excluded in the skill text.
+    import re
+    text = (Path(guard.PLUGIN_ROOT) / "skills" / "worktree" / "references" / "parallel-matrix.md").read_text(encoding="utf-8")
+    scope = {n: c["write_scope"] for n, c in guard.load_cards().items() if c.get("write_scope")}
+    seen = set()
+    for line in text.splitlines():
+        m = re.match(r"\| `([a-z-]+)`[^|]*\| (.+?) \|", line)
+        if not m or m.group(1) not in guard.WORKTREE_CHIEFS:
+            continue
+        chief, writes = m.group(1), re.findall(r"`([^`]+)`", m.group(2))
+        if chief == "engineering-lead" and any(w.startswith("src/") for w in writes):
+            continue
+        seen.add(chief)
+        for w in writes:
+            path = "outputs/devsecops-agency/app/" + w.replace("**", "x/y").replace("*", "x")
+            assert guard.in_scope(path, scope[chief] + guard.SHARED_WRITES), (chief, w)
+    assert seen == set(guard.WORKTREE_CHIEFS)

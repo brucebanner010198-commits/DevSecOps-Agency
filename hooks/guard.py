@@ -31,7 +31,9 @@ Blocking rules (exit 2 with a reason):
                   control file outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json,
                   at exactly that depth, for a chief in WORKTREE_CHIEFS. Red-team, archive
                   and unknown ids are refused, and so is everything else under _worktrees/,
-                  even where a CEO scope entry would match at depth (finding F4).
+                  even where a CEO scope entry would match at depth (finding F4). A CEO
+                  path with a Windows alias segment (trailing dot or space, 8.3 name) is
+                  refused outright.
                   "*" (the builders) is the whole project except the agency's records
                   (_agency/, _vision/, _decisions/, _memory/). A refusal names the
                   agents whose scope covers the path. A card with no write_scope falls
@@ -55,6 +57,7 @@ from __future__ import annotations
 import fnmatch
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -195,8 +198,18 @@ def in_scope(relpath: str, scope: list[str]) -> bool:
     return False
 
 
+def _segments(relpath: str) -> list[str]:
+    return relpath.replace("\\", "/").split("/")
+
+
+def windows_alias(relpath: str) -> bool:
+    """A segment Windows would resolve to another name: a trailing dot or space ("_worktrees."),
+    or an 8.3 short name ("_WORKT~1"). Refused for the CEO so B6 cannot be stepped around."""
+    return any(s != s.rstrip(". ") or re.fullmatch(r"[^~]{1,6}~[0-9]+(\.[^.]{0,3})?", s) for s in _segments(relpath) if s)
+
+
 def under_worktrees(relpath: str) -> bool:
-    return "_worktrees" in relpath.replace("\\", "/").lower().split("/")
+    return any(s.rstrip(". ").lower() == "_worktrees" for s in _segments(relpath))
 
 
 def ceo_worktree_control(relpath: str) -> bool:
@@ -209,7 +222,7 @@ def ceo_worktree_control(relpath: str) -> bool:
             or parts[5] != "worktree.json" or not parts[2] or parts[2].startswith(("_", ".")):
         return False
     chief, _, n = parts[4].rpartition("-")
-    return chief in WORKTREE_CHIEFS and n.isdigit()
+    return chief in WORKTREE_CHIEFS and n.isascii() and n.isdigit()
 
 
 def load_cards() -> dict:
@@ -313,8 +326,11 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
             scope = (card or {}).get("write_scope")
             if cards and not card:
                 block.append(f"B5 scope: {name} has no role card, so it may not write (default deny, Part 4 rule 1)")
-            elif name == "ceo" and under_worktrees(r):
-                if not ceo_worktree_control(r):
+            elif name == "ceo" and (under_worktrees(r) or windows_alias(r)):
+                if windows_alias(r):
+                    block.append(f"B6 worktree: {r} has a segment Windows would resolve to another name "
+                                 "(a trailing dot or space, or an 8.3 short name); write the plain path")
+                elif not ceo_worktree_control(r):
                     block.append(f"B6 worktree: under _worktrees/ the CEO may write only "
                                  f"outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json, for a chief in "
                                  f"{', '.join(WORKTREE_CHIEFS)}; not {r}. The owning chief writes and copies its own artifacts.")

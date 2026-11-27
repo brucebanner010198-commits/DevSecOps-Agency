@@ -386,3 +386,66 @@ The Chairman was asked "when a chief works in its own worktree, who merges that 
 
 **Spend correction.** The record above stops at $37.77. Later spend: draft round-3 reviews $1.53 (#14 $1.43, #13 $0.10), which brings the total to $39.30 of $40. Then the #14 round 4 ($0.70) ran under the Chairman's added $1.10, for $40.00 of $41.10.
 
+### F4 review, round 1: CRT (`red-team-lead`) REJECT (read-only, own tier, $0.24)
+
+> **Verdict: REJECT.** The guard rule is nearly right. Two things block approval: the merge text contradicts itself in several places, and the red-team claim fails on Windows through a path alias.
+> 
+> ## 1. Guard rule B6: mostly sound
+> 
+> - **Exact depth.** `ceo_worktree_control` (`hooks/guard.py:~201-212`) parses the path. It needs exactly 6 segments in the form `outputs/devsecops-agency/<slug>/_worktrees/<id>/worktree.json`. The chief must be in `WORKTREE_CHIEFS` and `<n>` must be digits.
+> - **Other writes refused.** B6 sits before the generic scope branch (`guard.py:316-320`). Any CEO write under `_worktrees/` that fails the check gets B6 instead of falling through to the CEO's name entries such as `status.json` and `adr-*.md`.
+> - **Tests.** The refuse list covers depth, archive, unknown-id and missing-number cases. It also covers CEO name entries at depth, the wrong slug root and a nested root (`test_guard.py:~136-157`). The `len(b)==1 and startswith("B6")` assertion is a good check.
+> - **Weak point 1: `n.isdigit()`.** It accepts Unicode digits such as `²` and Arabic-Indic numerals, so "digits" is looser than stated. Use `isascii() and isdigit()`. This is minor.
+> - **Weak point 2: aliases.** `under_worktrees` matches the exact segment `_worktrees` (`guard.py:~198`), and `rel()` only calls `abspath` and `normcase` (`guard.py:113-114`). On Windows, a segment like `_worktrees.` or `_worktrees ` (trailing dot or space), or an 8.3 name, resolves to the real folder at the OS level. In `guard.py`, none of those aliases counts as `_worktrees`.
+>   - Such a path skips B6 and reaches the CEO scope branch. There `status.json` matches `*/status.json`. So the CEO could write `…/_worktrees./red-team-lead-0/status.json`.
+>   - This is static analysis. I did not run it.
+>   - It is the same class of gap B6 says it closes ("everything else under `_worktrees/`"). No test covers it.
+> 
+> ## 2. Red-team independence
+> 
+> - Red-team ids are refused in the CEO's control-file check, because `red-team-lead` and `red-team-fuzzer` are not in `WORKTREE_CHIEFS`.
+> - The red-team lead's own writes are untouched, since B6 only fires for `name == "ceo"`. `test_worktree_rule_leaves_the_chiefs_alone` covers this. The lead's `_worktrees/` scope is at `role-cards.yaml:1360`.
+> - The Windows alias in section 1 defeats the independence claim on Windows, which is this user's platform. The fix is to normalise or reject path segments that fold to `_worktrees` (strip trailing dots and spaces, or refuse any segment that matches after stripping) and to add a test.
+> 
+> ## 3. Merge sequence consistency: fails
+> 
+> `agents/ceo.md`, `skills/ceo/SKILL.md:201`, `skills/worktree/SKILL.md` (Merge section, `:89-100`) and `merge-policy.md:3,38-42` agree. The CEO verifies, the chief copies, and the CEO marks merged. The files below still contradict that.
+> 
+> - **`skills/worktree/SKILL.md:111`** says the old worktree "is moved to `_worktrees/_discarded/<id>-<ts>/`". That is a folder move, and the diff updated the cancel line at `:113` but not this one.
+> - **`skills/worktree/SKILL.md:46`** still shows a `_merged/` archive in the tree diagram.
+> - **`SKILL.md:19`** still says the convention makes work "atomic".
+> - **`merge-policy.md:142`** says "Atomicity means all or nothing". This contradicts the new "checked, not atomic" wording at `:3`.
+> - **`merge-policy.md:145`** still treats `_merged/` and `_discarded/` as archives.
+> - **`parallel-matrix.md:76`** says "CEO is the merger of last resort". That is the old model.
+> - **`parallel-matrix.md:35,85`** say "Worktree on every Build dispatch" and "Build: yes", and the Verify row says "yes (both)". These contradict the new exclusion of engineering-lead's Build row and qa-lead's Verify row. The CEO is told to look up this file when allocating.
+> 
+> ## 4. Main-tree scope per chief
+> 
+> I checked each matrix row against `role-cards.yaml`.
+> 
+> - **Scopes match their rows for:**
+>   - `cro`
+>   - `pm-lead`
+>   - `engineering-lead` (Design)
+>   - `security-lead` (Design and Verify)
+>   - `devops-lead` (`deploy/`, `.github/`)
+>   - `docs-lead`
+>   - `gc` (`legal/`, `PRIVACY.md`)
+> - **Correctly excluded:** `qa-lead` has no `tests/`, and `engineering-lead` has no `src/`.
+> - **Build exclusion is prompt-only.** The guard can't enforce it, and `engineering-lead` stays in `WORKTREE_CHIEFS`. This is disclosed, so I'm not raising it again.
+> - **Tests don't prove this item.** `test_every_worktree_chief_holds_write` checks the `Write` tool only. It never checks the main-tree scope for each row. I checked that by hand. A test that parses `parallel-matrix.md` and runs `in_scope` on each chief's `writes[]` would close it.
+> 
+> **Required before approval:**
+> 1. Fix the Windows `_worktrees` alias bypass and add a test for it.
+> 2. Update `worktree/SKILL.md:19,46,111`, `merge-policy.md:142,145` and `parallel-matrix.md:35,76,85` to the owning-chief model.
+> 3. Tighten `isdigit`.
+> 
+> VERDICT: REJECT
+
+| Finding | Response |
+|---|---|
+| Windows aliases step around B6 | Fixed, with tests. On Windows, `rel()` already strips trailing dots, so `_worktrees.` resolves to the real path and B6 applies to it. A trailing space or an 8.3 short name (`_WORKT~1`) is now refused outright for the CEO. |
+| `isdigit` accepts non-ASCII digits | Fixed: the attempt number must be ASCII digits. Tested with `²` and `٣`. |
+| Stale merge text (`skills/worktree` :19, :46, :111; `merge-policy.md` :142, :145; `parallel-matrix.md` :35, :76, :84-85) | Updated to the owning-chief model. No text says the CEO copies or moves a folder, and the matrix no longer allocates worktrees for Build or for `qa-lead` in Verify. |
+| No test proves each chief's matrix scope | Added: a test parses `parallel-matrix.md` and checks that every allowed chief holds, in the main tree, every path its rows merge (apart from the excluded Build row). |
+

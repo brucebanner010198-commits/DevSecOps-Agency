@@ -139,8 +139,8 @@ On structural conflict (task goes `blocked`, not merged):
 
 ## Anti-patterns
 
-- **Silent partial merge.** Copying some of `writes[]` and stopping on first missing file. Atomicity means all or nothing.
+- **Silent partial merge.** Copying some of `writes[]` and stopping on first missing file. The checks run on the whole `writes[]` before any copy, and the CEO marks the worktree merged only when the chief reports every path copied.
 - **Merging over a stale baseRev.** If main has changed, either rebase explicitly or re-dispatch. Never merge stale bytes silently.
 - **Reading a sibling's worktree.** A Chief reads from main or its own worktree. Full stop.
-- **Mutating `_merged/` or `_discarded/`.** Archive is read-only. For audit, not reuse.
+- **Mutating a merged or discarded worktree.** It is the audit copy. For audit, not reuse.
 - **Non-deterministic merge order.** Always sort `writes[]` alphabetically before iterating.
