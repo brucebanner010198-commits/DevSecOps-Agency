@@ -320,3 +320,25 @@ def test_gate_record_is_written_by_the_script(tmp_path):
 def test_release_check_needs_no_yaml():
     assert "import yaml" not in Path(rc.__file__).read_text(encoding="utf-8")
 
+
+def test_gate_record_goes_red_when_a_run_stops_early(tmp_path):
+    (tmp_path / ".devsecops-agency").mkdir()
+    proj, rs = gate_setup(tmp_path)
+    receipts = tmp_path / ".devsecops-agency" / "receipts.jsonl"
+    receipts.write_text("\n".join(json.dumps(r) for r in rs), encoding="utf-8")
+    rec = tmp_path / "outputs" / "devsecops-agency" / "_vision" / "audit" / "app-release-gate.md"
+    args = ["x", str(tmp_path), "--gate", "--project", "outputs/devsecops-agency/app", "--since", SINCE, "--record"]
+    assert rc.main(args) == 0 and rec.read_text(encoding="utf-8").startswith("gate: green")
+    receipts.unlink()
+    assert rc.main(args) == 2 and rec.read_text(encoding="utf-8").startswith("gate: red")
+    assert rc.main(args[:-3] + ["--record"]) == 2 and rec.read_text(encoding="utf-8").startswith("gate: red")
+
+
+@pytest.mark.parametrize("bad", ["2026-12-31garbage", "2026-12", "", "never"])
+def test_day_rejects_partial_dates(bad):
+    assert rc.day(bad) is None
+
+
+def test_day_reads_dates_and_times():
+    assert str(rc.day("2026-12-31")) == "2026-12-31" and str(rc.day("2026-12-31T10:00:00Z")) == "2026-12-31"
+

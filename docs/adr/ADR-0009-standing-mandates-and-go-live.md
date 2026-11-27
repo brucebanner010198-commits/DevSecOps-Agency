@@ -545,3 +545,7 @@ Each has a recommended option. None is decided here.
 ### Round 3 (2026-11-26 UTC)
 
 Reviewed together with ADR-0010; the verdicts are pasted there. CRT approved. CAO's one ADR-0009 point, the contradiction on when the conforming edits land, is fixed above. Nothing in round 3 blocked §2.6 itself.
+
+### Round 4 (2026-11-26 UTC)
+
+Reviewed together with ADR-0010; the verdicts are pasted there. CAO, CEVO and CISO approved. CRT approved in round 3. No reviewer raised a new point on §2.6.

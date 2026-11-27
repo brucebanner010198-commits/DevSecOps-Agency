@@ -59,7 +59,8 @@ Phase colours (byPhase) are derived from the councils' and are not checked.
 --record writes the gate record itself, at outputs/devsecops-agency/_vision/audit/
 <slug>-release-gate.md under the launch folder: a "gate: green" or "gate: red"
 line taken from the result, the UTC time, then every flag. It also appends one
-line to <slug>-release-gate-history.jsonl. The agent that runs the check never
+line to <slug>-release-gate-history.jsonl. The record is set to red when the run
+starts, so a run that stops early leaves red, never an earlier green. The agent that runs the check never
 types the result; that is a prompt rule, since the agent can still write there.
 The check needs only the Python standard library.
 """
@@ -247,8 +248,9 @@ def day(value) -> datetime.date | None:
         return value.date()
     if isinstance(value, datetime.date):
         return value
+    text = str(value).strip()
     try:
-        return datetime.date.fromisoformat(str(value).strip()[:10])
+        return datetime.date.fromisoformat(text) if len(text) == 10 else datetime.datetime.fromisoformat(text.replace("Z", "+00:00")).date()
     except ValueError:
         return None
 
@@ -389,21 +391,45 @@ def arg(argv: list[str], name: str) -> str | None:
     return argv[argv.index(name) + 1] if name in argv and argv.index(name) + 1 < len(argv) else None
 
 
+def write_record(launch: Path, proj_path: Path, since, flags: list[str], history: bool = True) -> None:
+    """The gate record, at a fixed path per project so a reader without a clock finds this run's
+    result, plus one line appended to the history file next to it. Red unless there are no flags."""
+    audit = launch / "outputs" / "devsecops-agency" / "_vision" / "audit"
+    audit.mkdir(parents=True, exist_ok=True)
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    gate = "red" if flags else "green"
+    body = f"gate: {gate}\nrecorded: {now}\n\n# Release gate, {proj_path.name}\n\n"
+    body += "".join(f"- FAIL {f}\n" for f in flags) or "- release gate passes\n"
+    (audit / f"{proj_path.name}-release-gate.md").write_text(body, encoding="utf-8")
+    if history:
+        with open(audit / f"{proj_path.name}-release-gate-history.jsonl", "a", encoding="utf-8") as h:
+            h.write(json.dumps({"ts": now, "project": proj_path.name, "since": since, "gate": gate,
+                                "flags": flags}) + "\n")
+
+
 def main(argv: list[str]) -> int:
     if len(argv) < 2 or argv[1].startswith("--"):
         print(__doc__)
         return 2
     launch = Path(argv[1])
     path = launch / ".devsecops-agency" / "receipts.jsonl"
-    if not path.exists():
-        print(f"no receipts at {path}")
-        return 2
     project = arg(argv, "--project")
     proj_path = (launch / project) if project and not os.path.isabs(project) else (Path(project) if project else None)
+    since = arg(argv, "--since")
+    record = "--gate" in argv and "--record" in argv and proj_path is not None
+    if record:
+        # Overwrite any earlier record first, so a run that stops early never leaves an old green.
+        write_record(launch, proj_path, since, ["the gate run did not complete"], history=False)
+    if not path.exists():
+        print(f"no receipts at {path}")
+        if record:
+            write_record(launch, proj_path, since, [f"no receipts at {path}"])
+        return 2
     if "--gate" in argv:
-        since = arg(argv, "--since")
         if not proj_path or not since:
             print("gate mode needs --project and --since")
+            if record:
+                write_record(launch, proj_path, since, ["gate mode needs --project and --since"])
             return 2
         today = datetime.datetime.now(datetime.timezone.utc).date().isoformat()
         dirs = [launch / "outputs" / "devsecops-agency" / "_decisions", proj_path / "_decisions"]
@@ -414,19 +440,8 @@ def main(argv: list[str]) -> int:
             print("FAIL", f)
         if not rep["flags"]:
             print("release gate passes")
-        if "--record" in argv:
-            # A fixed path per project, so a reader without a clock finds this run's result; each run
-            # also appends one line to the history file next to it.
-            audit = launch / "outputs" / "devsecops-agency" / "_vision" / "audit"
-            audit.mkdir(parents=True, exist_ok=True)
-            now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-            gate = "red" if rep["flags"] else "green"
-            body = f"gate: {gate}\n\n# Release gate, {proj_path.name}, {now}\n\n"
-            body += "".join(f"- FAIL {f}\n" for f in rep["flags"]) or "- release gate passes\n"
-            (audit / f"{proj_path.name}-release-gate.md").write_text(body, encoding="utf-8")
-            with open(audit / f"{proj_path.name}-release-gate-history.jsonl", "a", encoding="utf-8") as h:
-                h.write(json.dumps({"ts": now, "project": proj_path.name, "since": since, "gate": gate,
-                                    "flags": rep["flags"]}) + "\n")
+        if record:
+            write_record(launch, proj_path, since, rep["flags"])
         return 1 if rep["flags"] else 0
     rep = report(read_jsonl(path), load_councils(), read_gates(proj_path),
                  str(proj_path) if proj_path else None, arg(argv, "--since"))

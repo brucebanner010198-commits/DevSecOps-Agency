@@ -125,6 +125,16 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 - An acceptance correction ADR is CEO-written, like a waiver ADR, so the script cannot prove the User approved it.
 - None of the chief-prompt edits has been tried in a live run.
 - The gate auditor's shell is labelled `read-only`, but nothing enforces the label until a sandbox exists. With it, the auditor could rewrite the files the check reads before running it. So the gate result rests on one Haiku-tier agent's conduct, though the script, not the agent, writes the result.
+- The gate auditor also holds Write on `_vision/audit/`, so it could overwrite the script-written record. "Never type the result" is a prompt rule.
+- The rollback exemption is procedural: no script mode checks that the named build passed.
+- CRT's contract gives each finding its ASI category as its class, so every CRT red is unwaivable. That matches §8.4 but is stricter than `skills/waivers`.
+- §8.4 names no reviewer for an informing-council waiver.
+- ADR-0010 mentions §2.6 releases, but it reads on its own if ADR-0009 is not approved.
+
+**For the Chairman to confirm (three departures from the accepted options).**
+1. The gate result goes to a separate, script-written record (`_vision/audit/<slug>-release-gate.md`), not to `close-audit.md` or CI. `close-audit.md` is one of the files the check reads, and CI cannot see the receipts.
+2. The gate auditor gains a shell, labelled `read-only` but not constrained, to run the check.
+3. The four blocking reviews run before every release, not only at close.
 
 ## Rollback
 
@@ -777,3 +787,163 @@ These residuals are now disclosed:
 - ADR-0010 mentions §2.6 releases, but it reads on its own if ADR-0009 is not approved.
 
 The fixed command was then run with the system Python on a copy of run N4's launch folder. It ran, wrote `outputs/devsecops-agency/_vision/audit/tip-calculator-release-gate.md` with `gate: red` and the time, and appended the history line. It failed for the expected reason: N4's records predate the verdict contract.
+
+### Round 4 (2026-11-26 UTC, read-only, each agent on its own tier, $0.70)
+
+The Chairman funded a round 4 for the three councils that rejected in round 3 ("Fund round 4"). CAO, CEVO and CISO each approved. Every round-3 blocker is fixed or disclosed, and none of them found a new blocker. The verdicts are pasted unedited, then the response.
+
+#### CAO (`cao`): APPROVE
+
+**Round 4 verdict (CAO): all three of my round-3 blockers are fixed or disclosed, and the fixes add no new blocker.** This is a static read. I ran nothing, including the tests.
+
+## Round-3 blocking findings
+
+**1. Waiver expiry failed open: fixed.**
+- `live()` at `release_check.py:271-273` parses both dates with `day()` (244-253). It returns false if `approved`, `expires` or today is unreadable.
+- It also requires `approved <= today <= expires` and `(expires - approved).days <= 90`.
+- `valid_waivers` (263-266) now needs `status: accepted` and passes `approved` and `expires` to `live()`. That also closes my non-blocking point about draft or rejected waiver ADRs.
+- The new tests cover `expires="never"`, `expires="2999-01-01"`, `approved="x"` and `status="proposed"` in the invalid-waiver parametrisation (`test_release_check.py` diff, +189-190).
+- Two small leftovers, neither blocking:
+  - `day()` reads only the first 10 characters, so `2026-12-31garbage` parses.
+  - The 90-day cap is not stated in the §8.6 text. It is in the script docstring (line 41) and in §8.4.
+
+**2. Q2 departure not disclosed: disclosed, with a confirmation request.**
+- ADR-0010:548 now says "This departs from the recommended option; see round 3". The round-3 response section names both departures and asks the Chairman to confirm them:
+  - The result goes to a separate record, because `close-audit.md` is a file the check reads.
+  - CI does not run the check, because it cannot see the receipts.
+- The ADR also discloses the residual in the same area: the script writes the record (`release_check.py:417-429`), so the agent no longer types `gate:`. `skills/ceo` §4a step 4 (line 216) names the unconstrained shell at the ship step.
+- This stays open until the Chairman confirms. That is the confirmation you are already asking him for.
+
+**3. Contradictory timing of the conforming edits: fixed.**
+- ADR-0009:107 now says G9 lands with the amendment because it does not depend on a mandate. ADR-0009:137 says "Apart from G9" the rest lands with Phase 2b.
+- ADR-0009:137 also says `GOVERNANCE.md` changes only then. ADR-0010:524 now says `GOVERNANCE.md` "is not edited yet", and that it changes in the amendment's own PR.
+- ADR-0010:105 and ADR-0009:130 are two different `GOVERNANCE.md` rows with different timing. Each is internally consistent.
+
+## New blocking findings from the fixes
+
+None. These points are non-blocking, and the Chairman's separate confirmation of the shell departure covers the first:
+- **Role card still says enforced.**
+  - `role-cards.yaml:205` has `shell: read-only` under `enforced:`, and the file's line-4 comment says shell is "enforced by Phase 2a hooks". That is false for this agent, as ADR-0010:113 and :127 now admit.
+  - CISO asked for the card comment to change in round 3, and it did not.
+  - Reword it to "unconstrained" or add a note when convenient.
+- **Agent can still overwrite the record.**
+  - The record is only as trustworthy as the agent's conduct. The agent still holds Write on `_vision/audit/` and a shell, and the script's own writes carry no guard receipt.
+  - ADR-0010:127 covers the shell but not the Write scope. The round-3 response does disclose the Write scope, but the residual list should carry it too.
+  - The "time is after the reviews" check in `skills/ceo:216` reads a time inside a body the agent could edit.
+- **Stale green record.** A run that exits 2 (no receipts, or missing arguments) writes no record. An old green file stays at the fixed path, and only the time check guards against it.
+- **Carried over, still unnamed:** the §8.4 reviewer for an informing-council waiver, the `--since` value for patches and rollbacks, and the self-attested rollback exemption. All were already listed as non-blocking.
+
+VERDICT: APPROVE
+
+#### CEVO (`evaluation-lead`): APPROVE
+
+**Round 4 verdict (CEVO, static read, nothing run)**
+
+**My two round-3 blocking findings**
+
+1. **Empty acceptance set passes: fixed.**
+   - `release_check.py:374-376` now flags an `acceptance.md` with no `- <id>:` items. The item comparison at `:377` still runs, so a verdict with no `item` lines is flagged twice.
+   - `test_gate_fails_on_an_empty_acceptance_set` covers it.
+   - An empty `acceptance.md` can no longer pass the acceptance rule vacuously.
+
+2. **Unenforced "read-only shell" and an agent-typed `gate:` line: fixed for the `gate:` line, disclosed for the shell.**
+   - **The `gate:` line is now the script's.**
+     - `--record` writes the file, and `gate = "red" if rep["flags"] else "green"` at `:423` sets the line from the flags (`:417-429`). A test covers it.
+     - `gate-auditor.md:28` tells the agent not to write or edit the record. That is a prompt rule, because the agent still holds Write on `_vision/audit/` (`role-cards.yaml:203,208`).
+   - **The shell limit is disclosed.**
+     - ADR-0010:127 says nothing enforces the label, that the auditor could rewrite the files the check reads, and that the result rests on one Haiku-tier agent's conduct.
+     - ADR-0010:113 now says "labelled `read-only` but not constrained".
+     - `skills/ceo/SKILL.md:216` names the limit at the ship step.
+
+**New blocking findings from the fixes: none.**
+
+I read the new code for regressions:
+- The standard-library `frontmatter()` handles flat keys and date strings. `live()` fails closed on an unreadable date and enforces the 90-day cap (`:271-273`).
+- `status: accepted` is now required (`:263`), and the wider class denylist is at `:192`.
+- Dropping YAML for `hooks/role-cards.json` is sound.
+
+**Non-blocking, for the Chairman or a later pass**
+
+- **A stale green record can survive a failed run.**
+  - The record is a fixed path, written only after a completed gate run.
+  - Exit 2 (no receipts, or `--project`/`--since` missing) and a crash in `load_councils` write nothing, so a previous `gate: green` stays on disk.
+  - The only guard is the prompt rule at `skills/ceo:216`, "its time is after this release's reviews". The time sits in a heading line, not a machine-read field.
+  - A cheap fix is to write `gate: red` at the start of `--gate --record` and overwrite it on success. Another is to name the time check in the script.
+- **Some residuals are only in the round-3 response, not in the ADR's Residuals list.** The residuals in ADR-0010:118-127 omit these:
+  - The rollback exemption is procedural (ADR-0010:773).
+  - The auditor holds Write on `_vision/audit/` (ADR-0010:774).
+  - CRT reds are all unwaivable (ADR-0010:775).
+  - There is no reviewer for an informing-council waiver (ADR-0010:776).
+  - ADR-0010 reads on its own without ADR-0009 §2.6 (ADR-0010:777).
+  
+  Move them into the Residuals list before merge so they survive the review log.
+- **`role-cards.yaml:205` still says `shell: read-only` for `gate-auditor`.** This is the enforced block of the card, and the guard does not inspect shell commands. CISO asked for the comment to change. The ADR text is honest, but the card still states the false control.
+- **The CEO's agent label in the receipts is still unverified.** This is carried over from round 3: if the check at `:333-334` finds no `devsecops-agency:ceo` label, every real run fails closed. That fails safe, but a dry run would settle it.
+
+**The three departures for the Chairman to confirm**
+
+- **Separate script-written record:** acceptable from my side. It is stronger than writing into `close-audit.md`, which the script itself reads.
+- **A shell on the gate-auditor:** acceptable only with the disclosure now at ADR-0010:127 and `skills/ceo:216`. The ADR still lists this as a residual, not a control.
+- **The four blocking reviews before every release:** this is faithful to the §8.6 design and the `evaluation-lead.md:47` wording. ADR-0010:114 states it plainly, but nothing marks it as a departure for him to confirm. Add that mark alongside the Q2 note.
+
+VERDICT: APPROVE
+
+#### CISO (`security-lead`): APPROVE
+
+I'm checking the last open points in after/, and then I'll give the verdict. This is a static read, and I ran no tests.
+
+**Round-3 blocking finding: the "read-only shell" is false, and the gate record is self-attested**
+
+This was my only blocking finding in round 3. It is **fixed, and the part that remains is disclosed as a residual.** I offered two fixes, (a) disclose or (b) make the script write the record. The draft does both.
+
+- **Script-written record (my fix b): done.** `--record` is in `release_check.py:57-59`, with the write at `:417`.
+  - The script takes the `gate:` line from the result: green if no flags, red otherwise.
+  - It adds the UTC time and every flag.
+  - It appends a line to a history file.
+  - `gate-auditor.md` now tells the agent to invoke the command only and not to write or edit either file.
+  - The new test `test_gate_record_is_written_by_the_script` covers green, then red, then the history file.
+- **Disclosure (my fix a): done.**
+  - ADR-0010:113 now reads "labelled `read-only` but not constrained".
+  - ADR-0010:127 says "nothing enforces the label until a sandbox exists". It also says the auditor could rewrite the files the check reads before running it, so the result rests on one Haiku-tier agent's conduct.
+  - `skills/ceo/SKILL.md:216` names the limit at the ship step: "only as trustworthy as the gate auditor's shell, which nothing yet constrains".
+  - `hooks/guard.py:42-44` backs up the residual.
+- **What still falls short, none of it blocking:**
+  - `agents/role-cards.yaml:205` still says `shell: read-only`. I asked for the role-card comment to change. The ADR now labels it honestly, so a reader of the card alone could still be misled.
+  - The auditor keeps Write on `_vision/audit/` (`role-cards.yaml:203,208`). It can overwrite the script-written record, and ADR-0010:127 doesn't say so in terms. The residual's "rests on conduct" wording covers it in substance. The post-round-3 notes in the ADR's response section do say it.
+  - A stale `gate: green` file persists if a later run dies before the write. The CEO's "time is after this release's reviews" test (`skills/ceo:216`) mitigates this. That test is also only as good as the record's integrity.
+
+**Disclosed residuals I raised in round 3, unchanged and accepted by the Chairman**
+- Informing-council waivers match on council and project only (`ADR-0010:120`).
+- The CEO writes `status.json`, which is where informing reds are read from (`ADR-0010:96-98`).
+- The waiver and acceptance-correction ADRs are CEO-written (`ADR-0010:119,125`).
+- Shell writes leave no receipt (`ADR-0010:122`).
+
+**My two undisclosed non-blocking points**
+- **Non-waivable class list.** The substring list is widened to secret, credential, api-key, apikey, token, password and private-key (`release_check.py:189` onward). Tests cover `hardcoded-credential` and `api-key`. It is still a substring list rather than a pinned vocabulary, which is acceptable. `token` could over-block, but that fails closed.
+- **ADR-0009 dependency.** The response section says ADR-0010 reads on its own if ADR-0009 is not approved.
+
+**New findings from the fixes**
+- **Waiver validity.** `live()` (`release_check.py:271-273`) fails closed on unreadable dates.
+  - It requires `approved <= today <= expires` and a span of at most 90 days.
+  - Waivers also need `status: accepted`.
+  - `day()` truncates to the first 10 characters, so a value like `2026-11-25garbage` is read as a date. This is a harmless laxity.
+- **Standard library only.** The hand-rolled `frontmatter()` reads flat `key: value` lines only. A YAML waiver written with quotes, comments or nesting is simply not matched, so it fails closed and nothing is waived by mistake. A malformed `approver:` line also yields no waiver.
+- **Empty acceptance set.** The new check at `release_check.py:~374` fails an `acceptance.md` that lists no items. This closes a no-op hole in the acceptance rule.
+- **Departures for the Chairman to confirm.**
+  - The separate gate record is consistent with my remit: the script, not an agent, authors it.
+  - The shell labelled read-only is disclosed.
+  - Running the four blocking reviews before every release is a security gain.
+  - I have no security objection to any of the three.
+
+I found no new blocking security finding.
+
+VERDICT: APPROVE
+
+#### After round 4 (not reviewed)
+
+These non-blocking points are applied:
+- **A stale green record (CAO, CEVO, CISO).** `--record` now sets the record to red when the run starts. So a run that stops early, with no receipts or a missing argument, leaves red, never an earlier green. The record carries a `recorded:` line, which `skills/ceo` reads. Tested.
+- **`day()` read only the first 10 characters (CAO, CISO).** It now needs a full ISO date or time. Tested.
+- **The role card still says `shell: read-only` under `enforced:` (CAO, CEVO, CISO).** The card now carries a comment on that line saying it is a label only.
+- **Some residuals were only in the response text (CAO, CEVO).** They are now in the Residuals list.
+- **The four blocking reviews before every release are not marked as a departure (CEVO).** They are now marked, with the other two, under "For the Chairman to confirm".

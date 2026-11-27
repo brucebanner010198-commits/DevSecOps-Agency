@@ -202,7 +202,7 @@ agents:
       - Glob
       - Write
       - Bash
-      shell: read-only
+      shell: read-only  # a label only: nothing enforces it until a sandbox exists (ADR-0010, residuals)
       model: haiku
       write_scope:
       - _vision/audit/
