@@ -4,26 +4,26 @@ description: >
   Internal skill. Allocates an isolated scratch directory (a "worktree") for a
   Chief's dispatch so parallel agents don't step on each other's artifacts and
   fix-loop attempts can be compared against a baseline before merging. Invoked
-  by the CEO on parallel dispatches and on every fix-loop (attempt ≥ 1). Not a
-  user-facing skill.
+  by the CEO on parallel dispatches and fix-loops (attempt ≥ 1), except for
+  engineering-lead's Build row and qa-lead (finding F4). Not a user-facing skill.
 metadata:
   version: "0.2.4"
 ---
 
 # worktree — isolated scratch dirs for parallel + fix-loop dispatches
 
-> **Suspended for the CEO (finding F4, `docs/vision/CEO-ENTRY-REVIEW.md`).** The CEO holds no `_worktrees/` entry and cannot do the merge's main-tree copy, so it allocates and merges no worktree until the Chairman names a merge owner. Parallel dispatches write to the main tree. The red-team lead still uses its own worktrees.
+> **Who merges (finding F4, Chairman, 2026-11-26): the owning chief.** The CEO writes only each worktree's `worktree.json`, at exactly `outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json`, and the guard (B6) refuses it everything else under `_worktrees/`. The owning chief copies its own `writes[]` into the main tree, because only it holds those paths. The CEO allocates worktrees only for `cro`, `pm-lead`, `engineering-lead` (Design rows only), `security-lead`, `devops-lead`, `docs-lead` and `gc`. `qa-lead` (its Verify row writes `tests/**`) and `engineering-lead`'s Build row (`src/**`) do not hold their main-tree paths, so they write to the main tree directly. The red-team lead keeps its own worktrees, unchanged.
 
-A worktree is a subdirectory under `<slug>/_worktrees/<chief>-<attempt>/` where a Chief writes its artifacts in isolation. On a green/yellow report the CEO merges the worktree into the main project tree; on a red report the worktree stays in place so attempt N+1 can diff against it.
+A worktree is a subdirectory under `<slug>/_worktrees/<chief>-<attempt>/` where a Chief writes its artifacts in isolation. On a green/yellow report the owning Chief copies the worktree into the main project tree, on the CEO's dispatch; on a red report the worktree stays in place so attempt N+1 can diff against it.
 
-This skill is the openclaw-inspired analog of `git worktree add`. There is no git involved — just a disciplined convention that makes parallel work atomic and fix-loops diffable.
+This skill is the openclaw-inspired analog of `git worktree add`. There is no git involved — just a disciplined convention that keeps parallel work apart, checks it before it lands and makes fix-loops diffable.
 
 ## When to allocate a worktree
 
 Allocate when **any** of these is true:
 
 1. **Parallel dispatch.** Two or more Chiefs are dispatched for the same phase (`CRO+CPO` in discovery, `CQO+CISO²` in verify, `CKO+GC` in document-legal).
-2. **Fix-loop attempt ≥ 1.** The Chief already reported red on attempt 0 — attempt 1 and 2 go into worktrees so we can diff before merging.
+2. **Fix-loop attempt ≥ 1.** The Chief already reported red on attempt 0 — attempt 1 and 2 go into worktrees so we can diff before merging. Not for `engineering-lead`'s Build row or for `qa-lead` (finding F4): they write to the main tree.
 3. **Speculative dispatch.** The CEO starts Chief B on phase N+1 before Chief A's phase N has finalised (rare, requires override).
 4. **User-directed variant.** The user asks for two approaches side-by-side ("show me both Postgres and SQLite versions").
 
@@ -43,8 +43,7 @@ outputs/devsecops-agency/<slug>/
 │   ├── security-lead-1/    # fix-loop attempt 1 after security-lead attempt 0 red
 │   │   ├── worktree.json
 │   │   └── threat-model.md
-│   └── _merged/            # archive of worktrees that merged cleanly
-│       └── cro-0-<mergeTs>/
+│   └── ...                 # merged and discarded worktrees stay here, with their status set
 └── ...                     # the main project tree (merge target)
 ```
 
@@ -69,6 +68,7 @@ outputs/devsecops-agency/<slug>/
 
 - `id` = `<chief>-<attempt>`. Unique per project.
 - `baseRev` is a marker of what the main tree looked like when the worktree was created. In a no-git world it's just an ISO timestamp of the main tree's last update. Used for staleness detection.
+- **Times.** The CEO has no clock, so `createdAt`, `baseRev` and `mergedAt` are written as `null`, as in the session log; the guard's receipt of each write is the time of record. Until a clock exists, the 15- and 30-minute rules and the mtime comparison below cannot run. Instead, a worktree is stale when a later `merge` entry in `chat.jsonl` lists a path in its `reads[]`, and a conflict is a path in its `writes[]` that a later `merge` entry also lists.
 - `writes[]` lists the paths the Chief is allowed to create inside its worktree. Out-of-scope writes are a bug.
 - `reads[]` lists paths the Chief reads from the **main** tree (not the worktree) — it never reads from a sibling worktree.
 - `status` ∈ `open | merged | discarded | stale`.
@@ -76,8 +76,8 @@ outputs/devsecops-agency/<slug>/
 ## Lifecycle
 
 ```
-allocate  →  open                                           (CEO creates the dir + worktree.json)
-open      →  merged        (green/yellow report accepted)
+allocate  →  open                                           (CEO writes worktree.json; the chief's first write creates the rest)
+open      →  merged        (green/yellow report accepted; the owning chief copies, the CEO sets the status)
 open      →  discarded     (red report superseded by next attempt, or cancelled task)
 open      →  stale         (baseRev drifted; requires rebase before merge)
 ```
@@ -86,20 +86,20 @@ open      →  stale         (baseRev drifted; requires rebase before merge)
 
 CEO, before writing the `dispatch` entry to `chat.jsonl`:
 
-1. `mkdir -p <slug>/_worktrees/<chief>-<attempt>/`
-2. Write `worktree.json` with `status: "open"` and the `writes[]`/`reads[]` for this Chief (looked up in `references/parallel-matrix.md`).
+1. Write `worktree.json` at `<slug>/_worktrees/<chief>-<attempt>/worktree.json` (writing it creates the folder; no agent has a shell)
+2. Give it `status: "open"` and the `writes[]`/`reads[]` for this Chief (looked up in `references/parallel-matrix.md`).
 3. Pass the worktree root path into the Chief's dispatch context. The Chief must write every artifact **under this path**, not the main tree.
 4. On the task row, set `worktree: "<chief>-<attempt>"`.
 
 ### 2. Merge
 
-On a `green` or `yellow` report:
+On a `green` or `yellow` report. Steps 1 to 3 are the CEO's, by reading; step 4 is the owning chief's; steps 5 and 6 are the CEO's.
 
 1. Verify every path in `writes[]` exists under the worktree.
 2. Verify no path outside `writes[]` has been created in the worktree (bounce with `red` if so).
 3. Verify `baseRev` matches the main tree's current revision. If drifted → `stale`; require the Chief to re-merge or rebase.
-4. Copy each `writes[]` path from the worktree into the main tree, preserving directory structure.
-5. Move the worktree dir to `_worktrees/_merged/<id>-<mergeTs>/` (keep for audit, not active). Update `worktree.json > status: "merged"`, `mergedAt: <iso>`.
+4. Dispatch the owning chief to copy each `writes[]` path from the worktree into the main tree, preserving directory structure, and to do nothing else. It reads each file and writes it to the main tree; the copy is file by file, text only.
+5. When the chief reports the copy, update `worktree.json > status: "merged"`, `mergedAt: <iso>`. The folder stays where it is, as the audit copy: no agent has a shell to move it.
 6. Append a `merge` entry to `chat.jsonl`:
    ```json
    {"ts":"<iso>","scope":"exec","from":"ceo","to":"<chief>","type":"merge","worktree":"<id>","writes":["..."],"note":"clean merge"}
@@ -108,9 +108,9 @@ On a `green` or `yellow` report:
 
 ### 3. Discard
 
-On a `red` report that's being superseded by a fix-loop (not cancelled), the previous worktree stays `open` for diff purposes, and a **new** worktree is allocated for attempt N+1. When the fix-loop's new worktree merges, the old `red` worktree's `status` flips to `discarded` and it's moved to `_worktrees/_discarded/<id>-<ts>/`.
+On a `red` report that's being superseded by a fix-loop (not cancelled), the previous worktree stays `open` for diff purposes, and a **new** worktree is allocated for attempt N+1. When the fix-loop's new worktree merges, the old `red` worktree's `status` flips to `discarded`. The folder stays in place.
 
-On a cancelled task, discard immediately.
+On a cancelled task, discard immediately. Discarding sets `status: "discarded"` in `worktree.json`; the folder stays in place.
 
 ### 4. Stale
 
@@ -132,11 +132,11 @@ Rule 2 is tolerable because our parallel dispatches write to non-overlapping pat
 
 - **Smaller context.** A Chief sees only its worktree + its declared `reads[]`. No sibling's draft contaminates its prompt.
 - **Diffable fix-loops.** Attempt 1 can read attempt 0's artifact (from the previous worktree) and explicitly cite what changed. `corrections[]` in the fix-loop dispatch maps to visible diffs.
-- **Atomic merge.** A partial artifact never ends up in the main tree — either the whole `writes[]` lands or none of it does.
+- **Checked merge.** Nothing is copied until the whole `writes[]` passes the scope, staleness and conflict checks. The copy itself is file by file, so a chief that stops part-way leaves a partial merge. The CEO then sees `status` still `open` and re-dispatches the copy.
 
 ## Invocation points (for the CEO)
 
-- On parallel dispatch or fix-loop attempt ≥ 1: allocate.
+- On parallel work or a fix-loop attempt ≥ 1: allocate. Not for `engineering-lead`'s Build row or for `qa-lead` (finding F4): they write to the main tree.
 - On Chief report: if the task had a worktree, run merge (green/yellow) or schedule discard (red superseded).
 - On phase advance: verify no `_worktrees/*/worktree.json` has `status: "open"` for a completed phase. Any lingering open worktree is a bug.
 - Emit `worktree` references in the task row, `chat.jsonl`, and (optionally) the command-center lane.

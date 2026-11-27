@@ -27,6 +27,13 @@ Blocking rules (exit 2 with a reason):
                   keeps: chat.jsonl, inbox.json, _sessions/). An entry ending in "/"
                   is a folder; other entries are file names or globs. Both match at
                   any depth, so `brief.md` covers outputs/devsecops-agency/<slug>/brief.md.
+  B6 worktree     Under a `_worktrees/` folder the CEO may write one file only: the
+                  control file outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json,
+                  at exactly that depth, for a chief in WORKTREE_CHIEFS. Red-team, archive
+                  and unknown ids are refused, and so is everything else under _worktrees/,
+                  even where a CEO scope entry would match at depth (finding F4). A CEO
+                  path with a Windows alias segment (trailing dot or space, 8.3 name) is
+                  refused outright.
                   "*" (the builders) is the whole project except the agency's records
                   (_agency/, _vision/, _decisions/, _memory/). A refusal names the
                   agents whose scope covers the path. A card with no write_scope falls
@@ -50,6 +57,7 @@ from __future__ import annotations
 import fnmatch
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -89,6 +97,11 @@ RECEIPTS_DIR = ".devsecops-agency"
 SHARED_WRITES = ["chat.jsonl", "inbox.json", "_sessions/"]
 # The agency's own records. A "*" scope (the builders) covers the whole project except these.
 RECORD_DIRS = ["_agency/", "_vision/", "_decisions/", "_memory/"]
+
+# Chiefs whose worktree the CEO may allocate (finding F4): each holds Write and the main-tree
+# scope for at least one of its rows in skills/worktree/references/parallel-matrix.md, so it can
+# do its own merge copy. qa-lead is left out: its Verify row writes tests/**, which it does not hold.
+WORKTREE_CHIEFS = ("cro", "pm-lead", "engineering-lead", "security-lead", "devops-lead", "docs-lead", "gc")
 
 
 def _norm(p: str) -> str:
@@ -183,6 +196,33 @@ def in_scope(relpath: str, scope: list[str]) -> bool:
         elif fnmatch.fnmatchcase(r, e) or fnmatch.fnmatchcase(r, "*/" + e):
             return True
     return False
+
+
+def _segments(relpath: str) -> list[str]:
+    return relpath.replace("\\", "/").split("/")
+
+
+def windows_alias(relpath: str) -> bool:
+    """A segment Windows would resolve to another name: a trailing dot or space ("_worktrees."),
+    or an 8.3 short name ("_WORKT~1"). Refused for the CEO so B6 cannot be stepped around."""
+    return any(s != s.rstrip(". ") or re.fullmatch(r"[^~]{1,6}~[0-9]+(\.[^.]{0,3})?", s) for s in _segments(relpath) if s)
+
+
+def under_worktrees(relpath: str) -> bool:
+    return any(s.rstrip(". ").lower() == "_worktrees" for s in _segments(relpath))
+
+
+def ceo_worktree_control(relpath: str) -> bool:
+    """True only for outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json, at that
+    exact depth, with <chief> in WORKTREE_CHIEFS and <n> digits. Parsed, not globbed: fnmatch's
+    "*" also matches "/"."""
+    fold = str.lower if os.name == "nt" else (lambda s: s)
+    parts = fold(relpath.replace("\\", "/")).split("/")
+    if len(parts) != 6 or parts[:2] != ["outputs", "devsecops-agency"] or parts[3] != "_worktrees" \
+            or parts[5] != "worktree.json" or not parts[2] or parts[2].startswith(("_", ".")):
+        return False
+    chief, _, n = parts[4].rpartition("-")
+    return chief in WORKTREE_CHIEFS and n.isascii() and n.isdigit()
 
 
 def load_cards() -> dict:
@@ -286,6 +326,14 @@ def check(d: dict, cards: dict | None = None) -> tuple[list[str], list[str]]:
             scope = (card or {}).get("write_scope")
             if cards and not card:
                 block.append(f"B5 scope: {name} has no role card, so it may not write (default deny, Part 4 rule 1)")
+            elif name == "ceo" and (under_worktrees(r) or windows_alias(r)):
+                if windows_alias(r):
+                    block.append(f"B6 worktree: {r} has a segment Windows would resolve to another name "
+                                 "(a trailing dot or space, or an 8.3 short name); write the plain path")
+                elif not ceo_worktree_control(r):
+                    block.append(f"B6 worktree: under _worktrees/ the CEO may write only "
+                                 f"outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json, for a chief in "
+                                 f"{', '.join(WORKTREE_CHIEFS)}; not {r}. The owning chief writes and copies its own artifacts.")
             elif card and scope:
                 if not in_scope(r, scope + SHARED_WRITES):
                     own = owners(r, cards)

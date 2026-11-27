@@ -143,7 +143,7 @@ Waves 3–7 extend: people-ops + audit (Wave 3, shipped), never-give-up ladder (
 
 ## v0.2.4 — worktree parallelism
 
-- Parallel dispatches and fix-loops (attempt ≥ 1) write to `<slug>/_worktrees/<chief>-<attempt>/`, not the main tree.
+- Parallel work and fix-loops (attempt ≥ 1) write to `<slug>/_worktrees/<chief>-<attempt>/`, not the main tree, except `engineering-lead`'s Build row and `qa-lead`, which write to the main tree (finding F4).
 - Lifecycle: allocate → {merged | discarded | stale}. See `skills/worktree/SKILL.md`.
 - Merge is **atomic** (all-or-nothing), **scope-checked** (out-of-scope writes bounce), **deterministic** (alphabetical write order).
 - Structural conflicts escalate to `inbox.json`. Non-structural merge with a note.

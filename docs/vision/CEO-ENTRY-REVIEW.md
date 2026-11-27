@@ -70,7 +70,7 @@ The sweep script is kept outside the repo. It feeds each path to `guard.check()`
 - **F2. Three steps need tools the CEO does not hold:** `command-center` (an artifact), `notify` (push) and intake's AskUserQuestion. Granting them is a Part 4 grant decision.
   **Decided (Chairman, 2026-11-25, default accepted): not granted.** The CEO keeps skipping these steps, uses what the Chairman's message says, and records its defaults in `brief.md`, as `ceo.md` already says.
 - **F3. The lessons ledger.** With the plugin-root `LESSONS.md`, the write is refused (B1), which was already open after Phase 2a. With the read/write path rule, it lands in the launch folder instead (N1-e). Where the cross-project ledger lives is a design decision.
-- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree. *Still open: the grant the Chairman approved was not made, because the merge has no owner (see "Chairman's second set of defaults").*
+- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree. *Decided (Chairman, 2026-11-26 UTC): the owning chief merges. See "F4: who merges a worktree" below.*
 - **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision. **Unblocked with F1, at the guard only; not run live:** `_vision/rhythm/` is in the CEO's scope, and a rewrite of an existing `state.json` passes.
 
 ## Live run N1 (cap $6 of the remaining $16.62)
@@ -374,3 +374,124 @@ VERDICT: APPROVE
 Non-blocking notes 1 and 2 are applied (the deny wording and the folder entries in the known gap). Note 3 waits for F4. Review spend for this change is $0.50 (rounds 1 to 3). Build spend is $36.16 of $40. The merged head differs from the commit CRT approved only by the wording of non-blocking notes 1 and 2, a changed agent name in the `skills/worktree` note (to pass `dispatch_names.py`), and this record.
 
 **Spend after the second set of defaults.** Draft round-2 reviews for #14 cost $1.19 (four reviewers) and for #13 $0.20. Probe P2 cost $0.22. Build spend is $37.77 of $40.
+
+## F4: who merges a worktree (2026-11-26 UTC)
+
+The Chairman was asked "when a chief works in its own worktree, who merges that worktree back into the main tree?" and chose "Owning chief". Applied:
+- **Guard, rule B6.** Under `_worktrees/`, the CEO may write one file only: `outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json`, at exactly that depth. The path is parsed, not globbed. `<chief>` must be one of `WORKTREE_CHIEFS`, and `<n>` must be digits. Red-team ids, the `_merged` and `_discarded` archives, unknown ids and every other file under `_worktrees/` are refused. That closes the known gap from item 3: the CEO's name entries such as `status.json` and `adr-*.md` no longer reach inside a worktree. No `write_scope` entry is added.
+- **Merge sequence.** The CEO verifies the worktree by reading. It then has the owning chief copy its `writes[]` into the main tree, and nothing else, because only that chief holds those main-tree paths. Then the CEO sets `status: merged` and appends the `merge` entry. Merged and discarded worktrees stay in place, because no agent has a shell to move them. The skill no longer claims the copy is atomic.
+- **Which chiefs.** A $0 sweep checked each row of `references/parallel-matrix.md` against the chief's card. Two rows fail: `engineering-lead`'s Build row writes `src/**`, and `qa-lead`'s Verify row writes `tests/**`. Neither chief holds those paths in the main tree, so both rows still write to the main tree directly. `qa-lead` is not in `WORKTREE_CHIEFS`. `engineering-lead` is, for its Design row, and the Build exclusion is a prompt rule only. Giving either chief those scopes is a separate question for the Chairman.
+- **Red-team worktrees are unchanged.** The red-team lead still holds `_worktrees/` and manages its own worktrees. An open red-team worktree still blocks a phase through `inbox.json`.
+- **Not covered.** Other agents still match their scope entries inside any worktree, including a sibling's. Mapping a worktree id to its owner's council can't be proven without a live run, so no general rule was added. Nothing in this change has been tried in a live run.
+- **Root `AGENTS.md:96`** still says every fix-loop goes into a worktree. It is a root document, so it changes only by amendment; the skills carry the F4 exclusion.
+- **Times.** The CEO has no clock, so the worktree times are written as `null`, and staleness and conflicts are read from later `merge` entries instead of times. The 15- and 30-minute rules wait for a clock.
+
+**Spend correction.** The record above stops at $37.77. Later spend: draft round-3 reviews $1.53 (#14 $1.43, #13 $0.10), which brings the total to $39.30 of $40. Then the #14 round 4 ($0.70) ran under the Chairman's added $1.10, for $40.00 of $41.10.
+
+### F4 review, round 1: CRT (`red-team-lead`) REJECT (read-only, own tier, $0.24)
+
+> **Verdict: REJECT.** The guard rule is nearly right. Two things block approval: the merge text contradicts itself in several places, and the red-team claim fails on Windows through a path alias.
+> 
+> ## 1. Guard rule B6: mostly sound
+> 
+> - **Exact depth.** `ceo_worktree_control` (`hooks/guard.py:~201-212`) parses the path. It needs exactly 6 segments in the form `outputs/devsecops-agency/<slug>/_worktrees/<id>/worktree.json`. The chief must be in `WORKTREE_CHIEFS` and `<n>` must be digits.
+> - **Other writes refused.** B6 sits before the generic scope branch (`guard.py:316-320`). Any CEO write under `_worktrees/` that fails the check gets B6 instead of falling through to the CEO's name entries such as `status.json` and `adr-*.md`.
+> - **Tests.** The refuse list covers depth, archive, unknown-id and missing-number cases. It also covers CEO name entries at depth, the wrong slug root and a nested root (`test_guard.py:~136-157`). The `len(b)==1 and startswith("B6")` assertion is a good check.
+> - **Weak point 1: `n.isdigit()`.** It accepts Unicode digits such as `²` and Arabic-Indic numerals, so "digits" is looser than stated. Use `isascii() and isdigit()`. This is minor.
+> - **Weak point 2: aliases.** `under_worktrees` matches the exact segment `_worktrees` (`guard.py:~198`), and `rel()` only calls `abspath` and `normcase` (`guard.py:113-114`). On Windows, a segment like `_worktrees.` or `_worktrees ` (trailing dot or space), or an 8.3 name, resolves to the real folder at the OS level. In `guard.py`, none of those aliases counts as `_worktrees`.
+>   - Such a path skips B6 and reaches the CEO scope branch. There `status.json` matches `*/status.json`. So the CEO could write `…/_worktrees./red-team-lead-0/status.json`.
+>   - This is static analysis. I did not run it.
+>   - It is the same class of gap B6 says it closes ("everything else under `_worktrees/`"). No test covers it.
+> 
+> ## 2. Red-team independence
+> 
+> - Red-team ids are refused in the CEO's control-file check, because `red-team-lead` and `red-team-fuzzer` are not in `WORKTREE_CHIEFS`.
+> - The red-team lead's own writes are untouched, since B6 only fires for `name == "ceo"`. `test_worktree_rule_leaves_the_chiefs_alone` covers this. The lead's `_worktrees/` scope is at `role-cards.yaml:1360`.
+> - The Windows alias in section 1 defeats the independence claim on Windows, which is this user's platform. The fix is to normalise or reject path segments that fold to `_worktrees` (strip trailing dots and spaces, or refuse any segment that matches after stripping) and to add a test.
+> 
+> ## 3. Merge sequence consistency: fails
+> 
+> `agents/ceo.md`, `skills/ceo/SKILL.md:201`, `skills/worktree/SKILL.md` (Merge section, `:89-100`) and `merge-policy.md:3,38-42` agree. The CEO verifies, the chief copies, and the CEO marks merged. The files below still contradict that.
+> 
+> - **`skills/worktree/SKILL.md:111`** says the old worktree "is moved to `_worktrees/_discarded/<id>-<ts>/`". That is a folder move, and the diff updated the cancel line at `:113` but not this one.
+> - **`skills/worktree/SKILL.md:46`** still shows a `_merged/` archive in the tree diagram.
+> - **`SKILL.md:19`** still says the convention makes work "atomic".
+> - **`merge-policy.md:142`** says "Atomicity means all or nothing". This contradicts the new "checked, not atomic" wording at `:3`.
+> - **`merge-policy.md:145`** still treats `_merged/` and `_discarded/` as archives.
+> - **`parallel-matrix.md:76`** says "CEO is the merger of last resort". That is the old model.
+> - **`parallel-matrix.md:35,85`** say "Worktree on every Build dispatch" and "Build: yes", and the Verify row says "yes (both)". These contradict the new exclusion of engineering-lead's Build row and qa-lead's Verify row. The CEO is told to look up this file when allocating.
+> 
+> ## 4. Main-tree scope per chief
+> 
+> I checked each matrix row against `role-cards.yaml`.
+> 
+> - **Scopes match their rows for:**
+>   - `cro`
+>   - `pm-lead`
+>   - `engineering-lead` (Design)
+>   - `security-lead` (Design and Verify)
+>   - `devops-lead` (`deploy/`, `.github/`)
+>   - `docs-lead`
+>   - `gc` (`legal/`, `PRIVACY.md`)
+> - **Correctly excluded:** `qa-lead` has no `tests/`, and `engineering-lead` has no `src/`.
+> - **Build exclusion is prompt-only.** The guard can't enforce it, and `engineering-lead` stays in `WORKTREE_CHIEFS`. This is disclosed, so I'm not raising it again.
+> - **Tests don't prove this item.** `test_every_worktree_chief_holds_write` checks the `Write` tool only. It never checks the main-tree scope for each row. I checked that by hand. A test that parses `parallel-matrix.md` and runs `in_scope` on each chief's `writes[]` would close it.
+> 
+> **Required before approval:**
+> 1. Fix the Windows `_worktrees` alias bypass and add a test for it.
+> 2. Update `worktree/SKILL.md:19,46,111`, `merge-policy.md:142,145` and `parallel-matrix.md:35,76,85` to the owning-chief model.
+> 3. Tighten `isdigit`.
+> 
+> VERDICT: REJECT
+
+| Finding | Response |
+|---|---|
+| Windows aliases step around B6 | Fixed, with tests. On Windows, `rel()` already strips trailing dots, so `_worktrees.` resolves to the real path and B6 applies to it. A trailing space or an 8.3 short name (`_WORKT~1`) is now refused outright for the CEO. |
+| `isdigit` accepts non-ASCII digits | Fixed: the attempt number must be ASCII digits. Tested with `²` and `٣`. |
+| Stale merge text (`skills/worktree` :19, :46, :111; `merge-policy.md` :142, :145; `parallel-matrix.md` :35, :76, :84-85) | Updated to the owning-chief model. No text says the CEO copies or moves a folder, and the matrix no longer allocates worktrees for Build or for `qa-lead` in Verify. |
+| No test proves each chief's matrix scope | Added: a test parses `parallel-matrix.md` and checks that every allowed chief holds, in the main tree, every path its rows merge (apart from the excluded Build row). |
+
+### F4 review, round 2: CRT (`red-team-lead`) APPROVE ($0.13)
+
+> Round 2 clears all three items from my round-1 list, and the fixes add no blocking finding. This is static review only. I did not run the tests.
+> 
+> ## Round-1 "Required before approval"
+> 
+> **1. Windows `_worktrees` alias bypass, plus a test: fixed.**
+> - **Dot alias:** `under_worktrees` at `guard.py:211-212` now compares `s.rstrip(". ").lower() == "_worktrees"`. A dot or space alias therefore counts as `_worktrees` even if it reaches the guard unresolved. On Windows `abspath` already strips the dot, so B6 also applies there, as you said.
+> - **Space and 8.3 aliases:** `windows_alias` at `guard.py:205-208` refuses any CEO path with a segment ending in a dot or space. It also refuses 8.3 short names, matching `[^~]{1,6}~[0-9]+(\.[^.]{0,3})?`.
+>   - That pattern covers `_WORKT~1`, `RED-TE~1` and `WORKTR~1.JSO`.
+>   - `rel()` case-folds, so `_workt~1` is matched too.
+> - **Wiring:** the CEO branch at `guard.py:329-330` fires on `under_worktrees(r) or windows_alias(r)`, and the alias check runs first.
+> - **Tests:** `test_ceo_cannot_step_around_b6` (`test_guard.py:412-422` of the diff) covers `_worktrees.`, `_worktrees ` and `_WORKT~1`, and asserts exactly one B6 block.
+> - **Remaining gap (not blocking):** I believe NTFS stream syntax such as `_worktrees::$INDEX_ALLOCATION` can't be used as a path prefix. I did not verify that, and the alias check doesn't cover it. It is worth a later hardening note.
+> 
+> **2. Stale merge text: fixed.** A grep of `after/` (excluding the review doc) for `_merged`, `_discarded`, `atomic`, `last resort`, `every Build` and `yes (both)` found nothing stale.
+> - `worktree/SKILL.md:19` now says "keeps parallel work apart, checks it before it lands".
+> - The tree diagram at `:46` now shows "merged and discarded worktrees stay here, with their status set".
+> - The discard section at `:111` says the folder stays in place.
+> - `merge-policy.md:142` now describes checks on the whole `writes[]` before any copy. `:145` now says "merged or discarded worktree".
+> - `parallel-matrix.md:35` has no worktree for Build, and `:76` says "The owning chief merges its own worktree; the CEO verifies and marks it".
+> - `parallel-matrix.md:84-85` has no worktree for Build, and Verify is "`security-lead` only".
+> - The remaining `_merged` and `_discarded` hits are `test_guard.py:365,391,392`. They are refuse-list fixtures, which is correct.
+> - `parallel-matrix.md:82` (`yes (both)`) is the Discovery row, which is correct.
+> 
+> **3. `isdigit` tightened: fixed.** `guard.py:225` now uses `n.isascii() and n.isdigit()`. The tests cover `²` and `٣`.
+> 
+> ## Round-1 item 4 (not on the required list)
+> 
+> The new `test_every_worktree_chief_holds_its_matrix_paths` closes it. It parses the matrix and runs `in_scope` on each chief's rows. It skips only engineering-lead's `src/` Build row and asserts that all `WORKTREE_CHIEFS` were seen.
+> - The regex fits the table rows.
+> - I couldn't run it, so I can't confirm it passes. Nothing in it suggests a failure.
+> 
+> ## New blocking findings
+> 
+> None.
+> - `windows_alias` applies to every CEO write. Its false positives would need a segment like `x~1` or one with a trailing dot or space, and the CEO's usual entries (`status.json`, `adr-*.md`) don't look like that. The failure mode is a refusal, not a bypass.
+> - B6 still fires only for `name == "ceo"`. The red-team lead's own `_worktrees/` writes are untouched.
+> 
+> VERDICT: APPROVE
+
+The NTFS stream-syntax point is left as a later hardening note, as CRT suggests. F4 review spend is $0.37 (rounds 1 and 2), so build spend is $40.37 of $41.10. Tests: 220 passed.
+
+**After round 2 (not reviewed).** A sweep of `skills/` and `agents/` found three places that still allocated a worktree on every fix-loop, regardless of phase: `skills/worktree` (description, the fix-loop trigger and the invocation points), `parallel-matrix.md:90` and `skills/ceo/references/version-layers.md:146`. On a Build fix-loop that would have sent `src/**` into a worktree that the chief cannot copy out. Each now carries the F4 exclusion. `skills/worktree` also says how to write the times the CEO cannot read. The merged head differs from the head CRT approved only by these lines and this note.

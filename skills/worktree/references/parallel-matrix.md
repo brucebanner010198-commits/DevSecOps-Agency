@@ -32,7 +32,7 @@ CISO follows CTO sequentially. Worktree only allocated if CTO is on a fix-loop (
 | ------------------------ | ------------------------------- | -------------------------------------------- |
 | `engineering-lead` (VP-Eng) | `src/**`, `.env.example`, migration files | `architecture.md`, `architecture/**`, `threat-model.md`, `product/*` |
 
-Worktree on every Build dispatch. Build is the heaviest phase and fix-loops are expected; cheap to have worktrees default-on here.
+No worktree for Build (finding F4): `engineering-lead` does not hold `src/**` in the main tree, so it cannot do its own merge copy. Build writes to the main tree.
 
 ## Phase 4 — Verify (parallel)
 
@@ -73,7 +73,7 @@ Option 1 is the default. Option 2 only if the user is in a hurry and accepts the
 | --------- | -------------------------------- | --------------------------- |
 | `ceo` (you) | `status.json` final, user summary | `chat.jsonl`, all artifacts |
 
-No worktree. CEO is the merger of last resort.
+No worktree. The owning chief merges its own worktree; the CEO verifies and marks it.
 
 ## Summary of default worktree allocations
 
@@ -81,10 +81,10 @@ No worktree. CEO is the merger of last resort.
 | ---------------- | ------------------ | ----------------------- |
 | Discovery        | `cro` + `pm-lead`  | yes (both)              |
 | Design           | no                 | no (direct write)       |
-| Build            | no                 | yes (heavy phase)       |
-| Verify           | `qa-lead` + `security-lead²` | yes (both)    |
+| Build            | no                 | no (F4: no main-tree `src/**` for the chief) |
+| Verify           | `qa-lead` + `security-lead²` | `security-lead` only (F4: `qa-lead` does not hold `tests/**`) |
 | Ship             | no                 | no                      |
 | Document + Legal | optional           | yes if parallel, else no |
 | Close            | no                 | no                      |
 
-On any fix-loop (attempt ≥ 1), allocate a worktree regardless of phase.
+On any fix-loop (attempt ≥ 1), allocate a worktree in any phase, except for `engineering-lead`'s Build row and for `qa-lead` (finding F4). Those write to the main tree.
