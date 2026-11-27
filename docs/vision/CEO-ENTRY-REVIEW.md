@@ -449,3 +449,46 @@ The Chairman was asked "when a chief works in its own worktree, who merges that 
 | Stale merge text (`skills/worktree` :19, :46, :111; `merge-policy.md` :142, :145; `parallel-matrix.md` :35, :76, :84-85) | Updated to the owning-chief model. No text says the CEO copies or moves a folder, and the matrix no longer allocates worktrees for Build or for `qa-lead` in Verify. |
 | No test proves each chief's matrix scope | Added: a test parses `parallel-matrix.md` and checks that every allowed chief holds, in the main tree, every path its rows merge (apart from the excluded Build row). |
 
+### F4 review, round 2: CRT (`red-team-lead`) APPROVE ($0.13)
+
+> Round 2 clears all three items from my round-1 list, and the fixes add no blocking finding. This is static review only. I did not run the tests.
+> 
+> ## Round-1 "Required before approval"
+> 
+> **1. Windows `_worktrees` alias bypass, plus a test: fixed.**
+> - **Dot alias:** `under_worktrees` at `guard.py:211-212` now compares `s.rstrip(". ").lower() == "_worktrees"`. A dot or space alias therefore counts as `_worktrees` even if it reaches the guard unresolved. On Windows `abspath` already strips the dot, so B6 also applies there, as you said.
+> - **Space and 8.3 aliases:** `windows_alias` at `guard.py:205-208` refuses any CEO path with a segment ending in a dot or space. It also refuses 8.3 short names, matching `[^~]{1,6}~[0-9]+(\.[^.]{0,3})?`.
+>   - That pattern covers `_WORKT~1`, `RED-TE~1` and `WORKTR~1.JSO`.
+>   - `rel()` case-folds, so `_workt~1` is matched too.
+> - **Wiring:** the CEO branch at `guard.py:329-330` fires on `under_worktrees(r) or windows_alias(r)`, and the alias check runs first.
+> - **Tests:** `test_ceo_cannot_step_around_b6` (`test_guard.py:412-422` of the diff) covers `_worktrees.`, `_worktrees ` and `_WORKT~1`, and asserts exactly one B6 block.
+> - **Remaining gap (not blocking):** I believe NTFS stream syntax such as `_worktrees::$INDEX_ALLOCATION` can't be used as a path prefix. I did not verify that, and the alias check doesn't cover it. It is worth a later hardening note.
+> 
+> **2. Stale merge text: fixed.** A grep of `after/` (excluding the review doc) for `_merged`, `_discarded`, `atomic`, `last resort`, `every Build` and `yes (both)` found nothing stale.
+> - `worktree/SKILL.md:19` now says "keeps parallel work apart, checks it before it lands".
+> - The tree diagram at `:46` now shows "merged and discarded worktrees stay here, with their status set".
+> - The discard section at `:111` says the folder stays in place.
+> - `merge-policy.md:142` now describes checks on the whole `writes[]` before any copy. `:145` now says "merged or discarded worktree".
+> - `parallel-matrix.md:35` has no worktree for Build, and `:76` says "The owning chief merges its own worktree; the CEO verifies and marks it".
+> - `parallel-matrix.md:84-85` has no worktree for Build, and Verify is "`security-lead` only".
+> - The remaining `_merged` and `_discarded` hits are `test_guard.py:365,391,392`. They are refuse-list fixtures, which is correct.
+> - `parallel-matrix.md:82` (`yes (both)`) is the Discovery row, which is correct.
+> 
+> **3. `isdigit` tightened: fixed.** `guard.py:225` now uses `n.isascii() and n.isdigit()`. The tests cover `²` and `٣`.
+> 
+> ## Round-1 item 4 (not on the required list)
+> 
+> The new `test_every_worktree_chief_holds_its_matrix_paths` closes it. It parses the matrix and runs `in_scope` on each chief's rows. It skips only engineering-lead's `src/` Build row and asserts that all `WORKTREE_CHIEFS` were seen.
+> - The regex fits the table rows.
+> - I couldn't run it, so I can't confirm it passes. Nothing in it suggests a failure.
+> 
+> ## New blocking findings
+> 
+> None.
+> - `windows_alias` applies to every CEO write. Its false positives would need a segment like `x~1` or one with a trailing dot or space, and the CEO's usual entries (`status.json`, `adr-*.md`) don't look like that. The failure mode is a refusal, not a bypass.
+> - B6 still fires only for `name == "ceo"`. The red-team lead's own `_worktrees/` writes are untouched.
+> 
+> VERDICT: APPROVE
+
+The NTFS stream-syntax point is left as a later hardening note, as CRT suggests. F4 review spend is $0.37 (rounds 1 and 2), so build spend is $40.37 of $41.10. Tests: 220 passed.
+
