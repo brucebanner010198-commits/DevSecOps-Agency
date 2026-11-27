@@ -1,6 +1,6 @@
 # Merge policy — how a worktree lands in the main tree
 
-Two goals: atomic (all-or-nothing per worktree) and deterministic (same inputs → same merge, for prompt-cache stability).
+Two goals: checked (nothing lands until the whole worktree passes) and deterministic (same inputs → same merge, for prompt-cache stability). Steps 1 to 3 are the CEO's, by reading. Step 4 is the owning chief's, on the CEO's dispatch, because only the chief holds its main-tree paths (finding F4). Step 5 is the CEO's.
 
 ## The merge algorithm
 
@@ -35,13 +35,12 @@ function merge(worktree):
         # non-structural: last-merger wins, emit note
         emit_conflict_note(conflicts)
 
-    # 4. Atomic copy
+    # 4. Copy (the owning chief, file by file)
     for path in sort(worktree.writes):
         mkdirs(main_tree / dirname(path))
         cp(worktree.dir / path, main_tree / path)
 
-    # 5. Archive worktree
-    mv(worktree.dir, "_worktrees/_merged/" + worktree.id + "-" + now())
+    # 5. Mark merged (the CEO). The folder stays in place as the audit copy: no agent has a shell.
     set worktree.status = "merged"
     set worktree.mergedAt = now()
 
@@ -84,8 +83,8 @@ When merge returns `STALE(touched)`:
 
 ## Archive / discard policy
 
-- `_worktrees/_merged/<id>-<mergeTs>/` — kept for the life of the project. The audit trail. Reviewers can diff against the main tree.
-- `_worktrees/_discarded/<id>-<ts>/` — kept for 7 days (or until project close, whichever is first). After that, garbage-collected.
+- A merged worktree stays at `_worktrees/<id>/` with `status: "merged"`, for the life of the project. The audit trail. Reviewers can diff against the main tree.
+- A discarded worktree stays at `_worktrees/<id>/` with `status: "discarded"`. Nothing moves or deletes it: no agent has a shell.
 - Active `_worktrees/<chief>-<attempt>/` with `status: "open"` for > 30 minutes is a stuck task. CEO must either merge, discard, or escalate.
 
 ## Merge entry (chat.jsonl)

@@ -70,7 +70,7 @@ The sweep script is kept outside the repo. It feeds each path to `guard.check()`
 - **F2. Three steps need tools the CEO does not hold:** `command-center` (an artifact), `notify` (push) and intake's AskUserQuestion. Granting them is a Part 4 grant decision.
   **Decided (Chairman, 2026-11-25, default accepted): not granted.** The CEO keeps skipping these steps, uses what the Chairman's message says, and records its defaults in `brief.md`, as `ceo.md` already says.
 - **F3. The lessons ledger.** With the plugin-root `LESSONS.md`, the write is refused (B1), which was already open after Phase 2a. With the read/write path rule, it lands in the launch folder instead (N1-e). Where the cross-project ledger lives is a design decision.
-- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree. *Still open: the grant the Chairman approved was not made, because the merge has no owner (see "Chairman's second set of defaults").*
+- **F4. `worktree` writes `_worktrees/`,** which only `red-team-lead` holds. Parallel dispatch therefore runs in the main tree. *Decided (Chairman, 2026-11-26 UTC): the owning chief merges. See "F4: who merges a worktree" below.*
 - **F5. The rhythm heartbeat can never record a pass.** Every heartbeat output (`_vision/rhythm/heartbeat-<date>.md`, `weekly-…`, `monthly-…`, `quarterly-…`) and `_vision/rhythm/state.json` are outside the CEO's scope. So `state.json` is never written, and every session takes the bootstrap branch, which runs all four cadences. This is part of F1's decision. **Unblocked with F1, at the guard only; not run live:** `_vision/rhythm/` is in the CEO's scope, and a rewrite of an existing `state.json` passes.
 
 ## Live run N1 (cap $6 of the remaining $16.62)
@@ -374,3 +374,15 @@ VERDICT: APPROVE
 Non-blocking notes 1 and 2 are applied (the deny wording and the folder entries in the known gap). Note 3 waits for F4. Review spend for this change is $0.50 (rounds 1 to 3). Build spend is $36.16 of $40. The merged head differs from the commit CRT approved only by the wording of non-blocking notes 1 and 2, a changed agent name in the `skills/worktree` note (to pass `dispatch_names.py`), and this record.
 
 **Spend after the second set of defaults.** Draft round-2 reviews for #14 cost $1.19 (four reviewers) and for #13 $0.20. Probe P2 cost $0.22. Build spend is $37.77 of $40.
+
+## F4: who merges a worktree (2026-11-26 UTC)
+
+The Chairman was asked "when a chief works in its own worktree, who merges that worktree back into the main tree?" and chose "Owning chief". Applied:
+- **Guard, rule B6.** Under `_worktrees/`, the CEO may write one file only: `outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json`, at exactly that depth. The path is parsed, not globbed. `<chief>` must be one of `WORKTREE_CHIEFS`, and `<n>` must be digits. Red-team ids, the `_merged` and `_discarded` archives, unknown ids and every other file under `_worktrees/` are refused. That closes the known gap from item 3: the CEO's name entries such as `status.json` and `adr-*.md` no longer reach inside a worktree. No `write_scope` entry is added.
+- **Merge sequence.** The CEO verifies the worktree by reading. It then has the owning chief copy its `writes[]` into the main tree, and nothing else, because only that chief holds those main-tree paths. Then the CEO sets `status: merged` and appends the `merge` entry. Merged and discarded worktrees stay in place, because no agent has a shell to move them. The skill no longer claims the copy is atomic.
+- **Which chiefs.** A $0 sweep checked each row of `references/parallel-matrix.md` against the chief's card. Two rows fail: `engineering-lead`'s Build row writes `src/**`, and `qa-lead`'s Verify row writes `tests/**`. Neither chief holds those paths in the main tree, so both rows still write to the main tree directly. `qa-lead` is not in `WORKTREE_CHIEFS`. `engineering-lead` is, for its Design row, and the Build exclusion is a prompt rule only. Giving either chief those scopes is a separate question for the Chairman.
+- **Red-team worktrees are unchanged.** The red-team lead still holds `_worktrees/` and manages its own worktrees. An open red-team worktree still blocks a phase through `inbox.json`.
+- **Not covered.** Other agents still match their scope entries inside any worktree, including a sibling's. Mapping a worktree id to its owner's council can't be proven without a live run, so no general rule was added. Nothing in this change has been tried in a live run.
+
+**Spend correction.** The record above stops at $37.77. Later spend: draft round-3 reviews $1.53 (#14 $1.43, #13 $0.10), which brings the total to $39.30 of $40. Then the #14 round 4 ($0.70) ran under the Chairman's added $1.10, for $40.00 of $41.10.
+

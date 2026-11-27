@@ -12,9 +12,9 @@ metadata:
 
 # worktree — isolated scratch dirs for parallel + fix-loop dispatches
 
-> **Suspended for the CEO (finding F4, `docs/vision/CEO-ENTRY-REVIEW.md`).** The CEO holds no `_worktrees/` entry and cannot do the merge's main-tree copy, so it allocates and merges no worktree until the Chairman names a merge owner. Parallel dispatches write to the main tree. The red-team lead still uses its own worktrees.
+> **Who merges (finding F4, Chairman, 2026-11-26): the owning chief.** The CEO writes only each worktree's `worktree.json`, at exactly `outputs/devsecops-agency/<slug>/_worktrees/<chief>-<n>/worktree.json`, and the guard (B6) refuses it everything else under `_worktrees/`. The owning chief copies its own `writes[]` into the main tree, because only it holds those paths. The CEO allocates worktrees only for `cro`, `pm-lead`, `engineering-lead` (Design rows only), `security-lead`, `devops-lead`, `docs-lead` and `gc`. `qa-lead` (its Verify row writes `tests/**`) and `engineering-lead`'s Build row (`src/**`) do not hold their main-tree paths, so they write to the main tree directly. The red-team lead keeps its own worktrees, unchanged.
 
-A worktree is a subdirectory under `<slug>/_worktrees/<chief>-<attempt>/` where a Chief writes its artifacts in isolation. On a green/yellow report the CEO merges the worktree into the main project tree; on a red report the worktree stays in place so attempt N+1 can diff against it.
+A worktree is a subdirectory under `<slug>/_worktrees/<chief>-<attempt>/` where a Chief writes its artifacts in isolation. On a green/yellow report the owning Chief copies the worktree into the main project tree, on the CEO's dispatch; on a red report the worktree stays in place so attempt N+1 can diff against it.
 
 This skill is the openclaw-inspired analog of `git worktree add`. There is no git involved — just a disciplined convention that makes parallel work atomic and fix-loops diffable.
 
@@ -76,8 +76,8 @@ outputs/devsecops-agency/<slug>/
 ## Lifecycle
 
 ```
-allocate  →  open                                           (CEO creates the dir + worktree.json)
-open      →  merged        (green/yellow report accepted)
+allocate  →  open                                           (CEO writes worktree.json; the chief's first write creates the rest)
+open      →  merged        (green/yellow report accepted; the owning chief copies, the CEO sets the status)
 open      →  discarded     (red report superseded by next attempt, or cancelled task)
 open      →  stale         (baseRev drifted; requires rebase before merge)
 ```
@@ -86,20 +86,20 @@ open      →  stale         (baseRev drifted; requires rebase before merge)
 
 CEO, before writing the `dispatch` entry to `chat.jsonl`:
 
-1. `mkdir -p <slug>/_worktrees/<chief>-<attempt>/`
-2. Write `worktree.json` with `status: "open"` and the `writes[]`/`reads[]` for this Chief (looked up in `references/parallel-matrix.md`).
+1. Write `worktree.json` at `<slug>/_worktrees/<chief>-<attempt>/worktree.json` (writing it creates the folder; no agent has a shell)
+2. Give it `status: "open"` and the `writes[]`/`reads[]` for this Chief (looked up in `references/parallel-matrix.md`).
 3. Pass the worktree root path into the Chief's dispatch context. The Chief must write every artifact **under this path**, not the main tree.
 4. On the task row, set `worktree: "<chief>-<attempt>"`.
 
 ### 2. Merge
 
-On a `green` or `yellow` report:
+On a `green` or `yellow` report. Steps 1 to 3 are the CEO's, by reading; step 4 is the owning chief's; steps 5 and 6 are the CEO's.
 
 1. Verify every path in `writes[]` exists under the worktree.
 2. Verify no path outside `writes[]` has been created in the worktree (bounce with `red` if so).
 3. Verify `baseRev` matches the main tree's current revision. If drifted → `stale`; require the Chief to re-merge or rebase.
-4. Copy each `writes[]` path from the worktree into the main tree, preserving directory structure.
-5. Move the worktree dir to `_worktrees/_merged/<id>-<mergeTs>/` (keep for audit, not active). Update `worktree.json > status: "merged"`, `mergedAt: <iso>`.
+4. Dispatch the owning chief to copy each `writes[]` path from the worktree into the main tree, preserving directory structure, and to do nothing else. It reads each file and writes it to the main tree; the copy is file by file, text only.
+5. When the chief reports the copy, update `worktree.json > status: "merged"`, `mergedAt: <iso>`. The folder stays where it is, as the audit copy: no agent has a shell to move it.
 6. Append a `merge` entry to `chat.jsonl`:
    ```json
    {"ts":"<iso>","scope":"exec","from":"ceo","to":"<chief>","type":"merge","worktree":"<id>","writes":["..."],"note":"clean merge"}
@@ -110,7 +110,7 @@ On a `green` or `yellow` report:
 
 On a `red` report that's being superseded by a fix-loop (not cancelled), the previous worktree stays `open` for diff purposes, and a **new** worktree is allocated for attempt N+1. When the fix-loop's new worktree merges, the old `red` worktree's `status` flips to `discarded` and it's moved to `_worktrees/_discarded/<id>-<ts>/`.
 
-On a cancelled task, discard immediately.
+On a cancelled task, discard immediately. Discarding sets `status: "discarded"` in `worktree.json`; the folder stays in place.
 
 ### 4. Stale
 
@@ -132,7 +132,7 @@ Rule 2 is tolerable because our parallel dispatches write to non-overlapping pat
 
 - **Smaller context.** A Chief sees only its worktree + its declared `reads[]`. No sibling's draft contaminates its prompt.
 - **Diffable fix-loops.** Attempt 1 can read attempt 0's artifact (from the previous worktree) and explicitly cite what changed. `corrections[]` in the fix-loop dispatch maps to visible diffs.
-- **Atomic merge.** A partial artifact never ends up in the main tree — either the whole `writes[]` lands or none of it does.
+- **Checked merge.** Nothing is copied until the whole `writes[]` passes the scope, staleness and conflict checks. The copy itself is file by file, so a chief that stops part-way leaves a partial merge. The CEO then sees `status` still `open` and re-dispatches the copy.
 
 ## Invocation points (for the CEO)
 
