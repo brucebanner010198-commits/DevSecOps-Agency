@@ -495,3 +495,6 @@ The Chairman was asked "when a chief works in its own worktree, who merges that 
 The NTFS stream-syntax point is left as a later hardening note, as CRT suggests. F4 review spend is $0.37 (rounds 1 and 2), so build spend is $40.37 of $41.10. Tests: 220 passed.
 
 **After round 2 (not reviewed).** A sweep of `skills/` and `agents/` found three places that still allocated a worktree on every fix-loop, regardless of phase: `skills/worktree` (description, the fix-loop trigger and the invocation points), `parallel-matrix.md:90` and `skills/ceo/references/version-layers.md:146`. On a Build fix-loop that would have sent `src/**` into a worktree that the chief cannot copy out. Each now carries the F4 exclusion. `skills/worktree` also says how to write the times the CEO cannot read. The merged head differs from the head CRT approved only by these lines and this note.
+
+**Spend after #14 merges.** CRT reviewed the applied amendment text for $0.29. Build spend is $40.66 of $41.10.
+

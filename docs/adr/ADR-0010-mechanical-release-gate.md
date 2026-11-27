@@ -959,3 +959,50 @@ These non-blocking points are applied:
 ## Chairman's approval and ratification (2026-11-27T02:53:54Z)
 
 The Chairman approved the final text ("Approve and merge"). The redlines are applied verbatim to `CONSTITUTION.md` in the same commit, with a Schedule B entry, and `plugin.json` is bumped to 0.7.2 (§10.5). `GOVERNANCE.md`'s Waivers section gains the release-gate sentence, mirroring §8.4. The earlier notes saying `GOVERNANCE.md` "is not edited yet" describe the draft, before approval.
+
+### CRT review of the applied text (§10.3, $0.29): APPROVE
+
+CRT had approved in round 3, before the post-round-3 changes to §8.6. It reviewed the redlines as applied to `CONSTITUTION.md`, `GOVERNANCE.md` and `skills/gates`, and approved. The verdict is pasted unedited:
+
+**Review of the §8.6 redline as applied to ADR-0009 and ADR-0010 (static read)**
+
+I read both ADRs, the diff, and the parts of the script and `gate-auditor` card that matter for check 2. I did not read the rest of the script, and I ran nothing.
+
+**1. Does the diff match the redlines?**
+
+Yes, with one deviation.
+
+- **ADR-0009:** these match the redline word for word:
+  - the full §2.6 text;
+  - the §2.2 preamble and clause 7;
+  - the §2.3 addition (joined into the same paragraph, which is fine);
+  - the §5.2 receipts line;
+  - the §9.4 exception;
+  - the G9 section in `skills/gates`.
+- **ADR-0010:** these match the redline word for word:
+  - the §3.3 CEVO trigger;
+  - the §3.4 sentence;
+  - the §8.4 sentence;
+  - all of §8.6, including the post-round-3 wording: the script writes the record to `_vision/audit/<slug>-release-gate.md`, the CEO never runs the check, and the informing-council paragraph.
+- **Additions outside the redlines:** the Schedule B entry and the GOVERNANCE.md Waivers sentence are the two you named. Both are accurate and say nothing the redlines don't.
+- **The deviation:** in `skills/gates` the heading changed from "(draft ADR-0010, not yet reviewed)" to "(CONSTITUTION §8.6, ADR-0010)". No redline contains this edit, and it isn't one of your two permitted additions. It only removes a draft label that approval makes obsolete, so I treat it as non-blocking. Record it in the commit, or put it in the ADR's conforming-edits table.
+- **Nothing dropped:** every redline hunk appears in the diff.
+
+**2. Do the post-round-3 §8.6 changes weaken any gate?**
+
+No. They are neutral or stronger.
+
+- **Separate, script-written record:** this removes a flaw. `close-audit.md` is one of the files the check reads, so writing the result there would have made the check read its own output. The record is now at a path the check doesn't read.
+- **Stale green record:** `write_record` runs first with an "incomplete" red, which overwrites any earlier record. A run that stops early therefore can't leave an old green (script lines 419-422). It also writes red on missing receipts and on missing `--project` or `--since`.
+- **Fail-closed:** the §8.6 text still lists the same fail-closed conditions. It adds no waiver path and no new exemption.
+- **Who runs the check:** "the CEO never runs the check for its own release" is kept.
+- **Residuals:** the unenforced `read-only` shell label, the auditor's Write access to `_vision/audit/`, and the rule against typing the result by hand are all disclosed in ADR-0010. I am not re-raising them.
+
+One thing to watch, not a finding. The record is only written when the auditor passes `--record`. If it leaves the flag off, no record exists. §8.6 treats a release without a passing check as a §11.3 CAO red, so the gate still fails closed. It just fails at the audit step.
+
+No gate is weakened. The only blemish is the unlisted `skills/gates` heading edit.
+
+VERDICT: APPROVE
+
+On CRT's one note: the `skills/gates` heading edit, from "(draft ADR-0010, not yet reviewed)" to "(CONSTITUTION §8.6, ADR-0010)", only removes the draft label. The same applies to the draft labels in `skills/ceo` §4a and `scripts/release_check.py`.
+
