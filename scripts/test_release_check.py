@@ -342,3 +342,10 @@ def test_day_rejects_partial_dates(bad):
 def test_day_reads_dates_and_times():
     assert str(rc.day("2026-12-31")) == "2026-12-31" and str(rc.day("2026-12-31T10:00:00Z")) == "2026-12-31"
 
+
+def test_ceo_intake_states_the_acceptance_line_shape():
+    # Run REF1 wrote acceptance.md as a table, which the gate reads as empty.
+    text = (Path(rc.__file__).resolve().parent.parent / "skills" / "ceo" / "SKILL.md").read_text(encoding="utf-8")
+    assert "one `- <id>: <text>` line per item" in text
+    assert rc.acceptance_ids("- A1: converts\n- A2: offline\n") == {"A1", "A2"}
+    assert rc.acceptance_ids("| A1 | converts |\n") == set()
