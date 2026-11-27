@@ -469,3 +469,26 @@ def test_memory_index_first_write_passes(project):
     f = project / MEM / "index.json"
     assert blocks(call("Write", {"file_path": str(f), "content": json.dumps(IDX)})) == []
     assert guard.is_memory_index("_memory/index.json") and not guard.is_append_only(MEM + "index.json")
+
+
+def test_change_requests_are_append_only(project):
+    rel = "_agency/change-requests.md"
+    assert guard.is_append_only(rel) and guard.is_append_only("outputs/x/" + rel)
+    f = project / rel
+    f.parent.mkdir(parents=True)
+    f.write_text("CR-1 open\n", encoding="utf-8")
+    assert blocks(call("Write", {"file_path": str(f), "content": "CR-1 open\nCR-1 done\n"})) == []
+    assert blocks(call("Write", {"file_path": str(f), "content": "CR-1 done\n"})) != []
+
+
+@pytest.mark.parametrize("agent,rel", [
+    ("cao", "_agency/cr/CR-1-class-audit.md"),
+    ("security-lead", "_agency/cr/CR-1-security.md"),
+    ("evaluation-lead", "_agency/cr/CR-1-baseline.md"),
+])
+def test_change_request_reviewers_write_their_own_record(agent, rel):
+    cards = guard.load_cards()
+    assert guard.in_scope(rel, cards[agent]["write_scope"])
+    assert not guard.in_scope(rel, cards["engineering-lead"]["write_scope"])
+    assert guard.in_scope("_agency/cr/CR-1-impact.md", cards["engineering-lead"]["write_scope"])
+
