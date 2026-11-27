@@ -2,6 +2,13 @@
 
 Wave-by-wave history of DevSecOps-Agency. Newest at the top. See `AGENTS.md` for the currently authoritative conventions and `README.md` for the user-facing overview.
 
+## v0.7.2 — Standing mandates and a mechanical release gate (2026-11-26)
+
+Patch release under CONSTITUTION §10.5 for `docs/adr/ADR-0009-standing-mandates-and-go-live.md` and `docs/adr/ADR-0010-mechanical-release-gate.md` (both `kind: constitution-amend`). The Chairman approved both after the CAO, CRT, CEVO and CISO reviews, which are recorded in the ADRs.
+
+- **Standing mandates (§2.6).** The User may pre-approve a staging deploy, a rollback or a patch update for one product. No mandate can be granted until signed receipts exist (Phase 2b). §2.2, §2.3, §5.2 and §9.4 carry the matching exceptions. `skills/gates` gains G9, go-live.
+- **Release gate (§8.6).** Every release needs each blocking council's own verdict, a waiver per red finding, and the acceptance set as part of CEVO's verdict. `scripts/release_check.py --gate` checks it; CAO's gate auditor runs it, and the script writes the record. The CEO may not waive an informing red at release (§3.4, §8.4, `GOVERNANCE.md`). The four blocking chiefs, the gate auditor, `eval-designer`, `skills/ceo`, `skills/gates`, `skills/waivers` and the status schema follow the verdict contract.
+
 ## v0.7.1 — Workspace lessons ledger and memory index (2026-11-25)
 
 Patch release under CONSTITUTION §10.5 for `docs/adr/ADR-0011-workspace-lessons-and-memory-index.md` (`kind: constitution-amend`). The Chairman approved it on 2026-11-25, before the CAO and CRT reviews, whose verdicts are in the ADR.

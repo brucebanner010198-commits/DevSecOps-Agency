@@ -201,7 +201,8 @@ agents:
       - Grep
       - Glob
       - Write
-      shell: null
+      - Bash
+      shell: read-only  # a label only: nothing enforces it until a sandbox exists (ADR-0010, residuals)
       model: haiku
       write_scope:
       - _vision/audit/
@@ -282,6 +283,7 @@ agents:
       - status.json
       - inbox.json
       - brief.md
+      - acceptance.md
       - retro.md
       - _decisions/
       - "adr-*.md"

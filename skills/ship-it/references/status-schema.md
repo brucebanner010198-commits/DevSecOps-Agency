@@ -77,7 +77,8 @@ Two shapes are supported. v0.2 is the default (16 councils, 7 phases, CEO orches
     "byCouncil": {
       "research": "green", "product": "green", "architecture": "green",
       "security": "yellow", "execution": "green", "quality": "yellow",
-      "devops": "green", "docs": "green", "legal": "green"
+      "devops": "green", "docs": "green", "legal": "green",
+      "evaluation": "green", "red-team": "green", "audit": "green"
     },
     "byPhase": {
       "discovery": "green", "design": "green", "build": "green",

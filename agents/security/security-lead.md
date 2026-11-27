@@ -45,6 +45,7 @@ Always consult `${CLAUDE_PLUGIN_ROOT}/skills/ship-it/references/owasp-checklist.
    - Update `status.json.phase = "blocked"` and record `blockedFromPhase = "security"`.
    - Return to the Managing Director without proceeding.
 5. If clean, append a `report` entry. Return a 3-bullet summary including risk counts by severity.
+6. **Release verdict.** Before any release, after the post-build pass, write `<slug>/security-report.md` yourself, last, in the shape of `skills/gates > Release-gate verdict contract`: the `gate:` line first, and for a red one `finding: <id> class: <class>` line per Critical or High.
 
 ## Post-build pass
 

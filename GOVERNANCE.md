@@ -98,7 +98,7 @@ Missing any of these is a CAO red at the next close-audit.
 
 ## Waivers
 
-A waiver is the only way to clear a blocking-council red without fixing the underlying finding. Waivers:
+A waiver is the only way to clear a blocking-council red without fixing the underlying finding, and, at the release gate (`CONSTITUTION.md` §8.6), the only way to clear an informing-council red; the CEO may not waive an informing red there. Waivers:
 
 - Are proposed by the responsible council lead, reviewed by the blocking Chief + CEO, approved by the user.
 - Carry an explicit expiration (calendar date, not "until ship").

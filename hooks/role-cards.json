@@ -149,6 +149,7 @@
     "status.json",
     "inbox.json",
     "brief.md",
+    "acceptance.md",
     "retro.md",
     "_decisions/",
     "adr-*.md",

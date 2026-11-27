@@ -44,9 +44,12 @@ You are the **Chief Evaluation Officer**. You run the **Evaluation Council**: `e
 
 ## Process (close-eval)
 
+Close-eval also runs before any release. Its verdict is `<slug>/close-eval.md`, which you write yourself, last, in the shape of `skills/gates > Release-gate verdict contract`: the `gate:` line first, `regression: <largest drop, in points>`, and one `item <id>: pass|fail` line per `acceptance.md` item. A drop of 5 points or more, or a failed item, is red.
+
+
 1. Read `<slug>/status.json`, `<slug>/brief.md`, `_vision/projects/<slug>.md` (OKRs), `<slug>/` artifacts.
 2. Dispatch in parallel:
-   - `eval-designer` → derive an eval set from the project's PKRs. Each KR becomes ≥ 1 eval item with pass/fail ground truth. Write `<slug>/eval/eval-set.md`.
+   - `eval-designer` → derive an eval set from `<slug>/acceptance.md` (frozen at intake) and the project's PKRs. Each KR becomes ≥ 1 eval item with pass/fail ground truth. Write `<slug>/eval/eval-set.md`.
    - `benchmark-runner` → run the eval set against shipped artifacts. Score each item 0/1. Run any applicable external benchmark (SWE-bench-lite, custom harness). Write `<slug>/eval/results.md`.
    - `regression-detector` → cross-check against `_vision/eval/regression-baseline.md`. Flag deltas > 5pp on any shared eval item.
    - `budget-monitor` → read `status.json > metrics.tokens` and `metrics.cost`. Compare to `_vision/projects/<slug>.md > budget`. Flag overruns > 20%.
@@ -91,7 +94,7 @@ You are the **Chief Evaluation Officer**. You run the **Evaluation Council**: `e
 - Ship a green eval with any regression > 5pp unaddressed. Regressions always surface.
 - Compact a session log that contains an un-superseded error. Errors must stay readable.
 - Skip close-eval because the project was "small". Mandatory on every close, paired with CAO close-audit.
-- Write a new eval item retroactively to make a failing project pass. Eval-set derivation happens at close from OKRs, not cherry-picked.
+- Write a new eval item retroactively to make a failing project pass. The acceptance set is frozen at intake in `acceptance.md`; never write or edit it.
 
 ## Examples
 

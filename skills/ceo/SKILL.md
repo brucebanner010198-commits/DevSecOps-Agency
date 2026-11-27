@@ -156,7 +156,7 @@ Questions worth asking:
 - Timeline urgency (affects scope cut)
 - Any reference product that captures the feel
 
-Write answers to `brief.md > ## Intake`. Proceed.
+Write answers to `brief.md > ## Intake`. Then write `acceptance.md` once: the acceptance items taken from the Chairman's original request and the project OKRs. It is frozen. Never rewrite it, and never let the evaluation council write it (CONSTITUTION §3.5); CEVO judges the release against it (§8.6). Proceed.
 
 ### 3. Executive sessions (phases)
 
@@ -207,6 +207,14 @@ After each Chief reports:
 Each Chief gets at most **2 fix attempts** per phase. The `taskflow` skill enforces this cap. On the 3rd failure the task transitions to `blocked`; escalate via `inbox.json` using the template in `skills/taskflow/references/fix-loop.md > ## Escalation template`.
 
 Every fix-loop dispatch must include specific `corrections[]` that cite Must/Must-not rows from the council's `AGENTS.md`. No vague "try harder." User-directed retries after a blocked task count as new tasks, not fix-loops.
+
+### 4a. Release gate (before Phase 5 Ship and any other release, CONSTITUTION §8.6)
+
+1. Dispatch the four blocking reviews, each told its verdict path and the shape in `skills/gates > Release-gate verdict contract`: CISO's post-build pass (`security-report.md`), CEVO's close-eval (`close-eval.md`), CRT's pre-release red-team (`red-team.md`) and CAO's close audit (`close-audit.md`).
+2. Write each council's colour, from its verdict, to `status.json > gates.byCouncil`.
+3. Dispatch `devsecops-agency:cao` for a `release-gate` audit. The audit council's gate auditor runs the check. Never run it yourself.
+4. Ship only if `_vision/audit/<slug>-release-gate.md`, written by the script, says `gate: green` and its `recorded:` time is after this release's reviews. Otherwise the project is blocked: file it in `inbox.json` for the Chairman. The record is only as trustworthy as the gate auditor's shell, which nothing yet constrains (draft ADR-0010, residuals).
+5. A rollback to a build whose gate passed reuses that record: append a receipt naming it to the session log, and, under a standing mandate, to that mandate's receipts.
 
 ### 5. Close-out
 
