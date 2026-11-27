@@ -136,7 +136,8 @@
    "write_scope": [
     "_vision/audit/",
     "close-audit.md",
-    "_memory/"
+    "_memory/",
+    "_agency/cr/*-class-audit.md"
    ]
   },
   "ceo": {
@@ -157,6 +158,7 @@
     "_agency/adoption-report.md",
     "ADR-*.md",
     "_meetings/",
+    "_agency/change-requests.md",
     "_vision/VISION.md",
     "_vision/projects/",
     "_vision/history/",
@@ -358,7 +360,8 @@
    "write_scope": [
     "architecture.md",
     "architecture/",
-    "build-report.md"
+    "build-report.md",
+    "_agency/cr/*-impact.md"
    ]
   },
   "eval-designer": {
@@ -379,7 +382,8 @@
    "write_scope": [
     "_vision/eval/",
     "eval/",
-    "close-eval.md"
+    "close-eval.md",
+    "_agency/cr/*-baseline.md"
    ]
   },
   "finops-analyst": {
@@ -814,7 +818,8 @@
     "security-report.md",
     "security-audit.md",
     "_agency/baseline/threat-model.md",
-    "_agency/baseline/security-scan.md"
+    "_agency/baseline/security-scan.md",
+    "_agency/cr/*-security.md"
    ]
   },
   "skill-creator": {

@@ -65,6 +65,7 @@ agents:
       - architecture.md
       - architecture/
       - build-report.md
+      - _agency/cr/*-impact.md
       effort: medium
       maxTurns: 30
     activation: core
@@ -185,6 +186,7 @@ agents:
       - _vision/audit/
       - close-audit.md
       - _memory/
+      - _agency/cr/*-class-audit.md
       effort: medium
       maxTurns: 30
     activation: department
@@ -290,6 +292,7 @@ agents:
       - _agency/adoption-report.md
       - "ADR-*.md"
       - _meetings/
+      - _agency/change-requests.md
       - _vision/VISION.md
       - _vision/projects/
       - _vision/history/
@@ -547,6 +550,7 @@ agents:
       - _vision/eval/
       - eval/
       - close-eval.md
+      - _agency/cr/*-baseline.md
       effort: medium
       maxTurns: 30
     activation: core
@@ -1678,6 +1682,7 @@ agents:
       - security-audit.md
       - _agency/baseline/threat-model.md
       - _agency/baseline/security-scan.md
+      - _agency/cr/*-security.md
       effort: medium
       maxTurns: 30
     activation: core
