@@ -365,9 +365,77 @@ def test_ceo_does_not_get_the_other_vision_records(rel):
     "app/_worktrees/red-team-fuzzer-1/worktree.json", "app/_worktrees/_merged/cto-0-x/worktree.json",
     "app/_worktrees/cto-0/architecture.md", "app/_worktrees/engineering-lead-1/src/app.js",
 ])
-def test_ceo_has_no_worktree_grant(rel):
+def test_ceo_card_has_no_worktree_scope_entry(rel):
+    # The CEO's worktree grant is B6's exact-depth rule, not a write_scope entry.
     scope = guard.load_cards()["ceo"]["write_scope"]
     assert not guard.in_scope(rel, scope) and not guard.in_scope("outputs/devsecops-agency/" + rel, scope), rel
+
+
+def ceo_write(project, rel):
+    return guard.check(call("Write", {"file_path": str(project / rel), "content": "{}"}))[0]
+
+
+@pytest.mark.parametrize("rel", [
+    "outputs/devsecops-agency/app/_worktrees/cro-0/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/engineering-lead-1/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/security-lead-12/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/gc-0/worktree.json",
+])
+def test_ceo_writes_a_chief_worktree_control_file(project, rel):
+    assert ceo_write(project, rel) == []
+
+
+@pytest.mark.parametrize("rel", [
+    "outputs/devsecops-agency/app/_worktrees/red-team-fuzzer-1/worktree.json",      # red-team independence
+    "outputs/devsecops-agency/app/_worktrees/red-team-lead-0/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/_merged/cro-0-x/worktree.json",        # archive
+    "outputs/devsecops-agency/app/_worktrees/_discarded/cro-0/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/qa-lead-0/worktree.json",              # cannot do its own copy
+    "outputs/devsecops-agency/app/_worktrees/cto-0/worktree.json",                  # not a card name
+    "outputs/devsecops-agency/app/_worktrees/cro/worktree.json",                    # no attempt number
+    "outputs/devsecops-agency/app/_worktrees/cro-x/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/engineering-lead-1/src/worktree.json",  # deeper
+    "outputs/devsecops-agency/app/_worktrees/cro-0/status.json",                    # CEO name entries at depth
+    "outputs/devsecops-agency/app/_worktrees/cro-0/adr-1.md",
+    "outputs/devsecops-agency/app/_worktrees/cro-0/inbox.json",
+    "outputs/devsecops-agency/app/_worktrees/red-team-x-1/status.json",
+    "outputs/devsecops-agency/app/_worktrees/cro-0/research-brief.md",
+    "outputs/devsecops-agency/app/sub/_worktrees/cro-0/worktree.json",
+    "app/_worktrees/cro-0/worktree.json",
+    "outputs/devsecops-agency/_worktrees/cro-0/worktree.json",
+])
+def test_ceo_writes_nothing_else_under_worktrees(project, rel):
+    b = ceo_write(project, rel)
+    assert len(b) == 1 and b[0].startswith("B6"), (rel, b)
+
+
+@pytest.mark.parametrize("rel", [
+    "outputs/devsecops-agency/app/_worktrees./red-team-lead-0/status.json",
+    "outputs/devsecops-agency/app/_worktrees /red-team-lead-0/status.json",
+    "outputs/devsecops-agency/app/_WORKT~1/red-team-lead-0/status.json",
+    "outputs/devsecops-agency/app/_worktrees/cro-²/worktree.json",
+    "outputs/devsecops-agency/app/_worktrees/cro-٣/worktree.json",
+])
+def test_ceo_cannot_step_around_b6(project, rel):
+    b = ceo_write(project, rel)
+    assert len(b) == 1 and b[0].startswith("B6"), (rel, b)
+
+
+def test_worktree_rule_leaves_the_chiefs_alone(project):
+    # A chief still writes its own artifacts inside its worktree, as before.
+    d = call("Write", {"file_path": str(project / "outputs/devsecops-agency/app/_worktrees/cro-0/research-brief.md"),
+                       "content": "x"}, agent="devsecops-agency:cro")
+    assert guard.check(d)[0] == []
+    d = call("Write", {"file_path": str(project / "outputs/devsecops-agency/app/_worktrees/red-team-fuzzer-1/notes.md"),
+                       "content": "x"}, agent="devsecops-agency:red-team-lead")
+    assert guard.check(d)[0] == []
+
+
+@pytest.mark.parametrize("chief", ["cro", "pm-lead", "engineering-lead", "security-lead", "devops-lead", "docs-lead", "gc"])
+def test_every_worktree_chief_holds_write(chief):
+    import yaml
+    cards = yaml.safe_load((Path(guard.PLUGIN_ROOT) / "agents" / "role-cards.yaml").read_text(encoding="utf-8"))["agents"]
+    assert "Write" in cards[chief]["enforced"]["tools"] and chief in guard.WORKTREE_CHIEFS
 
 
 MEM = "outputs/devsecops-agency/_memory/"
@@ -492,3 +560,23 @@ def test_change_request_reviewers_write_their_own_record(agent, rel):
     assert not guard.in_scope(rel, cards["engineering-lead"]["write_scope"])
     assert guard.in_scope("_agency/cr/CR-1-impact.md", cards["engineering-lead"]["write_scope"])
 
+
+def test_every_worktree_chief_holds_its_matrix_paths():
+    # Each allowed chief must hold, in the main tree, every path its parallel-matrix rows merge,
+    # except engineering-lead's Build row, which is excluded in the skill text.
+    import re
+    text = (Path(guard.PLUGIN_ROOT) / "skills" / "worktree" / "references" / "parallel-matrix.md").read_text(encoding="utf-8")
+    scope = {n: c["write_scope"] for n, c in guard.load_cards().items() if c.get("write_scope")}
+    seen = set()
+    for line in text.splitlines():
+        m = re.match(r"\| `([a-z-]+)`[^|]*\| (.+?) \|", line)
+        if not m or m.group(1) not in guard.WORKTREE_CHIEFS:
+            continue
+        chief, writes = m.group(1), re.findall(r"`([^`]+)`", m.group(2))
+        if chief == "engineering-lead" and any(w.startswith("src/") for w in writes):
+            continue
+        seen.add(chief)
+        for w in writes:
+            path = "outputs/devsecops-agency/app/" + w.replace("**", "x/y").replace("*", "x")
+            assert guard.in_scope(path, scope[chief] + guard.SHARED_WRITES), (chief, w)
+    assert seen == set(guard.WORKTREE_CHIEFS)
