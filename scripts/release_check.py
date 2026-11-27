@@ -21,7 +21,7 @@ accumulate across runs in the launch folder: use --project to keep only writes
 under one project folder (dispatches carry no path, so they are not narrowed),
 and --since to drop receipts before a time. It checks a ship, not an adoption.
 
-Gate mode (--gate) is the check draft ADR-0010 (CONSTITUTION §8.6) would make
+Gate mode (--gate) is the check CONSTITUTION §8.6 (ADR-0010) makes
 binding. It needs --project and --since, fails closed, and exits 1 on any flag.
 "This run" starts at the later of --since and the CEO's write of acceptance.md.
   - status.json must exist and parse;

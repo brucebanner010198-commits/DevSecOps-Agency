@@ -81,7 +81,7 @@ def test_main_reads_receipts_and_the_projects_status(tmp_path, capsys):
     assert "FLAG CAO (audit) is red with no user-signed waiver" in out and "CEVO" not in out.split("FLAG", 1)[1]
 
 
-# --- gate mode (draft ADR-0010, CONSTITUTION §8.6) ----------------------------------------
+# --- gate mode (CONSTITUTION §8.6, ADR-0010) --------------------------------------------
 
 LEADS = {"security": "security-lead", "evaluation": "evaluation-lead", "red-team": "red-team-lead", "audit": "cao"}
 SINCE = "2026-11-24T00:00:00Z"

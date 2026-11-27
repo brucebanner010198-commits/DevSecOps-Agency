@@ -1,9 +1,9 @@
 ---
 adr: 0009
 title: Standing mandates and a go-live gate (E3)
-status: draft (not proposed; awaiting the Chairman)
+status: accepted
 date: 2026-11-24
-deciders: user (pending)
+deciders: user (Chairman)
 kind: constitution-amend
 related: design review 1 (E3, proposal C mandates M1 to M7), ADR-0008, ADR-0010 (depends on it), alignment plan Parts 6 and 7
 ---
@@ -12,7 +12,17 @@ related: design review 1 (E3, proposal C mandates M1 to M7), ADR-0008, ADR-0010 
 
 ## Status
 
-**Draft.** Written under the Chairman's 2026-11-24 delegation so that the decision is ready when they take it. Under `CONSTITUTION.md` §10.4, an amendment is USER-ONLY. Nothing in this ADR takes effect, and `CONSTITUTION.md` is unchanged, until the Chairman approves it and the review roll in §10.3 is complete. It takes effect only with or after ADR-0010, whose §8.6 it relies on.
+**Accepted.** The §10.3 reviews came first: CAO, CRT, CEVO and CISO all approved, the last of them in round 4, below. The Chairman then approved the final text.
+
+**Approval (§10.4), in the chat interface, at 2026-11-27T02:53:54Z.** The time is the session transcript's timestamp for the answer. The question and answer, verbatim:
+
+> Draft #14 (release gate and standing mandates) now has approval from all four reviewing councils, and its 263 tests pass. Do you approve its final text, including its three changes from the options you accepted: a separate gate record written by the script, a gate-auditor shell labelled read-only but not enforced, and all four reviews before every release?
+>
+> **Answer:** "Approve and merge (Recommended)"
+
+The same answer confirms the three departures from the accepted options listed in ADR-0010. The amendment takes effect on the merge commit that updates `CONSTITUTION.md` (§10.5), in v0.7.2.
+
+It takes effect together with ADR-0010, whose §8.6 it relies on. §2.6 is in force but grants nothing until signed receipts exist (Phase 2b), and the conforming edits other than G9 land then.
 
 ## Context
 
@@ -27,7 +37,7 @@ related: design review 1 (E3, proposal C mandates M1 to M7), ADR-0008, ADR-0010 
   - M6, research egress;
   - M7, housekeeping.
 
-## Decision (proposed for the Chairman)
+## Decision
 
 Add a §2.6 "Standing mandates" that lets the User pre-approve a named, bounded class of §2.2 clause 7 action (publishing or releasing) for one product. Only M2 (staging deploy), M3 (rollback to the last verified release) and M4 (patch updates) can be granted.
 - M5 (money) and M6 (research egress) are excluded; each needs its own amendment. So clause 8 is not amended.
@@ -549,3 +559,7 @@ Reviewed together with ADR-0010; the verdicts are pasted there. CRT approved. CA
 ### Round 4 (2026-11-26 UTC)
 
 Reviewed together with ADR-0010; the verdicts are pasted there. CAO, CEVO and CISO approved. CRT approved in round 3. No reviewer raised a new point on §2.6.
+
+## Chairman's approval and ratification (2026-11-27T02:53:54Z)
+
+The Chairman approved the final text ("Approve and merge"). The redlines are applied verbatim to `CONSTITUTION.md` in the same commit, with a Schedule B entry, and `plugin.json` is bumped to 0.7.2 (§10.5). `skills/gates` gains G9 in the same commit. The `GOVERNANCE.md` row, the `skills/adr` kinds, the executor's card and the guard entry for `_decisions/mandates/*.jsonl` land with Phase 2b, as stated above.

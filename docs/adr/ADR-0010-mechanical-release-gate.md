@@ -1,9 +1,9 @@
 ---
 adr: 0010
 title: A mechanical release gate without a fifth veto (E4)
-status: draft (not proposed; awaiting the Chairman)
+status: accepted
 date: 2026-11-24
-deciders: user (pending)
+deciders: user (Chairman)
 kind: constitution-amend
 related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check.py, skills/gates
 ---
@@ -12,7 +12,15 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 
 ## Status
 
-**Draft.** Written under the Chairman's 2026-11-24 delegation so that the decision is ready when they take it. Under `CONSTITUTION.md` §10.4, an amendment is USER-ONLY. Nothing here takes effect, and `CONSTITUTION.md` is unchanged, until the Chairman approves it and the §10.3 review roll is complete.
+**Accepted.** The §10.3 reviews came first: CAO, CRT, CEVO and CISO all approved, the last of them in round 4, below. The Chairman then approved the final text.
+
+**Approval (§10.4), in the chat interface, at 2026-11-27T02:53:54Z.** The time is the session transcript's timestamp for the answer. The question and answer, verbatim:
+
+> Draft #14 (release gate and standing mandates) now has approval from all four reviewing councils, and its 263 tests pass. Do you approve its final text, including its three changes from the options you accepted: a separate gate record written by the script, a gate-auditor shell labelled read-only but not enforced, and all four reviews before every release?
+>
+> **Answer:** "Approve and merge (Recommended)"
+
+The same answer confirms the three departures from the accepted options listed in ADR-0010. The amendment takes effect on the merge commit that updates `CONSTITUTION.md` (§10.5), in v0.7.2.
 
 ## Context
 
@@ -131,7 +139,7 @@ related: design review 1 (E4), alignment plan Part 6 (G8), scripts/release_check
 - §8.4 names no reviewer for an informing-council waiver.
 - ADR-0010 mentions §2.6 releases, but it reads on its own if ADR-0009 is not approved.
 
-**For the Chairman to confirm (three departures from the accepted options).**
+**Confirmed by the Chairman at approval (three departures from the accepted options).**
 1. The gate result goes to a separate, script-written record (`_vision/audit/<slug>-release-gate.md`), not to `close-audit.md` or CI. `close-audit.md` is one of the files the check reads, and CI cannot see the receipts.
 2. The gate auditor gains a shell, labelled `read-only` but not constrained, to run the check.
 3. The four blocking reviews run before every release, not only at close.
@@ -947,3 +955,7 @@ These non-blocking points are applied:
 - **The role card still says `shell: read-only` under `enforced:` (CAO, CEVO, CISO).** The card now carries a comment on that line saying it is a label only.
 - **Some residuals were only in the response text (CAO, CEVO).** They are now in the Residuals list.
 - **The four blocking reviews before every release are not marked as a departure (CEVO).** They are now marked, with the other two, under "For the Chairman to confirm".
+
+## Chairman's approval and ratification (2026-11-27T02:53:54Z)
+
+The Chairman approved the final text ("Approve and merge"). The redlines are applied verbatim to `CONSTITUTION.md` in the same commit, with a Schedule B entry, and `plugin.json` is bumped to 0.7.2 (§10.5). `GOVERNANCE.md`'s Waivers section gains the release-gate sentence, mirroring §8.4. The earlier notes saying `GOVERNANCE.md` "is not edited yet" describe the draft, before approval.

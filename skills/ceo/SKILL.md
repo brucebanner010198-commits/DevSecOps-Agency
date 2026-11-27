@@ -208,7 +208,7 @@ Each Chief gets at most **2 fix attempts** per phase. The `taskflow` skill enfor
 
 Every fix-loop dispatch must include specific `corrections[]` that cite Must/Must-not rows from the council's `AGENTS.md`. No vague "try harder." User-directed retries after a blocked task count as new tasks, not fix-loops.
 
-### 4a. Release gate (before Phase 5 Ship and any other release, draft ADR-0010 §8.6)
+### 4a. Release gate (before Phase 5 Ship and any other release, CONSTITUTION §8.6)
 
 1. Dispatch the four blocking reviews, each told its verdict path and the shape in `skills/gates > Release-gate verdict contract`: CISO's post-build pass (`security-report.md`), CEVO's close-eval (`close-eval.md`), CRT's pre-release red-team (`red-team.md`) and CAO's close audit (`close-audit.md`).
 2. Write each council's colour, from its verdict, to `status.json > gates.byCouncil`.

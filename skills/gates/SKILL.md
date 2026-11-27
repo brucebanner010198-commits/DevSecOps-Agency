@@ -42,7 +42,15 @@ Every other council produces gates that **inform** the ship decision but do not 
 
 Blocking-council overrides require the user in `inbox.json`. The CEO cannot waive a red from CISO, CEVO, CRT or CAO, or an informing red at release, alone; §3.3 clears it only by a fix and a re-run, or a user-signed waiver under `skills/waivers`.
 
-## Release-gate verdict contract (draft ADR-0010, not yet reviewed)
+## G9 — go-live
+
+The first public release of a product, and any release outside a standing mandate,
+needs the User's approval, recorded as a `user-decision` ADR (§2.3), before it runs.
+The first public release is the first time a product is reachable by anyone other than
+the User; a staging URL open to the internet counts (§2.6). A release within a mandate
+still passes the release gate (§8.6).
+
+## Release-gate verdict contract (CONSTITUTION §8.6, ADR-0010)
 
 `scripts/release_check.py --gate` reads these exact shapes. A council that writes anything else fails the gate.
 
