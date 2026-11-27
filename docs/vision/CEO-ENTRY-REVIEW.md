@@ -383,6 +383,8 @@ The Chairman was asked "when a chief works in its own worktree, who merges that 
 - **Which chiefs.** A $0 sweep checked each row of `references/parallel-matrix.md` against the chief's card. Two rows fail: `engineering-lead`'s Build row writes `src/**`, and `qa-lead`'s Verify row writes `tests/**`. Neither chief holds those paths in the main tree, so both rows still write to the main tree directly. `qa-lead` is not in `WORKTREE_CHIEFS`. `engineering-lead` is, for its Design row, and the Build exclusion is a prompt rule only. Giving either chief those scopes is a separate question for the Chairman.
 - **Red-team worktrees are unchanged.** The red-team lead still holds `_worktrees/` and manages its own worktrees. An open red-team worktree still blocks a phase through `inbox.json`.
 - **Not covered.** Other agents still match their scope entries inside any worktree, including a sibling's. Mapping a worktree id to its owner's council can't be proven without a live run, so no general rule was added. Nothing in this change has been tried in a live run.
+- **Root `AGENTS.md:96`** still says every fix-loop goes into a worktree. It is a root document, so it changes only by amendment; the skills carry the F4 exclusion.
+- **Times.** The CEO has no clock, so the worktree times are written as `null`, and staleness and conflicts are read from later `merge` entries instead of times. The 15- and 30-minute rules wait for a clock.
 
 **Spend correction.** The record above stops at $37.77. Later spend: draft round-3 reviews $1.53 (#14 $1.43, #13 $0.10), which brings the total to $39.30 of $40. Then the #14 round 4 ($0.70) ran under the Chairman's added $1.10, for $40.00 of $41.10.
 
@@ -492,3 +494,4 @@ The Chairman was asked "when a chief works in its own worktree, who merges that 
 
 The NTFS stream-syntax point is left as a later hardening note, as CRT suggests. F4 review spend is $0.37 (rounds 1 and 2), so build spend is $40.37 of $41.10. Tests: 220 passed.
 
+**After round 2 (not reviewed).** A sweep of `skills/` and `agents/` found three places that still allocated a worktree on every fix-loop, regardless of phase: `skills/worktree` (description, the fix-loop trigger and the invocation points), `parallel-matrix.md:90` and `skills/ceo/references/version-layers.md:146`. On a Build fix-loop that would have sent `src/**` into a worktree that the chief cannot copy out. Each now carries the F4 exclusion. `skills/worktree` also says how to write the times the CEO cannot read. The merged head differs from the head CRT approved only by these lines and this note.

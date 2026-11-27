@@ -4,8 +4,8 @@ description: >
   Internal skill. Allocates an isolated scratch directory (a "worktree") for a
   Chief's dispatch so parallel agents don't step on each other's artifacts and
   fix-loop attempts can be compared against a baseline before merging. Invoked
-  by the CEO on parallel dispatches and on every fix-loop (attempt ≥ 1). Not a
-  user-facing skill.
+  by the CEO on parallel dispatches and fix-loops (attempt ≥ 1), except for
+  engineering-lead's Build row and qa-lead (finding F4). Not a user-facing skill.
 metadata:
   version: "0.2.4"
 ---
@@ -23,7 +23,7 @@ This skill is the openclaw-inspired analog of `git worktree add`. There is no gi
 Allocate when **any** of these is true:
 
 1. **Parallel dispatch.** Two or more Chiefs are dispatched for the same phase (`CRO+CPO` in discovery, `CQO+CISO²` in verify, `CKO+GC` in document-legal).
-2. **Fix-loop attempt ≥ 1.** The Chief already reported red on attempt 0 — attempt 1 and 2 go into worktrees so we can diff before merging.
+2. **Fix-loop attempt ≥ 1.** The Chief already reported red on attempt 0 — attempt 1 and 2 go into worktrees so we can diff before merging. Not for `engineering-lead`'s Build row or for `qa-lead` (finding F4): they write to the main tree.
 3. **Speculative dispatch.** The CEO starts Chief B on phase N+1 before Chief A's phase N has finalised (rare, requires override).
 4. **User-directed variant.** The user asks for two approaches side-by-side ("show me both Postgres and SQLite versions").
 
@@ -68,6 +68,7 @@ outputs/devsecops-agency/<slug>/
 
 - `id` = `<chief>-<attempt>`. Unique per project.
 - `baseRev` is a marker of what the main tree looked like when the worktree was created. In a no-git world it's just an ISO timestamp of the main tree's last update. Used for staleness detection.
+- **Times.** The CEO has no clock, so `createdAt`, `baseRev` and `mergedAt` are written as `null`, as in the session log; the guard's receipt of each write is the time of record. Until a clock exists, the 15- and 30-minute rules and the mtime comparison below cannot run. Instead, a worktree is stale when a later `merge` entry in `chat.jsonl` lists a path in its `reads[]`, and a conflict is a path in its `writes[]` that a later `merge` entry also lists.
 - `writes[]` lists the paths the Chief is allowed to create inside its worktree. Out-of-scope writes are a bug.
 - `reads[]` lists paths the Chief reads from the **main** tree (not the worktree) — it never reads from a sibling worktree.
 - `status` ∈ `open | merged | discarded | stale`.
@@ -135,7 +136,7 @@ Rule 2 is tolerable because our parallel dispatches write to non-overlapping pat
 
 ## Invocation points (for the CEO)
 
-- On parallel dispatch or fix-loop attempt ≥ 1: allocate.
+- On parallel work or a fix-loop attempt ≥ 1: allocate. Not for `engineering-lead`'s Build row or for `qa-lead` (finding F4): they write to the main tree.
 - On Chief report: if the task had a worktree, run merge (green/yellow) or schedule discard (red superseded).
 - On phase advance: verify no `_worktrees/*/worktree.json` has `status: "open"` for a completed phase. Any lingering open worktree is a bug.
 - Emit `worktree` references in the task row, `chat.jsonl`, and (optionally) the command-center lane.

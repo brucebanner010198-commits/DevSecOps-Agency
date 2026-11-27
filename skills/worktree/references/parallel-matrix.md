@@ -87,4 +87,4 @@ No worktree. The owning chief merges its own worktree; the CEO verifies and mark
 | Document + Legal | optional           | yes if parallel, else no |
 | Close            | no                 | no                      |
 
-On any fix-loop (attempt ≥ 1), allocate a worktree regardless of phase.
+On any fix-loop (attempt ≥ 1), allocate a worktree in any phase, except for `engineering-lead`'s Build row and for `qa-lead` (finding F4). Those write to the main tree.
