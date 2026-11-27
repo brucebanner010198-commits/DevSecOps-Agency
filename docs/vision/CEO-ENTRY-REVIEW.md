@@ -498,3 +498,21 @@ The NTFS stream-syntax point is left as a later hardening note, as CRT suggests.
 
 **Spend after #14 merges.** CRT reviewed the applied amendment text for $0.29. Build spend is $40.66 of $41.10.
 
+## Reference run REF1 (2026-11-27 UTC, $0.97 of a $9.97 cap)
+
+The first live run on v0.7.2. The prompt is the N4 prompt with a new idea (a unit converter) and one added sentence stating a $10 budget. It does not mention the release gate.
+
+Before it, four probes (about $0.02, charged to the reference run's $10) checked the harness:
+- `${CLAUDE_PLUGIN_ROOT}` in an agent's prompt is replaced with the real path when the agent loads. It is not set in the agent's shell.
+- On a copy of N4, `gate-auditor` ran its real release-gate step. The script wrote a `gate: red` record with its `recorded:` time.
+- `cd "<folder>" && node --test` is no longer refused in a subagent.
+- The guard lets each blocking chief write its verdict file and the CEO write `acceptance.md`.
+
+**Result: closed blocked at intake, by design.** The CEO forecast about $21 for whole councils, about twice the cap. Under the whole-council rule (defaults 1-2) and `skills/budget`, it stopped before any dispatch. It filed `inbox.json` and an ADR, and asked the Chairman to raise the budget or park the project. That is what probe P2 asked for. A truncated run is neither a pass nor a fail for the gate criteria; the rerun waits for the Chairman's budget.
+
+**Finding: the acceptance-set shape.** The CEO wrote `acceptance.md` once, before any verdict, but as a table. The gate script reads only `- <id>: <text>` lines (`skills/gates`), so the gate would have failed with "lists no items". The shape was stated only in `skills/gates`, which the CEO does not read at intake. `skills/ceo` intake now states the shape, with an example, and a test checks it. The script is unchanged: changing what it reads needs an amendment (§8.6).
+
+**Date labels corrected.** The records of the round-4 funding and the F4 answer say "2026-11-26 UTC". Both answers came at 2026-11-27T01:47:13Z, and the #14 approval at 2026-11-27T02:53:54Z. The labels give the Chairman's local date (UTC−5), not the UTC date.
+
+
+**Review.** CRT §5.3 prompt-diff review, read-only, $0.06: APPROVE. CRT found nothing blocking. Its one note: any stray `- x:` bullet in `acceptance.md` counts as an item, which was already the case. Build spend is $40.72 of $41.10.
